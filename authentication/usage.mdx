@@ -1,0 +1,166 @@
+---
+title: 'Usage'
+description: ''
+---
+
+
+### Overview
+
+OpenAPI uses API keys for authentication. Get your API token from our API interfaces . We provide open APIs for main GenAI Marketing platform by clicking on the top left API button on this page [Content](https://akool.com/tools) and face swap API button on this page [Faceswap](https://akool.com/apps/faceswap).
+- First  you need to login to our website.
+- Then click the picture icon in the upper right corner of the website, and click the "APl Credentials" function to set the key pair (clientId, clientSecret) used when accessing the API and save it.
+- Use the secret key pair just saved to send the api interface to obtain the access token.
+
+
+### API
+
+#### Get the token
+
+```
+POST https://openapi.akool.com/api/open/v3/getToken
+```
+
+**Body Attributes**
+
+| **Parameter** | **Description**                             |
+|---------------|---------------------------------------------|
+| clientId      | Used for request creation authorization     |
+| clientSecret  | Used for request creation authorization     |
+
+**Response Attributes**
+
+| **Parameter** | **Value** | **Description**                                      |
+|---------------|-----------|------------------------------------------------------|
+| code          | 1000      | Interface returns business status code(1000:success) |
+| token         |           | API token                                            |
+
+<Note>Please note that the generated token is valid for more than 1 year.</Note>
+
+#### Example
+
+**Body**
+
+```json
+{
+  "clientId": "64db241f6d9e5c4bd136c187",
+  "clientSecret": "openapi.akool.com"
+}
+```
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v3/getToken' \
+--header 'Content-Type: application/json' \
+--data '{
+  "clientId": "64db241f6d9e5c4bd136c187",
+  "clientSecret": "openapi.akool.com"
+}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\r\n    \"clientId\": \"64db241f6d9e5c4bd136c187\",\r\n    \"clientSecret\": \"openapi.akool.com\"\r\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v3/getToken")
+  .method("POST", body)
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```javascript Javascript
+const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "clientId": "64db241f6d9e5c4bd136c187",
+  "clientSecret": "openapi.akool.com"
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v3/getToken", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```PHP PHP
+<?php
+$client = new Client();
+$headers = [
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "clientId": "64db241f6d9e5c4bd136c187",
+  "clientSecret": "openapi.akool.com"
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v3/getToken', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v3/getToken"
+
+payload = json.dumps({
+  "clientId": "64db241f6d9e5c4bd136c187",
+  "clientSecret": "openapi.akool.com"
+})
+headers = {
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+"code": 1000,
+"token": "xxxxxxxxxxxxxxxx"
+}
+```
+
+All API requests should include your API token in the HTTP header,
+Authorization looks like this:
+
+```
+Authorization: Bearer token
+```
+
+
+Remember, your API token is secret! Do not share it with others or
+expose it in any client-side code (browser, application). Production
+requests must be routed through your own backend server, and your API
+token can be securely loaded from environment variables or a key
+management service.
+
+**Response Code Description**
+
+<Note> Please note that if the value of the response code is not equal to 1000, the request is failed or wrong</Note>
+| **Parameter** | **Value** | **Description**                                      |
+|---------------|-----------|------------------------------------------------------|
+| code          | 1000      | Success |
+| code          | 1101      | Invalid authorization or The request token has expired  |
+| code          | 1102      | Authorization cannot be empty  |
+| code          | 1200      | The account has been banned  |
+

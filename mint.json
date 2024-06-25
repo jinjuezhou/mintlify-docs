@@ -1,91 +1,65 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Akool open api documents",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "light": "/logo/akool-light.svg",
+    "dark": "/logo/akool-dark.svg"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#8458cc",
+    "light": "#8458cc",
+    "dark": "#8458cc",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#8458cc",
+      "to": "#8458cc"
     }
   },
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:info@akool.com"
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "name": "Akool",
+    "url": "https://akool.com"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
+  "tabs": [],
   "anchors": [
     {
       "name": "Documentation",
       "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
+      "url": "/"
     },
     {
       "name": "Blog",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://akool.com/blog"
     }
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Authentication",
       "pages": [
-        "introduction",
-        "quickstart",
-        "development"
+        "authentication/usage"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "AI Tools Suite",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
-      ]
-    },
-    {
-      "group": "API Documentation",
-      "pages": [
-        "api-reference/introduction"
-      ]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "ai-tools-suite/faceswap",
+        "ai-tools-suite/reage",
+         "ai-tools-suite/audio",
+        "ai-tools-suite/video-translation",
+        "ai-tools-suite/talking-photo",
+        "ai-tools-suite/avatar",
+        "ai-tools-suite/background-change",
+        "ai-tools-suite/lip-sync",
+         "ai-tools-suite/image-generate",
+        "ai-tools-suite/sentiment-analysis",
+        "ai-tools-suite/webhook"
       ]
     }
-  ],
-  "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
-  }
+  ]
 }

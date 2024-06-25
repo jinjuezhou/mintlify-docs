@@ -1,0 +1,292 @@
+---
+title: 'Sentiment Analysis'
+description: ''
+---
+
+### Sentiment Analysis
+
+```
+POST https://openapi.akool.com/api/open/v3/content/analysis/sentiment
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer token | Your API Key used for request authorization. You can get from https://openapi.akool.com/api/open/v3/getToken api. |
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Value**  | **Description**                                                              |
+|---------------|----------|------------|------------------------------------------------------------------------------|
+| url           | String   |            | The video url or image url.                                 |
+| type          | Number   |            | 1: image  2:video                                 |
+| language          | String   |         | When type=2, the language of the video  needs to be provided。 Supplying the input language in ISO-639-1 format                              |
+| webhookUrl    | String   |            | Callback url address based on HTTP request.                                  |
+
+<Note>ISO-639-1: https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes</Note>
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
+|---------------|----------|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| code          | int      | 1000                                            | Interface returns business status code(1000:success)                                                                                                  |
+| msg           | String   |                                                 | Interface returns status information                                                                                                                  |
+| data          | Object   | `{ "_id": "", "status": 1 }` | `_id`: Interface returns data, status: the status of video： [1:queueing, 2:processing, 3:completed, 4:failed] |
+
+**Example**
+
+**Body**
+
+```json
+{
+   
+    "type":1,   // 1:image 2:video
+    "url":"https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg",
+    "webhookUrl":"http://localhost:3004/api/v3/webhook"
+}
+```
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v3/content/analysis/sentiment' \
+--header 'Authorization: Bearer token' \
+--header 'Content-Type: application/json' \
+--data '{
+   
+    "type":1,
+    "url":"https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg",
+
+
+}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\n   \n    \"type\":1,\n    \"url\":\"https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg\"\n\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v3/content/analysis/sentiment")
+  .method("POST", body)
+  .addHeader("Authorization", "Bearer token")
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer token");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "type": 1,
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg"
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v3/content/analysis/sentiment", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP 
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer token',
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "type": 1,
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg"
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/analysis/sentiment', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+
+```
+
+```python Python 
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v3/content/analysis/sentiment"
+
+payload = json.dumps({
+  "type": 1,
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg"
+})
+headers = {
+  'Authorization': 'Bearer token',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+```
+
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+    "code": 1000,
+    "msg": "OK",
+    "data": {
+        "create_time": 1710757900382,
+        "uid": 101690,
+        "type": 1,
+        "status": 1,   // current status of content： 【1：queueing（The requested operation is being processed），2：processing（The requested operation is being processing），3：completed（The request operation has been processed successfully），4：failed（The request operation processing failed）】
+        "webhookUrl": "http://localhost:3007/api/open/v3/test/webhook",
+        "result": "",
+        "_id": "65f8180c24d9989e93dde3b6",
+        "__v": 0
+    }
+}
+```
+
+### Get  analysis  Info Result
+
+```
+GET https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662df7928ee006bf033b64bf
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                |
+|---------------|--------------|----------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer token | Your API Key used for request authorization. You can get from https://openapi.akool.com/api/open/v3/getToken api. |
+
+**Query Attributes**
+
+| **Parameter**  | **Type** | **Value** | **Description**                                                                                                                       |
+|----------------|----------|-----------|---------------------------------------------------------------------------------------------------------------------------------------|
+| _id | String   | NULL      | video db id: You can get it based on the `_id` field returned by https://openapi.akool.com/api/open/v3/content/analysis/sentiment . |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Value**                              | **Description**                                                                                                                                      |
+|---------------|----------|----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| code          | int      | 1000                                   | Interface returns business status code(1000:success)                                                                                                 |
+| msg           | String   | OK                                     | Interface returns status information                                                                                                                 |
+| data          | Object   | `{ status:1, _id:"", result:"" }` | video_status: the status of video：【1:queueing, 2:processing, 3:completed, 4:failed】 result:  sentiment analysis result【POSITIVE related information, NEGATIVE related information】 _id: Interface returns data |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662e20b93baa7aa53169a325' \
+--header 'Authorization: Bearer token'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("text/plain");
+RequestBody body = RequestBody.create(mediaType, "");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662e20b93baa7aa53169a325")
+  .method("GET", body)
+  .addHeader("Authorization", "Bearer token")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer token");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662e20b93baa7aa53169a325", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP 
+<?php
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer token'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662e20b93baa7aa53169a325', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+
+```
+
+```python Python 
+import requests
+
+url = "https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662e20b93baa7aa53169a325"
+
+payload = {}
+headers = {
+  'Authorization': 'Bearer token'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+
+```
+  
+</CodeGroup>
+
+
+**Response**
+
+```json
+
+{
+    "code": 1000,
+    "msg": "OK",
+    "data": {
+        "_id": "662e20b93baa7aa53169a325",
+        "uid": 100002,
+        "status": 3,
+        "result": "POSITIVE"
+    }
+}
+```
+
+**Response Code Description**
+
+<Note> Please note that if the value of the response code is not equal to 1000, the request is failed or wrong</Note>
+| **Parameter** | **Value** | **Description**                                      |
+|---------------|-----------|------------------------------------------------------|
+| code          | 1000      | Success |
+| code          | 1003      | Parameter error  or Parameter can not be empty |
+| code          | 1008      | The content you get does not exist  |
+| code          | 1009      | You do not have permission to operate  |
+| code          | 1101      | Invalid authorization or The request token has expired  |
+| code          | 1102      | Authorization cannot be empty  |
+| code          | 1200      | The account has been banned  |
+| code          | 1201      | create audio error, please try again later  |
+| code          | 1202      | The same video cannot be translated lipSync in the same language more than 1 times  |
+| code          | 1203      | video should be with audio  |
