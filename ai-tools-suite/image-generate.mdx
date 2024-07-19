@@ -21,7 +21,8 @@ POST https://openapi.akool.com/api/open/v3/content/image/createbyprompt
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                      |
 |---------------|----------|-----------|--------------------------------------------------------------------------------------------------------------------------------------|
-| prompt        | String   |           | Describe the information needed to generate the image                                                                                |
+| prompt        | String   |           | Describe the information needed to generate the image                                                                          |
+| scale        | String    | "1:1" "4:3" "3:4" "16:9" "9:16"   "3:2" "2:3"         | The size of the generated image   default: "1:1"                                       |
 | source_image  | String   |           | Need to generate the original image link of the image 【If you want to perform imageToImage operation you can pass in this parameter】 |
 | webhookUrl    | String   |           | Callback url address based on HTTP request                                                                                           |
 
@@ -40,6 +41,7 @@ POST https://openapi.akool.com/api/open/v3/content/image/createbyprompt
 ```json
 {
     "prompt": "Sun Wukong is surrounded by heavenly soldiers and generals", // Describe the information needed to generate the image
+    "scale": "1:1",
     "source_image": "https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png", // Need to generate the original image link of the image 【If you want to perform imageToImage operation you can pass in this parameter】
     "webhookUrl":"http://localhost:3007/image/webhook" //  Callback url address based on HTTP request
 }
@@ -57,6 +59,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/image/createbypro
 --data '{
     "prompt": "Sun Wukong is surrounded by heavenly soldiers and generals",
     "source_image": "https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png",
+     "scale": "1:1",
     "webhookUrl":"http://localhost:3007/image/webhook"
 }
 '
@@ -84,6 +87,7 @@ myHeaders.append("Content-Type", "application/json");
 const raw = JSON.stringify({
   "prompt": "Sun Wukong is surrounded by heavenly soldiers and generals",
   "source_image": "https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png",
+ "scale": "1:1",
   "webhookUrl": "http://localhost:3007/image/webhook"
 });
 
@@ -110,6 +114,7 @@ $headers = [
 $body = '{
   "prompt": "Sun Wukong is surrounded by heavenly soldiers and generals",
   "source_image": "https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png",
+ "scale": "1:1",
   "webhookUrl": "http://localhost:3007/image/webhook"
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/image/createbyprompt', $headers, $body);
@@ -126,6 +131,7 @@ url = "https://openapi.akool.com/api/open/v3/content/image/createbyprompt"
 payload = json.dumps({
   "prompt": "Sun Wukong is surrounded by heavenly soldiers and generals",
   "source_image": "https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png",
+ "scale": "1:1",
   "webhookUrl": "http://localhost:3007/image/webhook"
 })
 headers = {
