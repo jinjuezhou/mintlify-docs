@@ -127,6 +127,267 @@ print(response.text)
       "uid": 1,
       "type": 1,
       "from": 2,
+      "status": 1,
+      "sort": 12,
+      "create_time": 1700788730000,
+      "name": "Yasmin in White shirt",
+      "avatar_id": "Yasmin_in_White_shirt_20231121",
+      "url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+      "modify_url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+      "gender": "female",
+      "thumbnailUrl": "https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+      "crop_arr": []
+    }
+  ]
+}
+```
+
+### Get Avatar Detail
+
+```
+GET https://openapi.akool.com/api/open/v3/avatar/detail
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                                     |
+| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Authorization | Bearer token | Your API Key used for request authorization. You can get from [https://openapi.akool.com/api/open/v3/getToken](https://openapi.akool.com/api/open/v3/getToken) api. |
+
+**Query Attributes**
+
+| **Parameter** | **Type** | **Value** | **Description**   |
+| ------------- | -------- | --------- | ----------------- |
+| id            | String   |           | avatar record id. |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Value**                                    | **Description**                                                                                                                                                           |
+| ------------- | -------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| code          | int      | 1000                                         | Interface returns business status code(1000:success)                                                                                                                      |
+| msg           | String   | OK                                           | Interface returns status information                                                                                                                                      |
+| data          | Array    | `[{ avatar_id: "xx", url: "", status: "" }]` | avatar_id: Used by avatar interface and creating avatar interface. url: You can preview the avatar via the link. status: 1-queueing 2-processing），3：completed 4-failed |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v3/avatar/detail?id=66a1a02d591ad336275eda62' \
+--header 'Authorization: Bearer {{Authorization}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("text/plain");
+RequestBody body = RequestBody.create(mediaType, "");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v3/avatar/detail?id=66a1a02d591ad336275eda62")
+  .method("GET", body)
+  .addHeader("Authorization", "Bearer {{Authorization}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {{Authorization}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow",
+};
+
+fetch(
+  "https://openapi.akool.com/api/open/v3/avatar/detail?id=66a1a02d591ad336275eda62,
+  requestOptions
+)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => '{{Authorization}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v3/avatar/detail?66a1a02d591ad336275eda62', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v3/avatar/detail?id=66a1a02d591ad336275eda62"
+
+payload = {}
+headers = {
+  'Authorization': 'Bearer {{Authorization}}'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "ok",
+  "data": [
+    {
+      "_id": "66a1a02d591ad336275eda62",
+        "uid": 100010,
+        "type": 2,
+        "from": 3,
+        "status": 3,
+        "name": "30870eb0",
+        "url": "https://drz0f01yeq1cx.cloudfront.net/1721868487350-6b4cc614038643eb9f842f4ddc3d5d56.mp4"
+    }
+  ]
+}
+```
+
+### Upload Avatar
+
+```
+GET https://openapi.akool.com/api/open/v3/avatar/create
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                                     |
+| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Authorization | Bearer token | Your API Key used for request authorization. You can get from [https://openapi.akool.com/api/open/v3/getToken](https://openapi.akool.com/api/open/v3/getToken) api. |
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
+| ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
+| avatar_id     | String   |           | avatar unique ID.                                                                                                                                                 |
+| type          | String   | 1，2      | Avatar type, 1 represents real avatar 2 represents stream avatar.                                                                                                 |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Value**                                   | **Description**                                                                                                                                        |
+| ------------- | -------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| code          | int      | 1000                                        | Interface returns business status code(1000:success)                                                                                                   |
+| msg           | String   | OK                                          | Interface returns status information                                                                                                                   |
+| data          | Array    | `[{ avatar_id: "xx", url: "", status: 1 }]` | avatar_id: Used by creating live avatar interface. url: You can preview the avatar via the link. status: 1-queueing, 2-processing, 3-success, 4-failed |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v3/avatar/create' \
+--header 'Authorization: Bearer {{Authorization}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("text/plain");
+RequestBody body = RequestBody.create(mediaType, "{\n    \n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4\",\n    \"avatar_id\": \"HHdEKhn7k7vVBlR5FSi0e\",\n    \"type\": 1\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v3/avatar/create")
+  .method("POST", body)
+  .addHeader("Authorization", "Bearer {{Authorization}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {{Authorization}}");
+
+const raw = JSON.stringify({
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+  "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "type": 1
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  redirect: "follow",
+  body: raw
+};
+
+fetch(
+  "https://openapi.akool.com/api/open/v3/avatar/create",
+  requestOptions
+)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => '{{Authorization}}'
+];
+$body = '{
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+  "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "type": 1
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v3/avatar/create', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v3/avatar/create"
+
+payload = json.dumps({
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+  "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "type": 1
+});
+headers = {
+  'Authorization': 'Bearer {{Authorization}}'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "ok",
+  "data": [
+    {
+      "_id": "655ffeada6976ea317087193",
+      "disabled": false,
+      "uid": 1,
+      "type": 1,
+      "from": 2,
+      "status": 1,
       "sort": 12,
       "create_time": 1700788730000,
       "name": "Yasmin in White shirt",
@@ -155,28 +416,28 @@ POST https://openapi.akool.com/api/open/v3/avatar/createVideo
 
 **Body Attributes**
 
-| Parameter                      | Type     | Value | Description                                                                                                                                                                                                                                                                               |
-| ------------------------------ | -------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data                           | [Object] |       |                                                                                                                                                                                                                                                                                           |
-| [data].width                   | Number   | 1920  | Set the output video width                                                                                                                                                                                                                                                                |
-| [data].height                  | Number   | 1080  | Set the output video height                                                                                                                                                                                                                                                               |
-| [data].duration                | Number   |       | Set the output video duration (in milliseconds)                                                                                                                                                                                                                                           |
-| [data].voice                   | Object   |       | Set Video Sound                                                                                                                                                                                                                                                                           |
-| [data].voice.voice_url         | String   |       | When you want to use the specified audio for cloning, you first need to call[ https://openapi.akool.com/api/open/v3/audio/create ](https://openapi.akool.com/api/open/v3/audio/create)API for audio cloning, you will obtain the field 【url】 and pass it here                           |
-| [data].elements                | [Object] |       | Collection of elements passed in in the video                                                                                                                                                                                                                                             |
-| [data].[elements].url          | [Object] |       | Link to element                                                                                                                                                                                                                                                                           |
-| [data].[elements].scale_x      | [Object] |       | Horizontal scaling ratio, range of values (0-1)                                                                                                                                                                                                                                           |
-| [data].[elements].scale_y      | [Object] |       | Vertical scaling ratio, range of values (0-1)                                                                                                                                                                                                                                             |
-| [data].[elements].offset_x     | [Object] |       | Horizontal offset of the upper left corner of the element from the video setting area (in pixels)                                                                                                                                                                                         |
-| [data].[elements].offset_y     | [Object] |       | Vertical offset of the upper left corner of the element from the video setting area (in pixels)                                                                                                                                                                                           |
-| [data].[elements].type         | [Object] |       | Element type（avatar、image、video）                                                                                                                                                                                                                                                      |
-| [data].[elements].layer_number | Number   |       | Element hierarchy, with higher levels displayed above                                                                                                                                                                                                                                     |
-| [data].[elements].avatar_id    | Number   |       | You use the avatar_id of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://openapi.akool.com/api/open/v3/avatar/list) api, you will obtain the field 【avatar_id】 and pass it here                                                      |
-| [data].[elements].url          | String   |       | You can provide image or video url resources                                                                                                                                                                                                                                              |
-| [data].ratio                   | String   |       | Video ratio，default "16:9"                                                                                                                                                                                                                                                               |
-| [data].background              | String   |       | Video background color, default white (# ffffff)                                                                                                                                                                                                                                          |
-| [data].avatarFrom              | Number   |       | You use the avatar from of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://openapi.akool.com/api/open/v3/avatar/list) api, you will obtain the field 【from】 and pass it here                                                         |
-| webhookUrl                     | String   |       | Callback url address based on HTTP request.                                                                                                                                                                                                                                               |
+| Parameter                      | Type     | Value | Description                                                                                                                                                                                                                                                     |
+| ------------------------------ | -------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| data                           | [Object] |       |                                                                                                                                                                                                                                                                 |
+| [data].width                   | Number   | 1920  | Set the output video width                                                                                                                                                                                                                                      |
+| [data].height                  | Number   | 1080  | Set the output video height                                                                                                                                                                                                                                     |
+| [data].duration                | Number   |       | Set the output video duration (in milliseconds)                                                                                                                                                                                                                 |
+| [data].voice                   | Object   |       | Set Video Sound                                                                                                                                                                                                                                                 |
+| [data].voice.voice_url         | String   |       | When you want to use the specified audio for cloning, you first need to call[ https://openapi.akool.com/api/open/v3/audio/create ](https://openapi.akool.com/api/open/v3/audio/create)API for audio cloning, you will obtain the field 【url】 and pass it here |
+| [data].elements                | [Object] |       | Collection of elements passed in in the video                                                                                                                                                                                                                   |
+| [data].[elements].url          | [Object] |       | Link to element                                                                                                                                                                                                                                                 |
+| [data].[elements].scale_x      | [Object] |       | Horizontal scaling ratio, range of values (0-1)                                                                                                                                                                                                                 |
+| [data].[elements].scale_y      | [Object] |       | Vertical scaling ratio, range of values (0-1)                                                                                                                                                                                                                   |
+| [data].[elements].offset_x     | [Object] |       | Horizontal offset of the upper left corner of the element from the video setting area (in pixels)                                                                                                                                                               |
+| [data].[elements].offset_y     | [Object] |       | Vertical offset of the upper left corner of the element from the video setting area (in pixels)                                                                                                                                                                 |
+| [data].[elements].type         | [Object] |       | Element type（avatar、image、video）                                                                                                                                                                                                                            |
+| [data].[elements].layer_number | Number   |       | Element hierarchy, with higher levels displayed above                                                                                                                                                                                                           |
+| [data].[elements].avatar_id    | Number   |       | You use the avatar_id of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://openapi.akool.com/api/open/v3/avatar/list) api, you will obtain the field 【avatar_id】 and pass it here                            |
+| [data].[elements].url          | String   |       | You can provide image or video url resources                                                                                                                                                                                                                    |
+| [data].ratio                   | String   |       | Video ratio，default "16:9"                                                                                                                                                                                                                                     |
+| [data].background              | String   |       | Video background color, default white (# ffffff)                                                                                                                                                                                                                |
+| [data].avatarFrom              | Number   |       | You use the avatar from of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://openapi.akool.com/api/open/v3/avatar/list) api, you will obtain the field 【from】 and pass it here                               |
+| webhookUrl                     | String   |       | Callback url address based on HTTP request.                                                                                                                                                                                                                     |
 
 <Note>voice_id and voice_url must provide one</Note>
 
@@ -537,8 +798,8 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 **Query Attributes**
 
-| **Parameter**  | **Type** | **Value** | **Description**                                                                                                                       |
-| -------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **Parameter**  | **Type** | **Value** | **Description**                                                                                                             |
+| -------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------- |
 | video_model_id | String   | NULL      | video db id: You can get it based on the `_id` field returned by https://openapi.akool.com/api/open/v3/avatar/createVideo . |
 
 **Response Attributes**
