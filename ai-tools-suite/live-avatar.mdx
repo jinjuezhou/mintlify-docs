@@ -24,7 +24,7 @@ POST https://openapi.akool.com/api/open/v3/liveAvatar/session/create
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| avatar_id     | String   |           | Digital human model in real-time avatar, The current system provides four options: _"Kai_1080P_back"、"Katha_1080P_back"、"Olivia_1080P_back"、"who_1080P_back"_. |
+| avatar_id     | String   |           | Digital human model in real-time avatar, The current system provides four options: _"Kai_1080P_back"、"Katha_1080P_back"、"Olivia_1080P_back"、"who_1080P_back". If you want to use a custom uploaded video, you need to call the *https://openapi.akool.com/api/open/v3/avatar/create* interface to create a template. This process takes some time to process. You can check the processing status through the interface *https://openapi.akool.com/api/open/v3/avatar/detail*. When status=3, you can use the avatar_id field to pass it in.|
 
 **Response Attributes**
 
