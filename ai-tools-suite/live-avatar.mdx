@@ -515,6 +515,97 @@ print(response.text)
 }
 ```
 
+### Live Avatar WebSocket
+
+```
+WSS https://openapi.akool.com/api/open/v3/liveAvatar/session/create
+```
+**Receive Data**
+
+| **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
+| ------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| type          | String   |    chat   | default *chat*.|
+| payload       | String   |           | To pass in content, you need to serialize the json content.|
+| payload.message_id       | String   |           | Message id. The same id indicates that the incoming data belongs to the same message.|
+| payload.voice_id       | String   |           | Voice model id, you can get the field *voice_id* from the interface 【Get Voice List Result】.|
+| payload.language       | String   |           | Language code, you can get the field *lang_code* from the interface 【Get Language List Result】.|
+| payload.mode_type       | String   |      1     | default *1*.|
+| payload.content       | String   |           |The text content passed in, such as 'Hello'.|
+| to            | String   |           | Server ID, you can get from *server_chat_room_url* link address, The address suffix such as server_8898 is the server id.|
+
+**Example**
+
+**Send Data** 
+
+<Warning>
+  The payload here is not serialized. When using it, you need to use JSON.stringify() to convert the object into a json string. If it is other types, you can convert it to base64 first.
+</Warning>
+
+```json
+{
+    "type": "chat",                         //  default 'chat'.
+    "payload": {
+      "message_id":"msg-1723629433573",     //  Message id. The same id indicates that the incoming data belongs to the same message.
+      "voice_id":"21m00Tcm4TlvDq8ikWAM",    //  Voice model id, you can get the field *voice_id* from the interface 【Get Voice List Result】.
+      "language":"en",                      //  Language code, you can get the field 'lang_code' from the interface 【Get Language List Result】
+      "mode_type":1,                        //  default *1*.
+      "question":"Hello"                    //  The text content passed in, such as 'Hello'.
+    },
+    "to": "server_8898"   //  Server ID, you can get from *server_chat_room_url* link address, The address suffix such as server_8898 is the server id.
+}
+```
+
+**Receive Data** 
+
+<Warning>
+The payload has been parsed here. In actual use, you need to perform JSON.parse() to restore it first.
+</Warning>
+
+```json
+{
+    "type": "chat",                       //  default 'chat'.
+    "from": "server_8898",                //  Current server id.
+    "to": "client_8898",                  //  Current client id.
+    "payload": {
+      "message_id": "msg-1723629433573",  //  Message id. The same id indicates that the incoming data belongs to the same message.
+      "voice_id": "21m00Tcm4TlvDq8ikWAM", //  Voice model id, you can get the field *voice_id* from the interface 【Get Voice List Result】.
+      "language": "English",              //  Language
+      "mode_type": 1,                     //  default *1*.
+      "question": "",                     //  Current input question
+      "answer": "Hello!  How can I assist you today? "  // avatar's answer
+    }
+}
+```
+
+<CodeGroup>
+
+```bash Javascript
+  const WebSocket = require('ws')
+  const ws = new WebSocket('wss://stream-open-test.akool.io:8443/final_[stream_name]/client_[stream_name].chat');
+
+  ws.on('open', function open() {
+    let message = {
+      "type": "chat",
+      "payload": JSON.stringify({
+          "message_id":"1",
+          "voice_id":"21m00Tcm4TlvDq8ikWAM",
+          "language":"en",
+          "mode_type": 1,
+          "content": "hello"
+      }),
+      "to": "server_8898"
+    };
+    ws.send(JSON.stringify(message));
+  });
+
+  ws.on('message', function message(data) {
+      console.log('received: %s', data);
+  });
+```
+
+</CodeGroup>
+
+
 **Response Code Description**
 
 <Note>
