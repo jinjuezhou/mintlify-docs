@@ -39,10 +39,12 @@ POST https://openapi.akool.com/api/open/v3/content/analysis/sentiment
 
 | **Parameter** | **Type** | **Value**  | **Description**                                                              |
 |---------------|----------|------------|------------------------------------------------------------------------------|
-| url           | String   |            | The video url or image url.                                 |
-| type          | Number   |            | 1: image  2:video                                 |
-| language          | String   |         | When type=2, the language of the video  needs to be provided。 Supplying the input language in ISO-639-1 format                              |
+| content       | String   |            | url or text， when the content is a image, video, or audio, a url must be provided. When the content provided is text, it can be either text content or a url.                                                     |
+| type          | Number   |            | 1: image  2:video  3: auido  4: text                                |
+| language      | String   |        | When type=2 or 3 or 4, it is best to provide the language to ensure the accuracy of the results。 Supplying the input language in ISO-639-1 format         |
 | webhookUrl    | String   |            | Callback url address based on HTTP request.                                  |
+
+
 
 <Note>ISO-639-1: https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes</Note>
 
