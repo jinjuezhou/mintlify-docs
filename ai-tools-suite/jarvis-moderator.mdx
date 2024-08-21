@@ -44,7 +44,7 @@ POST https://openapi.akool.com/api/open/v3/content/analysis/sentiment
 | language      | String   |        | When type=2 or 3 or 4, it is best to provide the language to ensure the accuracy of the results。 Supplying the input language in ISO-639-1 format         |
 | webhookUrl    | String   |            | Callback url address based on HTTP request.                                  |
 
-<Warning>We restrict image to 20MB. we currently support PNG (.png), JPEG (.jpeg and .jpg), WEBP (.webp), and non-animated GIF (.gif). We restrict audio to 25MB</Warning>
+<Warning>We restrict image to 20MB. we currently support PNG (.png), JPEG (.jpeg and .jpg), WEBP (.webp), and non-animated GIF (.gif). We restrict audio to 25MB. We restrict video to 1GB</Warning>
 
 
 
@@ -65,8 +65,8 @@ POST https://openapi.akool.com/api/open/v3/content/analysis/sentiment
 ```json
 {
    
-    "type":1,   // 1:image 2:video
-    "url":"https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg",
+    "type":1,   // 1:image 2:video 3: auido 4:text
+    "content":"https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg",
     "webhookUrl":"http://localhost:3004/api/v3/webhook"
 }
 ```
@@ -82,7 +82,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/analysis/sentimen
 --data '{
    
     "type":1,
-    "url":"https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg",
+    "content":"https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg",
 
 
 }'
@@ -92,7 +92,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/analysis/sentimen
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n   \n    \"type\":1,\n    \"url\":\"https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg\"\n\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n   \n    \"type\":1,\n    \"content\":\"https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg\"\n\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/content/analysis/sentiment")
   .method("POST", body)
@@ -109,7 +109,7 @@ myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
   "type": 1,
-  "url": "https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg"
+  "content": "https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg"
 });
 
 const requestOptions = {
@@ -134,7 +134,7 @@ $headers = [
 ];
 $body = '{
   "type": 1,
-  "url": "https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg"
+  "content": "https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg"
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/analysis/sentiment', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -150,7 +150,7 @@ url = "https://openapi.akool.com/api/open/v3/content/analysis/sentiment"
 
 payload = json.dumps({
   "type": 1,
-  "url": "https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg"
+  "content": "https://drz0f01yeq1cx.cloudfront.net/1714023431475-food.jpg"
 })
 headers = {
   'Authorization': 'Bearer token',
