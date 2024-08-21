@@ -44,6 +44,8 @@ POST https://openapi.akool.com/api/open/v3/content/analysis/sentiment
 | language      | String   |        | When type=2 or 3 or 4, it is best to provide the language to ensure the accuracy of the results。 Supplying the input language in ISO-639-1 format         |
 | webhookUrl    | String   |            | Callback url address based on HTTP request.                                  |
 
+<Warning>We restrict image to 20MB. we currently support PNG (.png), JPEG (.jpeg and .jpg), WEBP (.webp), and non-animated GIF (.gif). We restrict audio to 25MB</Warning>
+
 
 
 <Note>ISO-639-1: https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes</Note>
