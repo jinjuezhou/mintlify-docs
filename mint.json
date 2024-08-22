@@ -58,7 +58,7 @@
         "ai-tools-suite/lip-sync",
         "ai-tools-suite/live-avatar",
          "ai-tools-suite/image-generate",
-        "ai-tools-suite/sentiment-analysis",
+        "ai-tools-suite/jarvis-moderator",
         "ai-tools-suite/webhook",
         "ai-tools-suite/error-code.mdx"
       ]
