@@ -62,6 +62,7 @@ POST https://openapi.akool.com/api/open/v3/content/analysis/sentiment
 | type          | Number   |            | 1: image  2:video  3: auido  4: text                                |
 | language      | String   |        | When type=2 or 3 or 4, it is best to provide the language to ensure the accuracy of the results。 Supplying the input language in ISO-639-1 format         |
 | webhookUrl    | String   |            | Callback url address based on HTTP request.                                  |
+| input         | String   |     Optional       |  The user defines the content to be detected in words |
 
 <Note>We restrict image to 20MB. we currently support PNG (.png), JPEG (.jpeg and .jpg), WEBP (.webp), and non-animated GIF (.gif).</Note>
 <Note>We restrict audio to 25MB, 60minute.  we currently support .flac, .mp3, .mp4, .mpeg, .mpga, .m4a, .ogg, .wav, .webm</Note>
@@ -231,7 +232,7 @@ GET https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662df792
 |---------------|----------|----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | code          | int      | 1000                                   | Interface returns business status code(1000:success)                                                                                                 |
 | msg           | String   | OK                                     | Interface returns status information                                                                                                                 |
-| data          | Object   | `{ status:1, _id:"", result:"" }` | video_status: the status of video：【1:queueing, 2:processing, 3:completed, 4:failed】 result:  sentiment analysis result【POSITIVE related information, NEGATIVE related information】 _id: Interface returns data |
+| data          | Object   | `{ status:1, _id:"", result:"", final_conclusion: "" }` | video_status: the status of video：【1:queueing, 2:processing, 3:completed, 4:failed】 result:  sentiment analysis result【Related information returned by the detection content】 final_conclusion: final conclusion.【Non-Compliant、Compliant、Unknown】 _id: Interface returns data |
 
 **Example**
 
@@ -316,7 +317,8 @@ print(response.text)
         "_id": "662e20b93baa7aa53169a325",
         "uid": 100002,
         "status": 3,
-        "result": "POSITIVE"
+        "result": "- violence: Presence of a person holding a handgun, which can be associated with violent content.\nResult: Non-Compliant",
+        "final_conclusion" :"Non-Compliant"   // Non-Compliant、Compliant、Unknown
     }
 }
 ```
