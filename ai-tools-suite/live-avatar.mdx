@@ -529,9 +529,10 @@ WSS https://openapi.akool.com/api/open/v3/liveAvatar/session/create
 | payload.message_id       | String   |           | Message id. The same id indicates that the incoming data belongs to the same message.|
 | payload.voice_id       | String   |           | Voice model id, you can get the field *voice_id* from the interface 【Get Voice List Result】.|
 | payload.language       | String   |           | Language code, you can get the field *lang_code* from the interface 【Get Language List Result】.|
-| payload.mode_type       | String   |      1     | default *1*.|
-| payload.content       | String   |           |The text content passed in, such as 'Hello'.|
-| to            | String   |           | Server ID, you can get from *server_chat_room_url* link address, The address suffix such as server_8898 is the server id.|
+| payload.mode_type      | String   |      1     | default *1*.|
+| payload.prompt         | Object   |   { from: "", content: "" }  | Regarding the custom description of the digital person, the value range of from is *【text, url】*. When type is text, content is the text description of the avatar role. When type is url, content is the pdf link of the description of the avatar role. The link size limit is 50M. The default *type="text"* and *content=""* |
+| payload.question       | String   |           |The text content passed in, such as 'Hello'.|
+| to            | String |           | Server ID, you can get from *server_chat_room_url* link address, The address suffix such as server_8898 is the server id.|
 
 **Example**
 
@@ -549,6 +550,7 @@ WSS https://openapi.akool.com/api/open/v3/liveAvatar/session/create
       "voice_id":"21m00Tcm4TlvDq8ikWAM",    //  Voice model id, you can get the field *voice_id* from the interface 【Get Voice List Result】.
       "language":"en",                      //  Language code, you can get the field 'lang_code' from the interface 【Get Language List Result】
       "mode_type":1,                        //  default *1*.
+      "prompt": { from: "text", content: "" },  //  Regarding the custom description of the digital person, the value range of from is [text, url]. When type is text, content is the text description of the avatar role. When type is url, content is the pdf link of the description of the avatar role. The link size limit is 50M. The default *type="text"* and *content=""*.
       "question":"Hello"                    //  The text content passed in, such as 'Hello'.
     },
     "to": "server_8898"   //  Server ID, you can get from *server_chat_room_url* link address, The address suffix such as server_8898 is the server id.
@@ -571,6 +573,7 @@ The payload has been parsed here. In actual use, you need to perform JSON.parse(
       "voice_id": "21m00Tcm4TlvDq8ikWAM", //  Voice model id, you can get the field *voice_id* from the interface 【Get Voice List Result】.
       "language": "English",              //  Language
       "mode_type": 1,                     //  default *1*.
+      "prompt": { from: "text", content: "" }
       "question": "",                     //  Current input question
       "answer": "Hello!  How can I assist you today? "  // avatar's answer
     }
@@ -591,6 +594,7 @@ The payload has been parsed here. In actual use, you need to perform JSON.parse(
           "voice_id":"21m00Tcm4TlvDq8ikWAM",
           "language":"en",
           "mode_type": 1,
+          "prompt": { from: "text", content: "" },
           "content": "hello"
       }),
       "to": "server_8898"
