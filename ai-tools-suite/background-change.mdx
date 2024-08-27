@@ -30,8 +30,9 @@ POST https://openapi.akool.com/api/open/v3/content/image/bg/replace
 | overlay_origin_y       |        true     | int       |  eg: 497           |    The position of the upper left corner of the foreground image in the canvas                |
 | overlay_template_x     |        false    | int       |  eg: 10            |    The position of the upper left corner of the template image in the canvas                  |
 | overlay_template_y     |        false    | int       |  eg: 497           |    The position of the upper left corner of the template image in the canvas                  |
-| canvas_size            |        true     | String    |  eg:"3840x3840"    |    Canvas size                                                                             |
+| canvas_size            |        true     | String    |  eg:"3840x3840"    |    Canvas size                                                                                |
 | webhookUrl             |        true     | String    |                    |    Callback url address based on HTTP request                                                 |
+| removeBg               |        false    | Boolean    |     true or false   default false                |   Whether to remove the background image                       |
 
 <Note>In addition to using the required parameters,you can also use one or both of the color_code or template_url parameters(but this is not required). Once you use template_url, you can carry three additional parameters: modify_template_size, overlay_template_x, and overlay_template_y.</Note>
 
