@@ -22,17 +22,17 @@ POST https://openapi.akool.com/api/open/v3/liveAvatar/session/create
 
 **Body Attributes**
 
-| **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
-| ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| avatar_id     | String   |           | Digital human model in real-time avatar, The current system provides four options: _"Kai_1080P_back"、"Katha_1080P_back"、"Olivia_1080P_back"、"who_1080P_back". If you want to use a custom uploaded video, you need to call the *https://openapi.akool.com/api/open/v3/avatar/create* interface to create a template. This process takes some time to process. You can check the processing status through the interface *https://openapi.akool.com/api/open/v3/avatar/detail*. When status=3, you can use the avatar_id field to pass it in.|
+| **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| avatar_id     | String   |           | Digital human model in real-time avatar, The current system provides four options: \_"Kai_1080P_back"、"Katha_1080P_back"、"Olivia_1080P_back"、"who_1080P_back". If you want to use a custom uploaded video, you need to call the *https://openapi.akool.com/api/open/v3/avatar/create* interface to create a template. This process takes some time to process. You can check the processing status through the interface *https://openapi.akool.com/api/open/v3/avatar/detail*. When status=3, you can use the avatar_id field to pass it in. |
 
 **Response Attributes**
 
-| **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
-| ------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | int      | 1000                                            | Interface returns business status code(1000:success)                                                                                                  |
-| msg           | String   |                                                 | Interface returns status information                                                                                                                  |
-| data          | Object   | `{ "_id": "", "status": 1, "stream_urls": { "client_pull_stream_url":"", "client_chat_room_url":"", "server_chat_room_url":"" } }` | `_id`: Interface returns data, status: the status of session： [1:queueing, 2:processing, 3:completed, 4:failed], stream_urls: the url of live avatar, *client_pull_stream_url*:  Client streaming address, *client_chat_room_url*: Client websocket link address, *server_chat_room_url*: server websocket link address, The address suffix such as server_8898 is the object processed by the server algorithm |
+| **Parameter** | **Type** | **Value**                                                                                                                          | **Description**                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| code          | int      | 1000                                                                                                                               | Interface returns business status code(1000:success)                                                                                                                                                                                                                                                                                                                                                            |
+| msg           | String   |                                                                                                                                    | Interface returns status information                                                                                                                                                                                                                                                                                                                                                                            |
+| data          | Object   | `{ "_id": "", "status": 1, "stream_urls": { "client_pull_stream_url":"", "client_chat_room_url":"", "server_chat_room_url":"" } }` | `_id`: Interface returns data, status: the status of session： [1:queueing, 2:processing, 3:completed, 4:failed], stream_urls: the url of live avatar, _client_pull_stream_url_: Client streaming address, _client_chat_room_url_: Client websocket link address, _server_chat_room_url_: server websocket link address, The address suffix such as server_8898 is the object processed by the server algorithm |
 
 **Example**
 
@@ -520,23 +520,24 @@ print(response.text)
 ```
 WSS https://openapi.akool.com/api/open/v3/liveAvatar/session/create
 ```
+
 **Receive Data**
 
-| **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
-| ------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| type          | String   |    chat   | default *chat*.|
-| payload       | String   |           | To pass in content, you need to serialize the json content.|
-| payload.message_id       | String   |           | Message id. The same id indicates that the incoming data belongs to the same message.|
-| payload.voice_id       | String   |           | Voice model id, you can get the field *voice_id* from the interface 【Get Voice List Result】.|
-| payload.language       | String   |           | Language code, you can get the field *lang_code* from the interface 【Get Language List Result】.|
-| payload.mode_type      | String   |      1     | default *1*.|
-| payload.prompt         | Object   |   { from: "", content: "" }  | Regarding the custom description of the digital person, the value range of from is *【text, url】*. When type is text, content is the text description of the avatar role. When type is url, content is the pdf link of the description of the avatar role. The link size limit is 50M. The default *type="text"* and *content=""* |
-| payload.question       | String   |           |The text content passed in, such as 'Hello'.|
-| to            | String |           | Server ID, you can get from *server_chat_room_url* link address, The address suffix such as server_8898 is the server id.|
+| **Parameter**      | **Type** | **Value**                 | **Description**                                                                                                                                                                                                                                                                                                                    |
+| ------------------ | -------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| type               | String   | chat                      | default _chat_.                                                                                                                                                                                                                                                                                                                    |
+| payload            | String   |                           | To pass in content, you need to serialize the json content.                                                                                                                                                                                                                                                                        |
+| payload.message_id | String   |                           | Message id. The same id indicates that the incoming data belongs to the same message.                                                                                                                                                                                                                                              |
+| payload.voice_id   | String   |                           | Voice model id, you can get the field _voice_id_ from the interface 【Get Voice List Result】.                                                                                                                                                                                                                                     |
+| payload.language   | String   |                           | Language code, you can get the field _lang_code_ from the interface 【Get Language List Result】.                                                                                                                                                                                                                                  |
+| payload.mode_type  | String   | 1                         | default _1_.                                                                                                                                                                                                                                                                                                                       |
+| payload.prompt     | Object   | { from: "", content: "" } | Regarding the custom description of the digital person, the value range of from is _【text, url】_. When type is text, content is the text description of the avatar role. When type is url, content is the pdf link of the description of the avatar role. The link size limit is 50M. The default _type="text"_ and _content=""_ |
+| payload.question   | String   |                           | The text content passed in, such as 'Hello'.                                                                                                                                                                                                                                                                                       |
+| to                 | String   |                           | Server ID, you can get from _server_chat_room_url_ link address, The address suffix such as server_8898 is the server id.                                                                                                                                                                                                          |
 
 **Example**
 
-**Send Data** 
+**Send Data**
 
 <Warning>
   The payload here is not serialized. When using it, you need to use JSON.stringify() to convert the object into a json string. If it is other types, you can convert it to base64 first.
@@ -557,7 +558,7 @@ WSS https://openapi.akool.com/api/open/v3/liveAvatar/session/create
 }
 ```
 
-**Receive Data** 
+**Receive Data**
 
 <Warning>
 The payload has been parsed here. In actual use, you need to perform JSON.parse() to restore it first.
@@ -608,7 +609,6 @@ The payload has been parsed here. In actual use, you need to perform JSON.parse(
 ```
 
 </CodeGroup>
-
 
 **Response Code Description**
 
