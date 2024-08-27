@@ -391,6 +391,116 @@ print(response.text)
 }
 ```
 
+### Pause Session
+
+```
+POST https://openapi.akool.com/api/open/v3/liveAvatar/session/pause
+```
+
+<Note>
+  Calling this interface will pause the streaming, and the processing of data may be delayed by 0.5s to several seconds.
+  Resending the websocket message will continue streaming. Please note that if you do not send messages for a long time after pausing, the connection will time out and you will need to restart the session.
+</Note>
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+| ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
+| Authorization | Bearer token | Your API Key used for request authorization. You can get from https://openapi.akool.com/api/open/v3/getToken api. |
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Value** | **Description**                                                                                                                   |
+| ------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| id            | String   | NULL      | session id: You can get it based on the `_id` field returned by https://openapi.akool.com/api/open/v3/liveAvatar/session/create . |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Value** | **Description**                                      |
+| ------------- | -------- | --------- | ---------------------------------------------------- |
+| code          | int      | 1000      | Interface returns business status code(1000:success) |
+| msg           | String   | OK        | Interface returns status information                 |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'http://openapi.akool.com/api/open/v3/liveAvatar/session/pause' \
+--header 'Authorization: Bearer token'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("text/plain");
+RequestBody body = RequestBody.create(mediaType, "");
+Request request = new Request.Builder()
+  .url("http://openapi.akool.com/api/open/v3/liveAvatar/session/pause")
+  .method("POST", body)
+  .addHeader("Authorization", "Bearer token")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer token");
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  redirect: "follow",
+};
+
+fetch(
+  "http://openapi.akool.com/api/open/v3/liveAvatar/session/pause",
+  requestOptions
+)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer token'
+];
+$request = new Request('POST', 'http://openapi.akool.com/api/open/v3/liveAvatar/session/pause', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+
+url = "http://openapi.akool.com/api/open/v3/liveAvatar/session/pause"
+
+payload = {}
+headers = {
+  'Authorization': 'Bearer token'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "OK"
+}
+```
+
 ### Get Session List
 
 ```
