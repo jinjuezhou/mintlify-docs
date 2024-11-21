@@ -126,35 +126,50 @@ function generateAesEncrypt(data,clientId,clientSecret){
 ```
 
 ```python Python
-from hashlib import sha1
+import hashlib
 from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad, unpad
-from Crypto.Random import get_random_bytes
+import base64
+
 
 # Generate signature
 def generate_msg_signature(client_id, timestamp, nonce, msg_encrypt):
     sorted_str = ''.join(sorted([client_id, timestamp, nonce, msg_encrypt]))
-    hash_obj = sha1(sorted_str.encode())
-    return hash_obj.hexdigest()
+    hash_value = hashlib.sha1(sorted_str.encode('utf-8')).hexdigest()
+    return hash_value
 
 
 # Decryption algorithm
 def generate_aes_decrypt(data_encrypt, client_id, client_secret):
-    aes_key = client_secret.encode()
-    iv = client_id.encode()
+    aes_key = client_secret.encode('utf-8')
+
+    # Ensure the IV is 16 bytes long
+    iv = client_id.encode('utf-8')
+    iv = iv[:16] if len(iv) >= 16 else iv.ljust(16, b'\0')
+
     cipher = AES.new(aes_key, AES.MODE_CBC, iv)
-    decrypted = unpad(cipher.decrypt(data_encrypt), AES.block_size)
-    return decrypted.decode()
+    decrypted_data = cipher.decrypt(base64.b64decode(data_encrypt))
+
+    padding_len = decrypted_data[-1]
+    return decrypted_data[:-padding_len].decode('utf-8')
 
 
 # Encryption algorithm
 def generate_aes_encrypt(data, client_id, client_secret):
-    aes_key = client_secret.encode()
-    iv = client_id.encode()
+    aes_key = client_secret.encode('utf-8')
+
+    # Ensure the IV is 16 bytes long
+    iv = client_id.encode('utf-8')
+    iv = iv[:16] if len(iv) >= 16 else iv.ljust(16, b'\0')
+
+    # Pkcs7 padding
+    data_bytes = data.encode('utf-8')
+    padding_len = AES.block_size - len(data_bytes) % AES.block_size
+    padded_data = data_bytes + bytes([padding_len]) * padding_len
+
     cipher = AES.new(aes_key, AES.MODE_CBC, iv)
-    padded_data = pad(data.encode(), AES.block_size)
-    encrypted = cipher.encrypt(padded_data)
-    return encrypted
+    encrypted_data = cipher.encrypt(padded_data)
+
+    return base64.b64encode(encrypted_data).decode('utf-8')
 ```
 
 ```java Java
@@ -296,22 +311,28 @@ const obj = {
 ```python Python
 import hashlib
 from Crypto.Cipher import AES
-from Crypto.Util.Padding import unpad
 import base64
 
-# Generate signature
+
 def generate_msg_signature(client_id, timestamp, nonce, msg_encrypt):
-    sorted_str = ''.join(sorted([client_id, str(timestamp), str(nonce), msg_encrypt]))
-    hash_obj = hashlib.sha1(sorted_str.encode())
-    return hash_obj.hexdigest()
+    sorted_str = ''.join(sorted([client_id, timestamp, nonce, msg_encrypt]))
+    hash_value = hashlib.sha1(sorted_str.encode('utf-8')).hexdigest()
+    return hash_value
+
 
 # Decryption algorithm
 def generate_aes_decrypt(data_encrypt, client_id, client_secret):
-    aes_key = client_secret.encode()
-    iv = client_id.encode()
+    aes_key = client_secret.encode('utf-8')
+
+    # Ensure the IV is 16 bytes long
+    iv = client_id.encode('utf-8')
+    iv = iv[:16] if len(iv) >= 16 else iv.ljust(16, b'\0')
+
     cipher = AES.new(aes_key, AES.MODE_CBC, iv)
-    decrypted = unpad(cipher.decrypt(base64.b64decode(data_encrypt)), AES.block_size)
-    return decrypted.decode()
+    decrypted_data = cipher.decrypt(base64.b64decode(data_encrypt))
+
+    padding_len = decrypted_data[-1]
+    return decrypted_data[:-padding_len].decode('utf-8')
 
 # Example usage
 if __name__ == "__main__":
