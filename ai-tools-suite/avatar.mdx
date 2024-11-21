@@ -659,7 +659,7 @@ $body = '{
   }],
   "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"
 }';
-$request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto', $headers, $body);
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v3/avatar/createVideo', $headers, $body);
 $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ```
@@ -668,7 +668,7 @@ echo $res->getBody();
 import requests
 import json
 
-url = "https://openapi.akool.com/api/open/v3/avatar/createVideoo"
+url = "https://openapi.akool.com/api/open/v3/avatar/createVideo"
 
 payload = json.dumps({
   "data": [{
