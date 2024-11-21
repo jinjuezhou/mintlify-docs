@@ -1,0 +1,28 @@
+---
+title: 'FAQ'
+description: ''
+---
+
+### 1、How should I handle the streaming address (FLV file) to display the live avatar in a web or desktop application?
+
+Client streaming address is the client streaming address. You need to put the address link into a player that supports pulling RTMP protocol video streams to play the real-time generated avatar video.
+
+### 2、Are there any recommended libraries or frameworks that work best with your streaming format?
+
+If you have no other good options, you can use the recommended video streaming player, here is the relevant documentation【https://www.nodemedia.cn/doc/web/#/1/1】 You can read in detail, there will be demos of various language frameworks, as well as usage demos, such as【https://www.nodemedia.cn/demo/uploads/worker/】， You can directly paste the video stream returned by our interface here to play and experience
+
+### 3、What is the expected workflow for managing the WebSocket connections for the client and server chat rooms?
+
+After you create a liveavatar session, the task will be queued. You need to use the [Get Session Info Result] interface to get the status of the current task. When status = 2, it means that the task has started. At this time, you can connect to wss and send text to interact with the avatar.
+
+### 4、How should I process and interact with the data received through these WebSocket connections?
+
+When you interact with avatar through websocket, the message replied by avatar will be returned through websocket. You can try to monitor websocket messages and apply the received messages to your service.
+
+### 5、Are there any examples or documentation that detail how to implement this stream data effectively within an application?
+
+This is our document address【https://docs.akool.io/ai-tools-suite/live-avatar】. Please read it carefully. We will update the document content from time to time, including the examples and descriptions you need.
+
+
+
+
