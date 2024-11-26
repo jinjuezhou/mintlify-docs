@@ -8,6 +8,8 @@ description: "Real-time avatar"
   Please save the relevant resources as soon as possible to prevent expiration.
 </Warning>
 
+To experience our live avatar streaming feature in action, explore our demo built on the Agora streaming service: [Streaming Avatar Node.js Demo](https://github.com/Akool-Open-API/streaming-avatar-nodejs-demo).
+
 ### Create session
 
 ```
@@ -26,7 +28,7 @@ POST https://openapi.akool.com/api/open/v3/liveAvatar/session/create
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | avatar_id     | String   |           | Digital human model in real-time avatar, The current system provides four options: _"Kai_1080P_back"、"Katha_1080P_back"、"Olivia_1080P_back"、"who_1080P_back". If you want to use a custom uploaded video, you need to call the *https://openapi.akool.com/api/open/v3/avatar/create* interface to create a template. This process takes some time to process. You can check the processing status through the interface *https://openapi.akool.com/api/open/v3/avatar/detail*. When status=3, you can use the avatar_id field to pass it in.|
 | background_url     | String   |           | The user can provide a background image to replace the avatar background in the video. If it is not passed or is empty, the avatar default background will be used. |
-
+| stream_type     | String   |           | Specifies the type of streaming. You can choose between "flv" and "agora". If this parameter is omitted, "flv" will be used as the default streaming type. |
 **Response Attributes**
 
 | **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
@@ -47,7 +49,10 @@ POST https://openapi.akool.com/api/open/v3/liveAvatar/session/create
   "app_name": "openapi_live",
   "stream_name": "20240718075254093_8898",
   "stream_urls": {
-    "client_pull_stream_url": "https://stream-open-test.akool.io:8443/final_openapi_live/20240718075254093_8898.flv", // Client streaming address
+    "agora_app_id": "", // The App ID used for the Agora SDK, applicable only when the "stream_type" is set to "agora".
+    "agora_channel": "", // The specified channel name for the Agora SDK, applicable only when the "stream_type" is set to "agora".
+    "agora_token": "", // The authentication token for the Agora SDK, required only when the "stream_type" is set to "agora".
+    "client_pull_stream_url": "https://stream-open-test.akool.io:8443/final_openapi_live/20240718075254093_8898.flv", // Client streaming address, applicable only when the "stream_type" is set to "flv".
     "client_chat_room_url": "wss://stream-open-test.akool.io:8443/final_20240718075254093_8898/client_8898.chat",     // Client websocket link address
     "server_chat_room_url": "wss://stream-open-test.akool.io:8443/final_20240718075254093_8898/server_8898.chat"      // server websocket link address, The address suffix such as server_8898 is the object processed by the server algorithm
   }
