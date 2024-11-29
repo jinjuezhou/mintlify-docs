@@ -140,13 +140,15 @@ print(response.text)
 }
 ```
 
-All API requests should include your API token in the HTTP header,
-Authorization looks like this:
-
+All API requests should include your API token in the HTTP header.
+Bearer tokens are generally composed of a random string of characters. Formally, it takes the form of the "Bearer" keyword and the token value separated by spaces. The following is the general form of a Bearer token:
 ```
-Authorization: Bearer token
+Authorization: Bearer {token}
 ```
-
+Here is an example of an actual Bearer token:
+```
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTA2Mjg1N2YzNWNjNTJlM2UxNzYyMCIsInR5cGUiOiJ1c2VyIiwiZnJvbSI6InRvYiIsImVtYWlsIjoiZ3VvZG9uZ2RvbmdAYWtvb2wuY29tIiwiZmlyc3ROYW1lIjoiZGQiLCJ1aWQiOjkwMzI4LCJjb2RlIjoiNTY1NCIsImlhdCI6MTczMjg2NzczMiwiZXhwIjoxNzMyODY3NzMzfQ._pilTnv8sPsrKCzrAyh9Lsvyge8NPxUG5Y_8CTdxad0
+```
 
 Remember, your API token is secret! Do not share it with others or
 expose it in any client-side code (browser, application). Production
