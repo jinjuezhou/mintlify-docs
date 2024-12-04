@@ -53,6 +53,7 @@
          "ai-tools-suite/audio",
         "ai-tools-suite/video-translation",
         "ai-tools-suite/talking-photo",
+        "ai-tools-suite/talking-avatar",
         "ai-tools-suite/avatar",
         "ai-tools-suite/background-change",
         "ai-tools-suite/lip-sync",
