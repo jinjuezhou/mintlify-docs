@@ -17,7 +17,7 @@ GET https://openapi.akool.com/api/open/v3/voice/list
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. You can get from [getToken](https://docs.akool.io/authentication/usage#get-the-token) api. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.io/authentication/usage#get-the-token) |
 
 **Query Attributes**
 
@@ -139,14 +139,14 @@ POST https://openapi.akool.com/api/open/v3/audio/create
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. You can get from [getToken](https://docs.akool.io/authentication/usage#get-the-token) api. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.io/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                                     |
 |---------------|----------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | input_text    | String   |           | Enter what talkingphoto to say                                                                                                                      |
-| voice_id      | String   |           | Voice id: get from [https://openapi.akool.com/api/open/v3/voice/list](https://openapi.akool.com/api/open/v3/voice/list) api，the field is 【voice_id】 |
+| voice_id      | String   |           | Voice id: get from [https://openapi.akool.com/api/open/v3/voice/list](https://docs.akool.io/ai-tools-suite/audio#get-voice-list-result) api，the field is 【voice_id】 |
 | rate          | String   |           | Voice speaking speed【field value ranges（0%-100%）】                                                                                                   |
 | webhookUrl    | String   |           | Callback url address based on HTTP request          |
 
@@ -303,7 +303,7 @@ POST https://openapi.akool.com/api/open/v3/audio/clone
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. You can get from [getToken](https://docs.akool.io/authentication/usage#get-the-token) api. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.io/authentication/usage#get-the-token)|
 
 **Body Attributes**
 
@@ -323,7 +323,7 @@ POST https://openapi.akool.com/api/open/v3/audio/clone
 | ------------- | -------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | code          | int      | 1000                             | Interface returns business status code(1000:success)                                                                                                                                                                                                                                                                   |
 | msg           | String   |                                  | Interface returns status information                                                                                                                                                                                                                                                                                   |
-| data          | Object   | `{ _id: "", status: 1, url:"" }` | \_id: Interface returns data, status: the status of audio: 【1:queueing, 2:processing, 3:completed, 4:failed】, url: Links to the generated audio resources，You can use it in the interface [https://openapi.akool.com/api/open/v3/avatar/createVideo](https://openapi.akool.com/api/open/v3/avatar/createVideo) api. |
+| data          | Object   | `{ _id: "", status: 1, url:"" }` | \_id: Interface returns data, status: the status of audio: 【1:queueing, 2:processing, 3:completed, 4:failed】, url: Links to the generated audio resources，You can use it in the interface [https://openapi.akool.com/api/open/v3/talkingavatar/create](https://docs.akool.io/ai-tools-suite/talking-avatar#create-talking-avatar) api. |
 
 **Example**
 
@@ -468,14 +468,13 @@ GET https://openapi.akool.com/api/open/v3/audio/infobymodelid?audio_model_id=65f
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. You can get from [getToken](https://docs.akool.io/authentication/usage#get-the-token) api. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.io/authentication/usage#get-the-token)|
 
 **Query Attributes**
 
 | **Parameter**  | **Type** | **Value** | **Description**                                                                                                                   |
 |----------------|----------|-----------|-----------------------------------------------------------------------------------------------------------------------------------|
-| audio_model_id | String   |           | audio db id：You can get it based on the `_id` field returned by https://openapi.akool.com/api/open/v3/audio/create or https://openapi.akool.com/api/open/v3/audio/clone api. |
-
+| audio_model_id | String   |           | audio db id：You can get it based on the `_id` field returned by [https://openapi.akool.com/api/open/v3/audio/create](https://docs.akool.io/ai-tools-suite/audio#create-tts) or [https://openapi.akool.com/api/open/v3/audio/clone](https://docs.akool.io/ai-tools-suite/audio#create-voice-clone) api. |
 **Response Attributes**
 
 | **Parameter** | **Type** | **Value**            | **Description**                                                                                             |
