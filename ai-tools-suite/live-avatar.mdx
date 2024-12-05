@@ -8,7 +8,7 @@ description: "Streaming avatar"
   Please save the relevant resources as soon as possible to prevent expiration.
 </Warning>
 
-To experience our live avatar streaming feature in action, explore our demo built on the Agora streaming service: [Streaming Avatar React Demo](https://github.com/AKOOL-Official/streaming-avatar-react-demo)(https://github.com/AKOOL-Official/streaming-avatar-react-demo).
+To experience our live avatar streaming feature in action, explore our demo built on the Agora streaming service: [Streaming Avatar React Demo](https://github.com/AKOOL-Official/streaming-avatar-react-demo). (https://github.com/AKOOL-Official/streaming-avatar-react-demo).
 
 ### Create session
 
@@ -28,7 +28,7 @@ POST https://openapi.akool.com/api/open/v3/liveAvatar/session/create
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | avatar_id     | String   |           | Digital human model in real-time avatar, The current system provides four options: _"Kai_1080P_back"、"Katha_1080P_back"、"Olivia_1080P_back"、"who_1080P_back". If you want to use a custom uploaded video, you need to call the *https://openapi.akool.com/api/open/v3/avatar/create* interface to create a template. This process takes some time to process. You can check the processing status through the interface *https://openapi.akool.com/api/open/v3/avatar/detail*. When status=3, you can use the avatar_id field to pass it in.|
 | background_url     | String   |           | The user can provide a background image to replace the avatar background in the video. If it is not passed or is empty, the avatar default background will be used. |
-| stream_type     | String   |           | Specifies the type of streaming. You can choose between "flv" and "agora". If this parameter is omitted, "flv" will be used as the default streaming type. |
+| stream_type     | String   |      agora     | Specifies the type of streaming. You can use "agora". If this parameter is omitted, "flv" will be used as the default streaming type. |
 **Response Attributes**
 
 | **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
@@ -70,7 +70,8 @@ curl --location 'https://openapi.akool.com/api/open/v3/liveAvatar/session/create
 --data '{
     "avatar_id": "Kai_1080P_back",
     "background_url": "https://static.website-files.org/assets/images/generator/text2image/1716867976184-c698621e-9bf3-4924-8d79-0ba1856669f2-6178_thumbnail.webp",
-    "webhookUrl":"https://openapitest.akool.com/api/open/v3/test/webhook"
+    "webhookUrl":"https://openapitest.akool.com/api/open/v3/test/webhook",
+    "stream_type": "agora"
 }'
 ```
 
@@ -97,6 +98,7 @@ const raw = JSON.stringify({
   avatar_id: "Kai_1080P_back",
   background_url: "https://static.website-files.org/assets/images/generator/text2image/1716867976184-c698621e-9bf3-4924-8d79-0ba1856669f2-6178_thumbnail.webp",
   webhookUrl: "https://openapitest.akool.com/api/open/v3/test/webhook",
+ "stream_type": "agora"
 });
 
 const requestOptions = {
@@ -125,7 +127,8 @@ $headers = [
 $body = '{
   "avatar_id": "Kai_1080P_back",
   "background_url": "https://static.website-files.org/assets/images/generator/text2image/1716867976184-c698621e-9bf3-4924-8d79-0ba1856669f2-6178_thumbnail.webp",
-  "webhookUrl": "https://openapitest.akool.com/api/open/v3/test/webhook"
+  "webhookUrl": "https://openapitest.akool.com/api/open/v3/test/webhook",
+ "stream_type": "agora"
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/liveAvatar/session/create', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -142,7 +145,8 @@ url = "https://openapi.akool.com/api/open/v3/liveAvatar/session/create"
 payload = json.dumps({
   "avatar_id": "Kai_1080P_back",
   "background_url": "https://static.website-files.org/assets/images/generator/text2image/1716867976184-c698621e-9bf3-4924-8d79-0ba1856669f2-6178_thumbnail.webp",
-  "webhookUrl": "https://openapitest.akool.com/api/open/v3/test/webhook"
+  "webhookUrl": "https://openapitest.akool.com/api/open/v3/test/webhook",
+ "stream_type": "agora"
 })
 headers = {
   'authorization': 'Bearer token',
