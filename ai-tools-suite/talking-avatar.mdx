@@ -12,7 +12,7 @@ description: "Talking Avatar API documentation"
   - If you want to use the sound model you provide to generate speech, you need to generate a link by calling the interface [Create Voice Clone](https://docs.akool.io/ai-tools-suite/audio#create-voice-clone)
 - Secondly, you need to provide an avatar link, which can be a picture or video.
   - If you want to use the avatar provided by the system, you can obtain it through the interface [Get Avatar List](https://docs.akool.com/ai-tools-suite/avatar#get-avatar-list) .Or provide your own avatar url.
-- Then, you need to generate an avatar video by calling the API [Create Talking Avatar](https://docstest.akool.io/ai-tools-suite/talkingavatar#create-talking-avatar)
+- Then, you need to generate an avatar video by calling the API [Create Talking Avatar](https://docs.akool.io/ai-tools-suite/talkingavatar#create-talking-avatar)
 - Finally,The processing status will be returned promptly through the provided callback address, or you can also query it by calling the interface [Get Video Info](https://docs.akool.io/ai-tools-suite/avatar#get-video-info)
 
 ### Get Avatar List
@@ -25,7 +25,7 @@ GET https://openapi.akool.com/api/open/v3/avatar/list
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer token| Your API Key used for request authorization. You can get from [https://openapi.akool.com/api/open/v3/getToken](https://docs.akool.io/authentication/usage#get-the-token) api. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.io/authentication/usage#get-the-token) |
 
 **Query Attributes**
 
@@ -143,7 +143,7 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer {token} | Your API Key used for request authorization. You can get from [https://openapi.akool.com/api/open/v3/getToken](https://docs.akool.io/authentication/usage#get-the-token) api. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.io/authentication/usage#get-the-token). |
 
 **Body Attributes**
 
@@ -444,7 +444,7 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 | **Parameter** | **Value**    | **Description**                                                                                                |
 | ------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer {token} | Your API Key used for request authorization. You can get from [https://open.akool.com/api/open/v3/getToken](https://docs.akool.io/authentication/usage#get-the-token) api. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.io/authentication/usage#get-the-token). |
 
 **Query Attributes**
 
