@@ -11,9 +11,9 @@ description: "Talking Avatar API documentation"
   - If you want to use the system's sound model to generate speech, you need to generate a link by calling the interface [Create TTS](https://docs.akool.io/ai-tools-suite/audio#create-tts)
   - If you want to use the sound model you provide to generate speech, you need to generate a link by calling the interface [Create Voice Clone](https://docs.akool.io/ai-tools-suite/audio#create-voice-clone)
 - Secondly, you need to provide an avatar link, which can be a picture or video.
-  - If you want to use the avatar provided by the system, you can obtain it through the interface [Get Avatar List](https://docs.akool.com/ai-tools-suite/avatar#get-avatar-list) .Or provide your own avatar url.
-- Then, you need to generate an avatar video by calling the API [Create Talking Avatar](https://docstest.akool.io/ai-tools-suite/talkingavatar#create-talking-avatar)
-- Finally,The processing status will be returned promptly through the provided callback address, or you can also query it by calling the interface [Get Video Info](https://docs.akool.io/ai-tools-suite/avatar#get-video-info)
+  - If you want to use the avatar provided by the system, you can obtain it through the interface [Get Avatar List](https://docs.akool.io/ai-tools-suite/talking-avatar#get-avatar-list) .Or provide your own avatar url.
+- Then, you need to generate an avatar video by calling the API [Create Talking Avatar](https://docs.akool.io/ai-tools-suite/talkingavatar#create-talking-avatar)
+- Finally,The processing status will be returned promptly through the provided callback address, or you can also query it by calling the interface [Get Video Info](https://docs.akool.io/ai-tools-suite/talking-avatar#get-video-info)
 
 ### Get Avatar List
 
@@ -25,7 +25,7 @@ GET https://openapi.akool.com/api/open/v3/avatar/list
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer token| Your API Key used for request authorization. You can get from [https://openapi.akool.com/api/open/v3/getToken](https://docs.akool.io/authentication/usage#get-the-token) api. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.io/authentication/usage#get-the-token) |
 
 **Query Attributes**
 
@@ -143,7 +143,7 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer {token} | Your API Key used for request authorization. You can get from [https://openapi.akool.com/api/open/v3/getToken](https://docs.akool.io/authentication/usage#get-the-token) api. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.io/authentication/usage#get-the-token). |
 
 **Body Attributes**
 
@@ -151,7 +151,7 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 | ------------------------------ | -------- | ----- | ------------------------------------------------------------------------------------------------------------ |
 | width                          | Number   | 3840  | Set the output video width,must be 3840                                                                                   |
 | height                         | Number   | 2160  | Set the output video height,must be 2160                                                                                 |
-| avatar_from                    | Number   |   2 or 3    | You use the avatar from of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://docs.akool.io/ai-tools-suite/avatar#get-avatar-list) api, you will obtain the field 【from】 and pass it here. If you provide an avatar URL yourself, avatar_from must be 3.                                                      |
+| avatar_from                    | Number   |   2 or 3    | You use the avatar from of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://docs.akool.io/ai-tools-suite/talking-avatar#get-avatar-list) api, you will obtain the field 【from】 and pass it here. If you provide an avatar URL yourself, avatar_from must be 3.                                                      |
 | webhookUrl                     | String   |       | Callback url address based on HTTP request.                                                                  |
 | elements                       | [Object] |       | Collection of elements passed in in the video                                                                |
 | [elements].url                 | String |         | Link to element(When type is equal to image, url can be either a link or a Hexadecimal Color Code). When avatar_from =2, you don't need to pass this parameter          |
@@ -162,7 +162,7 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 | [elements].height              | Number |       |       The height of the element           |
 | [elements].width               | Number |       |        The width of the element         |
 | [elements].type                | String |       | Element type（avatar、image、audio）                                                                                   |
-| [elements].avatar_id           | String |       |When type is equal to avatar, you use the avatar_id of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://docs.akool.io/ai-tools-suite/avatar#get-avatar-list) api, you will obtain the field 【avatar_id】 and pass it here。 If you provide an avatar URL yourself, you don't need to pass this parameter.                                                     |
+| [elements].avatar_id           | String |       |When type is equal to avatar, you use the avatar_id of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://docs.akool.io/ai-tools-suite/talking-avatar#get-avatar-list) api, you will obtain the field 【avatar_id】 and pass it here。 If you provide an avatar URL yourself, you don't need to pass this parameter.                                                     |
 
 
 **Response Attributes**
@@ -444,7 +444,7 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 | **Parameter** | **Value**    | **Description**                                                                                                |
 | ------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer {token} | Your API Key used for request authorization. You can get from [https://open.akool.com/api/open/v3/getToken](https://docs.akool.io/authentication/usage#get-the-token) api. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.io/authentication/usage#get-the-token). |
 
 **Query Attributes**
 
@@ -546,6 +546,266 @@ print(response.text)
     "video_status": 2, // current status of video： 【1：queueing（The requested operation is being processed），2：processing（The requested operation is being processing），3：completed（The request operation has been processed successfully），4：failed（The request operation processing failed, the reason for the failure can be viewed in the video translation details.）】
     "video": "" //  Generated video resource url
   }
+}
+```
+
+### Get Avatar Detail
+
+```
+GET https://openapi.akool.com/api/open/v3/avatar/detail
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                                     |
+| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://openapi.akool.com/api/open/v3/getToken)|
+
+**Query Attributes**
+
+| **Parameter** | **Type** | **Value** | **Description**   |
+| ------------- | -------- | --------- | ----------------- |
+| id            | String   |           | avatar record id. |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Value**                                    | **Description**                                                                                                                                                           |
+| ------------- | -------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| code          | int      | 1000                                         | Interface returns business status code(1000:success)                                                                                                                      |
+| msg           | String   | OK                                           | Interface returns status information                                                                                                                                      |
+| data          | Array    | `[{ avatar_id: "xx", url: "", status: "" }]` | avatar_id: Used by avatar interface and creating avatar interface. url: You can preview the avatar via the link. status: 1-queueing 2-processing），3：completed 4-failed |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v3/avatar/detail?id=66a1a02d591ad336275eda62' \
+--header 'Authorization: Bearer {{Authorization}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("text/plain");
+RequestBody body = RequestBody.create(mediaType, "");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v3/avatar/detail?id=66a1a02d591ad336275eda62")
+  .method("GET", body)
+  .addHeader("Authorization", "Bearer {{Authorization}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {{Authorization}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow",
+};
+
+fetch(
+  "https://openapi.akool.com/api/open/v3/avatar/detail?id=66a1a02d591ad336275eda62,
+  requestOptions
+)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => '{{Authorization}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v3/avatar/detail?66a1a02d591ad336275eda62', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v3/avatar/detail?id=66a1a02d591ad336275eda62"
+
+payload = {}
+headers = {
+  'Authorization': 'Bearer {{Authorization}}'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "ok",
+  "data": [
+    {
+      "_id": "66a1a02d591ad336275eda62",
+        "uid": 100010,
+        "type": 2,
+        "from": 3,
+        "status": 3,
+        "name": "30870eb0",
+        "url": "https://drz0f01yeq1cx.cloudfront.net/1721868487350-6b4cc614038643eb9f842f4ddc3d5d56.mp4"
+    }
+  ]
+}
+```
+
+### Upload Avatar
+
+```
+GET https://openapi.akool.com/api/open/v3/avatar/create
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                                     |
+| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Authorization | Bearer token | Your API Key used for request authorization. [getToken](https://openapi.akool.com/api/open/v3/getToken)|
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
+| ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
+| avatar_id     | String   |           | avatar unique ID，Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
+| type          | String   | 1，2      | Avatar type, 1 represents real avatar, 2 represents stream avatar, When type is 2, you need to wait until status is 3 before you can use it, You can get the current status in real time through the interface *[https://openapi.akool.com/api/open/v3/avatar/create](https://docs.akool.io/ai-tools-suite/talkingavatar#upload-avatar)*.                                                                                                 |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Value**                                   | **Description**                                                                                                                                        |
+| ------------- | -------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| code          | int      | 1000                                        | Interface returns business status code(1000:success)                                                                                                   |
+| msg           | String   | OK                                          | Interface returns status information                                                                                                                   |
+| data          | Array    | `[{ avatar_id: "xx", url: "", status: 1 }]` | avatar_id: Used by creating live avatar interface. url: You can preview the avatar via the link. status: 1-queueing, 2-processing, 3-success, 4-failed |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v3/avatar/create' \
+--header 'Authorization: Bearer {{Authorization}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("text/plain");
+RequestBody body = RequestBody.create(mediaType, "{\n    \n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4\",\n    \"avatar_id\": \"HHdEKhn7k7vVBlR5FSi0e\",\n    \"type\": 1\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v3/avatar/create")
+  .method("POST", body)
+  .addHeader("Authorization", "Bearer {{Authorization}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {{Authorization}}");
+
+const raw = JSON.stringify({
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+  "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "type": 1
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  redirect: "follow",
+  body: raw
+};
+
+fetch(
+  "https://openapi.akool.com/api/open/v3/avatar/create",
+  requestOptions
+)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => '{{Authorization}}'
+];
+$body = '{
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+  "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "type": 1
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v3/avatar/create', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v3/avatar/create"
+
+payload = json.dumps({
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+  "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "type": 1
+});
+headers = {
+  'Authorization': 'Bearer {{Authorization}}'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "ok",
+  "data": [
+    {
+      "_id": "655ffeada6976ea317087193",
+      "disabled": false,
+      "uid": 1,
+      "type": 1,
+      "from": 2,
+      "status": 1,
+      "sort": 12,
+      "create_time": 1700788730000,
+      "name": "Yasmin in White shirt",
+      "avatar_id": "Yasmin_in_White_shirt_20231121",
+      "url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+      "modify_url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+      "gender": "female",
+      "thumbnailUrl": "https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+      "crop_arr": []
+    }
+  ]
 }
 ```
 
