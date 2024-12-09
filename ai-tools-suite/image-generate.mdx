@@ -15,7 +15,7 @@ POST https://openapi.akool.com/api/open/v3/content/image/createbyprompt
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| Authorization | Bearer token | Your API Key used for request authorization |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://openapi.akool.com/api/open/v3/getToken) |
 
 **Body Attributes**
 
@@ -181,14 +181,14 @@ POST https://openapi.akool.com/api/open/v3/content/image/createbybutton
 
 | **Parameter**  | **Value**       | **Description**                                          |
 |----------------|-----------------|----------------------------------------------------------|
-| Authorization  | Bearer token    | Your API Key used for request authorization              |
+| Authorization  | Bearer `{token}`    | Your API Key used for request authorization.[getToken](https://openapi.akool.com/api/open/v3/getToken)|
 
 **Body Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                                                                                                                                                                                                     |
 |---------------|----------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| _id           | String   |           | the image`_id` you had generated, you can got it from https://openapi.akool.com/api/open/v3/content/image/createbyprompt                                                                                                                                                                                                                              |
-| button        | String   |           | the type of operation you want to perform, You can get the field（display_buttons） value from https://openapi.akool.com/api/open/v3/content/image/infobymodelid 【U(1-4): Generate a single 4k image based on the corresponding serial number original image， V(1-4)：Generate a single variant image based on the corresponding serial number original image】 |
+| _id           | String   |           | the image`_id` you had generated, you can got it from [https://openapi.akool.com/api/open/v3/content/image/createbyprompt](https://docs.akool.io/ai-tools-suite/image-generate#text-to-image-image-to-image)   |
+| button        | String   |           | the type of operation you want to perform, You can get the field（display_buttons） value from [https://openapi.akool.com/api/open/v3/content/image/infobymodelid](https://docs.akool.io/ai-tools-suite/image-generate#get-image-result-image-info)【U(1-4): Generate a single 4k image based on the corresponding serial number original image， V(1-4)：Generate a single variant image based on the corresponding serial number original image】 |
 | webhookUrl    | String   |           | Callback url address based on HTTP request                                                                                                                                                                                                                                                                                                          |
 
 **Response Attributes**
@@ -337,13 +337,13 @@ GET https://openapi.akool.com/api/open/v3/content/image/infobymodelid?image_mode
 
 | **Parameter**  | **Value**       | **Description**                                          |
 |----------------|-----------------|----------------------------------------------------------|
-| Authorization  | Bearer token    | Your API Key used for request authorization              |
+| Authorization  | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://openapi.akool.com/api/open/v3/getToken)|
 
 **Query Attributes**
 
 | **Parameter**  | **Type** | **Value** | **Description**                                                                                                                                                                                           |
 |----------------|----------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| image_model_id | String   |           | image db id：You can get it based on the `_id` field returned by https://openapi.akool.com/api/open/v3/content/image/createbyprompt or https://openapi.akool.com/api/open/v3/content/image/createbybutton api. |
+| image_model_id | String   |           | image db id：You can get it based on the `_id` field returned by [https://openapi.akool.com/api/open/v3/content/image/createbyprompt](https://docs.akool.io/ai-tools-suite/image-generate#text-to-image-image-to-image) or [https://openapi.akool.com/api/open/v3/content/image/createbybutton](https://docs.akool.io/ai-tools-suite/image-generate#generate-4k-or-variations) api. |
 
 **Response Attributes**
 
