@@ -55,17 +55,23 @@
       "pages": [
         "ai-tools-suite/faceswap",
         "ai-tools-suite/reage",
-         "ai-tools-suite/audio",
+        "ai-tools-suite/audio",
         "ai-tools-suite/video-translation",
         "ai-tools-suite/talking-photo",
         "ai-tools-suite/talking-avatar",
         "ai-tools-suite/background-change",
         "ai-tools-suite/lip-sync",
         "ai-tools-suite/live-avatar",
-         "ai-tools-suite/image-generate",
+        "ai-tools-suite/image-generate",
         "ai-tools-suite/jarvis-moderator",
         "ai-tools-suite/webhook",
         "ai-tools-suite/error-code"
+      ]
+    },
+    {
+      "group": "Implementation guide",
+      "pages": [
+        "implementation-guide/streaming-avatar"
       ]
     }
   ]
