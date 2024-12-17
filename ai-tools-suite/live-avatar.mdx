@@ -9,35 +9,32 @@ description: "Streaming avatar"
 </Warning>
 
 <Info>
-To experience our live avatar streaming feature in action, explore our demo built on the Agora streaming service: [AKool Streaming Avatar React Demo](https://github.com/AKOOL-Official/streaming-avatar-react-demo).
+To experience our live avatar streaming feature in action, explore our demo built on the Agora streaming service: [AKool Streaming Avatar React Demo](https://github.com/AKOOL-Official/akool-streaming-avatar-react-demo).
 </Info>
 
 ### Create session
 
 ```
-POST https://openapi.akool.com/api/open/v3/liveAvatar/session/create
+POST https://openapi.akool.com/api/open/v4/liveAvatar/session/create
 ```
 
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 | ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.io/authentication/usage#get-the-token)|
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](/authentication/usage#get-the-token)|
 
 **Body Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| avatar_id     | String   |           | Digital human model in real-time avatar, The current system provides four options: _"Kai_1080P_back"、"Katha_1080P_back"、"Olivia_1080P_back"、"who_1080P_back". If you want to use a custom uploaded video, you need to call the *[https://openapi.akool.com/api/open/v3/avatar/create](https://docs.akool.io/ai-tools-suite/talkingavatar#upload-avatar)* interface to create a template. This process takes some time to process. You can check the processing status through the interface *[https://openapi.akool.com/api/open/v3/avatar/detail](https://docs.akool.io/ai-tools-suite/talkingavatar#get-avatar-detail)*. When status=3, you can use the avatar_id field to pass it in.|
-| background_url     | String   |           | The user can provide a background image to replace the avatar background in the video. If it is not passed or is empty, the avatar default background will be used. |
-| stream_type     | String   |           | Defines the streaming type, with current support limited to "agora". |
-**Response Attributes**
+| avatar_id     | String   |           | Digital human model in real-time avatar, The current system provides only one option: "dvp_Tristan_cloth2_1080P". If you want to use a custom uploaded video, you need to call the *https://openapi.akool.com/api/open/v3/avatar/create* interface to create a template. This process takes some time to process. You can check the processing status through the interface *https://openapi.akool.com/api/open/v3/avatar/detail*. When status=3, you can use the avatar_id field to pass it in.|
 
 | **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
 | ------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | code          | int      | 1000                                            | Interface returns business status code(1000:success)                                                                                                  |
 | msg           | String   |                                                 | Interface returns status information                                                                                                                  |
-| data          | Object   | `{ "_id": "", "status": 1, "stream_urls": { "client_pull_stream_url":"", "client_chat_room_url":"", "server_chat_room_url":"" } }` | `_id`: Interface returns data, status: the status of session： [1:queueing, 2:processing, 3:completed, 4:failed], stream_urls: the url of live avatar, *client_pull_stream_url*:  Client streaming address, *client_chat_room_url*: Client websocket link address, *server_chat_room_url*: server websocket link address, The address suffix such as server_8898 is the object processed by the server algorithm |
+| data          | Object   | `{ "_id": "", "status": 1, "stream_urls": {} }` | `_id`: Interface returns data, status: the status of session: [1:queueing, 2:processing, 3:completed, 4:failed], stream_urls: the join information for the Agora SDK |
 
 **Example**
 
@@ -51,12 +48,10 @@ POST https://openapi.akool.com/api/open/v3/liveAvatar/session/create
   "app_name": "openapi_live",
   "stream_name": "20240718075254093_8898",
   "stream_urls": {
-    "agora_app_id": "", // The App ID used for the Agora SDK, applicable only when the "stream_type" is set to "agora".
-    "agora_channel": "", // The specified channel name for the Agora SDK, applicable only when the "stream_type" is set to "agora".
-    "agora_token": "", // The authentication token for the Agora SDK, required only when the "stream_type" is set to "agora".
-    "client_pull_stream_url": "https://stream-open-test.akool.io:8443/final_openapi_live/20240718075254093_8898.flv", // Client streaming address, applicable only when the "stream_type" is set to "flv".
-    "client_chat_room_url": "wss://stream-open-test.akool.io:8443/final_20240718075254093_8898/client_8898.chat",     // Client websocket link address
-    "server_chat_room_url": "wss://stream-open-test.akool.io:8443/final_20240718075254093_8898/server_8898.chat"      // server websocket link address, The address suffix such as server_8898 is the object processed by the server algorithm
+    "agora_uid": 100000, // The user ID for the Agora SDK.
+    "agora_app_id": "", // The App ID used for the Agora SDK.
+    "agora_channel": "", // The specified channel name for the Agora SDK.
+    "agora_token": "", // The authentication token for the Agora SDK, currently the valid time is 5 minutes.
   }
 }
 ```
@@ -66,14 +61,11 @@ POST https://openapi.akool.com/api/open/v3/liveAvatar/session/create
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v3/liveAvatar/session/create' \
+curl --location 'https://openapi.akool.com/api/open/v4/liveAvatar/session/create' \
 --header 'authorization: Bearer token' \
 --header 'content-type: application/json' \
 --data '{
-    "avatar_id": "Kai_1080P_back",
-    "background_url": "https://static.website-files.org/assets/images/generator/text2image/1716867976184-c698621e-9bf3-4924-8d79-0ba1856669f2-6178_thumbnail.webp",
-    "webhookUrl":"https://openapitest.akool.com/api/open/v3/test/webhook",
-    "stream_type": "agora"
+    "avatar_id": "dvp_Tristan_cloth2_1080P"
 }'
 ```
 
@@ -81,9 +73,9 @@ curl --location 'https://openapi.akool.com/api/open/v3/liveAvatar/session/create
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"avatar_id\": \"Kai_1080P_back\",\n    \"webhookUrl\":\"https://openapitest.akool.com/api/open/v3/test/webhook\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"avatar_id\": \"dvp_Tristan_cloth2_1080P\",\n    \"webhookUrl\":\"https://openapitest.akool.com/api/open/v4/test/webhook\"\n}");
 Request request = new Request.Builder()
-  .url("https://openapi.akool.com/api/open/v3/liveAvatar/session/create")
+  .url("https://openapi.akool.com/api/open/v4/liveAvatar/session/create")
   .method("POST", body)
   .addHeader("authorization", "Bearer token")
   .addHeader("content-type", "application/json")
@@ -97,10 +89,9 @@ myHeaders.append("authorization", "Bearer token");
 myHeaders.append("content-type", "application/json");
 
 const raw = JSON.stringify({
-  avatar_id: "Kai_1080P_back",
+  avatar_id: "dvp_Tristan_cloth2_1080P",
   background_url: "https://static.website-files.org/assets/images/generator/text2image/1716867976184-c698621e-9bf3-4924-8d79-0ba1856669f2-6178_thumbnail.webp",
-  webhookUrl: "https://openapitest.akool.com/api/open/v3/test/webhook",
- "stream_type": "agora"
+  webhookUrl: "https://openapitest.akool.com/api/open/v4/test/webhook"
 });
 
 const requestOptions = {
@@ -111,7 +102,7 @@ const requestOptions = {
 };
 
 fetch(
-  "https://openapi.akool.com/api/open/v3/liveAvatar/session/create",
+  "https://openapi.akool.com/api/open/v4/liveAvatar/session/create",
   requestOptions
 )
   .then((response) => response.text())
@@ -127,12 +118,10 @@ $headers = [
   'content-type' => 'application/json'
 ];
 $body = '{
-  "avatar_id": "Kai_1080P_back",
-  "background_url": "https://static.website-files.org/assets/images/generator/text2image/1716867976184-c698621e-9bf3-4924-8d79-0ba1856669f2-6178_thumbnail.webp",
-  "webhookUrl": "https://openapitest.akool.com/api/open/v3/test/webhook",
- "stream_type": "agora"
+  "avatar_id": "dvp_Tristan_cloth2_1080P",
+  "webhookUrl": "https://openapitest.akool.com/api/open/v4/test/webhook"
 }';
-$request = new Request('POST', 'https://openapi.akool.com/api/open/v3/liveAvatar/session/create', $headers, $body);
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/liveAvatar/session/create', $headers, $body);
 $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 
@@ -142,13 +131,11 @@ echo $res->getBody();
 import requests
 import json
 
-url = "https://openapi.akool.com/api/open/v3/liveAvatar/session/create"
+url = "https://openapi.akool.com/api/open/v4/liveAvatar/session/create"
 
 payload = json.dumps({
-  "avatar_id": "Kai_1080P_back",
-  "background_url": "https://static.website-files.org/assets/images/generator/text2image/1716867976184-c698621e-9bf3-4924-8d79-0ba1856669f2-6178_thumbnail.webp",
-  "webhookUrl": "https://openapitest.akool.com/api/open/v3/test/webhook",
- "stream_type": "agora"
+  "avatar_id": "dvp_Tristan_cloth2_1080P",
+  "webhookUrl": "https://openapitest.akool.com/api/open/v4/test/webhook"
 })
 headers = {
   'authorization': 'Bearer token',
@@ -174,13 +161,13 @@ print(response.text)
         "uid": 100010,
         "type": 1,
         "status": 1,
-        "task_id": "6698c9d69b4c131d2cf15f2d",
         "app_name": "openapi_live",
         "stream_name": "20240718075254093_8898",
         "stream_urls": {
-            "client_pull_stream_url": "https://stream-open-test.akool.io:8443/final_openapi_live/20240718075254093_8898.flv",   // Client streaming address
-            "client_chat_room_url": "wss://stream-open-test.akool.io:8443/final_20240718075254093_8898/client_8898.chat",   // Client websocket link address
-            "server_chat_room_url": "wss://stream-open-test.akool.io:8443/final_20240718075254093_8898/server_8898.chat" // server websocket link address, The address suffix such as server_8898 is the object processed by the server algorithm
+          "agora_uid": 100000, // The user ID for the Agora SDK.
+          "agora_app_id": "", // The App ID used for the Agora SDK.
+          "agora_channel": "", // The specified channel name for the Agora SDK.
+          "agora_token": "", // The authentication token for the Agora SDK, currently the valid time is 5 minutes.
         }
     }
 }
@@ -189,20 +176,20 @@ print(response.text)
 ### Get Session Info Result
 
 ```
-GET https://openapi.akool.com/api/open/v3/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420
+GET https://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420
 ```
 
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 | ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.io/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](/authentication/usage#get-the-token) |
 
 **Query Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                    |
 | ------------- | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| id            | String   | NULL      | video db id: You can get it based on the `_id` field returned by [https://openapi.akool.com/api/open/v3/liveAvatar/session/create](https://docs.akool.io/ai-tools-suite/live-avatar#create-session) . |
+| id            | String   | NULL      | video db id: You can get it based on the `_id` field returned by [Create Session](/ai-tools-suite/live-avatar#create-session) . |
 
 **Response Attributes**
 
@@ -210,7 +197,7 @@ GET https://openapi.akool.com/api/open/v3/liveAvatar/session/detail?id=6698c9d69
 | ------------- | -------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | code          | int      | 1000                                   | Interface returns business status code(1000:success)                                                                                                     |
 | msg           | String   | OK                                     | Interface returns status information                                                                                                                     |
-| data          | Object   | `{ status:1, _id:"", stream_urls:{} }` | status: the status of live avatar：【1:queueing, 2:processing, 3:completed, 4:failed】 stream_urls: the url of live avatar, \_id: Interface returns data |
+| data          | Object   | `{ status:1, _id:"", stream_urls:{} }` | status: the status of live avatar:(1:queueing, 2:processing, 3:completed, 4:failed) stream_urls: the url of live avatar, \_id: Interface returns data |
 
 **Example**
 
@@ -219,7 +206,7 @@ GET https://openapi.akool.com/api/open/v3/liveAvatar/session/detail?id=6698c9d69
 <CodeGroup>
 
 ```bash cURL
-curl --location 'http://openapi.akool.com/api/open/v3/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420' \
+curl --location 'http://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420' \
 --header 'Authorization: Bearer token'
 ```
 
@@ -229,7 +216,7 @@ OkHttpClient client = new OkHttpClient().newBuilder()
 MediaType mediaType = MediaType.parse("text/plain");
 RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
-  .url("http://openapi.akool.com/api/open/v3/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420")
+  .url("http://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420")
   .method("GET", body)
   .addHeader("Authorization", "Bearer token")
   .build();
@@ -247,7 +234,7 @@ const requestOptions = {
 };
 
 fetch(
-  "http://openapi.akool.com/api/open/v3/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420",
+  "http://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420",
   requestOptions
 )
   .then((response) => response.text())
@@ -261,7 +248,7 @@ $client = new Client();
 $headers = [
   'Authorization' => 'Bearer token'
 ];
-$request = new Request('GET', 'http://openapi.akool.com/api/open/v3/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420', $headers);
+$request = new Request('GET', 'http://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420', $headers);
 $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ```
@@ -269,7 +256,7 @@ echo $res->getBody();
 ```python Python
 import requests
 
-url = "http://openapi.akool.com/api/open/v3/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420"
+url = "http://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420"
 
 payload = {}
 headers = {
@@ -294,9 +281,10 @@ print(response.text)
     "uid": 100010,
     "type": 1,
     "status": 3,
-    "task_id": "6698c9d69b4c131d2cf15f2d",
     "stream_urls": {
-        "client_pull_stream_url": "https://stream-open-test.akool.io:8443/final_openapi_live/20240718075254093_8898.flv"
+        "agora_uid": 100000, // The user ID for the Agora SDK.
+        "agora_app_id": "", // The App ID used for the Agora SDK.
+        "agora_channel": "", // The specified channel name for the Agora SDK.
     }
   }
 }
@@ -305,20 +293,20 @@ print(response.text)
 ### Close Session
 
 ```
-POST https://openapi.akool.com/api/open/v3/liveAvatar/session/close
+POST https://openapi.akool.com/api/open/v4/liveAvatar/session/close
 ```
 
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 | ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.io/authentication/usage#get-the-token)|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](/authentication/usage#get-the-token)|
 
 **Body Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                   |
 | ------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| id            | String   | NULL      | session id: You can get it based on the `_id` field returned by [https://openapi.akool.com/api/open/v3/liveAvatar/session/create](https://docs.akool.io/ai-tools-suite/live-avatar#create-session) . |
+| id            | String   | NULL      | session id: You can get it based on the `_id` field returned by [Create session](/ai-tools-suite/live-avatar#create-session) . |
 
 **Response Attributes**
 
@@ -334,7 +322,7 @@ POST https://openapi.akool.com/api/open/v3/liveAvatar/session/close
 <CodeGroup>
 
 ```bash cURL
-curl --location 'http://openapi.akool.com/api/open/v3/liveAvatar/session/close' \
+curl --location 'http://openapi.akool.com/api/open/v4/liveAvatar/session/close' \
 --header 'Authorization: Bearer token'
 ```
 
@@ -344,7 +332,7 @@ OkHttpClient client = new OkHttpClient().newBuilder()
 MediaType mediaType = MediaType.parse("text/plain");
 RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
-  .url("http://openapi.akool.com/api/open/v3/liveAvatar/session/close")
+  .url("http://openapi.akool.com/api/open/v4/liveAvatar/session/close")
   .method("POST", body)
   .addHeader("Authorization", "Bearer token")
   .build();
@@ -362,7 +350,7 @@ const requestOptions = {
 };
 
 fetch(
-  "http://openapi.akool.com/api/open/v3/liveAvatar/session/close",
+  "http://openapi.akool.com/api/open/v4/liveAvatar/session/close",
   requestOptions
 )
   .then((response) => response.text())
@@ -376,7 +364,7 @@ $client = new Client();
 $headers = [
   'Authorization' => 'Bearer token'
 ];
-$request = new Request('POST', 'http://openapi.akool.com/api/open/v3/liveAvatar/session/close', $headers);
+$request = new Request('POST', 'http://openapi.akool.com/api/open/v4/liveAvatar/session/close', $headers);
 $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ```
@@ -384,117 +372,7 @@ echo $res->getBody();
 ```python Python
 import requests
 
-url = "http://openapi.akool.com/api/open/v3/liveAvatar/session/close"
-
-payload = {}
-headers = {
-  'Authorization': 'Bearer token'
-}
-
-response = requests.request("POST", url, headers=headers, data=payload)
-
-print(response.text)
-```
-
-</CodeGroup>
-
-**Response**
-
-```json
-{
-  "code": 1000,
-  "msg": "OK"
-}
-```
-
-### Pause Session
-
-```
-POST https://openapi.akool.com/api/open/v3/liveAvatar/session/pause
-```
-
-<Note>
-  Calling this interface will pause the streaming, and the processing of data may be delayed by 0.5s to several seconds.
-  Resending the websocket message will continue streaming. Please note that if you do not send messages for a long time after pausing, the connection will time out and you will need to restart the session.
-</Note>
-
-**Request Headers**
-
-| **Parameter** | **Value**    | **Description**                                                                                                   |
-| ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.io/authentication/usage#get-the-token)|
-
-**Body Attributes**
-
-| **Parameter** | **Type** | **Value** | **Description**                                                                                                                   |
-| ------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| id            | String   | NULL      | session id: You can get it based on the `_id` field returned by [https://openapi.akool.com/api/open/v3/liveAvatar/session/create](https://docs.akool.io/ai-tools-suite/live-avatar#create-session) . |
-
-**Response Attributes**
-
-| **Parameter** | **Type** | **Value** | **Description**                                      |
-| ------------- | -------- | --------- | ---------------------------------------------------- |
-| code          | int      | 1000      | Interface returns business status code(1000:success) |
-| msg           | String   | OK        | Interface returns status information                 |
-
-**Example**
-
-**Request**
-
-<CodeGroup>
-
-```bash cURL
-curl --location 'http://openapi.akool.com/api/open/v3/liveAvatar/session/pause' \
---header 'Authorization: Bearer token'
-```
-
-```java Java
-OkHttpClient client = new OkHttpClient().newBuilder()
-  .build();
-MediaType mediaType = MediaType.parse("text/plain");
-RequestBody body = RequestBody.create(mediaType, "");
-Request request = new Request.Builder()
-  .url("http://openapi.akool.com/api/open/v3/liveAvatar/session/pause")
-  .method("POST", body)
-  .addHeader("Authorization", "Bearer token")
-  .build();
-Response response = client.newCall(request).execute();
-```
-
-```js Javascript
-const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer token");
-
-const requestOptions = {
-  method: "POST",
-  headers: myHeaders,
-  redirect: "follow",
-};
-
-fetch(
-  "http://openapi.akool.com/api/open/v3/liveAvatar/session/pause",
-  requestOptions
-)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.error(error));
-```
-
-```php PHP
-<?php
-$client = new Client();
-$headers = [
-  'Authorization' => 'Bearer token'
-];
-$request = new Request('POST', 'http://openapi.akool.com/api/open/v3/liveAvatar/session/pause', $headers);
-$res = $client->sendAsync($request)->wait();
-echo $res->getBody();
-```
-
-```python Python
-import requests
-
-url = "http://openapi.akool.com/api/open/v3/liveAvatar/session/pause"
+url = "http://openapi.akool.com/api/open/v4/liveAvatar/session/close"
 
 payload = {}
 headers = {
@@ -520,22 +398,22 @@ print(response.text)
 ### Get Session List
 
 ```
-GET https://openapi.akool.com/api/open/v3/liveAvatar/session/list?page=1&size=10&status=1
+GET https://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10&status=1
 ```
 
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 | ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.io/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](/authentication/usage#get-the-token) |
 
 **Query Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                      |
 | ------------- | -------- | --------- | -------------------------------------------------------------------- |
-| page          | Number   | 1         | Current number of pages，Default is 1.                               |
-| size          | Number   | 10        | Current number of returns per page，Default is 100.                  |
-| status        | Number   | NULL      | session status: 【1:queueing, 2:processing, 3:completed, 4:failed】. |
+| page          | Number   | 1         | Current number of pages, Default is 1.                               |
+| size          | Number   | 10        | Current number of returns per page, Default is 100.                  |
+| status        | Number   | NULL      | session status: (1:queueing, 2:processing, 3:completed, 4:failed). |
 
 **Response Attributes**
 
@@ -543,7 +421,7 @@ GET https://openapi.akool.com/api/open/v3/liveAvatar/session/list?page=1&size=10
 | ------------- | -------- | ---------------------------------------------------------- | --------------------------------------------------------- |
 | code          | int      | 1000                                                       | Interface returns business status code(1000:success)      |
 | msg           | String   | OK                                                         | Interface returns status information                      |
-| data          | Array    | `{count： 1, data: [{ task_id: "xx", stream_urls: {} }] }` | task_id: task id of session. url: the url of live avatar. |
+| data          | Array    | `{count: 1, data: [{ stream_urls: {} }] }` | task_id: task id of session. url: the url of live avatar. |
 
 **Example**
 
@@ -552,7 +430,7 @@ GET https://openapi.akool.com/api/open/v3/liveAvatar/session/list?page=1&size=10
 <CodeGroup>
 
 ```bash cURL
-curl --location 'http://openapi.akool.com/api/open/v3/liveAvatar/session/list?page=1&size=10&status=1' \
+curl --location 'http://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10&status=1' \
 --header 'Authorization: Bearer token'
 ```
 
@@ -562,7 +440,7 @@ OkHttpClient client = new OkHttpClient().newBuilder()
 MediaType mediaType = MediaType.parse("text/plain");
 RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
-  .url("http://openapi.akool.com/api/open/v3/liveAvatar/session/list?page=1&size=10&status=1")
+  .url("http://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10&status=1")
   .method("GET", body)
   .addHeader("Authorization", "Bearer token")
   .build();
@@ -580,7 +458,7 @@ const requestOptions = {
 };
 
 fetch(
-  "http://openapi.akool.com/api/open/v3/liveAvatar/session/list?page=1&size=10&status=1",
+  "http://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10&status=1",
   requestOptions
 )
   .then((response) => response.text())
@@ -594,7 +472,7 @@ $client = new Client();
 $headers = [
   'Authorization' => 'Bearer token'
 ];
-$request = new Request('GET', 'http://openapi.akool.com/api/open/v3/liveAvatar/session/list?page=1&size=10&status=1', $headers);
+$request = new Request('GET', 'http://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10&status=1', $headers);
 $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ```
@@ -602,7 +480,7 @@ echo $res->getBody();
 ```python Python
 import requests
 
-url = "http://openapi.akool.com/api/open/v3/liveAvatar/session/list?page=1&size=10&status=1"
+url = "http://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10&status=1"
 
 payload = {}
 headers = {
@@ -626,90 +504,115 @@ print(response.text)
     "count": 18,
     "result": [
       {
-        "stream_urls": {
-          "client_pull_stream_url": "https://stream-open.akool.io:8443/final_openapi_live/20240615060910789_3712.flv",
-          "client_push_stream_url": "https://stream-open.akool.io:8443/openapi_live/20240615060910789_3712.whip"
-        },
         "_id": "666d3006247f07725af0f884",
         "uid": 100010,
         "type": 1,
         "status": 1,
-        "task_id": "666d300635d473f81c8be7b1"
+        "stream_urls": {
+          "agora_uid": 100000, // The user ID for the Agora SDK.
+          "agora_app_id": "", // The App ID used for the Agora SDK.
+          "agora_channel": "" // The specified channel name for the Agora SDK.
+        },
       }
     ]
-    }
+  }
 }
 ```
 
-### Live Avatar WebSocket
+### Live Avatar Stream Message
 
+```ts
+IAgoraRTCClient.on(event: "stream-message", listener: (uid: UID, payload: Uint8Array) => void)
+
+IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Promise<void>;
 ```
-WSS client_chat_room_url
-```
 
-<Note>
-  {" "}
-   you can get the url *client_chat_room_url* from the interface 【Create session】.
-   like *wss://stream-open.akool.io:8443/final_open_live/client_3835.chat*
-</Note>
+**Send Data**
 
-**Receive Data**
+**Chat Type Parameters**
 
-| **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
-| ------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| type          | String   |    chat   | default *chat*.|
-| payload       | String   |           | To pass in content, you need to serialize the json content.|
-| payload.message_id       | String   |           | Message id. The same id indicates that the incoming data belongs to the same message.|
-| payload.voice_id       | String   |           | Voice model id, you can get the field *voice_id* from the interface 【Get Voice List Result】.|
-| payload.language       | String   |           | Language code, you can get the field *lang_code* from the interface 【Get Language List Result】.|
-| payload.mode_type       | String   |      1     | default *1*.|
-| payload.question       | String   |           |The text content passed in, such as 'Hello'.|
-| payload.prompt     | Object   |  | Regarding the custom description of the digital person. | 
-| payload.prompt.from     | String   |  text | the value range of from is 【text, url】. The default type="text"| 
-| payload.prompt.content     | String   | | When type is text, content is the text description of the avatar role. When type is url, content is the pdf link of the description of the avatar role. The link size limit is 50M. The default type="text" and content=""| 
-| to            | String   |           | Server ID, you can get from *server_chat_room_url* link address, The address suffix such as server_8898 is the server id.|
+| **Parameter** | **Type** | **Value** | **Description** |
+| ------------- | -------- | --------- | --------------- |
+| type | String | chat | Message type for chat interactions |
+| payload | String | | JSON serialized content containing chat parameters |
+| payload.message_id | String | | Unique identifier for tracking related messages in a conversation |
+| payload.voice_id | String | | Voice model ID from [Get Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
+| payload.language | String | | Language code (e.g. "en") from [Get Language List API](/ai-tools-suite/video-translation#get-language-list-result) |
+| payload.mode_type | Number | 1 | Interaction mode (1: Retelling, 2: Dialogue) |
+| payload.prompt | Object | | Avatar personality configuration |
+| payload.prompt.from | String | text | Prompt source type ("text" or "url") |
+| payload.prompt.content | String | | Text: Role description. URL: PDF file link (max 50MB) |
+| payload.question | String | | Text input to send to the avatar (e.g. "Hello") |
+| payload.question_ended | Boolean | | Indicates if this is the end of the question |
+
+**Command Type Parameters**
+
+| **Parameter** | **Type** | **Value** | **Description** |
+| ------------- | -------- | --------- | --------------- |
+| type | String | command | Message type for system commands |
+| payload | String | | JSON serialized content containing command parameters |
+| payload.command | String | | Command to execute: "set-params" to update settings, "interrupt" to stop current action |
+| payload.params | Object | | Parameters for the command |
+| payload.params.voice_id | String | | Voice model ID to switch to |
+| payload.params.language | String | | Language code to switch to |
+| payload.params.mode_type | String | | Interaction mode to switch to: 1 for Retelling, 2 for Dialogue |
+| payload.params.background_url | String | | URL of background image/video to display behind avatar |
 
 **Example**
-
-**Send Data** 
 
 <Warning>
   The payload here is not serialized. When using it, you need to use JSON.stringify() to convert the object into a json string. If it is other types, you can convert it to base64 first.
 </Warning>
 
-```json
+```json Request
 {
     "type": "chat",                         //  default 'chat'.
     "payload": {
-      "message_id":"msg-1723629433573",     //  Message id. The same id indicates that the incoming data belongs to the same message.
-      "voice_id":"21m00Tcm4TlvDq8ikWAM",    //  Voice model id, you can get the field *voice_id* from the interface 【Get Voice List Result】.
-      "language":"en",                      //  Language code, you can get the field 'lang_code' from the interface 【Get Language List Result】
-      "mode_type":1,                        //  1 Retelling 2 Dialogue， default *1*.
+      "message_id": "msg-1723629433573",     //  Message id. The same id indicates that the incoming data belongs to the same message.
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",    //  Voice model id, you can get the field *voice_id* from the interface Get Voice List Result.
+      "language": "en",                      //  Language code, you can get the field 'lang_code' from the interface Get Language List Result.
+      "mode_type": 1,                        //  1 Retelling 2 Dialogue,  default *1*.
       "prompt":{
         "from": "text", 
         "content": ""
       },
       "question":"Hello"                    //  The text content passed in, such as 'Hello'.
     },
-    "to": "server_8898"   //  Server ID, you can get from *server_chat_room_url* link address, The address suffix such as server_8898 is the server id.
 }
 ```
 
 **Receive Data** 
 
+**Chat Type Parameters**
+
+| **Parameter** | **Type** | **Value** | **Description** |
+| ------------- | -------- | --------- | --------------- |
+| type | String | chat | Message type for chat interactions |
+| payload | String | | JSON serialized content containing chat parameters |
+| payload.message_id | String | | Unique identifier for tracking related messages in a conversation |
+| payload.voice_id | String | | Voice model ID from [Get Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
+| payload.language | String | | Language code (e.g. "en") from [Get Language List API](/ai-tools-suite/video-translation#get-language-list-result) |
+| payload.mode_type | Number | 1 | Interaction mode (1: Retelling, 2: Dialogue) |
+| payload.prompt | Object | | Avatar personality configuration |
+| payload.prompt.from | String | text | Prompt source type ("text" or "url") |
+| payload.prompt.content | String | | Text: Role description. URL: PDF file link (max 50MB) |
+| payload.type | String | | Message sender type ("bot" or "user"), when type is "user", it means the user's SAR or STT message |
+| payload.answer | String | | Response text from the avatar |
+| payload.answer_ended | Boolean | | Indicates if this is the final part of the response |
+
+**Example**
+
 <Warning>
 The payload has been parsed here. In actual use, you need to perform JSON.parse() to restore it first.
 </Warning>
 
-```json
+```json Response
 {
     "type": "chat",                       //  default 'chat'.
-    "from": "server_8898",                //  Current server id.
-    "to": "client_8898",                  //  Current client id.
     "payload": {
       "message_id": "msg-1723629433573",  //  Message id. The same id indicates that the incoming data belongs to the same message.
-      "voice_id": "21m00Tcm4TlvDq8ikWAM", //  Voice model id, you can get the field *voice_id* from the interface 【Get Voice List Result】.
-      "language": "English",              //  Language
+      "voice_id": "21m00Tcm4TlvDq8ikWAM", //  Voice model id, you can get the field *voice_id* from the interface Get Voice List Result.
+      "language": "English",              //  Language code, you can get the field 'lang_code' from the interface Get Language List Result.
       "mode_type": 1,                     //  default *1*.
       "prompt": {
         "from": "text", 
@@ -723,32 +626,67 @@ The payload has been parsed here. In actual use, you need to perform JSON.parse(
 
 <CodeGroup>
 
-```js Javascript
-  const WebSocket = require('ws')
-  const ws = new WebSocket('wss://stream-open-test.akool.io:8443/final_[stream_name]/client_[stream_name].chat');
+```ts Create Client
+const client: IAgoraRTCClient = AgoraRTC.createClient({
+  mode: 'rtc',
+  codec: 'vp8',
+});
 
-  ws.on('open', function open() {
-    let message = {
-      "type": "chat",
-      "payload": JSON.stringify({
-          "message_id":"1",
-          "voice_id":"21m00Tcm4TlvDq8ikWAM",
-          "language":"en",
-          "mode_type": 1,
-          "prompt":{
-            "from": "text", 
-            "content": "" 
-          },
-          "question": "hello"
-      }),
-      "to": "server_8898"
-    };
-    ws.send(JSON.stringify(message));
-  });
+client.join(agora_app_id, agora_channel, agora_token, agora_uid);
 
-  ws.on('message', function message(data) {
-      console.log('received: %s', data);
+client.on('stream-message', (message: Uint8Array | string) => {
+  console.log('received: %s', message);
+});
+```
+
+```ts Send Message
+const msg = JSON.stringify({
+  type: "chat",
+  payload: JSON.stringify({
+      message_id: "1",
+      voice_id: "21m00Tcm4TlvDq8ikWAM",
+      language: "en",
+      mode_type: 1,
+      prompt:{
+        from: "text", 
+        content: "" 
+      },
+      question: "hello"
+  }),
+});
+
+await client.sendStreamMessage(msg, false);
+```
+
+```ts Set Avatar Params
+const setAvatarParams = async () => {
+  const msg = JSON.stringify({
+    type: 'command',
+    payload: JSON.stringify({
+      command: 'set-params',
+      params: {
+        voice_id: voiceId,
+        voice_url: '',
+        language: language,
+        mode_type: modeType,
+        background_url: '',
+      },
+    }),
   });
+  return client.sendStreamMessage(msg, false);
+};
+```
+
+```ts Interrupt Response
+const interruptResponse = async () => {
+  const msg = JSON.stringify({
+    type: 'command',
+    payload: JSON.stringify({
+      command: 'interrupt',
+    }),
+  });
+  return client.sendStreamMessage(msg, false);
+};
 ```
 
 </CodeGroup>
@@ -759,55 +697,57 @@ Before dispatching a message to the WebSocket, consider executing an HTTP reques
 
 <CodeGroup>
 
-```js Javascript
-  const WebSocket = require('ws')
-  const ws = new WebSocket('wss://stream-open-test.akool.io:8443/final_[stream_name]/client_[stream_name].chat');
+```ts TypeScript
+const client: IAgoraRTCClient = AgoraRTC.createClient({
+  mode: 'rtc',
+  codec: 'vp8',
+});
 
-  ws.on('message', function message(data) {
-      console.log('received: %s', data);
+client.join(agora_app_id, agora_channel, agora_token, agora_uid);
+
+client.on('stream-message', (message: Uint8Array | string) => {
+  console.log('received: %s', message);
+});
+
+let inputMessage = 'hello';
+
+try {
+  const response = await fetch('https://your-backend-host/api/llm/answer', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      question: inputMessage,
+    }),
   });
 
-  ws.on('open', function open() {
-    let inputMessage = 'hello';
-
-    try {
-      const response = await fetch('https://your-backend-host/api/llm/answer', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          question: inputMessage,
-        }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        inputMessage = result.answer;
-      } else {
-        console.error("Failed to fetch from backend", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error during fetch operation", error);
-    }
-
-    let message = {
-      "type": "chat",
-      "payload": JSON.stringify({
-          "message_id": "1",
-          "voice_id": "21m00Tcm4TlvDq8ikWAM",
-          "language": "en",
-          "mode_type": 1,
-          "prompt":{
-            "from": "text", 
-            "content": "" 
-          },
-          "question": inputMessage
-      }),
-      "to": "server_8898"
-    };
-    ws.send(JSON.stringify(message));
+  if (response.ok) {
+    const result = await response.json();
+    inputMessage = result.answer;
+  } else {
+    console.error("Failed to fetch from backend", response.statusText);
   }
+} catch (error) {
+  console.error("Error during fetch operation", error);
+}
+
+const message = {
+  type: "chat",
+  payload: JSON.stringify({
+      message_id: "1",
+      voice_id: "21m00Tcm4TlvDq8ikWAM",
+      language: "en",
+      mode_type: 1,
+      prompt:{
+        from: "text", 
+        content: "" 
+      },
+      question: inputMessage,
+      question_ended: true,
+  }),
+};
+client.sendStreamMessage(JSON.stringify(message), false);
 ```
 
 </CodeGroup>
