@@ -223,8 +223,8 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage
 {
     "targetImage": [    // Replacement target image information
         {
-            "path": "https://d21ksh0k4smeql.cloudfront.net/crop_1695200391486-4662-0-1695200392027-6110.png",   // Links to faces detected in target images
-            "opts": "1622,759:2149,776:1869,1085:1875,1345" // Key information of the face detected in the target image【You can get it through the face https://sg3.akool.com/detect API,You can get the landmarks_str value returned by the api interface as the value of opts
+            "path": "https://static.website-files.org/assets/images/faceswap/crop_1719224038759-3888-0-1719224039439-1517.jpg",   // Links to faces detected in target images
+            "opts": "1408,786:1954,798:1653,1091:1447,1343" // Key information of the face detected in the target image【You can get it through the face https://sg3.akool.com/detect API,You can get the landmarks_str value returned by the api interface as the value of opts
         }
     ],
     "face_reage":10,// [-30,30]
@@ -242,15 +242,15 @@ curl --location 'https://openapi.akool.com/api/open/v3/faceswap/highquality/vidr
 --header 'Authorization: Bearer token' \
 --header 'Content-Type: application/json' \
 --data '{
-    "targetImage": [
+    "targetImage": [    // Replacement target image information
         {
-            "path": "https://d21ksh0k4smeql.cloudfront.net/crop_1695200391486-4662-0-1695200392027-6110.png",
-            "opts": "1622,759:2149,776:1869,1085:1875,1345"
+            "path": "https://static.website-files.org/assets/images/faceswap/crop_1719224038759-3888-0-1719224039439-1517.jpg",   // Links to faces detected in target images
+            "opts": "1408,786:1954,798:1653,1091:1447,1343" // Key information of the face detected in the target image【You can get it through the face https://sg3.akool.com/detect API,You can get the landmarks_str value returned by the api interface as the value of opts
         }
     ],
-    "face_reage":10,
-    "modifyVideo": "https://d3t6pcz7y7ey7x.cloudfront.net/Video10__d2a8cf85-10ae-4c2d-8f4b-d818c0a2e4a4.mp4",
-     "webhookUrl":"http://localhost:3007/api/webhook"
+    "face_reage":10,// [-30,30]
+    "modifyVideo": "https://d3t6pcz7y7ey7x.cloudfront.net/Video10__d2a8cf85-10ae-4c2d-8f4b-d818c0a2e4a4.mp4",    // Modify the link address of the video
+     "webhookUrl":"http://localhost:3007/api/webhook" // Callback url address based on HTTP request
 }'
 ```
 
@@ -258,7 +258,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/faceswap/highquality/vidr
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"targetImage\": [    \n        {\n            \"path\": \"https://d21ksh0k4smeql.cloudfront.net/crop_1695200391486-4662-0-1695200392027-6110.png\",   \n            \"opts\": \"1622,759:2149,776:1869,1085:1875,1345\" \n        }\n    ],\n    \"face_reage\":10,\n    \"modifyVideo\": \"https://d3t6pcz7y7ey7x.cloudfront.net/Video10__d2a8cf85-10ae-4c2d-8f4b-d818c0a2e4a4.mp4\",    \n     \"webhookUrl\":\"http://localhost:3007/api/webhook\" \n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"targetImage\": [    \n        {\n            \"path\": \"https://static.website-files.org/assets/images/faceswap/crop_1719224038759-3888-0-1719224039439-1517.jpg\",   \n            \"opts\": \"1408,786:1954,798:1653,1091:1447,1343\" \n        }\n    ],\n    \"face_reage\":10,\n    \"modifyVideo\": \"https://d3t6pcz7y7ey7x.cloudfront.net/Video10__d2a8cf85-10ae-4c2d-8f4b-d818c0a2e4a4.mp4\",    \n     \"webhookUrl\":\"http://localhost:3007/api/webhook\" \n}\n");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage")
   .method("POST", body)
@@ -274,15 +274,15 @@ myHeaders.append("Authorization", "Bearer token");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
-  "targetImage": [
-    {
-      "path": "https://d21ksh0k4smeql.cloudfront.net/crop_1695200391486-4662-0-1695200392027-6110.png",
-      "opts": "1622,759:2149,776:1869,1085:1875,1345"
-    }
-  ],
-  "face_reage": 10,
-  "modifyVideo": "https://d3t6pcz7y7ey7x.cloudfront.net/Video10__d2a8cf85-10ae-4c2d-8f4b-d818c0a2e4a4.mp4",
-  "webhookUrl": "http://localhost:3007/api/webhook"
+  "targetImage": [    // Replacement target image information
+        {
+            "path": "https://static.website-files.org/assets/images/faceswap/crop_1719224038759-3888-0-1719224039439-1517.jpg",   // Links to faces detected in target images
+            "opts": "1408,786:1954,798:1653,1091:1447,1343" // Key information of the face detected in the target image【You can get it through the face https://sg3.akool.com/detect API,You can get the landmarks_str value returned by the api interface as the value of opts
+        }
+    ],
+    "face_reage":10,// [-30,30]
+    "modifyVideo": "https://d3t6pcz7y7ey7x.cloudfront.net/Video10__d2a8cf85-10ae-4c2d-8f4b-d818c0a2e4a4.mp4",    // Modify the link address of the video
+     "webhookUrl":"http://localhost:3007/api/webhook" // Callback url address based on HTTP request
 });
 
 const requestOptions = {
@@ -306,15 +306,15 @@ $headers = [
   'Content-Type' => 'application/json'
 ];
 $body = '{
-  "targetImage": [
-    {
-      "path": "https://d21ksh0k4smeql.cloudfront.net/crop_1695200391486-4662-0-1695200392027-6110.png",
-      "opts": "1622,759:2149,776:1869,1085:1875,1345"
-    }
-  ],
-  "face_reage": 10,
-  "modifyVideo": "https://d3t6pcz7y7ey7x.cloudfront.net/Video10__d2a8cf85-10ae-4c2d-8f4b-d818c0a2e4a4.mp4",
-  "webhookUrl": "http://localhost:3007/api/webhook"
+  "targetImage": [    // Replacement target image information
+        {
+            "path": "https://static.website-files.org/assets/images/faceswap/crop_1719224038759-3888-0-1719224039439-1517.jpg",   // Links to faces detected in target images
+            "opts": "1408,786:1954,798:1653,1091:1447,1343" // Key information of the face detected in the target image【You can get it through the face https://sg3.akool.com/detect API,You can get the landmarks_str value returned by the api interface as the value of opts
+        }
+    ],
+    "face_reage":10,// [-30,30]
+    "modifyVideo": "https://d3t6pcz7y7ey7x.cloudfront.net/Video10__d2a8cf85-10ae-4c2d-8f4b-d818c0a2e4a4.mp4",    // Modify the link address of the video
+    "webhookUrl":"http://localhost:3007/api/webhook" // Callback url address based on HTTP request
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -328,15 +328,15 @@ import json
 url = "https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage"
 
 payload = json.dumps({
-  "targetImage": [
-    {
-      "path": "https://d21ksh0k4smeql.cloudfront.net/crop_1695200391486-4662-0-1695200392027-6110.png",
-      "opts": "1622,759:2149,776:1869,1085:1875,1345"
-    }
-  ],
-  "face_reage": 10,
-  "modifyVideo": "https://d3t6pcz7y7ey7x.cloudfront.net/Video10__d2a8cf85-10ae-4c2d-8f4b-d818c0a2e4a4.mp4",
-  "webhookUrl": "http://localhost:3007/api/webhook"
+  "targetImage": [    // Replacement target image information
+        {
+            "path": "https://static.website-files.org/assets/images/faceswap/crop_1719224038759-3888-0-1719224039439-1517.jpg",   // Links to faces detected in target images
+            "opts": "1408,786:1954,798:1653,1091:1447,1343" // Key information of the face detected in the target image【You can get it through the face https://sg3.akool.com/detect API,You can get the landmarks_str value returned by the api interface as the value of opts
+        }
+    ],
+    "face_reage":10,// [-30,30]
+    "modifyVideo": "https://d3t6pcz7y7ey7x.cloudfront.net/Video10__d2a8cf85-10ae-4c2d-8f4b-d818c0a2e4a4.mp4",    // Modify the link address of the video
+     "webhookUrl":"http://localhost:3007/api/webhook" // Callback url address based on HTTP request
 })
 headers = {
   'Authorization': 'Bearer token',
