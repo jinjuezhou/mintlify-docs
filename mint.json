@@ -33,6 +33,11 @@
       "url": "/"
     },
     {
+      "name": "Github",
+      "icon": "github",
+      "url": "https://github.com/AKOOL-Official"
+    },
+    {
       "name": "Blog",
       "icon": "newspaper",
       "url": "https://akool.com/blog"
