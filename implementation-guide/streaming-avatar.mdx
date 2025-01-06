@@ -108,19 +108,17 @@ sequenceDiagram
 First, create a session to obtain Agora credentials:
 
 ```ts
-async function createSession() {
-  interface SessionResponse {
-    data: {
-      credentials: {
-        agora_app_id: string;
-        agora_channel: string;
-        agora_token: string;
-        agora_uid: number;
-      };
-      _id: string;
-    };
-  }
+type Session = {
+  _id: string;
+  credentials: {
+    agora_app_id: string;
+    agora_channel: string;
+    agora_token: string;
+    agora_uid: number;
+  };
+}
 
+async function createSession(): Promise<Session> {
   const response = await fetch('https://openapi.akool.com/api/open/v4/liveAvatar/session/create', {
     method: 'POST',
     headers: {
@@ -128,7 +126,8 @@ async function createSession() {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      avatar_id: "dvp_Tristan_cloth2_1080P"
+      avatar_id: "dvp_Tristan_cloth2_1080P",
+      duration: 600, // seconds
     })
   });
 
@@ -136,7 +135,7 @@ async function createSession() {
     throw new Error(`Failed to create session: ${response.status} ${response.statusText}`);
   }
 
-  const res: SessionResponse = await response.json();
+  const res = await response.json();
   return res.data;
 }
 ```
@@ -202,11 +201,19 @@ function setupMessageHandlers(client: IAgoraRTCClient) {
       if (parsedMessage.type === 'chat') {
         const payload = parsedMessage.pld;
         
-        if (!payload.fin) {
-          answer += payload.text;
-        } else {
-          console.log('Avatar response:', answer);
-          answer = '';
+        if (payload.from === 'bot') {
+          if (!payload.fin) {
+            answer += payload.text;
+          } else {
+            console.log('Avatar response:', answer);
+            answer = '';
+          }
+        } else if (payload.from === 'user') {
+          console.log('User message:', payload.text);
+        }
+      } else if (parsedMessage.type === 'command') {
+        if (parsedMessage.pld.code !== 1000) {
+          console.error('Command failed:', parsedMessage.pld.msg);
         }
       }
     } catch (error) {
@@ -225,7 +232,7 @@ async function sendMessageToAvatar(client: IAgoraRTCClient, question: string) {
   const message = {
     v: 2,
     type: "chat",
-    mid: `msg-${crypto.randomUUID()}`,
+    mid: `msg-${Date.now()}`,
     idx: 0,
     fin: true,
     pld: {
@@ -341,7 +348,7 @@ async function setAvatarParams(client: IAgoraRTCClient, params: {
   const message = {
     v: 2,
     type: 'command',
-    mid: `msg-${crypto.randomUUID()}`,
+    mid: `msg-${Date.now()}`,
     pld: {
       command: 'set-params',
       data: params
@@ -355,7 +362,7 @@ async function interruptAvatar(client: IAgoraRTCClient) {
   const message = {
     v: 2,
     type: 'command',
-    mid: `msg-${crypto.randomUUID()}`,
+    mid: `msg-${Date.now()}`,
     pld: {
       command: 'interrupt'
     }
@@ -460,9 +467,11 @@ For more details about Agora's audio functionality, refer to the [Agora Web SDK 
 
 ### 8. Video Interaction With The Avatar (coming soon)
 
-> **Note**: Video interaction is currently under development and will be available in a future release. The following implementation details are provided as a reference for upcoming features.
+<Warning>
+Video interaction is currently under development and will be available in a future release. The following implementation details are provided as a reference for upcoming features.
+</Warning>
 
-To enable video interaction with the avatar (coming soon), you'll need to publish your local video stream:
+To enable video interaction with the avatar, you'll need to publish your local video stream:
 
 ```ts
 // Note: This is a preview of upcoming functionality
