@@ -1,11 +1,19 @@
 ---
-title: "Streaming Avatar Integration"
+title: "Streaming Avatar Integration: using Agora SDK"
 description: "Learn how to integrate streaming avatars using the Agora SDK"
 ---
 
 ## Overview
 
-This guide will walk you through integrating the streaming avatar feature using the Agora SDK.
+The Streaming Avatar feature allows you to create interactive, real-time avatar experiences in your application. This guide provides a comprehensive walkthrough of integrating streaming avatars using the Agora SDK, including:
+
+- Setting up real-time communication channels
+- Handling avatar interactions and responses
+- Managing audio streams
+- Implementing cleanup procedures
+- Optional LLM service integration
+
+The integration uses Agora's Real-Time Communication (RTC) SDK for reliable, low-latency streaming and our avatar service for generating responsive avatar behaviors.
 
 ## Prerequisites
 
@@ -27,7 +35,7 @@ import AgoraRTC, { IAgoraRTCClient } from "agora-rtc-sdk-ng";
 
 Agora SDK's sendStreamMessage is not exposed, so we need to add it manually. And it has some limitations, so we need to handle it carefully.
 
-We can guess [from the doc](https://docs.agora.io/en/voice-calling/troubleshooting/error-codes?platform=android#data-stream-related-error-codes) that the message size is limited to 1KB and the message frequency is limited to 6KB per second.
+We can infer [from the doc](https://docs.agora.io/en/voice-calling/troubleshooting/error-codes?platform=android#data-stream-related-error-codes) that the message size is limited to 1KB and the message frequency is limited to 6KB per second.
 
 The Agora SDK's `sendStreamMessage` method needs to be manually added to the type definitions:
 
@@ -80,6 +88,14 @@ sequenceDiagram
         Agora->>Client: Forward avatar response
     end
 
+    %% Video Flow (Coming Soon)
+    opt Video Interaction (Future Feature)
+        Client->>Agora: Publish video track
+        Agora->>Akool: Forward video stream
+        Akool->>Agora: Stream avatar response
+        Agora->>Client: Forward avatar response
+    end
+
     %% Cleanup
     Client->>Agora: Leave channel
     Client->>Akool: Close session
@@ -93,6 +109,18 @@ First, create a session to obtain Agora credentials:
 
 ```ts
 async function createSession() {
+  interface SessionResponse {
+    data: {
+      credentials: {
+        agora_app_id: string;
+        agora_channel: string;
+        agora_token: string;
+        agora_uid: number;
+      };
+      _id: string;
+    };
+  }
+
   const response = await fetch('https://openapi.akool.com/api/open/v4/liveAvatar/session/create', {
     method: 'POST',
     headers: {
@@ -104,7 +132,11 @@ async function createSession() {
     })
   });
 
-  const res = await response.json();
+  if (!response.ok) {
+    throw new Error(`Failed to create session: ${response.status} ${response.statusText}`);
+  }
+
+  const res: SessionResponse = await response.json();
   return res.data;
 }
 ```
@@ -168,10 +200,10 @@ function setupMessageHandlers(client: IAgoraRTCClient) {
       const parsedMessage = JSON.parse(message);
       
       if (parsedMessage.type === 'chat') {
-        const payload = JSON.parse(parsedMessage.payload);
+        const payload = parsedMessage.pld;
         
-        if (!payload.answer_ended) {
-          answer += payload.answer;
+        if (!payload.fin) {
+          answer += payload.text;
         } else {
           console.log('Avatar response:', answer);
           answer = '';
@@ -191,19 +223,14 @@ Implement functions to interact with the avatar:
 ```ts
 async function sendMessageToAvatar(client: IAgoraRTCClient, question: string) {
   const message = {
+    v: 2,
     type: "chat",
-    payload: JSON.stringify({
-      message_id: `msg-${Date.now()}`,
-      voice_id: "21m00Tcm4TlvDq8ikWAM", // Example voice ID
-      language: "en",
-      mode_type: 2, // Dialogue mode
-      prompt: {
-        from: "text",
-        content: ""
-      },
-      question: question,
-      question_ended: true,
-    })
+    mid: `msg-${crypto.randomUUID()}`,
+    idx: 0,
+    fin: true,
+    pld: {
+      text: question,
+    }
   };
 
   try {
@@ -218,83 +245,79 @@ async function sendMessageToAvatar(client: IAgoraRTCClient, question: string) {
 In real-world scenarios, the message size is limited to 1KB and the message frequency is limited to 6KB per second, so we need to split the message into chunks and send them separately.
 
 ```ts
-async function sendMessageToAvatar(
-  client: RTCClient,
-  inputMessage: string,
-  messageId: string,
-  voiceId: string,
-  language: string,
-  modeType: number,
-) {
-  const message_id = messageId;
+export async function sendMessageToAvatar(client: RTCClient, messageId: string, content: string) {
+  const MAX_ENCODED_SIZE = 950;
+  const BYTES_PER_SECOND = 6000;
 
-  // Helper function to create message payload
-  const createPayload = (question: string, isEnded: boolean) => ({
-    message_id,
-    voice_id: voiceId,
-    voice_url: '',
-    language,
-    mode_type: modeType,
-    prompt: { from: 'url', content: '' },
-    question,
-    question_ended: isEnded,
-  });
-
-  // Helper function to encode message
-  const encodeMessage = (question: string, isEnded: boolean) => {
-    const message = {
+  // Improved message encoder with proper typing
+  const encodeMessage = (text: string, idx: number, fin: boolean): Uint8Array => {
+    const message: StreamMessage = {
+      v: 2,
       type: 'chat',
-      payload: JSON.stringify(createPayload(question, isEnded)),
+      mid: messageId,
+      idx,
+      fin,
+      pld: {
+        text,
+      },
     };
     return new TextEncoder().encode(JSON.stringify(message));
   };
 
-  const maxEncodedSize = 950; // Leave buffer below 1kb limit
-  const baseEncoded = encodeMessage('', false);
-  // Conservative UTF-8 encoding estimate
-  const maxQuestionLength = Math.floor((maxEncodedSize - baseEncoded.length) / 4);
+  // Validate inputs
+  if (!content) {
+    throw new Error('Content cannot be empty');
+  }
 
-  // Split message into chunks that fit size limit
+  // Calculate maximum content length
+  const baseEncoded = encodeMessage('', 0, false);
+  const maxQuestionLength = Math.floor((MAX_ENCODED_SIZE - baseEncoded.length) / 4);
+
+  // Split message into chunks
   const chunks: string[] = [];
-  let remainingMessage = inputMessage;
+  let remainingMessage = content;
+  let chunkIndex = 0;
 
   while (remainingMessage.length > 0) {
     let chunk = remainingMessage.slice(0, maxQuestionLength);
-    let encoded = encodeMessage(chunk, false);
+    let encoded = encodeMessage(chunk, chunkIndex, false);
 
-    // Reduce chunk size if needed
-    while (encoded.length > maxEncodedSize && chunk.length > 0) {
-      chunk = chunk.slice(0, chunk.length - 10);
-      encoded = encodeMessage(chunk, false);
+    // Binary search for optimal chunk size if needed
+    while (encoded.length > MAX_ENCODED_SIZE && chunk.length > 1) {
+      chunk = chunk.slice(0, Math.ceil(chunk.length / 2));
+      encoded = encodeMessage(chunk, chunkIndex, false);
     }
 
-    if (chunk.length === 0) {
-      throw new Error('Unable to encode message: single character exceeds size limit');
+    if (encoded.length > MAX_ENCODED_SIZE) {
+      throw new Error('Message encoding failed: content too large for chunking');
     }
 
     chunks.push(chunk);
     remainingMessage = remainingMessage.slice(chunk.length);
+    chunkIndex++;
   }
 
-  // Calculate rate limiting delay based on 6kb/s limit
-  const bytesPerSecond = 6000; // 6kb/s
+  log(`Splitting message into ${chunks.length} chunks`);
 
   // Send chunks with rate limiting
   for (let i = 0; i < chunks.length; i++) {
     const isLastChunk = i === chunks.length - 1;
-    const body = encodeMessage(chunks[i], isLastChunk);
-    const chunkSize = body.length;
-    
-    // Calculate minimum time needed for this chunk at 6kb/s
-    const minimumTimeMs = Math.ceil((1000 * chunkSize) / bytesPerSecond);
+    const encodedChunk = encodeMessage(chunks[i], i, isLastChunk);
+    const chunkSize = encodedChunk.length;
+
+    const minimumTimeMs = Math.ceil((1000 * chunkSize) / BYTES_PER_SECOND);
     const startTime = Date.now();
 
-    console.log(`Sending chunk ${i + 1}/${chunks.length}, size=${chunkSize} bytes`);
-    await client.sendStreamMessage(body, false);
-    
+    log(`Sending chunk ${i + 1}/${chunks.length}, size=${chunkSize} bytes`);
+
+    try {
+      await client.sendStreamMessage(encodedChunk, false);
+    } catch (error: unknown) {
+      throw new Error(`Failed to send chunk ${i + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+
     if (!isLastChunk) {
       const elapsedMs = Date.now() - startTime;
-      // Only wait if we completed faster than our rate limit requires
       const remainingDelay = Math.max(0, minimumTimeMs - elapsedMs);
       if (remainingDelay > 0) {
         await new Promise((resolve) => setTimeout(resolve, remainingDelay));
@@ -302,7 +325,6 @@ async function sendMessageToAvatar(
     }
   }
 }
-
 ```
 
 ### 6. Control Avatar Parameters
@@ -311,17 +333,19 @@ Implement functions to control avatar settings:
 
 ```ts
 async function setAvatarParams(client: IAgoraRTCClient, params: {
-  voice_id?: string;
-  language?: string;
-  mode_type?: number;
-  background_url?: string;
+  vid?: string;
+  lang?: string;
+  mode?: number;
+  bgurl?: string;
 }) {
   const message = {
+    v: 2,
     type: 'command',
-    payload: JSON.stringify({
+    mid: `msg-${crypto.randomUUID()}`,
+    pld: {
       command: 'set-params',
-      params
-    })
+      data: params
+    }
   };
 
   await client.sendStreamMessage(JSON.stringify(message), false);
@@ -329,10 +353,12 @@ async function setAvatarParams(client: IAgoraRTCClient, params: {
 
 async function interruptAvatar(client: IAgoraRTCClient) {
   const message = {
+    v: 2,
     type: 'command',
-    payload: JSON.stringify({
+    mid: `msg-${crypto.randomUUID()}`,
+    pld: {
       command: 'interrupt'
-    })
+    }
   };
 
   await client.sendStreamMessage(JSON.stringify(message), false);
@@ -432,7 +458,88 @@ async function initializeWithAudio() {
 
 For more details about Agora's audio functionality, refer to the [Agora Web SDK Documentation](https://docs.agora.io/en/voice-calling/get-started/get-started-sdk?platform=web#publish-a-local-audio-track).
 
-### 8. Integrating your own LLM service (optional)
+### 8. Video Interaction With The Avatar (coming soon)
+
+> **Note**: Video interaction is currently under development and will be available in a future release. The following implementation details are provided as a reference for upcoming features.
+
+To enable video interaction with the avatar (coming soon), you'll need to publish your local video stream:
+
+```ts
+// Note: This is a preview of upcoming functionality
+async function publishVideo(client: IAgoraRTCClient) {
+  // Create a camera video track
+  const videoTrack = await AgoraRTC.createCameraVideoTrack();
+  
+  try {
+    // Publish the video track to the channel
+    await client.publish(videoTrack);
+    console.log("Video publishing successful");
+    
+    return videoTrack;
+  } catch (error) {
+    console.error("Error publishing video:", error);
+    throw error;
+  }
+}
+
+// Example usage with video controls (Preview of upcoming features)
+async function setupVideoInteraction(client: IAgoraRTCClient) {
+  let videoTrack;
+  
+  // Start video
+  async function startVideo() {
+    try {
+      videoTrack = await publishVideo(client);
+      // Play the local video in a specific HTML element
+      videoTrack.play('local-video-container');
+    } catch (error) {
+      console.error("Failed to start video:", error);
+    }
+  }
+
+  // Stop video
+  async function stopVideo() {
+    if (videoTrack) {
+      // Stop and close the video track
+      videoTrack.stop();
+      videoTrack.close();
+      await client.unpublish(videoTrack);
+      videoTrack = null;
+    }
+  }
+
+  // Enable/disable video
+  function toggleVideo(enabled: boolean) {
+    if (videoTrack) {
+      videoTrack.setEnabled(enabled);
+    }
+  }
+
+  // Switch camera (if multiple cameras are available)
+  async function switchCamera(deviceId: string) {
+    if (videoTrack) {
+      await videoTrack.setDevice(deviceId);
+    }
+  }
+
+  return {
+    startVideo,
+    stopVideo,
+    toggleVideo,
+    switchCamera
+  };
+}
+```
+
+The upcoming video features will include:
+- Two-way video communication
+- Camera switching capabilities
+- Video quality controls
+- Integration with existing audio features
+
+Stay tuned for updates on when video interaction becomes available.
+
+### 9. Integrating your own LLM service (optional)
 
 You can integrate your own LLM service to process messages before sending them to the avatar. Here's how to do it:
 
@@ -441,6 +548,11 @@ You can integrate your own LLM service to process messages before sending them t
 interface LLMResponse {
   answer: string;
 }
+
+// Set the avatar to retelling mode
+await setAvatarParams(client, {
+  mode: 1,
+});
 
 // Create a wrapper for your LLM service
 async function processWithLLM(question: string): Promise<LLMResponse> {
@@ -477,17 +589,12 @@ async function sendMessageToAvatarWithLLM(
     // Prepare the message with LLM response
     const message = {
       type: "chat",
-      payload: JSON.stringify({
-        message_id: `msg-${Date.now()}`,
-        voice_id: "21m00Tcm4TlvDq8ikWAM",
-        language: "en",
-        mode_type: 1, // Retelling mode
-        prompt: {
-          from: "text",
-          content: ""
-        },
-        question: llmResponse.answer // Use the LLM-processed response
-      })
+      mid: `msg-${Date.now()}`,
+      idx: 0,
+      fin: true,
+      pld: {
+        text: llmResponse.answer // Use the LLM-processed response
+      }
     };
 
     // Send the processed message to the avatar
@@ -507,19 +614,54 @@ async function sendMessageToAvatarWithLLM(
 4. Consider implementing streaming responses if your LLM service supports it
 5. Cache common responses when appropriate
 
-### 9. Putting It All Together
+### 10. Cleanup
+
+Don't forget to clean up when you're done:
+
+```ts
+async function cleanup(client: IAgoraRTCClient, sessionId: string) {
+  await fetch('https://openapi.akool.com/api/open/v4/liveAvatar/session/close', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer YOUR_TOKEN'
+    },
+    body: JSON.stringify({
+      id: sessionId
+    })
+  });
+
+  // Remove event listeners
+  client.removeAllListeners('user-published');
+  client.removeAllListeners('user-unpublished');
+  client.removeAllListeners('stream-message');
+
+  // Stop audio/video and unpublish if they're still running
+  if (audioControls) {
+    await audioControls.stopAudio();
+  }
+  if (videoControls) {
+    await videoControls.stopVideo();
+  }
+  
+  // Leave the Agora channel
+  await client.leave();
+}
+```
+
+### 11. Putting It All Together
 
 Here's how to use all the components together:
 
 ```ts
 async function initializeStreamingAvatar() {
+  let client;
   try {
     // Create session and get credentials
     const session = await createSession();
-    const { stream_urls: credentials } = session;
+    const { credentials } = session;
     
     // Initialize Agora client
-    const client = await initializeAgoraClient(credentials);
+    client = await initializeAgoraClient(credentials);
 
     // Subscribe to the audio and video stream of the avatar
     await subscribeToAvatarStream(client);
@@ -541,51 +683,23 @@ async function initializeStreamingAvatar() {
 
     // Example of changing avatar parameters
     await setAvatarParams(client, {
-      language: "en",
-      voice_id: "new_voice_id"
+      lang: "en",
+      vid: "new_voice_id"
     });
     
     return client;
   } catch (error) {
     console.error('Error initializing streaming avatar:', error);
+    if (client) {
+      await cleanup(client, session._id);
+    }
     throw error;
   }
-}
-```
-
-### 10. Cleanup
-
-Don't forget to clean up when you're done:
-
-```ts
-async function cleanup(client: IAgoraRTCClient) {
-  // Close the avatar session
-  await fetch('https://openapi.akool.com/api/open/v4/liveAvatar/session/close', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer YOUR_TOKEN'
-    },
-    body: JSON.stringify({
-      id: session._id
-    })
-  });
-
-  // Remove event listeners
-  client.removeAllListeners('user-published');
-  client.removeAllListeners('user-unpublished');
-  client.removeAllListeners('stream-message');
-
-  // Stop audio and unpublish if it's still running
-  await audioControls.stopAudio();
-  await client.unpublish(audioTrack);
-  
-  // Leave the Agora channel
-  await client.leave();
 }
 ```
 
 ## Additional Resources
 
 - [Agora Web SDK Documentation](https://docs.agora.io/en/sdks?platform=web)
-- [API Reference](https://api-ref.agora.io/en/video-sdk/web/4.x/index.html)
-- [Error Codes](/ai-tools-suite/live-avatar#response-code-description)
+- [Agora Web SDK API Reference](https://api-ref.agora.io/en/video-sdk/web/4.x/index.html)
+- [AKool OpenAPI Error Codes](/ai-tools-suite/live-avatar#response-code-description)

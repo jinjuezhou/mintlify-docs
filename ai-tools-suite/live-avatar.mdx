@@ -29,12 +29,13 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/create
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | avatar_id     | String   |           | Digital human model in real-time avatar, The current system provides only one option: "dvp_Tristan_cloth2_1080P". If you want to use a custom uploaded video, you need to call the *https://openapi.akool.com/api/open/v3/avatar/create* interface to create a template. This process takes some time to process. You can check the processing status through the interface *https://openapi.akool.com/api/open/v3/avatar/detail*. When status=3, you can use the avatar_id field to pass it in.|
+| duration      | Number   |           | The duration of the session, in seconds. The maximum value is 3600 seconds. |
 
 | **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
 | ------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | code          | int      | 1000                                            | Interface returns business status code(1000:success)                                                                                                  |
 | msg           | String   |                                                 | Interface returns status information                                                                                                                  |
-| data          | Object   | `{ "_id": "", "status": 1, "stream_urls": {} }` | `_id`: Interface returns data, status: the status of session: [1:queueing, 2:processing, 3:completed, 4:failed], stream_urls: the join information for the Agora SDK |
+| data          | Object   | `{ "_id": "", "status": 1, "credentials": {} }` | `_id`: Interface returns data, status: the status of session: [1:queueing, 2:processing, 3:completed, 4:failed], credentials: the join information for the Agora SDK |
 
 **Example**
 
@@ -44,10 +45,8 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/create
 {
   "_id": "6698c9d69cf7b0d61d1b6420",
   "status": 1,
-  "task_id": "6698c9d69b4c131d2cf15f2d",
-  "app_name": "openapi_live",
-  "stream_name": "20240718075254093_8898",
-  "stream_urls": {
+  "stream_type": "agora",
+  "credentials": {
     "agora_uid": 100000, // The user ID for the Agora SDK.
     "agora_app_id": "", // The App ID used for the Agora SDK.
     "agora_channel": "", // The specified channel name for the Agora SDK.
@@ -133,7 +132,7 @@ import json
 
 url = "https://openapi.akool.com/api/open/v4/liveAvatar/session/create"
 
-payload = json.dumps({
+pld = json.dumps({
   "avatar_id": "dvp_Tristan_cloth2_1080P",
   "webhookUrl": "https://openapitest.akool.com/api/open/v4/test/webhook"
 })
@@ -142,7 +141,7 @@ headers = {
   'content-type': 'application/json'
 }
 
-response = requests.request("POST", url, headers=headers, data=payload)
+response = requests.request("POST", url, headers=headers, data=pld)
 
 print(response.text)
 
@@ -161,9 +160,8 @@ print(response.text)
         "uid": 100010,
         "type": 1,
         "status": 1,
-        "app_name": "openapi_live",
-        "stream_name": "20240718075254093_8898",
-        "stream_urls": {
+        "stream_type": "agora",
+        "credentials": {
           "agora_uid": 100000, // The user ID for the Agora SDK.
           "agora_app_id": "", // The App ID used for the Agora SDK.
           "agora_channel": "", // The specified channel name for the Agora SDK.
@@ -197,7 +195,7 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69
 | ------------- | -------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | code          | int      | 1000                                   | Interface returns business status code(1000:success)                                                                                                     |
 | msg           | String   | OK                                     | Interface returns status information                                                                                                                     |
-| data          | Object   | `{ status:1, _id:"", stream_urls:{} }` | status: the status of live avatar:(1:queueing, 2:processing, 3:completed, 4:failed) stream_urls: the url of live avatar, \_id: Interface returns data |
+| data          | Object   | `{ status:1, _id:"", credentials:{} }` | status: the status of live avatar:(1:queueing, 2:processing, 3:completed, 4:failed) credentials: the url of live avatar, \_id: Interface returns data |
 
 **Example**
 
@@ -258,12 +256,12 @@ import requests
 
 url = "http://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420"
 
-payload = {}
+pld = {}
 headers = {
   'Authorization': 'Bearer token'
 }
 
-response = requests.request("GET", url, headers=headers, data=payload)
+response = requests.request("GET", url, headers=headers, data=pld)
 
 print(response.text)
 ```
@@ -281,7 +279,8 @@ print(response.text)
     "uid": 100010,
     "type": 1,
     "status": 3,
-    "stream_urls": {
+    "stream_type": "agora",
+    "credentials": {
         "agora_uid": 100000, // The user ID for the Agora SDK.
         "agora_app_id": "", // The App ID used for the Agora SDK.
         "agora_channel": "", // The specified channel name for the Agora SDK.
@@ -374,12 +373,12 @@ import requests
 
 url = "http://openapi.akool.com/api/open/v4/liveAvatar/session/close"
 
-payload = {}
+pld = {}
 headers = {
   'Authorization': 'Bearer token'
 }
 
-response = requests.request("POST", url, headers=headers, data=payload)
+response = requests.request("POST", url, headers=headers, data=pld)
 
 print(response.text)
 ```
@@ -421,7 +420,7 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10
 | ------------- | -------- | ---------------------------------------------------------- | --------------------------------------------------------- |
 | code          | int      | 1000                                                       | Interface returns business status code(1000:success)      |
 | msg           | String   | OK                                                         | Interface returns status information                      |
-| data          | Array    | `{count: 1, data: [{ stream_urls: {} }] }` | task_id: task id of session. url: the url of live avatar. |
+| data          | Array    | `{count: 1, data: [{ credentials: {} }] }` | task_id: task id of session. url: the url of live avatar. |
 
 **Example**
 
@@ -482,12 +481,12 @@ import requests
 
 url = "http://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10&status=1"
 
-payload = {}
+pld = {}
 headers = {
   'Authorization': 'Bearer token'
 }
 
-response = requests.request("GET", url, headers=headers, data=payload)
+response = requests.request("GET", url, headers=headers, data=pld)
 
 print(response.text)
 ```
@@ -508,7 +507,8 @@ print(response.text)
         "uid": 100010,
         "type": 1,
         "status": 1,
-        "stream_urls": {
+        "stream_type": "agora",
+        "credentials": {
           "agora_uid": 100000, // The user ID for the Agora SDK.
           "agora_app_id": "", // The App ID used for the Agora SDK.
           "agora_channel": "" // The specified channel name for the Agora SDK.
@@ -522,7 +522,7 @@ print(response.text)
 ### Live Avatar Stream Message
 
 ```ts
-IAgoraRTCClient.on(event: "stream-message", listener: (uid: UID, payload: Uint8Array) => void)
+IAgoraRTCClient.on(event: "stream-message", listener: (uid: UID, pld: Uint8Array) => void)
 
 IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Promise<void>;
 ```
@@ -533,50 +533,45 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 
 | **Parameter** | **Type** | **Value** | **Description** |
 | ------------- | -------- | --------- | --------------- |
+| v | Number | 2 | Version of the message |
 | type | String | chat | Message type for chat interactions |
-| payload | String | | JSON serialized content containing chat parameters |
-| payload.message_id | String | | Unique identifier for tracking related messages in a conversation |
-| payload.voice_id | String | | Voice model ID from [Get Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
-| payload.language | String | | Language code (e.g. "en") from [Get Language List API](/ai-tools-suite/video-translation#get-language-list-result) |
-| payload.mode_type | Number | 1 | Interaction mode (1: Retelling, 2: Dialogue) |
-| payload.prompt | Object | | Avatar personality configuration |
-| payload.prompt.from | String | text | Prompt source type ("text" or "url") |
-| payload.prompt.content | String | | Text: Role description. URL: PDF file link (max 50MB) |
-| payload.question | String | | Text input to send to the avatar (e.g. "Hello") |
-| payload.question_ended | Boolean | | Indicates if this is the end of the question |
+| mid | String | | Unique identifier for tracking related messages in a conversation |
+| idx | Number | | Index of the message |
+| fin | Boolean | | Indicates if this is the end of the question |
+| pld | String | | JSON serialized content containing chat parameters |
+| pld.text | String | | Text input to send to the avatar (e.g. "Hello") |
 
 **Command Type Parameters**
 
 | **Parameter** | **Type** | **Value** | **Description** |
 | ------------- | -------- | --------- | --------------- |
+| v | Number | 2 | Version of the message |
 | type | String | command | Message type for system commands |
-| payload | String | | JSON serialized content containing command parameters |
-| payload.command | String | | Command to execute: "set-params" to update settings, "interrupt" to stop current action |
-| payload.params | Object | | Parameters for the command |
-| payload.params.voice_id | String | | Voice model ID to switch to |
-| payload.params.language | String | | Language code to switch to |
-| payload.params.mode_type | String | | Interaction mode to switch to: 1 for Retelling, 2 for Dialogue |
-| payload.params.background_url | String | | URL of background image/video to display behind avatar |
+| mid | String | | Unique identifier for tracking related messages in a conversation |
+| pld | String | | JSON serialized content containing command parameters |
+| pld.command | String | | Command to execute: "set-params" to update settings, "interrupt" to stop current action |
+| pld.data | Object | | Parameters for the command |
+| pld.data.vid | String | | Voice model ID to switch to |
+| pld.data.vurl | String | | Voice model URL to switch to |
+| pld.data.lang | String | | Language code to switch to |
+| pld.data.mode | String | | Interaction mode to switch to: 1 for Retelling, 2 for Dialogue |
+| pld.data.bgurl | String | | URL of background image/video to display behind avatar |
 
 **Example**
 
 <Warning>
-  The payload here is not serialized. When using it, you need to use JSON.stringify() to convert the object into a json string. If it is other types, you can convert it to base64 first.
+  The pld here is not serialized. When using it, you need to use JSON.stringify() to convert the object into a json string. If it is other types, you can convert it to base64 first.
 </Warning>
 
 ```json Request
 {
-    "type": "chat",                         //  default 'chat'.
-    "payload": {
-      "message_id": "msg-1723629433573",     //  Message id. The same id indicates that the incoming data belongs to the same message.
-      "voice_id": "21m00Tcm4TlvDq8ikWAM",    //  Voice model id, you can get the field *voice_id* from the interface Get Voice List Result.
-      "language": "en",                      //  Language code, you can get the field 'lang_code' from the interface Get Language List Result.
-      "mode_type": 1,                        //  1 Retelling 2 Dialogue,  default *1*.
-      "prompt":{
-        "from": "text", 
-        "content": ""
-      },
-      "question":"Hello"                    //  The text content passed in, such as 'Hello'.
+    "v": 2, //  Version of the message
+    "type": "chat", //  Message type for chat interactions
+    "mid": "msg-1723629433573", //  Message id. The same id indicates that the incoming data belongs to the same message.
+    "idx": 0, // Index of the message.
+    "fin": true, // Indicates if this is the end of the question.
+    "pld": {
+      "text": "Hello" // The text content passed in, such as 'Hello'.
     },
 }
 ```
@@ -587,39 +582,54 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 
 | **Parameter** | **Type** | **Value** | **Description** |
 | ------------- | -------- | --------- | --------------- |
+| v | Number | 2 | Version of the message |
 | type | String | chat | Message type for chat interactions |
-| payload | String | | JSON serialized content containing chat parameters |
-| payload.message_id | String | | Unique identifier for tracking related messages in a conversation |
-| payload.voice_id | String | | Voice model ID from [Get Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
-| payload.language | String | | Language code (e.g. "en") from [Get Language List API](/ai-tools-suite/video-translation#get-language-list-result) |
-| payload.mode_type | Number | 1 | Interaction mode (1: Retelling, 2: Dialogue) |
-| payload.prompt | Object | | Avatar personality configuration |
-| payload.prompt.from | String | text | Prompt source type ("text" or "url") |
-| payload.prompt.content | String | | Text: Role description. URL: PDF file link (max 50MB) |
-| payload.type | String | | Message sender type ("bot" or "user"), when type is "user", it means the user's SAR or STT message |
-| payload.answer | String | | Response text from the avatar |
-| payload.answer_ended | Boolean | | Indicates if this is the final part of the response |
+| mid | String | | Unique identifier for tracking related messages in a conversation |
+| idx | Number | | Index of the message |
+| fin | Boolean | | Indicates if this is the end of the question |
+| pld | String | | JSON serialized content containing chat parameters |
+| pld.from | String | | Message sender type ("bot" or "user"), when type is "user", it means the user's SAR or STT message |
+| pld.text | String | | Response text from the avatar |
 
 **Example**
 
-<Warning>
-The payload has been parsed here. In actual use, you need to perform JSON.parse() to restore it first.
-</Warning>
+```json Response
+{
+    "v": 2,
+    "type": "chat",                       //  default 'chat'.
+    "mid": "msg-1723629433573",          //  Message id. The same id indicates that the incoming data belongs to the same message.
+    "idx": 0,                            //  Index of the message.
+    "fin": true,                         //  Indicates if this is the end of the question.
+    "pld": {
+      "from": "bot",                     //  Message sender type ("bot" or "user"), when type is "user", it means the user's SAR or STT message
+      "text": "Hello!  How can I assist you today? "  // avatar's answer
+    }
+}
+```
+
+**Command Type Parameters**
+
+| **Parameter** | **Type** | **Value** | **Description** |
+| ------------- | -------- | --------- | --------------- |
+| v | Number | 2 | Version of the message |
+| type | String | command | Message type for system commands |
+| mid | String | | Unique identifier for tracking related messages in a conversation |
+| pld | String | | JSON serialized content containing chat parameters |
+| pld.cmd | String | | Command to execute: "set-params" to update settings, "interrupt" to stop current action |
+| pld.code | String | | Response code from the server, 1000 means success |
+| pld.msg | String | | Response message from the server |
+
+**Example**
 
 ```json Response
 {
-    "type": "chat",                       //  default 'chat'.
-    "payload": {
-      "message_id": "msg-1723629433573",  //  Message id. The same id indicates that the incoming data belongs to the same message.
-      "voice_id": "21m00Tcm4TlvDq8ikWAM", //  Voice model id, you can get the field *voice_id* from the interface Get Voice List Result.
-      "language": "English",              //  Language code, you can get the field 'lang_code' from the interface Get Language List Result.
-      "mode_type": 1,                     //  default *1*.
-      "prompt": {
-        "from": "text", 
-        "content": ""
-      },
-      "question": "",                     //  Current input question
-      "answer": "Hello!  How can I assist you today? "  // avatar's answer
+    "v": 2, //  Version of the message
+    "type": "command", //  Message type for system commands
+    "mid": "msg-1723629433573", //  Message id. The same id indicates that the incoming data belongs to the same message.
+    "pld": {
+      "cmd": "set-params", // Command to execute: "set-params" to update settings, "interrupt" to stop current action
+      "code": 1000, // Response code from the server, 1000 means success
+      "msg": "OK" // Response message from the server
     }
 }
 ```
@@ -641,18 +651,14 @@ client.on('stream-message', (message: Uint8Array | string) => {
 
 ```ts Send Message
 const msg = JSON.stringify({
+  v: 2,
   type: "chat",
-  payload: JSON.stringify({
-      message_id: "1",
-      voice_id: "21m00Tcm4TlvDq8ikWAM",
-      language: "en",
-      mode_type: 1,
-      prompt:{
-        from: "text", 
-        content: "" 
-      },
-      question: "hello"
-  }),
+  mid: "msg-1723629433573",
+  idx: 0,
+  fin: true,
+  pld: {
+      text: "hello"
+  },
 });
 
 await client.sendStreamMessage(msg, false);
@@ -661,17 +667,16 @@ await client.sendStreamMessage(msg, false);
 ```ts Set Avatar Params
 const setAvatarParams = async () => {
   const msg = JSON.stringify({
+    v: 2,
     type: 'command',
-    payload: JSON.stringify({
+    pld: {
       command: 'set-params',
       params: {
-        voice_id: voiceId,
-        voice_url: '',
-        language: language,
-        mode_type: modeType,
-        background_url: '',
+        vid: voiceId,
+        lang: language,
+        mode: modeType,
       },
-    }),
+    },
   });
   return client.sendStreamMessage(msg, false);
 };
@@ -680,10 +685,11 @@ const setAvatarParams = async () => {
 ```ts Interrupt Response
 const interruptResponse = async () => {
   const msg = JSON.stringify({
+    v: 2,
     type: 'command',
-    payload: JSON.stringify({
+    pld: {
       command: 'interrupt',
-    }),
+    },
   });
   return client.sendStreamMessage(msg, false);
 };
@@ -733,19 +739,14 @@ try {
 }
 
 const message = {
+  v: 2,
   type: "chat",
-  payload: JSON.stringify({
-      message_id: "1",
-      voice_id: "21m00Tcm4TlvDq8ikWAM",
-      language: "en",
-      mode_type: 1,
-      prompt:{
-        from: "text", 
-        content: "" 
-      },
-      question: inputMessage,
-      question_ended: true,
-  }),
+  mid: "msg-1723629433573",
+  idx: 0,
+  fin: true,
+  pld: {
+      text: inputMessage,
+  },
 };
 client.sendStreamMessage(JSON.stringify(message), false);
 ```
