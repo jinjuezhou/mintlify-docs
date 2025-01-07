@@ -163,6 +163,7 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 | [elements].width               | Number |       |        The width of the element         |
 | [elements].type                | String |       | Element type（avatar、image、audio）                                                                                   |
 | [elements].avatar_id           | String |       |When type is equal to avatar, you use the avatar_id of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://docs.akool.io/ai-tools-suite/talking-avatar#get-avatar-list) api, you will obtain the field 【avatar_id】 and pass it here。 If you provide an avatar URL yourself, you don't need to pass this parameter.                                                     |
+| [elements].facial_expression   | String |    neutral、happiness、sadness、contempt、disgust、fear、surprise、angry | When type is equal to avatar and avtar_from is equal to 2. Supports emotion control of the entire video for official avatars|
 
 
 **Response Attributes**
