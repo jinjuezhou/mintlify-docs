@@ -531,37 +531,33 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 
 **Chat Type Parameters**
 
-| **Parameter** | **Type** | **Value** | **Description** |
-| ------------- | -------- | --------- | --------------- |
-| v | Number | 2 | Version of the message |
-| type | String | chat | Message type for chat interactions |
-| mid | String | | Unique identifier for tracking related messages in a conversation |
-| idx | Number | | Index of the message |
-| fin | Boolean | | Indicates if this is the end of the question |
-| pld | String | | JSON serialized content containing chat parameters |
-| pld.text | String | | Text input to send to the avatar (e.g. "Hello") |
+| **Parameter** | **Type** | **Required** | **Value** | **Description** |
+| ------------- | -------- | ------------ | --------- | --------------- |
+| v | Number | Yes | 2 | Version of the message |
+| type | String | Yes | chat | Message type for chat interactions |
+| mid | String | Yes | | Unique message identifier for conversation tracking |
+| idx | Number | Yes | | Sequential index of the message |
+| fin | Boolean | Yes | | Indicates if this is the final part of the message |
+| pld | Object | Yes | | Container for message payload |
+| pld.text | String | Yes | | Text content to send to avatar (e.g. "Hello") |
 
 **Command Type Parameters**
 
-| **Parameter** | **Type** | **Value** | **Description** |
-| ------------- | -------- | --------- | --------------- |
-| v | Number | 2 | Version of the message |
-| type | String | command | Message type for system commands |
-| mid | String | | Unique identifier for tracking related messages in a conversation |
-| pld | String | | JSON serialized content containing command parameters |
-| pld.command | String | | Command to execute: "set-params" to update settings, "interrupt" to stop current action |
-| pld.data | Object | | Parameters for the command |
-| pld.data.vid | String | | Voice model ID to switch to |
-| pld.data.vurl | String | | Voice model URL to switch to |
-| pld.data.lang | String | | Language code to switch to |
-| pld.data.mode | String | | Interaction mode to switch to: 1 for Retelling, 2 for Dialogue |
-| pld.data.bgurl | String | | URL of background image/video to display behind avatar |
+| **Parameter** | **Type** | **Required** | **Value** | **Description** |
+| ------------- | -------- | ------------ | --------- | --------------- |
+| v | Number | Yes | 2 | Version of the message |
+| type | String | Yes | command | Message type for system commands |
+| mid | String | Yes | | Unique message identifier for command tracking |
+| pld | Object | Yes | | Container for command payload |
+| pld.command | String | Yes | | Command type: "set-params" for settings update, "interrupt" to stop current action |
+| pld.data | Object | Yes | | Command parameters container |
+| pld.data.vid | String | No | | Voice model identifier to switch to |
+| pld.data.vurl | String | No | | Voice model URL to switch to |
+| pld.data.lang | String | No | | Target language code (e.g. "en-US") |
+| pld.data.mode | String | No | | Interaction mode: "1" for Retelling, "2" for Dialogue |
+| pld.data.bgurl | String | No | | Background media URL for avatar environment |
 
 **Example**
-
-<Warning>
-  The pld here is not serialized. When using it, you need to use JSON.stringify() to convert the object into a json string. If it is other types, you can convert it to base64 first.
-</Warning>
 
 ```json Request
 {
@@ -584,12 +580,12 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 | ------------- | -------- | --------- | --------------- |
 | v | Number | 2 | Version of the message |
 | type | String | chat | Message type for chat interactions |
-| mid | String | | Unique identifier for tracking related messages in a conversation |
-| idx | Number | | Index of the message |
-| fin | Boolean | | Indicates if this is the end of the question |
-| pld | String | | JSON serialized content containing chat parameters |
-| pld.from | String | | Message sender type ("bot" or "user"), when type is "user", it means the user's SAR or STT message |
-| pld.text | String | | Response text from the avatar |
+| mid | String | | Unique message identifier for tracking conversation flow |
+| idx | Number | | Sequential index of the message part |
+| fin | Boolean | | Indicates if this is the final part of the response |
+| pld | Object | | Container for message payload |
+| pld.from | String | "bot" or "user" | Source of the message - "bot" for avatar responses, "user" for speech recognition input |
+| pld.text | String | | Text content of the message |
 
 **Example**
 
@@ -614,9 +610,9 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 | v | Number | 2 | Version of the message |
 | type | String | command | Message type for system commands |
 | mid | String | | Unique identifier for tracking related messages in a conversation |
-| pld | String | | JSON serialized content containing chat parameters |
-| pld.cmd | String | | Command to execute: "set-params" to update settings, "interrupt" to stop current action |
-| pld.code | String | | Response code from the server, 1000 means success |
+| pld | Object | | Container for command payload |
+| pld.cmd | String | "set-params", "interrupt" | Command to execute: "set-params" to update avatar settings, "interrupt" to stop current response |
+| pld.code | Number | 1000 | Response code from the server, 1000 indicates success |
 | pld.msg | String | | Response message from the server |
 
 **Example**
