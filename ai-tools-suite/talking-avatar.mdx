@@ -151,7 +151,7 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 | ------------------------------ | -------- | ----- | ------------------------------------------------------------------------------------------------------------ |
 | resolution                     | String   |  4k or 1080p  | Generate  results                                                                                    |
 | ratio                          | String   | '16:9', '9:16', '1:1', 'original'  | Supports multiple scales and full size canvas selection                         |
-| width                          | Number   |   | Set the output video width                                                                                        |
+| width                          | Number   |   | Set the output video width。The width and height settings are as follows: (resolution =1080p, 16:9(1920*1080),9:16(1080*1920),1:1(1080*1080),original(1920*1080))、(resolution =4k, 16:9(3840*2160),9:16(2160*3840),1:1(2160*2160),original(3840*2160))          |
 | height                         | Number   |   | Set the output video height                                                                                      |
 | avatar_from                    | Number   |   2 or 3    | You use the avatar from of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://docs.akool.io/ai-tools-suite/talking-avatar#get-avatar-list) api, you will obtain the field 【from】 and pass it here. If you provide an avatar URL yourself, avatar_from must be 3.                                                      |
 | webhookUrl                     | String   |       | Callback url address based on HTTP request.                                                                  |
@@ -192,6 +192,8 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
     "width": 3840,
     "height": 2160,
     "avatar_from": 3,
+    "resolution": "4k",
+    "ratio":"16:9",
     "elements": [
         {
             "type": "image",
