@@ -32,6 +32,7 @@ GET https://openapi.akool.com/api/open/v3/avatar/list
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                               |
 | ------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | from          | Number   | 2、3      | 2 represents the official avatar of Akool, 3 represents the avatar uploaded by the user themselves，If empty, returns all avatars by default. |
+| type          | Number   | 1、2      | 1 represents the talking avatar of Akool, 3 represents the streaming avatar of Akool，If empty, returns all avatars by default. |
 | page          | Number   | 1         | Current number of pages，Default is 1.                                                                                                        |
 | size          | Number   | 10        | Current number of returns per page，Default is 100.                                                                                           |
 
@@ -684,7 +685,7 @@ GET https://openapi.akool.com/api/open/v3/avatar/create
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
 | avatar_id     | String   |           | avatar unique ID，Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
-| type          | String   | 1，2      | Avatar type, 1 represents real avatar, 2 represents stream avatar, When type is 2, you need to wait until status is 3 before you can use it, You can get the current status in real time through the interface *[https://openapi.akool.com/api/open/v3/avatar/create](https://docs.akool.io/ai-tools-suite/talkingavatar#upload-avatar)*.                                                                                                 |
+| type          | String   | 1，2      | Avatar type, 1 represents talking avatar, 2 represents stream avatar, When type is 2, you need to wait until status is 3 before you can use it, You can get the current status in real time through the interface *[https://openapi.akool.com/api/open/v3/avatar/create](https://docs.akool.io/ai-tools-suite/talkingavatar#upload-avatar)*.                                                                                                 |
 
 **Response Attributes**
 
