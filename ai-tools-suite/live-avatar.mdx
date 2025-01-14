@@ -536,7 +536,7 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 | v | Number | Yes | 2 | Version of the message |
 | type | String | Yes | chat | Message type for chat interactions |
 | mid | String | Yes | | Unique message identifier for conversation tracking |
-| idx | Number | Yes | | Sequential index of the message |
+| idx | Number | Yes | | Sequential index of the message, start from 0 |
 | fin | Boolean | Yes | | Indicates if this is the final part of the message |
 | pld | Object | Yes | | Container for message payload |
 | pld.text | String | Yes | | Text content to send to avatar (e.g. "Hello") |
@@ -545,32 +545,64 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description** |
 | ------------- | -------- | ------------ | --------- | --------------- |
-| v | Number | Yes | 2 | Version of the message |
-| type | String | Yes | command | Message type for system commands |
-| mid | String | Yes | | Unique message identifier for command tracking |
-| pld | Object | Yes | | Container for command payload |
-| pld.command | String | Yes | | Command type: "set-params" for settings update, "interrupt" to stop current action |
-| pld.data | Object | Yes | | Command parameters container |
-| pld.data.vid | String | No | | Voice model identifier to switch to |
-| pld.data.vurl | String | No | | Voice model URL to switch to |
-| pld.data.lang | String | No | | Target language code (e.g. "en-US") |
-| pld.data.mode | String | No | | Interaction mode: "1" for Retelling, "2" for Dialogue |
-| pld.data.bgurl | String | No | | Background media URL for avatar environment |
+| v | Number | Yes | 2 | Protocol version number |
+| type | String | Yes | command | Specifies this is a system command message |
+| mid | String | Yes | | Unique ID to track and correlate command messages |
+| pld | Object | Yes | | Contains the command details and parameters |
+| pld.command | String | Yes | | Command action to execute. Valid values: **"set-params"** (update avatar settings), **"interrupt"** (stop current avatar response) |
+| pld.data | Object | No | | Parameters for the command (required for **"set-params"**) |
+| pld.data.vid | String | No | | Voice ID to change avatar's voice. Only used with **"set-params"**. Get valid IDs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
+| pld.data.vurl | String | No | | Custom voice model URL. Only used with **"set-params"**. Get valid URLs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
+| pld.data.lang | String | No | | Language code for avatar responses (e.g. "en", "es"). Only used with **"set-params"**. Get valid codes from [Language List API](/ai-tools-suite/video-translation#get-language-list-result) |
+| pld.data.mode | String | No | | Avatar interaction style. Only used with **"set-params"**. "1" = Retelling (avatar repeats content), "2" = Dialogue (avatar engages in conversation) |
+| pld.data.bgurl | String | No | | URL of background image/video for avatar scene. Only used with **"set-params"** |
 
-**Example**
+**JSON Example**
 
-```json Request
+<CodeGroup>
+
+```json Chat Request
 {
-    "v": 2, //  Version of the message
-    "type": "chat", //  Message type for chat interactions
-    "mid": "msg-1723629433573", //  Message id. The same id indicates that the incoming data belongs to the same message.
-    "idx": 0, // Index of the message.
-    "fin": true, // Indicates if this is the end of the question.
+    "v": 2,
+    "type": "chat",
+    "mid": "msg-1723629433573",
+    "idx": 0,
+    "fin": true,
     "pld": {
-      "text": "Hello" // The text content passed in, such as 'Hello'.
+      "text": "Hello"
     },
 }
 ```
+
+```json Set Avatar Params
+{
+    "v": 2,
+    "type": "command",
+    "mid": "msg-1723629433573",
+    "pld": {
+      "command": "set-params",
+      "data": {
+        "vid": "1",
+        "lang": "en",
+        "mode": "1",
+        "bgurl": "https://example.com/background.jpg"
+      }
+    },
+}
+```
+
+```json Interrupt Response
+{
+    "v": 2,
+    "type": "command",
+    "mid": "msg-1723629433573",
+    "pld": {
+      "command": "interrupt"
+    },
+}
+```
+
+</CodeGroup>
 
 **Receive Data** 
 
@@ -587,22 +619,6 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 | pld.from | String | "bot" or "user" | Source of the message - "bot" for avatar responses, "user" for speech recognition input |
 | pld.text | String | | Text content of the message |
 
-**Example**
-
-```json Response
-{
-    "v": 2,
-    "type": "chat",                       //  default 'chat'.
-    "mid": "msg-1723629433573",          //  Message id. The same id indicates that the incoming data belongs to the same message.
-    "idx": 0,                            //  Index of the message.
-    "fin": true,                         //  Indicates if this is the end of the question.
-    "pld": {
-      "from": "bot",                     //  Message sender type ("bot" or "user"), when type is "user", it means the user's SAR or STT message
-      "text": "Hello!  How can I assist you today? "  // avatar's answer
-    }
-}
-```
-
 **Command Type Parameters**
 
 | **Parameter** | **Type** | **Value** | **Description** |
@@ -611,24 +627,44 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 | type | String | command | Message type for system commands |
 | mid | String | | Unique identifier for tracking related messages in a conversation |
 | pld | Object | | Container for command payload |
-| pld.cmd | String | "set-params", "interrupt" | Command to execute: "set-params" to update avatar settings, "interrupt" to stop current response |
+| pld.cmd | String | "set-params", "interrupt" | Command to execute: **"set-params"** to update avatar settings, **"interrupt"** to stop current response |
 | pld.code | Number | 1000 | Response code from the server, 1000 indicates success |
 | pld.msg | String | | Response message from the server |
 
-**Example**
+**JSON Example**
 
-```json Response
+<CodeGroup>
+
+```json Chat Response
 {
-    "v": 2, //  Version of the message
-    "type": "command", //  Message type for system commands
-    "mid": "msg-1723629433573", //  Message id. The same id indicates that the incoming data belongs to the same message.
+    "v": 2,
+    "type": "chat",
+    "mid": "msg-1723629433573",
+    "idx": 0,
+    "fin": true,
     "pld": {
-      "cmd": "set-params", // Command to execute: "set-params" to update settings, "interrupt" to stop current action
-      "code": 1000, // Response code from the server, 1000 means success
-      "msg": "OK" // Response message from the server
+      "from": "bot",
+      "text": "Hello!  How can I assist you today? "
     }
 }
 ```
+
+```json Command Response
+{
+    "v": 2,
+    "type": "command",
+    "mid": "msg-1723629433573",
+    "pld": {
+      "cmd": "set-params",
+      "code": 1000,
+      "msg": "OK"
+    }
+}
+```
+
+</CodeGroup>
+
+**Typescript Example**
 
 <CodeGroup>
 
