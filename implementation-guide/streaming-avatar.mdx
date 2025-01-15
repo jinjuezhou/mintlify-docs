@@ -387,7 +387,7 @@ async function setAvatarParams(client: IAgoraRTCClient, params: {
     type: 'command',
     mid: `msg-${Date.now()}`,
     pld: {
-      command: 'set-params',
+      cmd: 'set-params',
       data: params
     }
   };
@@ -401,7 +401,7 @@ async function interruptAvatar(client: IAgoraRTCClient) {
     type: 'command',
     mid: `msg-${Date.now()}`,
     pld: {
-      command: 'interrupt'
+      cmd: 'interrupt'
     }
   };
 

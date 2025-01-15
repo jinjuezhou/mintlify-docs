@@ -549,7 +549,7 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 | type | String | Yes | command | Specifies this is a system command message |
 | mid | String | Yes | | Unique ID to track and correlate command messages |
 | pld | Object | Yes | | Contains the command details and parameters |
-| pld.command | String | Yes | | Command action to execute. Valid values: **"set-params"** (update avatar settings), **"interrupt"** (stop current avatar response) |
+| pld.cmd | String | Yes | | Command action to execute. Valid values: **"set-params"** (update avatar settings), **"interrupt"** (stop current avatar response) |
 | pld.data | Object | No | | Parameters for the command (required for **"set-params"**) |
 | pld.data.vid | String | No | | Voice ID to change avatar's voice. Only used with **"set-params"**. Get valid IDs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
 | pld.data.vurl | String | No | | Custom voice model URL. Only used with **"set-params"**. Get valid URLs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
@@ -580,7 +580,7 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
     "type": "command",
     "mid": "msg-1723629433573",
     "pld": {
-      "command": "set-params",
+      "cmd": "set-params",
       "data": {
         "vid": "1",
         "lang": "en",
@@ -597,7 +597,7 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
     "type": "command",
     "mid": "msg-1723629433573",
     "pld": {
-      "command": "interrupt"
+      "cmd": "interrupt"
     },
 }
 ```
@@ -702,7 +702,7 @@ const setAvatarParams = async () => {
     v: 2,
     type: 'command',
     pld: {
-      command: 'set-params',
+      cmd: 'set-params',
       params: {
         vid: voiceId,
         lang: language,
@@ -720,7 +720,7 @@ const interruptResponse = async () => {
     v: 2,
     type: 'command',
     pld: {
-      command: 'interrupt',
+      cmd: 'interrupt',
     },
   });
   return client.sendStreamMessage(msg, false);
