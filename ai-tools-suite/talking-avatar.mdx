@@ -670,7 +670,7 @@ print(response.text)
 ### Upload Avatar
 
 ```
-GET https://openapi.akool.com/api/open/v3/avatar/create
+POST https://openapi.akool.com/api/open/v3/avatar/create
 ```
 
 **Request Headers**
@@ -702,8 +702,14 @@ GET https://openapi.akool.com/api/open/v3/avatar/create
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v3/avatar/create' \
---header 'Authorization: Bearer {{Authorization}}'
+curl --location 'https://landing-test.akool.io/interface/stats-api/api/open/v3/avatar/create' \
+--header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDk4NWM1NTcxNzI5ZDNlMjk5OTQ3NyIsInVpZCI6Mzc4MzM3LCJlbWFpbCI6Imh1Y2hlbkBha29vbC5jb20iLCJjcmVkZW50aWFsSWQiOiI2NjE1MGZmM2Q5MWRmYjc4OWYyNjFmNjEiLCJmaXJzdE5hbWUiOiJjaGVuIiwiZnJvbSI6InRvTyIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzEyNzE0ODI4LCJleHAiOjIwMjM3NTQ4Mjh9.e050LbczNhUx-Gprqb1NSYhBCKKH2xMqln3cMnAABmE' \
+--header 'Content-Type: application/json' \
+--data '{
+    "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+    "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+    "type": 1
+}'
 ```
 
 ```java Java
