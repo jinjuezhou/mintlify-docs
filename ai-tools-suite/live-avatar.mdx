@@ -12,6 +12,274 @@ description: "Streaming avatar"
 To experience our live avatar streaming feature in action, explore our demo built on the Agora streaming service: [AKool Streaming Avatar React Demo](https://github.com/AKOOL-Official/akool-streaming-avatar-react-demo).
 </Info>
 
+### Upload Streaming Avatar
+
+```
+POST https://openapi.akool.com/api/open/v3/avatar/create
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                                     |
+| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Authorization | Bearer token | Your API Key used for request authorization. [getToken](https://docs.akool.io/authentication/usage#get-the-token)|
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
+| ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
+| avatar_id     | String   |           | avatar unique ID，Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
+| type          | String   |    2      | Avatar type 2 represents stream avatar, When type is 2, you need to wait until status is 3 before you can use it, You can get the current status in real time through the interface *[https://openapi.akool.com/api/open/v3/avatar/create](https://docs.akool.io/ai-tools-suite/talkingavatar#upload-avatar)*.                                                                                                 |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Value**                                   | **Description**                                                                                                                                        |
+| ------------- | -------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| code          | int      | 1000                                        | Interface returns business status code(1000:success)                                                                                                   |
+| msg           | String   | OK                                          | Interface returns status information                                                                                                                   |
+| data          | Array    | `[{ avatar_id: "xx", url: "", status: 1 }]` | avatar_id: Used by creating live avatar interface. url: You can preview the avatar via the link. status: 1-queueing, 2-processing, 3-success, 4-failed |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://landing-test.akool.io/interface/stats-api/api/open/v3/avatar/create' \
+--header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDk4NWM1NTcxNzI5ZDNlMjk5OTQ3NyIsInVpZCI6Mzc4MzM3LCJlbWFpbCI6Imh1Y2hlbkBha29vbC5jb20iLCJjcmVkZW50aWFsSWQiOiI2NjE1MGZmM2Q5MWRmYjc4OWYyNjFmNjEiLCJmaXJzdE5hbWUiOiJjaGVuIiwiZnJvbSI6InRvTyIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzEyNzE0ODI4LCJleHAiOjIwMjM3NTQ4Mjh9.e050LbczNhUx-Gprqb1NSYhBCKKH2xMqln3cMnAABmE' \
+--header 'Content-Type: application/json' \
+--data '{
+    "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+    "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+    "type": 2
+}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("text/plain");
+RequestBody body = RequestBody.create(mediaType, "{\n    \n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4\",\n    \"avatar_id\": \"HHdEKhn7k7vVBlR5FSi0e\",\n    \"type\": 2\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v3/avatar/create")
+  .method("POST", body)
+  .addHeader("Authorization", "Bearer {{Authorization}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {{Authorization}}");
+
+const raw = JSON.stringify({
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+  "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "type": 2
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  redirect: "follow",
+  body: raw
+};
+
+fetch(
+  "https://openapi.akool.com/api/open/v3/avatar/create",
+  requestOptions
+)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => '{{Authorization}}'
+];
+$body = '{
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+  "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "type": 2
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v3/avatar/create', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v3/avatar/create"
+
+payload = json.dumps({
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+  "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "type": 2
+});
+headers = {
+  'Authorization': 'Bearer {{Authorization}}'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "ok",
+  "data": [
+    {
+      "_id": "655ffeada6976ea317087193",
+      "disabled": false,
+      "uid": 1,
+      "type": 2,
+      "from": 2,
+      "status": 1,
+      "sort": 12,
+      "create_time": 1700788730000,
+      "name": "Yasmin in White shirt",
+      "avatar_id": "Yasmin_in_White_shirt_20231121",
+      "url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+      "modify_url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+      "gender": "female",
+      "thumbnailUrl": "https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+      "crop_arr": []
+    }
+  ]
+}
+```
+
+### Get Streaming Avatar List
+
+```http
+GET https://openapi.akool.com/api/open/v3/avatar/list
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                                     |
+| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.io/authentication/usage#get-the-token) |
+
+**Query Attributes**
+
+| **Parameter** | **Type** | **Value** | **Description**                                                                                                                               |
+| ------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| from          | Number   | 2、3      | 2 represents the official avatar of Akool, 3 represents the avatar uploaded by the user themselves，If empty, returns all avatars by default. |
+| type          | Number   | 1、2      | 1 represents the talking avatar of Akool, 2 represents the streaming avatar of Akool，If empty, returns all avatars by default. |
+| page          | Number   | 1         | Current number of pages，Default is 1.                                                                                                        |
+| size          | Number   | 10        | Current number of returns per page，Default is 100.                                                                                           |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Value**                        | **Description**                                                                                                  |
+| ------------- | -------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| code          | int      | 1000                             | Interface returns business status code(1000:success)                                                             |
+| msg           | String   | OK                               | Interface returns status information                                                                             |
+| data          | Array    | `[{ avatar_id: "xx", url: "" }]` | avatar_id: Used by avatar interface and creating avatar interface. url: You can preview the avatar via the link. |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100' \
+--header 'Authorization: Bearer {{Authorization}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("text/plain");
+RequestBody body = RequestBody.create(mediaType, "");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100")
+  .method("GET", body)
+  .addHeader("Authorization", "Bearer {{Authorization}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {{Authorization}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow",
+};
+
+fetch(
+  "https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100",
+  requestOptions
+)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => '{{Authorization}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100"
+
+payload = {}
+headers = {
+  'Authorization': 'Bearer {{Authorization}}'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "ok",
+  "data": [
+    {
+      "name": "Yasmin in White shirt",  // avatar name
+      "avatar_id": "Yasmin_in_White_shirt_20231121",  //  parameter values ​​required to create talkingavatar
+      "url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png", // avatar url
+      "gender": "female",   //  avatar gender
+      "thumbnailUrl": "https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png", //  avatar thumbnail
+      "from": 2 //  parameter values ​​required to create talkingavatar
+    }
+  ]
+}
+```
+
 ### Create session
 
 ```
