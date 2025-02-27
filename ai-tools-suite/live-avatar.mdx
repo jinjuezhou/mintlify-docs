@@ -22,7 +22,7 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer token | Your API Key used for request authorization. [getToken](https://docs.akool.io/authentication/usage#get-the-token)|
+| Authorization | Bearer token | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token)|
 
 **Body Attributes**
 
@@ -30,7 +30,7 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
 | avatar_id     | String   |           | avatar unique ID，Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
-| type          | String   |    2      | Avatar type 2 represents stream avatar, When type is 2, you need to wait until status is 3 before you can use it, You can get the current status in real time through the interface *[https://openapi.akool.com/api/open/v3/avatar/create](https://docs.akool.io/ai-tools-suite/talkingavatar#upload-avatar)*.                                                                                                 |
+| type          | String   |    2      | Avatar type 2 represents stream avatar, When type is 2, you need to wait until status is 3 before you can use it, You can get the current status in real time through the interface *[https://openapi.akool.com/api/open/v3/avatar/create](https://docs.akool.com/ai-tools-suite/talkingavatar#upload-avatar)*.                                                                                                 |
 
 **Response Attributes**
 
@@ -171,7 +171,7 @@ GET https://openapi.akool.com/api/open/v3/avatar/list
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.io/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
 
 **Query Attributes**
 
