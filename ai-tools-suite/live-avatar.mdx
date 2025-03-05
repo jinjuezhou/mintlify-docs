@@ -822,7 +822,7 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 | pld.data.vid | String | No | | Voice ID to change avatar's voice. Only used with **"set-params"**. Get valid IDs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
 | pld.data.vurl | String | No | | Custom voice model URL. Only used with **"set-params"**. Get valid URLs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
 | pld.data.lang | String | No | | Language code for avatar responses (e.g. "en", "es"). Only used with **"set-params"**. Get valid codes from [Language List API](/ai-tools-suite/video-translation#get-language-list-result) |
-| pld.data.mode | String | No | | Avatar interaction style. Only used with **"set-params"**. "1" = Retelling (avatar repeats content), "2" = Dialogue (avatar engages in conversation) |
+| pld.data.mode | Number | No | | Avatar interaction style. Only used with **"set-params"**. "1" = Retelling (avatar repeats content), "2" = Dialogue (avatar engages in conversation) |
 | pld.data.bgurl | String | No | | URL of background image/video for avatar scene. Only used with **"set-params"** |
 
 **JSON Example**
@@ -852,7 +852,7 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
       "data": {
         "vid": "1",
         "lang": "en",
-        "mode": "1",
+        "mode": 1,
         "bgurl": "https://example.com/background.jpg"
       }
     },
