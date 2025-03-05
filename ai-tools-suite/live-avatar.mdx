@@ -20,16 +20,16 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                                                                                                                                                     |
-| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer token | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token)|
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
 
 **Body Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
-| avatar_id     | String   |           | avatar unique ID，Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
+| avatar_id     | String   |           | avatar unique ID, Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
 | type          | String   |    2      | Avatar type 2 represents stream avatar, When type is 2, you need to wait until status is 3 before you can use it, You can get the current status in real time through the interface *[https://openapi.akool.com/api/open/v3/avatar/create](https://docs.akool.com/ai-tools-suite/talkingavatar#upload-avatar)*.                                                                                                 |
 
 **Response Attributes**
@@ -167,24 +167,40 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                                                                                                                                                     |
-| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. You can get from [GetToken](https://docs.akool.com/authentication/usage#get-the-token) api. |
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
 
-**Query Attributes**
+**Query Parameters**
 
-| **Parameter** | **Type** | **Value** | **Description**                                                                                                                               |
-| ------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| page          | Number   | 1         | Current number of pages，Default is 1.                                                                                                        |
-| size          | Number   | 10        | Current number of returns per page，Default is 100.                                                                                           |
+| **Parameter** | **Type** | **Required** | **Default** | **Description** |
+|-----------|------|----------|---------|-------------|
+| page | Number | No | 1 | Page number for pagination |
+| size | Number | No | 100 | Number of items per page (max 100) |
 
-**Response Attributes**
+**Response Properties**
 
-| **Parameter** | **Type** | **Value**                        | **Description**                                                                                                  |
-| ------------- | -------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| code          | int      | 1000                             | Interface returns business status code(1000:success)                                                             |
-| msg           | String   | OK                               | Interface returns status information                                                                             |
-| data          | Array    | `[{ avatar_id: "xx", url: "" }]` | avatar_id: Used by avatar interface and creating avatar interface. url: You can preview the avatar via the link. |
+| **Property** | **Type** | **Description** |
+|----------|------|-------------|
+| code | Integer | Response status code (1000 indicates success) |
+| msg | String | Response status message |
+| data | Object | Container for response data |
+| data.count | Number | Total number of streaming avatars |
+| data.result | Array | List of streaming avatar objects |
+
+**Streaming Avatar Object Properties**
+
+| **Property** | **Type** | **Description** |
+|----------|------|-------------|
+| avatar_id | String | Unique identifier for the streaming avatar |
+| voice_id | String | Associated voice model identifier |
+| name | String | Display name of the avatar |
+| url | String | URL to access the streaming avatar |
+| thumbnailUrl | String | URL for the avatar's preview thumbnail |
+| gender | String | Avatar's gender designation |
+| available | Boolean | Indicates if the avatar is currently available for use |
+| type | Number | Avatar type identifier (2 for streaming avatars) |
+| from | Number | Source identifier for the avatar, 2 for official and 3 for user created |
 
 **Example**
 
@@ -269,15 +285,15 @@ print(response.text)
       {
         "_id": "67498e55cd053926b2e75cf2",
         "uid": 1,
-        "type": 2, // Means it is streaming avatar
-        "from": 2, // 2: official streaming avatar, 3: custom streaming avatar (your own created streaming avatar)
-        "avatar_id": "dvp_Tristan_cloth2_1080P", // The unique ID of the streaming avatar
-        "voice_id": "iP95p4xoKVk53GoZ742B", // The id of the voice
-        "name": "tristan_dvp", // The name of the streaming avatar
-        "url": "https://static.website-files.org/assets/avatar/avatar/streaming_avatar/tristan_10s_silence.mp4", // The url of the streaming avatar
-        "thumbnailUrl": "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024728-tristan_cloth2_20240522.webp", // The thumbnail url of the streaming avatar
-        "gender": "male", // The gender of the streaming avatar
-        "available": true // Whether the streaming avatar is available
+        "type": 2,
+        "from": 2,
+        "avatar_id": "dvp_Tristan_cloth2_1080P",
+        "voice_id": "iP95p4xoKVk53GoZ742B",
+        "name": "tristan_dvp",
+        "url": "https://static.website-files.org/assets/avatar/avatar/streaming_avatar/tristan_10s_silence.mp4",
+        "thumbnailUrl": "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024728-tristan_cloth2_20240522.webp",
+        "gender": "male",
+        "available": true
       }
     ]
   }
@@ -1079,6 +1095,10 @@ client.sendStreamMessage(JSON.stringify(message), false);
 | code          | 1203      | video should be with audio                                                        |
 | code          | 1204      | Your video duration is exceed 60s!                                                |
 | code          | 1205      | Create videoerror, please try again later                                         |
+| code          | 1207      | The video you are using exceeds thesize limit allowed by the system by 300M       |
+| code          | 1209      | Please upload a videoin another encoding format                                   |
+| code          | 1210      | The video you are using exceeds thevalue allowed by the system by 60fp            |
+| code          | 1211      | Create lipsync error, pleasetry again later                                       |
 | code          | 1207      | The video you are using exceeds thesize limit allowed by the system by 300M       |
 | code          | 1209      | Please upload a videoin another encoding format                                   |
 | code          | 1210      | The video you are using exceeds thevalue allowed by the system by 60fp            |
