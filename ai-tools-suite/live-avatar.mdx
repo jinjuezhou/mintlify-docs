@@ -38,7 +38,7 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 | ------------- | -------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | code          | int      | 1000                                        | Interface returns business status code(1000:success)                                                                                                   |
 | msg           | String   | OK                                          | Interface returns status information                                                                                                                   |
-| data          | Array    | `[{ avatar_id: "xx", url: "", status: 1 }]` | avatar_id: Used by creating live avatar interface. url: You can preview the avatar via the link. status: 1-queueing, 2-processing, 3-success, 4-failed |
+| data          | Object   | `{ avatar_id: "xx", url: "", status: 1 }` | avatar_id: Used by creating live avatar interface. url: You can preview the avatar via the link. status: 1-queueing, 2-processing, 3-success, 4-failed |
 
 **Example**
 
@@ -47,7 +47,7 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://landing-test.akool.io/interface/stats-api/api/open/v3/avatar/create' \
+curl --location 'https://openapi.akool.com/api/open/v3/avatar/create' \
 --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDk4NWM1NTcxNzI5ZDNlMjk5OTQ3NyIsInVpZCI6Mzc4MzM3LCJlbWFpbCI6Imh1Y2hlbkBha29vbC5jb20iLCJjcmVkZW50aWFsSWQiOiI2NjE1MGZmM2Q5MWRmYjc4OWYyNjFmNjEiLCJmaXJzdE5hbWUiOiJjaGVuIiwiZnJvbSI6InRvTyIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzEyNzE0ODI4LCJleHAiOjIwMjM3NTQ4Mjh9.e050LbczNhUx-Gprqb1NSYhBCKKH2xMqln3cMnAABmE' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -139,46 +139,42 @@ print(response.text)
 {
   "code": 1000,
   "msg": "ok",
-  "data": [
-    {
-      "_id": "655ffeada6976ea317087193",
-      "disabled": false,
-      "uid": 1,
-      "type": 2,
-      "from": 2,
-      "status": 1,
-      "sort": 12,
-      "create_time": 1700788730000,
-      "name": "Yasmin in White shirt",
-      "avatar_id": "Yasmin_in_White_shirt_20231121",
-      "url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
-      "modify_url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
-      "gender": "female",
-      "thumbnailUrl": "https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
-      "crop_arr": []
-    }
-  ]
+  "data": {
+    "_id": "655ffeada6976ea317087193",
+    "disabled": false,
+    "uid": 1,
+    "type": 2,
+    "from": 2,
+    "status": 1,
+    "sort": 12,
+    "create_time": 1700788730000,
+    "name": "Yasmin in White shirt",
+    "avatar_id": "Yasmin_in_White_shirt_20231121",
+    "url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+    "modify_url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+    "gender": "female",
+    "thumbnailUrl": "https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+    "crop_arr": []
+  }
 }
 ```
 
 ### Get Streaming Avatar List
 
 ```http
-GET https://openapi.akool.com/api/open/v3/avatar/list
+GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list
 ```
 
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization. You can get from [GetToken](https://docs.akool.com/authentication/usage#get-the-token) api. |
 
 **Query Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                               |
 | ------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| from          | Number   | 2、3      | 2 represents the official avatar of Akool, 3 represents the avatar uploaded by the user themselves，If empty, returns all avatars by default. |
-| type          | Number   | 1、2      | 1 represents the talking avatar of Akool, 2 represents the streaming avatar of Akool，If empty, returns all avatars by default. |
 | page          | Number   | 1         | Current number of pages，Default is 1.                                                                                                        |
 | size          | Number   | 10        | Current number of returns per page，Default is 100.                                                                                           |
 
@@ -197,7 +193,7 @@ GET https://openapi.akool.com/api/open/v3/avatar/list
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100' \
+curl --location 'https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list?page=1&size=100' \
 --header 'Authorization: Bearer {{Authorization}}'
 ```
 
@@ -207,7 +203,7 @@ OkHttpClient client = new OkHttpClient().newBuilder()
 MediaType mediaType = MediaType.parse("text/plain");
 RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
-  .url("https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100")
+  .url("https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list?page=1&size=100")
   .method("GET", body)
   .addHeader("Authorization", "Bearer {{Authorization}}")
   .build();
@@ -225,7 +221,7 @@ const requestOptions = {
 };
 
 fetch(
-  "https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100",
+  "https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list?page=1&size=100",
   requestOptions
 )
   .then((response) => response.text())
@@ -239,7 +235,7 @@ $client = new Client();
 $headers = [
   'Authorization' => '{{Authorization}}'
 ];
-$request = new Request('GET', 'https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100', $headers);
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list?page=1&size=100', $headers);
 $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ```
@@ -247,7 +243,7 @@ echo $res->getBody();
 ```python Python
 import requests
 
-url = "https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100"
+url = "https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list?page=1&size=100"
 
 payload = {}
 headers = {
@@ -266,17 +262,25 @@ print(response.text)
 ```json
 {
   "code": 1000,
-  "msg": "ok",
-  "data": [
-    {
-      "name": "Yasmin in White shirt",  // avatar name
-      "avatar_id": "Yasmin_in_White_shirt_20231121",  //  parameter values ​​required to create talkingavatar
-      "url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png", // avatar url
-      "gender": "female",   //  avatar gender
-      "thumbnailUrl": "https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png", //  avatar thumbnail
-      "from": 2 //  parameter values ​​required to create talkingavatar
-    }
-  ]
+  "msg": "OK",
+  "data": {
+    "count": 1,
+    "result": [
+      {
+        "_id": "67498e55cd053926b2e75cf2",
+        "uid": 1,
+        "type": 2, // Means it is streaming avatar
+        "from": 2, // 2: official streaming avatar, 3: custom streaming avatar (your own created streaming avatar)
+        "avatar_id": "dvp_Tristan_cloth2_1080P", // The unique ID of the streaming avatar
+        "voice_id": "iP95p4xoKVk53GoZ742B", // The id of the voice
+        "name": "tristan_dvp", // The name of the streaming avatar
+        "url": "https://static.website-files.org/assets/avatar/avatar/streaming_avatar/tristan_10s_silence.mp4", // The url of the streaming avatar
+        "thumbnailUrl": "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024728-tristan_cloth2_20240522.webp", // The thumbnail url of the streaming avatar
+        "gender": "male", // The gender of the streaming avatar
+        "available": true // Whether the streaming avatar is available
+      }
+    ]
+  }
 }
 ```
 
