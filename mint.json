@@ -73,6 +73,14 @@
       "pages": [
         "implementation-guide/streaming-avatar"
       ]
+    },
+    {
+      "group": "Streaming Avatar Jssdk",
+      "pages": [
+        "sdk/jssdk-start",
+        "sdk/jssdk-best-practice",
+        "sdk/jssdk-api"
+      ]
     }
   ]
 }
