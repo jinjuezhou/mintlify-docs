@@ -20,16 +20,16 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                                                                                                                                                     |
-| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer token | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token)|
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
 
 **Body Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
-| avatar_id     | String   |           | avatar unique ID，Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
+| avatar_id     | String   |           | avatar unique ID, Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
 | type          | String   |    2      | Avatar type 2 represents stream avatar, When type is 2, you need to wait until status is 3 before you can use it, You can get the current status in real time through the interface *[https://openapi.akool.com/api/open/v3/avatar/create](https://docs.akool.com/ai-tools-suite/talkingavatar#upload-avatar)*.                                                                                                 |
 
 **Response Attributes**
@@ -38,7 +38,7 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 | ------------- | -------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | code          | int      | 1000                                        | Interface returns business status code(1000:success)                                                                                                   |
 | msg           | String   | OK                                          | Interface returns status information                                                                                                                   |
-| data          | Array    | `[{ avatar_id: "xx", url: "", status: 1 }]` | avatar_id: Used by creating live avatar interface. url: You can preview the avatar via the link. status: 1-queueing, 2-processing, 3-success, 4-failed |
+| data          | Object   | `{ avatar_id: "xx", url: "", status: 1 }` | avatar_id: Used by creating live avatar interface. url: You can preview the avatar via the link. status: 1-queueing, 2-processing, 3-success, 4-failed |
 
 **Example**
 
@@ -47,7 +47,7 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://landing-test.akool.io/interface/stats-api/api/open/v3/avatar/create' \
+curl --location 'https://openapi.akool.com/api/open/v3/avatar/create' \
 --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDk4NWM1NTcxNzI5ZDNlMjk5OTQ3NyIsInVpZCI6Mzc4MzM3LCJlbWFpbCI6Imh1Y2hlbkBha29vbC5jb20iLCJjcmVkZW50aWFsSWQiOiI2NjE1MGZmM2Q5MWRmYjc4OWYyNjFmNjEiLCJmaXJzdE5hbWUiOiJjaGVuIiwiZnJvbSI6InRvTyIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzEyNzE0ODI4LCJleHAiOjIwMjM3NTQ4Mjh9.e050LbczNhUx-Gprqb1NSYhBCKKH2xMqln3cMnAABmE' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -139,56 +139,68 @@ print(response.text)
 {
   "code": 1000,
   "msg": "ok",
-  "data": [
-    {
-      "_id": "655ffeada6976ea317087193",
-      "disabled": false,
-      "uid": 1,
-      "type": 2,
-      "from": 2,
-      "status": 1,
-      "sort": 12,
-      "create_time": 1700788730000,
-      "name": "Yasmin in White shirt",
-      "avatar_id": "Yasmin_in_White_shirt_20231121",
-      "url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
-      "modify_url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
-      "gender": "female",
-      "thumbnailUrl": "https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
-      "crop_arr": []
-    }
-  ]
+  "data": {
+    "_id": "655ffeada6976ea317087193",
+    "disabled": false,
+    "uid": 1,
+    "type": 2,
+    "from": 2,
+    "status": 1,
+    "sort": 12,
+    "create_time": 1700788730000,
+    "name": "Yasmin in White shirt",
+    "avatar_id": "Yasmin_in_White_shirt_20231121",
+    "url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+    "modify_url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+    "gender": "female",
+    "thumbnailUrl": "https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png",
+    "crop_arr": []
+  }
 }
 ```
 
 ### Get Streaming Avatar List
 
 ```http
-GET https://openapi.akool.com/api/open/v3/avatar/list
+GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list
 ```
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                                                                                                                                                     |
-| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
 
-**Query Attributes**
+**Query Parameters**
 
-| **Parameter** | **Type** | **Value** | **Description**                                                                                                                               |
-| ------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| from          | Number   | 2、3      | 2 represents the official avatar of Akool, 3 represents the avatar uploaded by the user themselves，If empty, returns all avatars by default. |
-| type          | Number   | 1、2      | 1 represents the talking avatar of Akool, 2 represents the streaming avatar of Akool，If empty, returns all avatars by default. |
-| page          | Number   | 1         | Current number of pages，Default is 1.                                                                                                        |
-| size          | Number   | 10        | Current number of returns per page，Default is 100.                                                                                           |
+| **Parameter** | **Type** | **Required** | **Default** | **Description** |
+|-----------|------|----------|---------|-------------|
+| page | Number | No | 1 | Page number for pagination |
+| size | Number | No | 100 | Number of items per page (max 100) |
 
-**Response Attributes**
+**Response Properties**
 
-| **Parameter** | **Type** | **Value**                        | **Description**                                                                                                  |
-| ------------- | -------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| code          | int      | 1000                             | Interface returns business status code(1000:success)                                                             |
-| msg           | String   | OK                               | Interface returns status information                                                                             |
-| data          | Array    | `[{ avatar_id: "xx", url: "" }]` | avatar_id: Used by avatar interface and creating avatar interface. url: You can preview the avatar via the link. |
+| **Property** | **Type** | **Description** |
+|----------|------|-------------|
+| code | Integer | Response status code (1000 indicates success) |
+| msg | String | Response status message |
+| data | Object | Container for response data |
+| data.count | Number | Total number of streaming avatars |
+| data.result | Array | List of streaming avatar objects |
+
+**Streaming Avatar Object Properties**
+
+| **Property** | **Type** | **Description** |
+|----------|------|-------------|
+| avatar_id | String | Unique identifier for the streaming avatar |
+| voice_id | String | Associated voice model identifier |
+| name | String | Display name of the avatar |
+| url | String | URL to access the streaming avatar |
+| thumbnailUrl | String | URL for the avatar's preview thumbnail |
+| gender | String | Avatar's gender designation |
+| available | Boolean | Indicates if the avatar is currently available for use |
+| type | Number | Avatar type identifier (2 for streaming avatars) |
+| from | Number | Source identifier for the avatar, 2 for official and 3 for user created |
 
 **Example**
 
@@ -197,7 +209,7 @@ GET https://openapi.akool.com/api/open/v3/avatar/list
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100' \
+curl --location 'https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list?page=1&size=100' \
 --header 'Authorization: Bearer {{Authorization}}'
 ```
 
@@ -207,7 +219,7 @@ OkHttpClient client = new OkHttpClient().newBuilder()
 MediaType mediaType = MediaType.parse("text/plain");
 RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
-  .url("https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100")
+  .url("https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list?page=1&size=100")
   .method("GET", body)
   .addHeader("Authorization", "Bearer {{Authorization}}")
   .build();
@@ -225,7 +237,7 @@ const requestOptions = {
 };
 
 fetch(
-  "https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100",
+  "https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list?page=1&size=100",
   requestOptions
 )
   .then((response) => response.text())
@@ -239,7 +251,7 @@ $client = new Client();
 $headers = [
   'Authorization' => '{{Authorization}}'
 ];
-$request = new Request('GET', 'https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100', $headers);
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list?page=1&size=100', $headers);
 $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ```
@@ -247,7 +259,7 @@ echo $res->getBody();
 ```python Python
 import requests
 
-url = "https://openapi.akool.com/api/open/v3/avatar/list?from=2&type=2&page=1&size=100"
+url = "https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list?page=1&size=100"
 
 payload = {}
 headers = {
@@ -266,17 +278,25 @@ print(response.text)
 ```json
 {
   "code": 1000,
-  "msg": "ok",
-  "data": [
-    {
-      "name": "Yasmin in White shirt",  // avatar name
-      "avatar_id": "Yasmin_in_White_shirt_20231121",  //  parameter values ​​required to create talkingavatar
-      "url": "https://drz0f01yeq1cx.cloudfront.net/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png", // avatar url
-      "gender": "female",   //  avatar gender
-      "thumbnailUrl": "https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786304161-b574407f-f926-4b3e-bba7-dc77d1742e60-8169.png", //  avatar thumbnail
-      "from": 2 //  parameter values ​​required to create talkingavatar
-    }
-  ]
+  "msg": "OK",
+  "data": {
+    "count": 1,
+    "result": [
+      {
+        "_id": "67498e55cd053926b2e75cf2",
+        "uid": 1,
+        "type": 2,
+        "from": 2,
+        "avatar_id": "dvp_Tristan_cloth2_1080P",
+        "voice_id": "iP95p4xoKVk53GoZ742B",
+        "name": "tristan_dvp",
+        "url": "https://static.website-files.org/assets/avatar/avatar/streaming_avatar/tristan_10s_silence.mp4",
+        "thumbnailUrl": "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024728-tristan_cloth2_20240522.webp",
+        "gender": "male",
+        "available": true
+      }
+    ]
+  }
 }
 ```
 
@@ -822,7 +842,7 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 | pld.data.vid | String | No | | Voice ID to change avatar's voice. Only used with **"set-params"**. Get valid IDs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
 | pld.data.vurl | String | No | | Custom voice model URL. Only used with **"set-params"**. Get valid URLs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
 | pld.data.lang | String | No | | Language code for avatar responses (e.g. "en", "es"). Only used with **"set-params"**. Get valid codes from [Language List API](/ai-tools-suite/video-translation#get-language-list-result) |
-| pld.data.mode | String | No | | Avatar interaction style. Only used with **"set-params"**. "1" = Retelling (avatar repeats content), "2" = Dialogue (avatar engages in conversation) |
+| pld.data.mode | Number | No | | Avatar interaction style. Only used with **"set-params"**. "1" = Retelling (avatar repeats content), "2" = Dialogue (avatar engages in conversation) |
 | pld.data.bgurl | String | No | | URL of background image/video for avatar scene. Only used with **"set-params"** |
 
 **JSON Example**
@@ -852,7 +872,7 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
       "data": {
         "vid": "1",
         "lang": "en",
-        "mode": "1",
+        "mode": 1,
         "bgurl": "https://example.com/background.jpg"
       }
     },
