@@ -74,7 +74,7 @@ fetch("https://openapi.akool.com/api/open/v3/voice/list?from=3", requestOptions)
   .catch((error) => console.error(error));
 ```
 
-```php PHP 
+```php PHP
 <?php
 $client = new Client();
 $headers = [
@@ -85,7 +85,7 @@ $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ```
 
-```python Python 
+```python Python
 import requests
 
 url = "https://openapi.akool.com/api/open/v3/voice/list?from=3"
@@ -145,7 +145,7 @@ POST https://openapi.akool.com/api/open/v3/audio/create
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                                     |
 |---------------|----------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| input_text    | String   |           | Enter what talkingphoto to say                                                                                                                      |
+| input_text    | String   |           | Enter what talkingphoto to say, The text content is limited to 5000 words.                                                                                                                      |
 | voice_id      | String   |           | Voice id: get from [https://openapi.akool.com/api/open/v3/voice/list](https://docs.akool.com/ai-tools-suite/audio#get-voice-list-result) api，the field is 【voice_id】 |
 | rate          | String   |           | Voice speaking speed【field value ranges（0%-100%）】                                                                                                   |
 | webhookUrl    | String   |           | Callback url address based on HTTP request          |
@@ -167,7 +167,7 @@ POST https://openapi.akool.com/api/open/v3/audio/create
     "input_text": "Choose from male and female voices for various use-cases. For tailored options, refer to voice settings or read further.There are both male and female voices to choose from",
     "voice_id": "LcfcDJNUP1GQjkzn1xUU",
     "rate": "100%",
-   "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook" 
+   "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"
 }
 ```
 
@@ -183,11 +183,11 @@ curl --location 'https://openapi.akool.com/api/open/v3/audio/create' \
     "input_text": "Choose from male and female voices for various use-cases. For tailored options, refer to voice settings or read further.There are both male and female voices to choose from",
     "voice_id": "LcfcDJNUP1GQjkzn1xUU",
     "rate": "100%",
-    "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook" 
+    "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"
 }'
 ```
 
-```java Java 
+```java Java
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
@@ -201,7 +201,7 @@ Request request = new Request.Builder()
 Response response = client.newCall(request).execute();
 ```
 
-```js Javascript 
+```js Javascript
 const myHeaders = new Headers();
 myHeaders.append("authorization", "Bearer token");
 myHeaders.append("Content-Type", "application/json");
@@ -226,7 +226,7 @@ fetch("https://openapi.akool.com/api/open/v3/audio/create", requestOptions)
   .catch((error) => console.error(error));
 ```
 
-```php PHP 
+```php PHP
 <?php
 $client = new Client();
 $headers = [
@@ -246,7 +246,7 @@ echo $res->getBody();
 
 ```
 
-```python Python 
+```python Python
 import requests
 import json
 
@@ -293,7 +293,7 @@ print(response.text)
 }
 ```
 
-### Create Voice Clone 
+### Create Voice Clone
 
 ```
 POST https://openapi.akool.com/api/open/v3/audio/clone
@@ -309,7 +309,7 @@ POST https://openapi.akool.com/api/open/v3/audio/clone
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 | ------------- | -------- | ------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| input_text    | String   | true         |           | Enter what avatar in video to say   |
+| input_text    | String   | true         |           | Enter what avatar in video to say, The text content is limited to 5000 words.   |
 | rate          | String   | true         |           | Voice speaking speed【field value ranges（0%-100%）】 |
 | voice_url      | String   | false       |           |  Voice url address |
 | webhookUrl    | String   |              |           | Callback url address based on HTTP request          |
@@ -334,7 +334,7 @@ POST https://openapi.akool.com/api/open/v3/audio/clone
   "input_text": "Hello, this is Akool's AI platform!",
   "rate": "100%",
   "voice_url":"https://drz0f01yeq1cx.cloudfront.net/1713168740392-4022bc91-5502-4e79-a66a-8c45b31792e4-4867.mp3",
-  "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"  
+  "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"
 }
 ```
 
@@ -350,7 +350,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/audio/clone' \
   "input_text": "Hello, this is Akool'\''s AI platform!",
   "rate": "100%",
   "voice_url":"https://drz0f01yeq1cx.cloudfront.net/1713168740392-4022bc91-5502-4e79-a66a-8c45b31792e4-4867.mp3",
-  "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"  
+  "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"
 }'
 ```
 
@@ -523,7 +523,7 @@ fetch("https://openapi.akool.com/api/open/v3/audio/infobymodelid?audio_model_id=
   .catch((error) => console.error(error));
 ```
 
-```php PHP 
+```php PHP
 <?php
 $client = new Client();
 $headers = [
@@ -534,7 +534,7 @@ $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ```
 
-```python Python  
+```python Python
 import requests
 
 url = "https://openapi.akool.com/api/open/v3/audio/infobymodelid?audio_model_id=65f8017f56559aa67f0ecde7"
