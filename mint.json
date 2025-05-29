@@ -77,7 +77,15 @@
     {
       "group": "Implementation guide",
       "pages": [
-        "implementation-guide/streaming-avatar"
+        "implementation-guide/streaming-avatar",
+        {
+          "group": "Implementation jssdk",
+          "pages": [
+            "implementation-guide/jssdk-start",
+            "implementation-guide/jssdk-api"
+          ]
+        }
+
       ]
     },
     {
