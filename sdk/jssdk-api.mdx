@@ -1,5 +1,5 @@
 ---
-title: "Streaming Avatar SDK Reference"
+title: "Streaming Avatar SDK API Reference"
 description: "Learn what is in the Akool-Jssdk"
 ---
 
@@ -13,16 +13,18 @@ This document provides a detailed explanation of the `StreamingAvatar` class and
 
 ### **`new StreamingAvatar(params?: { token: string, openapiHost?: string })`**
 
-Creates an instance of `StreamingAvatar`.
+Creates an instance of `StreamingAvatar`.
 
 #### **Parameters:**
 
-- `params.token` (string) - Required. Open API authentication token.
-- `params.openapiHost` (string) - Optional. API host URL.
+- `params.token` (string) - Required. Open API authentication token.
+- `params.openapiHost` (string) - Optional. API host URL.
 
 #### **Example Usage:**
 
-`const avatar = new StreamingAvatar({ token: 'your-api-token'` });
+```javascript
+const avatar = new StreamingAvatar({ token: "your-api-token" });
+```
 
 ---
 
@@ -34,19 +36,21 @@ Starts a new avatar session.
 
 #### **Parameters:**
 
-- `videoContainer` (string) - The ID of the HTML container where the avatar video will be displayed.
-- `params` (InitParams) - Configuration options for the avatar session.
+- `videoContainer` (string) - The ID of the HTML container where the avatar video will be displayed.
+- `params` (InitParams) - Configuration options for the avatar session.
 
 #### **Example Usage:**
 
-`await avatar.startSession('avatarContainer'`, {
-`  avatarId: 'dvp_Tristan_cloth2_1080P'`,
-`  voiceId: 'iP95p4xoKVk53GoZ742B'`,
-`  language: 'en'`,
-`  modeType: 'Dialogue'`,
-`  background: 'https://example.com/background.jpg'`,
-`  duration: 120`
+```javascript
+await avatar.startSession("avatarContainer", {
+  avatarId: "dvp_Tristan_cloth2_1080P",
+  voiceId: "iP95p4xoKVk53GoZ742B",
+  language: "en",
+  modeType: "Dialogue",
+  background: "https://example.com/background.jpg",
+  duration: 120,
 });
+```
 
 ---
 
@@ -56,20 +60,22 @@ Starts a session using predefined credentials.
 
 #### **Parameters:**
 
-- `videoContainer` (string) - The ID of the HTML container for the avatar video.
-- `params` (CredentialParams) - Credential details for joining an Agora session.
+- `videoContainer` (string) - The ID of the HTML container for the avatar video.
+- `params` (CredentialParams) - Credential details for joining an Agora session.
 
 #### **Example Usage:**
 
-`await avatar.startSessionWithCredentials('avatarContainer'`, {
-`  _id: 'session-id'`,
-`  credentials`: {
-`    agora_uid: 12345`,
-`    agora_app_id: 'your-agora-app-id'`,
-`    agora_channel: 'your-channel-name'`,
-`    agora_token: 'your-agora-token'`
-&#x20; }
+```javascript
+await avatar.startSessionWithCredentials("avatarContainer", {
+  _id: "session-id",
+  credentials: {
+    agora_uid: 12345,
+    agora_app_id: "your-agora-app-id",
+    agora_channel: "your-channel-name",
+    agora_token: "your-agora-token",
+  },
 });
+```
 
 ---
 
@@ -79,7 +85,9 @@ Closes the current streaming session.
 
 #### **Example Usage:**
 
-`await avatar.closeStreaming`();
+```javascript
+await avatar.closeStreaming();
+```
 
 ---
 
@@ -89,11 +97,13 @@ Sends a text message to the avatar.
 
 #### **Parameters:**
 
-- `message` (string) - The message to send.
+- `message` (string) - The message to send.
 
 #### **Example Usage:**
 
-`await avatar.sendMessage('Hello, how are you?'`);
+```javascript
+await avatar.sendMessage("Hello, how are you?");
+```
 
 ---
 
@@ -103,7 +113,9 @@ Toggles the microphone on or off.
 
 #### **Example Usage:**
 
-`await avatar.toggleMic`();
+```javascript
+await avatar.toggleMic();
+```
 
 ---
 
@@ -113,19 +125,21 @@ Initializes the user interface for the avatar.
 
 #### **Parameters:**
 
-- `containerId` (string) - The ID of the HTML element to contain the avatar UI.
-- `params` (InitParams) - Optional parameters for session configuration.
+- `containerId` (string) - The ID of the HTML element to contain the avatar UI.
+- `params` (InitParams) - Optional parameters for session configuration.
 
 #### **Example Usage:**
 
-`avatar.initDom('avatarContainer'`, {
-`  avatarId: 'dvp_Tristan_cloth2_1080P'`,
-`  voiceId: 'iP95p4xoKVk53GoZ742B'`,
-`  language: 'en'`,
-`  modeType: 'Dialogue'`,
-`  background: 'https://example.com/background.jpg'`,
-`  duration: 120`
+```javascript
+avatar.initDom("avatarContainer", {
+  avatarId: "dvp_Tristan_cloth2_1080P",
+  voiceId: "iP95p4xoKVk53GoZ742B",
+  language: "en",
+  modeType: "Dialogue",
+  background: "https://example.com/background.jpg",
+  duration: 120,
 });
+```
 
 ---
 
@@ -137,14 +151,16 @@ Registers an event listener.
 
 #### **Parameters:**
 
-- `event` (StreamEvents) - The event name.
-- `handler` (function) - The callback function to execute when the event occurs.
+- `event` (StreamEvents) - The event name.
+- `handler` (function) - The callback function to execute when the event occurs.
 
 #### **Example Usage:**
 
-`avatar.on(StreamEvents.ONMESSAGE, (event) =>` {
-`  console.log('Message received:', event.detail`);
+```javascript
+avatar.on(StreamEvents.ONMESSAGE, (event) => {
+  console.log("Message received:", event.detail);
 });
+```
 
 ---
 
@@ -154,7 +170,9 @@ Removes an event listener.
 
 #### **Example Usage:**
 
-`avatar.off(StreamEvents.ONMESSAGE`, messageHandler);
+```javascript
+avatar.off(StreamEvents.ONMESSAGE, messageHandler);
+```
 
 ---
 
@@ -164,7 +182,9 @@ Manually triggers an event.
 
 #### **Example Usage:**
 
-`avatar.emit(StreamEvents.READY, { ready: true` });
+```javascript
+avatar.emit(StreamEvents.READY, { ready: true });
+```
 
 ---
 
@@ -176,17 +196,21 @@ Returns the current microphone status.
 
 #### **Example Usage:**
 
-`console.log(avatar.micStatus); // true or false`
+```javascript
+console.log(avatar.micStatus); // true or false
+```
 
 ---
 
 ### **`classStatus: object`**
 
-Returns the current state of the `StreamingAvatar` instance.
+Returns the current state of the `StreamingAvatar` instance.
 
 #### **Example Usage:**
 
-`console.log(avatar.classStatus`);
+```javascript
+console.log(avatar.classStatus);
+```
 
 ---
 
@@ -196,37 +220,22 @@ Returns the current state of the `StreamingAvatar` instance.
 
 Defines event types emitted by the class.
 
-Event NameDescription
-
-`READY`
-
-Fired when the session is ready.
-
-`ONMESSAGE`
-
-Fired when a message is received.
-
-`ERROR`
-
-Fired when an error occurs.
-
-`WILLEXPIRE`
-
-Fired when the session is about to expire.
-
-`EXPIRED`
-
-Fired when the session expires.
-
-`CLOSED`
-
-Fired when the session is closed.
+| Event Name   | Description                                |
+| ------------ | ------------------------------------------ |
+| `READY`      | Fired when the session is ready.           |
+| `ONMESSAGE`  | Fired when a message is received.          |
+| `ERROR`      | Fired when an error occurs.                |
+| `WILLEXPIRE` | Fired when the session is about to expire. |
+| `EXPIRED`    | Fired when the session expires.            |
+| `CLOSED`     | Fired when the session is closed.          |
 
 #### **Example Usage:**
 
-`avatar.on(StreamEvents.ERROR, (event) =>` {
-`  console.error('Error:', event.detail`);
+```javascript
+avatar.on(StreamEvents.ERROR, (event) => {
+  console.error("Error:", event.detail);
 });
+```
 
 ---
 
@@ -236,49 +245,15 @@ Fired when the session is closed.
 
 Defines parameters for initializing a session.
 
-PropertyTypeDescription
-
-`avatarId`
-
-string
-
-Avatar ID.
-
-`voiceId`
-
-string
-
-Voice ID.
-
-`language`
-
-string
-
-Language code (e.g., 'en').
-
-`modeType`
-
-string
-
-Interaction mode ('Repeat' or 'Dialogue').
-
-`background`
-
-string
-
-Background image URL.
-
-`voice_interaction_on`
-
-boolean
-
-Enable voice interaction.
-
-`duration`
-
-number
-
-Session duration in seconds.
+| Property               | Type    | Description                                |
+| ---------------------- | ------- | ------------------------------------------ |
+| `avatarId`             | string  | Avatar ID.                                 |
+| `voiceId`              | string  | Voice ID.                                  |
+| `language`             | string  | Language code (e.g., 'en').                |
+| `modeType`             | string  | Interaction mode ('Repeat' or 'Dialogue'). |
+| `background`           | string  | Background image URL.                      |
+| `voice_interaction_on` | boolean | Enable voice interaction.                  |
+| `duration`             | number  | Session duration in seconds.               |
 
 ---
 
@@ -286,62 +261,35 @@ Session duration in seconds.
 
 Defines credentials for joining an existing session.
 
-PropertyTypeDescription
-
-`voiceId`
-
-string
-
-Voice ID.
-
-`language`
-
-string
-
-Language code.
-
-`modeType`
-
-string
-
-Interaction mode.
-
-`background`
-
-string
-
-Background image URL.
-
-`_id`
-
-string
-
-Session ID.
-
-`credentials`
-
-object
-
-Agora credentials.
+| Property      | Type   | Description           |
+| ------------- | ------ | --------------------- |
+| `voiceId`     | string | Voice ID.             |
+| `language`    | string | Language code.        |
+| `modeType`    | string | Interaction mode.     |
+| `background`  | string | Background image URL. |
+| `_id`         | string | Session ID.           |
+| `credentials` | object | Agora credentials.    |
 
 ---
 
 ## **Example Usage**
 
-`const avatar = new StreamingAvatar({ token: 'your-api-token'` });
+```javascript
+const avatar = new StreamingAvatar({ token: "your-api-token" });
 
-`avatar.initDom('avatarContainer'`, {
-`  avatarId: 'dvp_Tristan_cloth2_1080P'`,
-`  voiceId: 'iP95p4xoKVk53GoZ742B'`,
-`  language: 'en'`,
-`  modeType: 'Dialogue'`,
-`  background: 'https://example.com/background.jpg'`,
-`  duration: 120`
+avatar.initDom("avatarContainer", {
+  avatarId: "dvp_Tristan_cloth2_1080P",
+  voiceId: "iP95p4xoKVk53GoZ742B",
+  language: "en",
+  modeType: "Dialogue",
+  background: "https://example.com/background.jpg",
+  duration: 120,
 });
 
-`avatar.on(StreamEvents.ONMESSAGE, (event) =>` {
-`  console.log('Received message:', event.detail.text`);
+avatar.on(StreamEvents.ONMESSAGE, (event) => {
+  console.log("Received message:", event.detail.text);
 });
 
-`await avatar.startSession`();
-`await avatar.sendMessage('Hello!');`
+await avatar.startSession();
+await avatar.sendMessage("Hello!");
+```

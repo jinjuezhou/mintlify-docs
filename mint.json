@@ -81,7 +81,7 @@
       ]
     },
     {
-      "group": "Streaming Avatar Jssdk",
+      "group": "Streaming Avatar SDK",
       "pages": [
         "sdk/jssdk-start",
         "sdk/jssdk-best-practice",

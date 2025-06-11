@@ -27,18 +27,18 @@ The integration uses Agora's Real-Time Communication (RTC) SDK for reliable, low
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Streaming Avatar SDK</title>
-</head>
-<body>
-  <div id="app">
-    <h1>Streaming Avatar Demo</h1>
-    <div id="yourAvatarContainer" class="avatarContainer"></div>
-  </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Streaming Avatar SDK</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Streaming Avatar Demo</h1>
+      <div id="yourAvatarContainer" class="avatarContainer"></div>
+    </div>
+  </body>
 </html>
 <style media="screen">
   #app {
@@ -47,7 +47,7 @@ The integration uses Agora's Real-Time Communication (RTC) SDK for reliable, low
     padding: 2rem;
     text-align: center;
   }
-  #app>div {
+  #app > div {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -61,6 +61,7 @@ The integration uses Agora's Real-Time Communication (RTC) SDK for reliable, low
   }
 </style>
 ```
+
 2.Importing Streaming Avatar SDK and a few js code to access the interactive avatar stream.
 
 ```bash
@@ -70,31 +71,33 @@ The integration uses Agora's Real-Time Communication (RTC) SDK for reliable, low
 ```
 
 ```js
-  import { StreamingAvatar,StreamEvents } from 'streaming-avatar-sdk'
-  const myStreamingAvatar = new StreamingAvatar({ token: "your-api-token" })
-  myStreamingAvatar.initDom('yourAvatarContainer')
+import { StreamingAvatar, StreamEvents } from "streaming-avatar-sdk";
+const myStreamingAvatar = new StreamingAvatar({ token: "your-api-token" });
+myStreamingAvatar.initDom("yourAvatarContainer");
 ```
 
 or by vanilla js way
 
 ```html
-  <script src="https://cdn.jsdelivr.net/gh/pigmore/docs/streamingAvatar-min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/pigmore/docs/streamingAvatar-min.js"></script>
 ```
+
 ```html
-  <script type="text/javascript">
-    var myStreamingAvatar = new StreamingAvatar({ token: "your-api-token" })
-    myStreamingAvatar.initDom('yourAvatarContainer')
-  </script>
+<script type="text/javascript">
+  var myStreamingAvatar = new StreamingAvatar({ token: "your-api-token" });
+  myStreamingAvatar.initDom("yourAvatarContainer");
+</script>
 ```
+
 - Then you will get the result:
-<Frame>
-  <img src="/images/jssdk_start.jpg" style={{ borderRadius: '0.5rem' }} />
-</Frame>
+  <Frame>
+    <img src="/images/jssdk_start.jpg" style={{ borderRadius: "0.5rem" }} />
+  </Frame>
 
 <Tip>
-- [Learn how to get your api token](/authentication/usage#get-the-token)
-- [Best Practice with your own service for security](/implementation-guide/jssdk-best-practice)
+  - [Learn how to get your api token](/authentication/usage#get-the-token) -
+  [Best Practice with your own service for
+  security](/implementation-guide/jssdk-best-practice)
 </Tip>
-## Additional Resources
-- [Streaming Avatar SDK API Interface](/implementation-guide/jssdk-api)
+## Additional Resources - [Streaming Avatar SDK API Interface](/implementation-guide/jssdk-api)
 - [AKool OpenAPI Error Codes](/ai-tools-suite/live-avatar#response-code-description)
