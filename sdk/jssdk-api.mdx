@@ -1,11 +1,11 @@
 ---
-title: "Streaming Avatar SDK API Reference"
+title: "Streaming Avatar SDK Reference"
 description: "Learn what is in the Akool-Jssdk"
 ---
 
 ## Documentation for StreamingAvatar Class
 
-This document provides a detailed explanation of the  `StreamingAvatar`  class and its usage, including the parameters, methods, events, and examples.
+This document provides a detailed explanation of the `StreamingAvatar` class and its usage, including the parameters, methods, events, and examples.
 
 # **StreamingAvatar Class Documentation**
 
@@ -17,15 +17,14 @@ Creates an instance of `StreamingAvatar`.
 
 #### **Parameters:**
 
-* `params.token` (string) - Required. Open API authentication token.
-* `params.openapiHost` (string) - Optional. API host URL.
+- `params.token` (string) - Required. Open API authentication token.
+- `params.openapiHost` (string) - Optional. API host URL.
 
 #### **Example Usage:**
 
 `const avatar = new StreamingAvatar({ token: 'your-api-token'` });
 
-
-***
+---
 
 ## **Public Methods**
 
@@ -35,8 +34,8 @@ Starts a new avatar session.
 
 #### **Parameters:**
 
-* `videoContainer` (string) - The ID of the HTML container where the avatar video will be displayed.
-* `params` (InitParams) - Configuration options for the avatar session.
+- `videoContainer` (string) - The ID of the HTML container where the avatar video will be displayed.
+- `params` (InitParams) - Configuration options for the avatar session.
 
 #### **Example Usage:**
 
@@ -49,8 +48,7 @@ Starts a new avatar session.
 `  duration: 120`
 });
 
-
-***
+---
 
 ### **`async startSessionWithCredentials(videoContainer?: string, params?: CredentialParams): Promise<void>`**
 
@@ -58,8 +56,8 @@ Starts a session using predefined credentials.
 
 #### **Parameters:**
 
-* `videoContainer` (string) - The ID of the HTML container for the avatar video.
-* `params` (CredentialParams) - Credential details for joining an Agora session.
+- `videoContainer` (string) - The ID of the HTML container for the avatar video.
+- `params` (CredentialParams) - Credential details for joining an Agora session.
 
 #### **Example Usage:**
 
@@ -73,8 +71,7 @@ Starts a session using predefined credentials.
 &#x20; }
 });
 
-
-***
+---
 
 ### **`async closeStreaming(): Promise<void>`**
 
@@ -84,8 +81,7 @@ Closes the current streaming session.
 
 `await avatar.closeStreaming`();
 
-
-***
+---
 
 ### **`async sendMessage(message: string): Promise<void>`**
 
@@ -93,14 +89,13 @@ Sends a text message to the avatar.
 
 #### **Parameters:**
 
-* `message` (string) - The message to send.
+- `message` (string) - The message to send.
 
 #### **Example Usage:**
 
 `await avatar.sendMessage('Hello, how are you?'`);
 
-
-***
+---
 
 ### **`async toggleMic(): Promise<void>`**
 
@@ -110,8 +105,7 @@ Toggles the microphone on or off.
 
 `await avatar.toggleMic`();
 
-
-***
+---
 
 ### **`initDom(containerId: string, params?: InitParams): void`**
 
@@ -119,8 +113,8 @@ Initializes the user interface for the avatar.
 
 #### **Parameters:**
 
-* `containerId` (string) - The ID of the HTML element to contain the avatar UI.
-* `params` (InitParams) - Optional parameters for session configuration.
+- `containerId` (string) - The ID of the HTML element to contain the avatar UI.
+- `params` (InitParams) - Optional parameters for session configuration.
 
 #### **Example Usage:**
 
@@ -133,8 +127,7 @@ Initializes the user interface for the avatar.
 `  duration: 120`
 });
 
-
-***
+---
 
 ## **Event Handling**
 
@@ -144,8 +137,8 @@ Registers an event listener.
 
 #### **Parameters:**
 
-* `event` (StreamEvents) - The event name.
-* `handler` (function) - The callback function to execute when the event occurs.
+- `event` (StreamEvents) - The event name.
+- `handler` (function) - The callback function to execute when the event occurs.
 
 #### **Example Usage:**
 
@@ -153,8 +146,7 @@ Registers an event listener.
 `  console.log('Message received:', event.detail`);
 });
 
-
-***
+---
 
 ### **`off(event: StreamEvents, handler: (event: CustomEvent) => void): void`**
 
@@ -164,8 +156,7 @@ Removes an event listener.
 
 `avatar.off(StreamEvents.ONMESSAGE`, messageHandler);
 
-
-***
+---
 
 ### **`emit(event: StreamEvents, params?: any): void`**
 
@@ -175,8 +166,7 @@ Manually triggers an event.
 
 `avatar.emit(StreamEvents.READY, { ready: true` });
 
-
-***
+---
 
 ## **Properties**
 
@@ -188,8 +178,7 @@ Returns the current microphone status.
 
 `console.log(avatar.micStatus); // true or false`
 
-
-***
+---
 
 ### **`classStatus: object`**
 
@@ -199,8 +188,7 @@ Returns the current state of the `StreamingAvatar` instance.
 
 `console.log(avatar.classStatus`);
 
-
-***
+---
 
 ## **Enums**
 
@@ -240,8 +228,7 @@ Fired when the session is closed.
 `  console.error('Error:', event.detail`);
 });
 
-
-***
+---
 
 ## **Interfaces**
 
@@ -293,7 +280,7 @@ number
 
 Session duration in seconds.
 
-***
+---
 
 ### **`CredentialParams`**
 
@@ -337,7 +324,7 @@ object
 
 Agora credentials.
 
-***
+---
 
 ## **Example Usage**
 
