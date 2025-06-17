@@ -87,6 +87,12 @@
         "sdk/jssdk-best-practice",
         "sdk/jssdk-api"
       ]
+    },
+    {
+      "group": "Streaming Avatar Knowledge Base",
+      "pages": [
+        "ai-tools-suite/knowledge-base"
+      ]
     }
   ]
 }
