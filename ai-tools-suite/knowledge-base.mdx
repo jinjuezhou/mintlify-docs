@@ -1,0 +1,957 @@
+---
+title: "Knowledge Base"
+description: "Create and manage knowledge bases with documents and URLs to enhance Streaming Avatar AI responses, providing contextual information for more accurate and relevant interactions"
+---
+
+<Warning>
+  Knowledge bases provide contextual information for Streaming Avatar AI responses. Documents and URLs are processed to enhance the avatar's understanding and response quality during interactive sessions.
+</Warning>
+
+<Info>
+  This API allows you to create and manage knowledge bases that can be integrated with [Streaming Avatar sessions](/ai-tools-suite/live-avatar#create-streaming-avatar-session) to provide more accurate and contextually relevant AI responses.
+</Info>
+
+## Overview
+
+The Knowledge Base API is specifically designed to enhance Streaming Avatar interactions by providing contextual information. You can create and manage knowledge bases containing documents and URLs that give your Streaming Avatar the context needed to provide more accurate, relevant, and intelligent responses during real-time conversations.
+
+### Data Model
+
+**Knowledge Base Object:**
+- `_id`: Knowledge base unique identifier (string)
+- `team_id`: Team identifier (string, required)
+- `uid`: User identifier (number)
+- `user_type`: User type (number, 1=internal user, 2=external user)
+- `from`: Source type (number, 1=system, 2=user)
+- `name`: Knowledge base name (string, optional, max 100 characters)
+- `prologue`: Opening message/greeting text (string, optional, max 100 characters) - can be used with TTS repeat mode for personalized AI assistant introductions
+- `prompt`: AI prompt instructions (string, optional, max 10,000 characters)
+- `docs`: Array of document objects (array, optional)
+- `urls`: Array of URL strings (array, optional)
+- `create_time`: Creation timestamp (number)
+- `update_time`: Last update timestamp (number)
+
+**Document Object Structure:**
+```json
+{
+  "name": "document_name.pdf",
+  "url": "https://example.com/document.pdf",
+  "size": 1024000
+}
+```
+
+### File Constraints
+
+**Document Limitations:**
+- **Single file size limit:** 100MB (104,857,600 bytes)
+- **Total files size limit:** 500MB (524,288,000 bytes)
+- **Supported formats:** PDF, DOC, DOCX, TXT, MD, JSON, XML, CSV
+
+**Field Limitations:**
+- **name:** Maximum 100 characters
+- **prologue:** Maximum 100 characters (recommended for TTS voice synthesis)
+- **prompt:** Maximum 10,000 characters
+
+## API Endpoints
+
+### List Knowledge Bases
+
+Retrieve a paginated list of knowledge bases.
+
+```http
+GET https://openapi.akool.com/api/open/v4/knowledge/list
+```
+
+**Request Headers**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](/authentication/usage#get-the-token) endpoint. |
+
+**Query Parameters**
+
+| **Parameter** | **Type** | **Required** | **Default** | **Description** |
+|-----------|------|----------|---------|-------------|
+| page | Number | No | 1 | Page number, minimum 1 |
+| size | Number | No | 10 | Items per page, range 1-100 |
+| name | String | No | - | Filter by knowledge base name |
+| from | Number | No | 2 | Filter by source type |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|-----------|------|-------------|
+| code | Integer | Interface returns business status code (1000: success) |
+| msg | String | Interface returns status information |
+| data | Array | Array of knowledge base objects |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/knowledge/list?page=1&size=10' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/knowledge/list?page=1&size=10")
+  .method("GET", null)
+  .addHeader("Authorization", "Bearer YOUR_TOKEN")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer YOUR_TOKEN");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/knowledge/list?page=1&size=10", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer YOUR_TOKEN'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/knowledge/list?page=1&size=10', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v4/knowledge/list?page=1&size=10"
+
+headers = {
+  'Authorization': 'Bearer YOUR_TOKEN'
+}
+
+response = requests.request("GET", url, headers=headers)
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": [
+    {
+      "_id": "64f8a1b2c3d4e5f6a7b8c9d0",
+      "uid": 123,
+      "name": "Customer Support KB",
+      "prompt": "You are a helpful customer support assistant.",
+      "docs": [
+        {
+          "name": "user_manual.pdf",
+          "url": "https://example.com/user_manual.pdf",
+          "size": 1024000
+        }
+      ],
+      "urls": [
+        "https://example.com/help",
+        "https://example.com/faq"
+      ],
+      "create_time": 1640995200000,
+      "update_time": 1640995200000
+    }
+  ]
+}
+```
+
+### Create Knowledge Base
+
+Create a new knowledge base with optional documents and URLs.
+
+```http
+POST https://openapi.akool.com/api/open/v4/knowledge/create
+```
+
+**Request Headers**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](/authentication/usage#get-the-token) endpoint. |
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| name | String | No | Knowledge base name, max 100 characters |
+| prologue | String | No | Opening message/greeting text, max 100 characters (recommended for TTS playback) |
+| prompt | String | No | AI instructions, max 10,000 characters |
+| docs | Array | No | Array of document objects |
+| urls | Array | No | Array of URL strings |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|-----------|------|-------------|
+| code | Integer | Interface returns business status code (1000: success) |
+| msg | String | Interface returns status information |
+| data | Object | Created knowledge base object |
+
+**Example**
+
+**Body**
+
+```json
+{
+  "name": "Customer Support KB",
+  "prologue": "Hello, I'm your AI assistant. How can I help you?",
+  "prompt": "You are a professional AI assistant. Please answer questions based on the provided documents.",
+  "docs": [
+    {
+      "name": "user_manual.pdf",
+      "url": "https://example.com/user_manual.pdf",
+      "size": 1024000
+    }
+  ],
+  "urls": [
+    "https://example.com/help",
+    "https://example.com/faq"
+  ]
+}
+```
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/knowledge/create' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data '{
+  "name": "Customer Support KB",
+  "prologue": "Hello, I am your AI assistant. How can I help you?",
+  "prompt": "You are a professional AI assistant. Please answer questions based on the provided documents.",
+  "docs": [
+    {
+      "name": "user_manual.pdf",
+      "url": "https://example.com/user_manual.pdf",
+      "size": 1024000
+    }
+  ],
+  "urls": [
+    "https://example.com/help",
+    "https://example.com/faq"
+  ]
+}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"name\": \"Customer Support KB\",\n  \"prologue\": \"Hello, I am your AI assistant. How can I help you?\",\n  \"prompt\": \"You are a professional AI assistant. Please answer questions based on the provided documents.\",\n  \"docs\": [\n    {\n      \"name\": \"user_manual.pdf\",\n      \"url\": \"https://example.com/user_manual.pdf\",\n      \"size\": 1024000\n    }\n  ],\n  \"urls\": [\n    \"https://example.com/help\",\n    \"https://example.com/faq\"\n  ]\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/knowledge/create")
+  .method("POST", body)
+  .addHeader("Authorization", "Bearer YOUR_TOKEN")
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer YOUR_TOKEN");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "name": "Customer Support KB",
+  "prologue": "Hello, I am your AI assistant. How can I help you?",
+  "prompt": "You are a professional AI assistant. Please answer questions based on the provided documents.",
+  "docs": [
+    {
+      "name": "user_manual.pdf",
+      "url": "https://example.com/user_manual.pdf",
+      "size": 1024000
+    }
+  ],
+  "urls": [
+    "https://example.com/help",
+    "https://example.com/faq"
+  ]
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/knowledge/create", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer YOUR_TOKEN',
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "name": "Customer Support KB",
+  "prologue": "Hello, I am your AI assistant. How can I help you?",
+  "prompt": "You are a professional AI assistant. Please answer questions based on the provided documents.",
+  "docs": [
+    {
+      "name": "user_manual.pdf",
+      "url": "https://example.com/user_manual.pdf",
+      "size": 1024000
+    }
+  ],
+  "urls": [
+    "https://example.com/help",
+    "https://example.com/faq"
+  ]
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/knowledge/create', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v4/knowledge/create"
+
+payload = json.dumps({
+  "name": "Customer Support KB",
+  "prologue": "Hello, I am your AI assistant. How can I help you?",
+  "prompt": "You are a professional AI assistant. Please answer questions based on the provided documents.",
+  "docs": [
+    {
+      "name": "user_manual.pdf",
+      "url": "https://example.com/user_manual.pdf",
+      "size": 1024000
+    }
+  ],
+  "urls": [
+    "https://example.com/help",
+    "https://example.com/faq"
+  ]
+})
+headers = {
+  'Authorization': 'Bearer YOUR_TOKEN',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "64f8a1b2c3d4e5f6a7b8c9d0",
+    "team_id": "team_123456",
+    "uid": 789,
+    "user_type": 2,
+    "from": 2,
+    "name": "Customer Support KB",
+    "prologue": "Hello, I am your AI assistant. How can I help you?",
+    "prompt": "You are a professional AI assistant. Please answer questions based on the provided documents.",
+    "docs": [
+      {
+        "name": "user_manual.pdf",
+        "url": "https://example.com/user_manual.pdf",
+        "size": 1024000
+      }
+    ],
+    "urls": [
+      "https://example.com/help",
+      "https://example.com/faq"
+    ],
+    "create_time": 1640995200000,
+    "update_time": 1640995200000
+  }
+}
+```
+
+### Get Knowledge Base Details
+
+Retrieve detailed information about a specific knowledge base.
+
+```http
+GET https://openapi.akool.com/api/open/v4/knowledge/detail
+```
+
+**Request Headers**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](/authentication/usage#get-the-token) endpoint. |
+
+**Query Parameters**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| id | String | Yes | Knowledge base ID |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|-----------|------|-------------|
+| code | Integer | Interface returns business status code (1000: success) |
+| msg | String | Interface returns status information |
+| data | Object | Knowledge base object details |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/knowledge/detail?id=64f8a1b2c3d4e5f6a7b8c9d0' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/knowledge/detail?id=64f8a1b2c3d4e5f6a7b8c9d0")
+  .method("GET", null)
+  .addHeader("Authorization", "Bearer YOUR_TOKEN")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer YOUR_TOKEN");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/knowledge/detail?id=64f8a1b2c3d4e5f6a7b8c9d0", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer YOUR_TOKEN'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/knowledge/detail?id=64f8a1b2c3d4e5f6a7b8c9d0', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v4/knowledge/detail?id=64f8a1b2c3d4e5f6a7b8c9d0"
+
+headers = {
+  'Authorization': 'Bearer YOUR_TOKEN'
+}
+
+response = requests.request("GET", url, headers=headers)
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "64f8a1b2c3d4e5f6a7b8c9d0",
+    "team_id": "team_123456",
+    "uid": 789,
+    "name": "Customer Support KB",
+    "prompt": "You are a professional AI assistant.",
+    "docs": [
+      {
+        "name": "user_manual.pdf",
+        "url": "https://example.com/user_manual.pdf",
+        "size": 1024000
+      }
+    ],
+    "urls": [
+      "https://example.com/help"
+    ],
+    "create_time": 1640995200000,
+    "update_time": 1640995200000
+  }
+}
+```
+
+### Update Knowledge Base
+
+Update an existing knowledge base by ID.
+
+```http
+POST https://openapi.akool.com/api/open/v4/knowledge/update
+```
+
+**Request Headers**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](/authentication/usage#get-the-token) endpoint. |
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| id | String | Yes | Knowledge base ID to update |
+| name | String | No | Updated name, max 100 characters |
+| prologue | String | No | Updated opening message/greeting text, max 100 characters |
+| prompt | String | No | Updated AI instructions, max 10,000 characters |
+| docs | Array | No | Updated document array |
+| urls | Array | No | Updated URL array |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|-----------|------|-------------|
+| code | Integer | Interface returns business status code (1000: success) |
+| msg | String | Interface returns status information |
+| data | Object | Updated knowledge base object |
+
+**Example**
+
+**Body**
+
+```json
+{
+  "id": "64f8a1b2c3d4e5f6a7b8c9d0",
+  "name": "Updated Customer Support KB",
+  "prologue": "Updated opening message",
+  "prompt": "Updated AI instructions",
+  "docs": [
+    {
+      "name": "updated_manual.pdf",
+      "url": "https://example.com/updated_manual.pdf",
+      "size": 2048000
+    }
+  ],
+  "urls": [
+    "https://example.com/updated-help"
+  ]
+}
+```
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/knowledge/update' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data '{
+  "id": "64f8a1b2c3d4e5f6a7b8c9d0",
+  "name": "Updated Customer Support KB",
+  "prologue": "Updated opening message",
+  "prompt": "Updated AI instructions",
+  "docs": [
+    {
+      "name": "updated_manual.pdf",
+      "url": "https://example.com/updated_manual.pdf",
+      "size": 2048000
+    }
+  ],
+  "urls": [
+    "https://example.com/updated-help"
+  ]
+}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"id\": \"64f8a1b2c3d4e5f6a7b8c9d0\",\n  \"name\": \"Updated Customer Support KB\",\n  \"prologue\": \"Updated opening message\",\n  \"prompt\": \"Updated AI instructions\",\n  \"docs\": [\n    {\n      \"name\": \"updated_manual.pdf\",\n      \"url\": \"https://example.com/updated_manual.pdf\",\n      \"size\": 2048000\n    }\n  ],\n  \"urls\": [\n    \"https://example.com/updated-help\"\n  ]\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/knowledge/update")
+  .method("POST", body)
+  .addHeader("Authorization", "Bearer YOUR_TOKEN")
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer YOUR_TOKEN");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "id": "64f8a1b2c3d4e5f6a7b8c9d0",
+  "name": "Updated Customer Support KB",
+  "prologue": "Updated opening message",
+  "prompt": "Updated AI instructions",
+  "docs": [
+    {
+      "name": "updated_manual.pdf",
+      "url": "https://example.com/updated_manual.pdf",
+      "size": 2048000
+    }
+  ],
+  "urls": [
+    "https://example.com/updated-help"
+  ]
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/knowledge/update", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer YOUR_TOKEN',
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "id": "64f8a1b2c3d4e5f6a7b8c9d0",
+  "name": "Updated Customer Support KB",
+  "prologue": "Updated opening message",
+  "prompt": "Updated AI instructions",
+  "docs": [
+    {
+      "name": "updated_manual.pdf",
+      "url": "https://example.com/updated_manual.pdf",
+      "size": 2048000
+    }
+  ],
+  "urls": [
+    "https://example.com/updated-help"
+  ]
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/knowledge/update', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v4/knowledge/update"
+
+payload = json.dumps({
+  "id": "64f8a1b2c3d4e5f6a7b8c9d0",
+  "name": "Updated Customer Support KB",
+  "prologue": "Updated opening message",
+  "prompt": "Updated AI instructions",
+  "docs": [
+    {
+      "name": "updated_manual.pdf",
+      "url": "https://example.com/updated_manual.pdf",
+      "size": 2048000
+    }
+  ],
+  "urls": [
+    "https://example.com/updated-help"
+  ]
+})
+headers = {
+  'Authorization': 'Bearer YOUR_TOKEN',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "64f8a1b2c3d4e5f6a7b8c9d0",
+    "team_id": "team_123456",
+    "uid": 789,
+    "name": "Updated Customer Support KB",
+    "prompt": "Updated AI instructions",
+    "docs": [
+      {
+        "name": "updated_manual.pdf",
+        "url": "https://example.com/updated_manual.pdf",
+        "size": 2048000
+      }
+    ],
+    "urls": [
+      "https://example.com/updated-help"
+    ],
+    "create_time": 1640995200000,
+    "update_time": 1640995300000
+  }
+}
+```
+
+### Delete Knowledge Base
+
+Delete a knowledge base by ID.
+
+```http
+DELETE https://openapi.akool.com/api/open/v4/knowledge/delete
+```
+
+**Request Headers**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](/authentication/usage#get-the-token) endpoint. |
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| id | String | Yes | Knowledge base ID to delete |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|-----------|------|-------------|
+| code | Integer | Interface returns business status code (1000: success) |
+| msg | String | Interface returns status information |
+
+**Example**
+
+**Body**
+
+```json
+{
+  "id": "64f8a1b2c3d4e5f6a7b8c9d0"
+}
+```
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://openapi.akool.com/api/open/v4/knowledge/delete' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data '{
+  "id": "64f8a1b2c3d4e5f6a7b8c9d0"
+}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"id\": \"64f8a1b2c3d4e5f6a7b8c9d0\"\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/knowledge/delete")
+  .method("DELETE", body)
+  .addHeader("Authorization", "Bearer YOUR_TOKEN")
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer YOUR_TOKEN");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "id": "64f8a1b2c3d4e5f6a7b8c9d0"
+});
+
+const requestOptions = {
+  method: "DELETE",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/knowledge/delete", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer YOUR_TOKEN',
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "id": "64f8a1b2c3d4e5f6a7b8c9d0"
+}';
+$request = new Request('DELETE', 'https://openapi.akool.com/api/open/v4/knowledge/delete', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v4/knowledge/delete"
+
+payload = json.dumps({
+  "id": "64f8a1b2c3d4e5f6a7b8c9d0"
+})
+headers = {
+  'Authorization': 'Bearer YOUR_TOKEN',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("DELETE", url, headers=headers, data=payload)
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "OK"
+}
+```
+
+## Integration with Streaming Avatar
+
+### Using Knowledge Base in Streaming Avatar Sessions
+
+To enhance your Streaming Avatar with contextual knowledge, simply provide the `knowledge_id` parameter when creating a Streaming Avatar session. This enables the AI to access documents and URLs from your knowledge base, resulting in more informed and accurate responses during real-time interactions.
+
+**Reference:** [Create Streaming Avatar Session](/ai-tools-suite/live-avatar#create-streaming-avatar-session)
+
+**Example Integration:**
+
+```json
+{
+  "avatar_id": "avatar_123",
+  "background_url": "https://example.com/background.jpg",
+  "duration": 600,
+  "stream_type": "agora",
+  "knowledge_id": "64f8a1b2c3d4e5f6a7b8c9d0"
+}
+```
+
+When a `knowledge_id` is provided, the system automatically:
+- Incorporates the knowledge base's prompt into the AI's context
+- Processes documents and URLs to enhance AI understanding
+- Uses the prologue for personalized AI assistant introductions (if TTS repeat mode is enabled)
+
+<Note>
+  The prologue field is particularly useful for TTS (Text-to-Speech) models in repeat mode, providing personalized AI assistant introductions at the beginning of LiveAvatar sessions.
+</Note>
+
+## Error Codes
+
+| **Code** | **Description** |
+|----------|-----------------|
+| 1000 | Success |
+| 1003 | Parameter validation error |
+| 1232 | Knowledge not found |
+| 1233 | Knowledge already exists |
+| 1234 | Knowledge creation error |
+| 1235 | Knowledge update error |
+| 1236 | Knowledge detail error |
+
+## Complete Workflow Example
+
+Here's a complete workflow showing how to create a knowledge base and integrate it with your Streaming Avatar for enhanced AI responses:
+
+```bash
+# 1. Create a knowledge base
+curl -X POST "https://openapi.akool.com/api/open/v4/knowledge/create" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Customer Support KB",
+    "prologue": "Hello, I am your customer support assistant. How can I help you today?",
+    "prompt": "You are a helpful customer support assistant. Use the provided documents to answer questions accurately.",
+    "docs": [
+      {
+        "name": "user_guide.pdf",
+        "url": "https://example.com/user_guide.pdf",
+        "size": 1024000
+      }
+    ],
+    "urls": [
+      "https://example.com/help",
+      "https://example.com/faq"
+    ]
+  }'
+
+# 2. Use the knowledge base in a streaming avatar session
+curl -X POST "https://openapi.akool.com/api/open/v4/liveAvatar/session/create" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "avatar_id": "your_avatar_id",
+    "knowledge_id": "KNOWLEDGE_ID_FROM_STEP_1"
+  }'
+```
+
+<Tip>
+  - Document size can be obtained using JavaScript's `File.size` property for client-side file uploads
+  - Knowledge base names must be unique within a team for the same user
+  - Results are sorted by creation time in descending order
+  - Users can only access knowledge bases within their team
+</Tip>
