@@ -743,7 +743,7 @@ GET https://openapi.akool.com/api/open/v4/voice/resource/list
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                               |
 | ------------- | -------- | ------------ | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| type          | String   | false        | 1,2   | 1-voiceTTS, 2-voiceChanger |
+| type          | String   | true        | 1,2   | 1-voiceTTS, 2-voiceChanger |
 | page          | String   | false        | 1         | Page number |
 | size          | String   | false        | 10        | Page size |
 
@@ -892,7 +892,7 @@ GET https://openapi.akool.com/api/open/v4/voice/list
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                               |
 | ------------- | -------- | ------------ | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| type          | String   | false        | 1,2       | 1-VoiceClone, 2-Akool Voices |
+| type          | String   | true        | 1,2       | 1-VoiceClone, 2-Akool Voices |
 | page          | String   | false        | 1         | Page number |
 | size          | String   | false        | 10        | Page size |
 | style         | String   | false        | Calm,Authoritative | Voice style filters, separated by commas |
