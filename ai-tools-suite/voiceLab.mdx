@@ -257,13 +257,13 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 | input_text    | String   | true         |           | Preview text content |
 | voice_id      | String   | true         |           | Voice ID, get this voice_id from your cloned voices or akool voice list.[getVoiceId](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
 | voice_options | Object   | false        |           | Audio settings |
-| - stability   | Number   | false        |           | Voice stability (0-1) |
-| - similarity_boost | Number | false     |           | Similarity boost (0-1) |
-| - style       | Number   | false        |           | Voice style (0-1) |
-| - speed       | Number   | false        |           | Speech speed (0-2) |
-| - speaker_boost | Boolean | false      |           | Speaker boost |
-| - emotion     | String   | false        |           | Emotion (happy, sad, angry, fearful, disgusted, surprised, neutral) |
-| - volume      | Integer  | false        |           | Volume (0-100) |
+| - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
+| - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
+| - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
+| - speed       | Number   | false        |           | Speech speed (0-2) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
+| - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
+| - emotion     | String   | false        |           | Emotion (happy, sad, angry, fearful, disgusted, surprised, neutral) , It only supports Chinese voice. Supported voice models: Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
+| - volume      | Integer  | false        |           | Volume (0-100) , Supported voice models: Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
 | webhookUrl    | String   | true         |           | Callback url address based on HTTP request |
 
 **Response Attributes**
@@ -501,13 +501,10 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 | voice_id      | String   | true         |           | Voice ID， get this voice_id from your cloned voices or akool voice list.[getVoiceId](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
 | sourc_voice_file    | String   | true         |           | Audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL |
 | voice_options | Object   | false        |           | Audio settings |
-| - stability   | Number   | false        |           | Voice stability (0-1) |
-| - similarity  | Number   | false        |           | Similarity (0-1) |
-| - style       | Integer  | false        |           | Voice style |
-| - use_speaker_boost | Boolean | false    |           | Use speaker boost |
-| - speed       | Integer  | false        |           | Speech speed (0-2) |
-| - seed        | Integer  | false        |           | Random seed (0-1) |
-| - remove_background_noise | Boolean | false |       | Remove background noise |
+| - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
+| - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
+| - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
+| - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
 | webhookUrl    | String   | true         |           | Callback url address based on HTTP request |
 
 **Response Attributes**
@@ -536,10 +533,7 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 | -- stability  | Number   | 0.7                              | Voice stability setting |
 | -- similarity_boost | Number | 0.5                        | Similarity boost setting |
 | -- style      | Number   | 0.6                              | Voice style setting |
-| -- speed      | Number   | 0.8                              | Speech speed setting |
 | -- speaker_boost | Boolean | false                        | Speaker boost setting |
-| -- emotion    | String   | "happy"                          | Emotion setting |
-| -- volume     | Integer  | 50                               | Volume setting |
 
 **Example**
 
@@ -551,12 +545,9 @@ POST https://openapi.akool.com/api/open/v4/voice/change
     "sourc_voice_file": "https://drz0f01yeq1cx.cloudfront.net/1749098405491-audio.mp3",
     "voice_options": {
         "stability": 0.9,
-        "similarity": 0.7,
+        "similarity_boost": 0.7,
         "style": 1,
-        "use_speaker_boost": false,
-        "speed": 1,
-        "seed": 0,
-        "remove_background_noise": false
+        "speaker_boost": false,
     },
     "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
 }
@@ -575,12 +566,9 @@ curl --location 'https://openapi.akool.com/api/open/v4/voice/change' \
     "sourc_voice_file": "https://drz0f01yeq1cx.cloudfront.net/1749098405491-audio.mp3",
     "voice_options": {
         "stability": 0.9,
-        "similarity": 0.7,
+        "similarity_boost": 0.7,
         "style": 1,
-        "use_speaker_boost": false,
-        "speed": 1,
-        "seed": 0,
-        "remove_background_noise": false
+        "speaker_boost": false,
     },
     "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
 }'
@@ -590,7 +578,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/voice/change' \
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"voice_id\": \"hkfHEbBvdQFNX4uWHqRF\",\n    \"sourc_voice_file\": \"https://drz0f01yeq1cx.cloudfront.net/1749098405491-audio.mp3\",\n    \"voice_options\": {\n        \"stability\": 0.9,\n        \"similarity\": 0.7,\n        \"style\": 1,\n        \"use_speaker_boost\": false,\n        \"speed\": 1,\n        \"seed\": 0,\n        \"remove_background_noise\": false\n    },\n    \"webhookUrl\": \"http://localhost:3007/api/open/v4/test/webhook\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"voice_id\": \"hkfHEbBvdQFNX4uWHqRF\",\n    \"sourc_voice_file\": \"https://drz0f01yeq1cx.cloudfront.net/1749098405491-audio.mp3\",\n    \"voice_options\": {\n        \"stability\": 0.9,\n        \"similarity_boost\": 0.7,\n        \"speaker_boost\": false\n    },\n    \"webhookUrl\": \"http://localhost:3007/api/open/v4/test/webhook\"\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/change")
   .method("POST", body)
@@ -610,12 +598,9 @@ const raw = JSON.stringify({
   "sourc_voice_file": "https://drz0f01yeq1cx.cloudfront.net/1749098405491-audio.mp3",
   "voice_options": {
     "stability": 0.9,
-    "similarity": 0.7,
+    "similarity_boost": 0.7,
     "style": 1,
-    "use_speaker_boost": false,
-    "speed": 1,
-    "seed": 0,
-    "remove_background_noise": false
+    "speaker_boost": false
   },
   "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
 });
@@ -645,12 +630,8 @@ $body = '{
   "sourc_voice_file": "https://drz0f01yeq1cx.cloudfront.net/1749098405491-audio.mp3",
   "voice_options": {
     "stability": 0.9,
-    "similarity": 0.7,
-    "style": 1,
-    "use_speaker_boost": false,
-    "speed": 1,
-    "seed": 0,
-    "remove_background_noise": false
+    "similarity_boost": 0.7,
+    "speaker_boost": false
   },
   "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
 }';
@@ -671,12 +652,9 @@ payload = json.dumps({
   "sourc_voice_file": "https://drz0f01yeq1cx.cloudfront.net/1749098405491-audio.mp3",
   "voice_options": {
     "stability": 0.9,
-    "similarity": 0.7,
+    "similarity_boost": 0.7,
     "style": 1,
-    "use_speaker_boost": False,
-    "speed": 1,
-    "seed": 0,
-    "remove_background_noise": False
+    "speaker_boost": False
   },
   "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
 })
@@ -718,10 +696,7 @@ print(response.text)
       "stability": 0.7,
       "similarity_boost": 0.5,
       "style": 0.6,
-      "speed": 0.8,
-      "speaker_boost": false,
-      "emotion": "happy",
-      "volume": 50
+      speaker_boost: false
     }
   }
 }
@@ -927,6 +902,7 @@ GET https://openapi.akool.com/api/open/v4/voice/list
 | -- age        | Array    | ["Elderly", "Middle"]            | Age tags |
 | -- deduction_credit | Integer | 0                            | Deducted credits |
 | -- webhookUrl | String   | "http://172.31.16.178:3004/..."  | Callback URL |
+| -- voice_model_name | String   | "Akool Multilingual 3"  | Supported voice model name |
 | - count       | Integer  | 9                                | Total count of voices |
 | - page        | Integer  | 1                                | Current page number |
 | - size        | Integer  | 1                                | Page size |
@@ -1043,7 +1019,8 @@ print(response.text)
                     "Middle"
                 ],
                 "deduction_credit": 0,
-                "webhookUrl": "http://172.31.16.178:3004/api/open/v4/content/test/thirdpart/webhook"
+                "webhookUrl": "http://172.31.16.178:3004/api/open/v4/content/test/thirdpart/webhook",
+                "voice_model_name": "Akool Multilingual 3"
             }
         ],
         "count": 9,
