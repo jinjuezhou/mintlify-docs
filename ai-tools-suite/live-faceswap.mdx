@@ -1,0 +1,542 @@
+---
+title: 'Live Face Swap'
+description: 'Real-time Face Swap API Documentation'
+---
+
+<Warning>Generated resources (images, videos) are valid for 7 days. Please save related resources promptly to prevent expiration.</Warning>
+
+## Overview
+
+Live Face Swap API provides real-time face swap functionality, supporting real-time face swap operations during live streaming.
+
+## Get Access Token
+
+Before calling other APIs, you need to obtain an access token first.
+
+```bash
+POST https://openapi.akool.com/api/open/v3/getToken
+```
+
+**Request Headers**
+
+| **Parameter** | **Value** | **Description** |
+|----------|--------|----------|
+| Content-Type | application/json | Request content type |
+
+**Request Body**
+
+| **Parameter** | **Type** | **Description** |
+|----------|----------|----------|
+| clientId | String | Client ID |
+| clientSecret | String | Client secret |
+
+**Example Request**
+
+```json
+{
+    "clientId": "AKX5brZQ***XBQSk=",
+    "clientSecret": "tcMhvgV0fY***WQ2eIoEY70rNi"
+}
+```
+
+## Face Detection
+
+Detect faces in an image and get facial landmarks coordinates.
+
+```bash
+POST https://sg3.akool.com/detect
+```
+
+**Request Headers**
+
+| **Parameter** | **Value** | **Description** |
+|----------|--------|----------|
+| Authorization | Bearer token | API key for request authorization |
+| Content-Type | application/json | Request content type |
+
+**Request Body**
+
+| **Parameter** | **Type** | **Description** |
+|----------|----------|----------|
+| single_face | Boolean | Whether to detect single face only |
+| image_url | String | Image URL for face detection |
+| img | String | Base64 encoded image (optional) |
+
+**Example Request**
+
+```json
+{
+    "single_face": false,
+    "image_url": "https://d21ksh0k4smeql.cloudfront.net/1745579943557-yr5w-crop_1728989585247-3239-0-1728989585409-9277.png"
+}
+```
+
+**Response**
+
+| **Parameter** | **Type** | **Description** |
+|----------|----------|----------|
+| error_code | int | Error code (0: success) |
+| error_msg | String | Error message |
+| landmarks | Array | Facial landmarks coordinates array |
+| landmarks_str | Array | Facial landmarks coordinates string array |
+| region | Array | Face region coordinates |
+| seconds | float | Processing time in seconds |
+| trx_id | String | Transaction ID |
+
+**Response Example**
+
+```json
+{
+    "error_code": 0,
+    "error_msg": "SUCCESS",
+    "landmarks": [
+        [
+            [249, 510],
+            [460, 515],
+            [343, 657],
+            [255, 740],
+            [0, 0],
+            [0, 0]
+        ]
+    ],
+    "landmarks_str": [
+        "249,510:460,515:343,657:255,740"
+    ],
+    "region": [
+        [150, 264, 437, 657]
+    ],
+    "seconds": 0.6554102897644043,
+    "trx_id": "64498285-446f-462d-9470-fe36c36c6eac"
+}
+```
+
+## Create Real-time Face Swap Session
+
+Create a new real-time face swap session.
+
+```bash
+POST https://openapi.akool.com/api/open/v3/faceswap/live/create
+```
+
+**Request Headers**
+
+| **Parameter** | **Value** | **Description** |
+|----------|--------|----------|
+| Authorization | Bearer token | API key for request authorization |
+| Content-Type | application/json | Request content type |
+
+**Request Body**
+
+| **Parameter** | **Type** | **Description** |
+|----------|----------|----------|
+| sourceImage | Array | Source image information array, each element contains path and opts properties |
+
+**Example Request**
+
+```json
+{
+    "sourceImage": [
+        {
+            "path": "https://d21ksh0k4smeql.cloudfront.net/crop_1695201165222-7514-0-1695201165485-8149.png",
+            "opts": "262,175:363,175:313,215:272,279"
+        }
+    ]
+}
+```
+
+**Response**
+
+| **Parameter** | **Type** | **Description** |
+|----------|----------|----------|
+| code | int | API response business status code (1000: success) |
+| msg | String | API response status information |
+| data | Object | Response data object |
+
+**Response Example**
+
+```json
+{
+    "code": 1000,
+    "msg": "OK",
+    "data": {
+        "_id": "684f8fb744b8795862e45cbe",
+        "faceswap_status": 1,
+        "front_user_id": "1",
+        "algorithm_user_id": "3",
+        "front_rtc_token": "007eJxTYFj/uGvaue3C3/VlOLdFmM5UuffmzHGhszbnTSqs3or94HNRYEhNNElJM0oxMkg1MTYxMklMMkm0MDCySDW0sDBOMjRP297vnyHAx8Bw6YAZIyMDIwMLAyMDiM8EJpnBJAuYFGMwMjAyNTAzNDMwNrI0tTQ0MIy3MDIyYWQwBADtwSJM",
+        "channel_id": "20250616032959101_8224",
+        "app_id": ""
+    }
+}
+```
+
+**Status Code Description**
+
+- `faceswap_status`: 
+  - 1: Queuing
+  - 2: Processing (when this value is 2, the frontend can connect to Agora's server)
+  - 3: Success
+  - 4: Failed
+
+## Update Real-time Face Swap Session
+
+Update existing real-time face swap session configuration.
+
+```bash
+POST https://openapi.akool.com/api/open/v3/faceswap/live/update
+```
+
+**Request Headers**
+
+| **Parameter** | **Value** | **Description** |
+|----------|--------|----------|
+| Authorization | Bearer token | API key for request authorization |
+| Content-Type | application/json | Request content type |
+
+**Request Body**
+
+| **Parameter** | **Type** | **Description** |
+|----------|----------|----------|
+| _id | String | Session ID |
+| sourceImage | Array | Source image information array, each element contains path and opts properties |
+
+**Example Request**
+
+```json
+{
+    "sourceImage": [
+        {
+            "path": "https://d21ksh0k4smeql.cloudfront.net/1745579943557-yr5w-crop_1728989585247-3239-0-1728989585409-9277.png",
+            "opts": "249,510:460,515:343,657:255,740"
+        }
+    ],
+    "_id": "685ea0bb5aa150dd8b7116b1"
+}
+```
+
+**Response Example**
+
+```json
+{
+    "code": 1000,
+    "msg": "OK"
+}
+```
+
+## Close Real-time Face Swap Session
+
+Close the specified real-time face swap session.
+
+```bash
+POST https://openapi.akool.com/api/open/v3/faceswap/live/close
+```
+
+**Request Headers**
+
+| **Parameter** | **Value** | **Description** |
+|----------|--------|----------|
+| Authorization | Bearer token | API key for request authorization |
+| Content-Type | application/json | Request content type |
+
+**Request Body**
+
+| **Parameter** | **Type** | **Description** |
+|----------|----------|----------|
+| _id | String | Session ID |
+
+**Example Request**
+
+```json
+{
+    "_id": "685ea0bb5aa150dd8b7116b1"
+}
+```
+
+**Response Example**
+
+```json
+{
+    "code": 1000,
+    "msg": "OK"
+}
+```
+
+## Code Examples
+
+<CodeGroup>
+
+```bash cURL
+# Get token
+curl -X POST "https://openapi.akool.com/api/open/v3/getToken" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "clientId": "AKX5brZQ***XBQSk=",
+        "clientSecret": "tcMhvgV0fY***WQ2eIoEY70rNi"
+    }'
+
+# Face detection
+curl -X POST "https://sg3.akool.com/detect" \
+    -H "Authorization: Bearer token" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "single_face": false,
+        "image_url": "https://d21ksh0k4smeql.cloudfront.net/1745579943557-yr5w-crop_1728989585247-3239-0-1728989585409-9277.png"
+    }'
+
+# Create session
+curl -X POST "https://openapi.akool.com/api/open/v3/faceswap/live/create" \
+    -H "Authorization: Bearer token" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "sourceImage": [
+            {
+                "path": "https://d21ksh0k4smeql.cloudfront.net/crop_1695201165222-7514-0-1695201165485-8149.png",
+                "opts": "262,175:363,175:313,215:272,279"
+            }
+        ]
+    }'
+
+# Update session
+curl -X POST "https://openapi.akool.com/api/open/v3/faceswap/live/update" \
+    -H "Authorization: Bearer token" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "sourceImage": [
+            {
+                "path": "https://d21ksh0k4smeql.cloudfront.net/1745579943557-yr5w-crop_1728989585247-3239-0-1728989585409-9277.png",
+                "opts": "249,510:460,515:343,657:255,740"
+            }
+        ],
+        "_id": "685ea0bb5aa150dd8b7116b1"
+    }'
+
+# Close session
+curl -X POST "https://openapi.akool.com/api/open/v3/faceswap/live/close" \
+    -H "Authorization: Bearer token" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "_id": "685ea0bb5aa150dd8b7116b1"
+    }'
+```
+
+```javascript JavaScript
+// Get token
+const getToken = async () => {
+    const response = await fetch('https://openapi.akool.com/api/open/v3/getToken', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            clientId: 'AKX5brZQ***XBQSk=',
+            clientSecret: 'tcMhvgV0fY***WQ2eIoEY70rNi'
+        })
+    });
+    return response.json();
+};
+
+// Face detection
+const detectFace = async (token, imageUrl) => {
+    const response = await fetch('https://sg3.akool.com/detect', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            single_face: false,
+            image_url: imageUrl
+        })
+    });
+    return response.json();
+};
+
+// Create session
+const createSession = async (token, sourceImage) => {
+    const response = await fetch('https://openapi.akool.com/api/open/v3/faceswap/live/create', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            sourceImage: sourceImage
+        })
+    });
+    return response.json();
+};
+
+// Update session
+const updateSession = async (token, sessionId, sourceImage) => {
+    const response = await fetch('https://openapi.akool.com/api/open/v3/faceswap/live/update', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            _id: sessionId,
+            sourceImage: sourceImage
+        })
+    });
+    return response.json();
+};
+
+// Close session
+const closeSession = async (token, sessionId) => {
+    const response = await fetch('https://openapi.akool.com/api/open/v3/faceswap/live/close', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            _id: sessionId
+        })
+    });
+    return response.json();
+};
+```
+
+```python Python
+import requests
+import json
+
+# Get token
+def get_token():
+    url = "https://openapi.akool.com/api/open/v3/getToken"
+    payload = {
+        "clientId": "AKX5brZQ***XBQSk=",
+        "clientSecret": "tcMhvgV0fY***WQ2eIoEY70rNi"
+    }
+    headers = {'Content-Type': 'application/json'}
+    response = requests.post(url, headers=headers, json=payload)
+    return response.json()
+
+# Face detection
+def detect_face(token, image_url):
+    url = "https://sg3.akool.com/detect"
+    payload = {
+        "single_face": False,
+        "image_url": image_url
+    }
+    headers = {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json'
+    }
+    response = requests.post(url, headers=headers, json=payload)
+    return response.json()
+
+# Create session
+def create_session(token, source_image):
+    url = "https://openapi.akool.com/api/open/v3/faceswap/live/create"
+    payload = {
+        "sourceImage": source_image
+    }
+    headers = {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json'
+    }
+    response = requests.post(url, headers=headers, json=payload)
+    return response.json()
+
+# Update session
+def update_session(token, session_id, source_image):
+    url = "https://openapi.akool.com/api/open/v3/faceswap/live/update"
+    payload = {
+        "_id": session_id,
+        "sourceImage": source_image
+    }
+    headers = {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json'
+    }
+    response = requests.post(url, headers=headers, json=payload)
+    return response.json()
+
+# Close session
+def close_session(token, session_id):
+    url = "https://openapi.akool.com/api/open/v3/faceswap/live/close"
+    payload = {
+        "_id": session_id
+    }
+    headers = {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json'
+    }
+    response = requests.post(url, headers=headers, json=payload)
+    return response.json()
+```
+
+</CodeGroup>
+
+
+## Response Code Description
+
+> **Note:** If the `code` value in the response is not `1000`, the request has failed or is incorrect.
+
+| **Parameter** | **Value** | **Description**                                              |
+|---------------|-----------|--------------------------------------------------------------|
+| code          | 1000      | Success                                                      |
+| code          | 1003      | Parameter error or parameter cannot be empty                 |
+| code          | 1101      | Invalid authorization or the request token has expired        |
+| code          | 1102      | Authorization cannot be empty                                |
+| code          | 1104      | Insufficient quota                                           |
+
+## Important Notes
+
+1. **Resource Validity**: Generated resources are valid for 7 days, please save them promptly
+2. **Face Detection**: Use the face-detect API to get face landmarks coordinates before creating face swap sessions
+3. **Status Monitoring**: After creating a session, you need to monitor the `faceswap_status` status
+4. **Real-time Connection**: When the status is 2, you can connect to Agora's server for real-time face swap
+5. **Session Management**: Please close sessions promptly after use to release resources
+6. **Error Handling**: Please handle API error codes and error messages properly
+
+
+## Push and pull stream Demo References
+
+For implementing real-time video communication with Agora SDK, you can refer to the following resources:
+
+### Basic Video Calling Demo Parameter Description
+
+![Basic Video Calling Demo Parameter Description](https://d21ksh0k4smeql.cloudfront.net/openapi/images/live-faceswap-demo-ui.png)
+
+As shown in the figure above, `channel_id`, `front_user_id`, and `front_rtc_token` correspond to the Channel, User ID, and Token input fields on the page respectively.
+These parameters can be obtained after creating a session through the Live Face Swap API. After filling them in, you can experience push/pull streaming and real-time face swap effects.
+
+### Demo Page
+- **Live Demo**: [https://webdemo-global.agora.io/example/basic/basicVideoCall/index.html](https://webdemo-global.agora.io/example/basic/basicVideoCall/index.html)
+
+### Source Code
+- **GitHub Repository**: [https://github.com/AgoraIO/API-Examples-Web/tree/main/src/example/basic/basicVideoCall](https://github.com/AgoraIO/API-Examples-Web/tree/main/src/example/basic/basicVideoCall)
+
+### Recommended Track Configuration
+
+For optimal performance in live face swap scenarios, it's recommended to use the following track configurations:
+
+#### Audio Track Configuration
+```javascript
+const audioTrack = await AgoraRTC.createMicrophoneAudioTrack({
+  encoderConfig: "music_standard",
+});
+```
+
+#### Video Track Configuration
+```javascript
+const videoTrack = await AgoraRTC.createCameraVideoTrack({
+  encoderConfig: {
+    width: 640,
+    height: 480,
+    frameRate: {max: 20, min: 20},
+    bitrateMin: 5000,
+    bitrateMax: 5000,
+  },
+});
+```
+
+These configurations are optimized for:
+- **Audio**: Using `music_standard` encoder for better audio quality
+- **Video**: Fixed frame rate at 20fps with controlled bitrate for stable performance
+- **Resolution**: 640x480 resolution suitable for face swap processing
+
+These resources provide complete examples of how to integrate Agora's real-time video communication SDK, which can be used as a reference for implementing the video streaming part of the live face swap functionality. 
