@@ -911,6 +911,7 @@ GET https://openapi.akool.com/api/open/v4/voice/list
 | -- deduction_credit | Integer | 0                            | Deducted credits |
 | -- webhookUrl | String   | "http://172.31.16.178:3004/..."  | Callback URL |
 | -- voice_model_name | String   | "Akool Multilingual 3"  | Supported voice model name |
+| -- support_stream | Boolean   | true  | Supported stream: true/false, Akool Multilingual 1 & Akool Multilingual 3 only support stream. |
 | - count       | Integer  | 9                                | Total count of voices |
 | - page        | Integer  | 1                                | Current page number |
 | - size        | Integer  | 1                                | Page size |
@@ -1054,7 +1055,7 @@ DELETE https://openapi.akool.com/api/open/v4/voice/del
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| _id           | String   | true         |           | Voice list document ID  [getVoiceDocumentId](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
+| _ids          | Array    | true         |           | Voice list document IDs [getVoiceDocumentId](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
 
 **Response Attributes**
 
@@ -1063,7 +1064,7 @@ DELETE https://openapi.akool.com/api/open/v4/voice/del
 | code          | int      | 1000                             | Interface returns business status code(1000:success)                                                                                                                                                                                                                                                                   |
 | msg           | String   |                                  | Interface returns status information                                                                                                                                                                                                                                                                                   |
 | data          | Object   |                                  | Response data object |
-| - _id         | String   | "685e37855edaaf06053d1afe"       | Document ID |
+| - _ids        | Array    |                                  | Deleted voice document IDs |
 
 **Example**
 
@@ -1071,7 +1072,10 @@ DELETE https://openapi.akool.com/api/open/v4/voice/del
 
 ```json
 {
-    "_id": "685e37855edaaf06053d1afe"
+    "_ids": [
+        "6836b8183a59f36196bb9c52",
+        "6836ba935026505ab7a529ce"
+    ]
 }
 ```
 
@@ -1084,7 +1088,10 @@ curl --location --request DELETE 'https://openapi.akool.com/api/open/v4/voice/de
 --header 'Authorization: Bearer {{token}}' \
 --header 'Content-Type: application/json' \
 --data '{
-    "_id": "685e37855edaaf06053d1afe"
+    "_ids": [
+        "6836b8183a59f36196bb9c52",
+        "6836ba935026505ab7a529ce"
+    ]
 }'
 ```
 
@@ -1092,7 +1099,7 @@ curl --location --request DELETE 'https://openapi.akool.com/api/open/v4/voice/de
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"_id\": \"685e37855edaaf06053d1afe\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"_ids\": [\n        \"6836b8183a59f36196bb9c52\",\n        \"6836ba935026505ab7a529ce\"\n    ]\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/del")
   .method("DELETE", body)
@@ -1108,7 +1115,10 @@ myHeaders.append("Authorization", "Bearer {{token}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
-  "_id": "685e37855edaaf06053d1afe"
+  "_ids": [
+    "6836b8183a59f36196bb9c52",
+    "6836ba935026505ab7a529ce"
+  ]
 });
 
 const requestOptions = {
@@ -1132,7 +1142,10 @@ $headers = [
   'Content-Type' => 'application/json'
 ];
 $body = '{
-  "_id": "685e37855edaaf06053d1afe"
+  "_ids": [
+    "6836b8183a59f36196bb9c52",
+    "6836ba935026505ab7a529ce"
+  ]
 }';
 $request = new Request('DELETE', 'https://openapi.akool.com/api/open/v4/voice/del', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -1147,7 +1160,10 @@ import json
 url = "https://openapi.akool.com/api/open/v4/voice/del"
 
 payload = json.dumps({
-  "_id": "685e37855edaaf06053d1afe"
+  "_ids": [
+    "6836b8183a59f36196bb9c52",
+    "6836ba935026505ab7a529ce"
+  ]
 })
 headers = {
   'Authorization': 'Bearer {{token}}',
@@ -1167,8 +1183,159 @@ print(response.text)
     "code": 1000,
     "msg": "Delete voice successfully",
     "data": {
-        "_id": "685e37855edaaf06053d1afe"
+        "_ids": [
+            "6836b8183a59f36196bb9c52",
+            "6836ba935026505ab7a529ce"
+        ]
     }
 }
 ```
+
+### Get Voice Detail
+
+```
+GET https://openapi.akool.com/api/open/v4/voice/detail/{_id}
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                               |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+
+**Path Attributes**
+
+| **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
+|---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| _id           | String   | true         |           | Voice list document IDs [getVoiceDocumentId](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Value**                        | **Description**                                                                                                                                                                                                                                                                                                        |
+| ------------- | -------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| code          | int      | 1000                             | Interface returns business status code(1000:success)                                                                                                                                                                                                                                                                   |
+| msg           | String   |                                  | Interface returns status information                                                                                                                                                                                                                                                                                   |
+| data          | Object   |                                  | Response data object |
+| - _id         | String   | "6836bafb5026505ab7a529fa"       | Document ID |
+| - uid         | Integer  | 101400                           | User ID |
+| - team_id     | String   | "6805fb69e92d9edc7ca0b409"       | Team ID |
+| - voice_id    | String   | "yRBw4OM8YFm5pCNKxJQ7"           | Voice ID |
+| - gender      | String   | "Male"                           | Voice gender |
+| - name        | String   | "Snow Peak 01"                   | Voice name |
+| - preview     | String   | "https://drz0f01yeq1cx.cloudfront.net/..." | Preview audio URL |
+| - text        | String   | "Hello, I'm your personalized AI voice..." | Preview text content |
+| - duration    | Integer  | 7055                             | Audio duration in milliseconds |
+| - status      | Integer  | 3                                | Voice status: 【1:queueing, 2:processing, 3:completed, 4:failed】 |
+| - create_time | Long     | 1748417275493                    | Creation timestamp |
+| - style       | Array    | ["Authoritative", "Calm"]        | Voice style tags |
+| - scenario    | Array    | ["Advertisement"]                | Scenario tags |
+| - age         | Array    | ["Elderly", "Middle"]            | Age tags |
+| - deduction_credit | Integer | 0                            | Deducted credits |
+| - voice_model_name | String   | "Akool Multilingual 1"  | Supported voice model name |
+| - support_stream | Boolean   | true  | Supported stream: true/false, Akool Multilingual 1 & Akool Multilingual 3 only support stream. |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529fa' \
+--header 'Authorization: Bearer {{token}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("text/plain");
+RequestBody body = RequestBody.create(mediaType, "");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529fa")
+  .method("GET", body)
+  .addHeader("Authorization", "Bearer {{token}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {{token}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529fa", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer {{token}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529fa', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529fa"
+
+payload = {}
+headers = {
+  'Authorization': 'Bearer {{token}}'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+    "code": 1000,
+    "msg": "OK",
+    "data": {
+        "_id": "6836bafb5026505ab7a529fa",
+        "uid": 101400,
+        "team_id": "6805fb69e92d9edc7ca0b409",
+        "voice_id": "yRBw4OM8YFm5pCNKxJQ7",
+        "gender": "Male",
+        "name": "Snow Peak 01",
+        "preview": "https://drz0f01yeq1cx.cloudfront.net/1748417273104-3d66d37e-1854-4b05-a8d7-98e95543ecb8-2334.mp3",
+        "text": "Hello, I'm your personalized AI voice. Nice to meet you. I hope my voice brings your content to life!",
+        "duration": 7055,
+        "status": 3,
+        "create_time": 1748417275493,
+        "style": [
+            "Authoritative",
+            "Calm"
+        ],
+        "scenario": [
+            "Advertisement"
+        ],
+        "age": [
+            "Elderly",
+            "Middle"
+        ],
+        "deduction_credit": 0,
+        "voice_model_name": "Akool Multilingual 1",
+        "support_stream": true
+    }
+}
+```
+
 
