@@ -52,12 +52,10 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 | - team_id     | String   | "6805fb69e92d9edc7ca0b409"       | Team ID |
 | - voice_id    | String   | null | Voice ID, this value will be updated after task completion, you can view it in the voiceList.[getVoiceList](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
 | - gender      | String   | "Male"                           | Voice gender |
-| - language    | String   | "Chinese"                        | Voice language |
-| - locale      | String   | "zh"                             | Voice locale |
 | - name        | String   | "MyVoice0626-01"                 | Voice name |
 | - preview     | String   | null | Preview audio URL, this value will be updated after task completion, you can view it in the voiceList.[getVoiceList](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
 | - text        | String   | "This is a comic style model..." | Preview text content |
-| - duration    | Number   | 8.064                            | Audio duration in seconds |
+| - duration    | Number   | 8064                            | Audio duration in milliseconds |
 | - status      | Integer  | 1                                | Voice clone status: 【1:queueing, 2:processing, 3:completed, 4:failed】 |
 | - create_time | Long     | 1751349718268                    | Creation timestamp |
 | - style       | Array    | ["Authoritative", "Calm"]        | Voice style tags |
@@ -219,12 +217,10 @@ print(response.text)
         "team_id": "6805fb69e92d9edc7ca0b409",
         "voice_id": null,
         "gender": "Male",
-        "language": "Chinese",
-        "locale": "zh",
         "name": "MyVoice0626-01",
         "preview": null,
         "text": "This is a comic style model, this is a comic style model, this is a comic style model, this is a comic style model",
-        "duration": 8.064,
+        "duration": 8064,
         "status": 1,
         "create_time": 1751349718268,
         "style": [
@@ -291,10 +287,10 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 | - duration    | Integer  | 0                                | Audio duration in milliseconds |
 | - file_name   | String   | "1ef1d76ebfc244f7a30430f7049d6ebc.mp3" | Generated file name |
 | - gender      | String   | "Male"                           | Voice gender |
-| - deduction_credit | Integer | 0                            | Deducted credits |
+| - deduction_credit | Float | 1.9295                           | Deducted credits |
 | - name        | String   | "27fec311afd743aa889a057e17e93c13" | Generated name |
 | - _id         | String   | "68637aff41e5eb74bb8dfe73"       | Document ID |
-| - voice_model_id | String | "686379d641e5eb74bb8dfe3f"      | Voice model ID |
+| - voice_model_id | String | "686379d641e5eb74bb8dfe3f"      | Voice document ID |
 | - voice_id    | String   | "Tq06jbVyFH4l6R-Gjvo_V-p_nVYk5DRrYJZsxeDmlhEtyhcFKKLQODmgngI9llKw" | Voice ID |
 | - voice_options | Object |                                | Voice options object |
 | -- stability  | Number   | 0.7                              | Voice stability setting |
@@ -472,7 +468,7 @@ print(response.text)
         "duration": 0,
         "file_name": "1ef1d76ebfc244f7a30430f7049d6ebc.mp3",
         "gender": "Male",
-        "deduction_credit": 0,
+        "deduction_credit": 1.9295,
         "name": "27fec311afd743aa889a057e17e93c13",
         "_id": "68637aff41e5eb74bb8dfe73",
         "voice_model_id": "686379d641e5eb74bb8dfe3f",
@@ -491,6 +487,7 @@ print(response.text)
 ```
 
 ### Create Voice Changer
+<Warning>Only the Akool Multilingual 1 model supports Voice Change.  </Warning>
 
 ```
 POST https://openapi.akool.com/api/open/v4/voice/change
@@ -529,13 +526,13 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 | - source_voice_file         | String   | "https://drz0f01yeq1cx.cloudfront.net/1749098405491-5858-1749019840512audio.mp3" | Original audio file URL |
 | - status      | Integer  | 1                                | Voice changer status: 【1:queueing, 2:processing, 3:completed, 4:failed】 |
 | - webhookUrl  | String   | "http://localhost:3004/api/open/v4/voice/test/thirdpart/webhook" | Callback URL |
-| - duration    | Integer  | 0                                | Audio duration in milliseconds |
+| - duration    | Integer  | 12800                               | Audio duration in milliseconds |
 | - file_name   | String   | "1749098405491-5858-1749019840512audio.mp3" | Generated file name |
 | - gender      | String   | "Female"                         | Voice gender |
-| - deduction_credit | Integer | 0                            | Deducted credits |
+| - deduction_credit | Float | 0.512                            | Deducted credits |
 | - name        | String   | "3f591fc370c542fca9087f124b5ad82b" | Generated name |
 | - _id         | String   | "68637c5b41e5eb74bb8dfec6"       | Document ID |
-| - voice_model_id | String | "67a45479354b7c1fff7e943a"      | Voice model ID |
+| - voice_model_id | String | "67a45479354b7c1fff7e943a"      | Voice document ID |
 | - voice_id    | String   | "hkfHEbBvdQFNX4uWHqRF"           | Voice ID |
 | - voice_options | Object |                                | Voice options object |
 | -- stability  | Number   | 0.7                              | Voice stability setting |
@@ -692,10 +689,10 @@ print(response.text)
     "preview": null,
     "status": 1,
     "webhookUrl": "http://localhost:3004/api/open/v4/voice/test/thirdpart/webhook",
-    "duration": 0,
+    "duration": 12800,
     "file_name": "1749098405491-5858-1749019840512audio.mp3",
     "gender": "Female",
-    "deduction_credit": 0,
+    "deduction_credit": 0.512,
     "name": "3f591fc370c542fca9087f124b5ad82b",
     "_id": "68637c5b41e5eb74bb8dfec6",
     "voice_model_id": "67a45479354b7c1fff7e943a",
@@ -704,7 +701,7 @@ print(response.text)
       "stability": 0.7,
       "similarity_boost": 0.5,
       "style": 0.6,
-      speaker_boost: false
+      "speaker_boost": false
     }
   }
 }
@@ -750,8 +747,9 @@ GET https://openapi.akool.com/api/open/v4/voice/resource/list
 | -- duration   | Integer  | 12852                            | Audio duration in milliseconds |
 | -- file_name  | String   | "1749098405491-5858-1749019840512audio.mp3" | File name |
 | -- gender     | String   | "Female"                         | Voice gender |
-| -- deduction_credit | Integer | 0                            | Deducted credits |
+| -- deduction_credit | Float | 0.9295                            | Deducted credits |
 | -- name       | String   | "3f591fc370c542fca9087f124b5ad82b" | Resource name |
+| -- input_text       | String   | "Słyszę, że chcesz leżeć płasko? Gratulacje — przynajmniej zrozumiałeś grawitację! " |  Text to Speech trial listening text|
 | -- __v        | Integer  | 0                                | Version number |
 | - count       | Integer  | 1                                | Total count of resources |
 | - page        | Integer  | 1                                | Current page number |
@@ -847,8 +845,9 @@ print(response.text)
                 "duration": 12852,
                 "file_name": "1749098405491-5858-1749019840512audio.mp3",
                 "gender": "Female",
-                "deduction_credit": 0,
+                "deduction_credit": 0.9295,
                 "name": "3f591fc370c542fca9087f124b5ad82b",
+                "input_text": "Słyszę, że chcesz leżeć płasko? Gratulacje — przynajmniej zrozumiałeś grawitację! ",
                 "__v": 0
             }
         ],
@@ -883,6 +882,7 @@ GET https://openapi.akool.com/api/open/v4/voice/list
 | age           | String   | false        | Young,Middle,Elderly | Age filters, separated by commas |
 | scenario      | String   | false        | Advertisement,Education | Scenario filters, separated by commas |
 | name          | String   | false        | MyVoice   | Voice name, supports fuzzy search |
+| support_stream          | Integer   | false        | 1   | 2-Voice does not support streaming.； 1-Voice supports streaming. |
 
 **Response Attributes**
 
@@ -897,8 +897,8 @@ GET https://openapi.akool.com/api/open/v4/voice/list
 | -- team_id    | String   | "6805fb69e92d9edc7ca0b409"       | Team ID |
 | -- voice_id   | String   | "zQAGCFElz23u6Brdj4L-NrbEmSxswXdoPN_GBpYgUPHo1EGWgZgAnFJexONx_jGy" | Voice ID |
 | -- gender     | String   | "Male"                           | Voice gender |
-| -- language   | String   | ""                               | Voice language |
-| -- locale     | String   | ""                               | Voice locale |
+| -- language   | String   | "Polish"                               | Voice language |
+| -- locale     | String   | "pl"                               | Voice locale |
 | -- name       | String   | "MyVoice0626-01"                 | Voice name |
 | -- preview    | String   | "https://d2qf6ukcym4kn9.cloudfront.net/..." | Preview audio URL |
 | -- text       | String   | "This is a comic style model..." | Preview text content |
@@ -1008,8 +1008,8 @@ print(response.text)
                 "team_id": "6805fb69e92d9edc7ca0b409",
                 "voice_id": "zQAGCFElz23u6Brdj4L-NrbEmSxswXdoPN_GBpYgUPHo1EGWgZgAnFJexONx_jGy",
                 "gender": "Male",
-                "language": "",
-                "locale": "",
+                "language": "Polish",
+                "locale": "pl",
                 "name": "MyVoice0626-01",
                 "preview": "https://d2qf6ukcym4kn9.cloudfront.net/1751608955706-c1cf1692-fd47-417c-b18a-dcbbb93360fa-2756.mp3",
                 "text": "This is a comic style model, this is a comic style model, this is a comic style model, this is a comic style model",
@@ -1029,7 +1029,8 @@ print(response.text)
                 ],
                 "deduction_credit": 0,
                 "webhookUrl": "http://172.31.16.178:3004/api/open/v4/content/test/thirdpart/webhook",
-                "voice_model_name": "Akool Multilingual 3"
+                "voice_model_name": "Akool Multilingual 3",
+                "support_stream": true
             }
         ],
         "count": 9,
@@ -1042,7 +1043,7 @@ print(response.text)
 ### Delete Voice
 
 ```
-DELETE https://openapi.akool.com/api/open/v4/voice/del
+POST https://openapi.akool.com/api/open/v4/voice/del
 ```
 
 **Request Headers**
@@ -1064,7 +1065,10 @@ DELETE https://openapi.akool.com/api/open/v4/voice/del
 | code          | int      | 1000                             | Interface returns business status code(1000:success)                                                                                                                                                                                                                                                                   |
 | msg           | String   |                                  | Interface returns status information                                                                                                                                                                                                                                                                                   |
 | data          | Object   |                                  | Response data object |
-| - _ids        | Array    |                                  | Deleted voice document IDs |
+| - successIds        | Array    |                                  | Deleted voice document IDs |
+| - noPermissionVoices        | Array    |                                  | Delete failed voice document msg list |
+| -- _id        | String    |   6881cd86618fa41c89557b0c    | Delete failed voice document ID |
+| -- msg        | String    |    VoiceId:6881cd86618fa41c89557b0c resource not found        | Delete failed voice error msg |
 
 **Example**
 
@@ -1183,9 +1187,14 @@ print(response.text)
     "code": 1000,
     "msg": "Delete voice successfully",
     "data": {
-        "_ids": [
-            "6836b8183a59f36196bb9c52",
-            "6836ba935026505ab7a529ce"
+        "successIds": [
+            "6882f4c10529ae771e71531d"
+        ],
+        "noPermissionVoices": [
+            {
+                "_id": "6881cd86618fa41c89557b0c",
+                "msg": "VoiceId:6881cd86618fa41c89557b0c resource not found"
+            }
         ]
     }
 }
@@ -1233,6 +1242,8 @@ GET https://openapi.akool.com/api/open/v4/voice/detail/{_id}
 | - deduction_credit | Integer | 0                            | Deducted credits |
 | - voice_model_name | String   | "Akool Multilingual 1"  | Supported voice model name |
 | - support_stream | Boolean   | true  | Supported stream: true/false, Akool Multilingual 1 & Akool Multilingual 3 only support stream. |
+| - language | String | "Chinese"                           | Voice language |
+| - locale | String | "zh"                           | Voice locale |
 
 **Example**
 
@@ -1309,30 +1320,33 @@ print(response.text)
     "code": 1000,
     "msg": "OK",
     "data": {
-        "_id": "6836bafb5026505ab7a529fa",
+        "_id": "6882f23c0529ae771e7152dc",
         "uid": 101400,
         "team_id": "6805fb69e92d9edc7ca0b409",
-        "voice_id": "yRBw4OM8YFm5pCNKxJQ7",
+        "voice_id": "kfr_1wGPuauzcSOZgpBGLd_ApviIHqMIZ5bS2OeMiMkvId0eAMkq1ii8rvInZ2pE",
         "gender": "Male",
-        "name": "Snow Peak 01",
-        "preview": "https://drz0f01yeq1cx.cloudfront.net/1748417273104-3d66d37e-1854-4b05-a8d7-98e95543ecb8-2334.mp3",
-        "text": "Hello, I'm your personalized AI voice. Nice to meet you. I hope my voice brings your content to life!",
-        "duration": 7055,
+        "name": "zhongwen-072501",
+        "preview": "https://drz0f01yeq1cx.cloudfront.net/1753412190380-sample.mp3",
+        "text": "人生就像登山，重要的不是顶峰的高度，而是攀登时的姿态。当你觉得脚步沉重时，请记住：竹子用四年时间仅生长3厘米，但从第五年开始，每天以30厘米的速度疯长。那些看似微不足道的积累，终将在某个转角绽放光芒。前路或许泥泞，但每个坚持的脚印都在书写传奇；黑夜也许漫长，但晨光总在咬牙坚持后准时降临。正如海明威所说：人可以被毁灭，但不能被打败。2025年的今天，愿你把挫折当作垫脚石，让汗水成为勋章，因为这个世界永远奖励那些在跌倒后依然选择起身奔跑的人。",
+        "duration": 55353,
         "status": 3,
-        "create_time": 1748417275493,
+        "create_time": 1753412156588,
         "style": [
             "Authoritative",
             "Calm"
         ],
         "scenario": [
-            "Advertisement"
+            "Advertisenment"
         ],
         "age": [
             "Elderly",
             "Middle"
         ],
         "deduction_credit": 0,
-        "voice_model_name": "Akool Multilingual 1",
+        "webhookUrl": "http://localhost:3004/api/open/v4/voice/test/thirdpart/webhook",
+        "language": "Chinese",
+        "locale": "zh",
+        "voice_model_name": "Akool Multilingual 3",
         "support_stream": true
     }
 }
