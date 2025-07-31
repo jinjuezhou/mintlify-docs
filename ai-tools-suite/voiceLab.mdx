@@ -50,10 +50,10 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 | data          | Object   |                                  | Response data object |
 | - uid         | Integer  | 101400                           | User ID |
 | - team_id     | String   | "6805fb69e92d9edc7ca0b409"       | Team ID |
-| - voice_id    | String   | null | Voice ID, this value will be updated after task completion, you can view it in the voiceList.[getVoiceList](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
+| - voice_id    | String   | null | Voice ID, this value will be updated after task completion, you can view it in the voiceList.[getVoiceList](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 | - gender      | String   | "Male"                           | Voice gender |
 | - name        | String   | "MyVoice0626-01"                 | Voice name |
-| - preview     | String   | null | Preview audio URL, this value will be updated after task completion, you can view it in the voiceList.[getVoiceList](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
+| - preview     | String   | null | Preview audio URL, this value will be updated after task completion, you can view it in the voiceList.[getVoiceList](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 | - text        | String   | "This is a comic style model..." | Preview text content |
 | - duration    | Number   | 8064                            | Audio duration in milliseconds |
 | - status      | Integer  | 1                                | Voice clone status: 【1:queueing, 2:processing, 3:completed, 4:failed】 |
@@ -259,15 +259,15 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | input_text    | String   | true         |           | Preview text content |
-| voice_id      | String   | true         |           | Voice ID, get this voice_id from your cloned voices or akool voice list.[getVoiceId](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
+| voice_id      | String   | true         |           | Voice ID, get this voice_id from your cloned voices or akool voice list.[getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 | voice_options | Object   | false        |           | Audio settings |
-| - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
-| - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
-| - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
-| - speed       | Number   | false        |           | Speech speed (0-2) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
-| - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
-| - emotion     | String   | false        |           | Emotion (happy, sad, angry, fearful, disgusted, surprised, neutral) , It only supports Chinese voice. Supported voice models: Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
-| - volume      | Integer  | false        |           | Volume (0-100) , Supported voice models: Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
+| - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
+| - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
+| - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
+| - speed       | Number   | false        |           | Speech speed (0-2) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
+| - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
+| - emotion     | String   | false        |           | Emotion (happy, sad, angry, fearful, disgusted, surprised, neutral) , It only supports Chinese voice. Supported voice models: Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
+| - volume      | Integer  | false        |           | Volume (0-100) , Supported voice models: Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | webhookUrl    | String   | true         |           | Callback url address based on HTTP request |
 | language_code    | String   | false         |           | Currently supported: Akool Multilingual 1, Akool Multilingual 3 and Akool Multilingual 4. When passing in, only Language code (ISO 639-1) such as "zh", "pt" is supported. |
 
@@ -282,7 +282,7 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 | - uid         | Integer  | 101400                           | User ID |
 | - team_id     | String   | "6805fb69e92d9edc7ca0b409"       | Team ID |
 | - input_text  | String   | "Welcome to the Akool..."        | Input text content |
-| - preview         | String   | null                             | Generated audio URL, this value will be updated after task completion, you can view it in the resourceList.[getResourceList](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-resource-list) |
+| - preview         | String   | null                             | Generated audio URL, this value will be updated after task completion, you can view it in the resourceList.[getResourceList](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-results-list) |
 | - status      | Integer  | 1                                | TTS status: 【1:queueing, 2:processing, 3:completed, 4:failed】 |
 | - webhookUrl  | String   | ""                               | Callback URL |
 | - duration    | Integer  | 0                                | Audio duration in milliseconds |
@@ -504,13 +504,13 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| voice_id      | String   | true         |           | Voice ID， get this voice_id from your cloned voices or akool voice list.[getVoiceId](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
+| voice_id      | String   | true         |           | Voice ID， get this voice_id from your cloned voices or akool voice list.[getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 | source_voice_file    | String   | true         |           | Audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL |
 | voice_options | Object   | false        |           | Audio settings |
-| - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
-| - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
-| - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
-| - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list)|
+| - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
+| - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
+| - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
+| - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | webhookUrl    | String   | true         |           | Callback url address based on HTTP request |
 
 **Response Attributes**
@@ -523,7 +523,7 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 | - create_time | Long     | 1751350363707                    | Creation timestamp |
 | - uid         | Integer  | 101400                           | User ID |
 | - team_id     | String   | "6805fb69e92d9edc7ca0b409"       | Team ID |
-| - preview         | String   | null | Generated audio URL, this value will be updated after task completion, you can view it in the resourceList. [getResourceList](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-resource-list)|
+| - preview         | String   | null | Generated audio URL, this value will be updated after task completion, you can view it in the resourceList. [getResourceList](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-results-list)|
 | - source_voice_file         | String   | "https://drz0f01yeq1cx.cloudfront.net/1749098405491-5858-1749019840512audio.mp3" | Original audio file URL |
 | - status      | Integer  | 1                                | Voice changer status: 【1:queueing, 2:processing, 3:completed, 4:failed】 |
 | - webhookUrl  | String   | "http://localhost:3004/api/open/v4/voice/test/thirdpart/webhook" | Callback URL |
@@ -1057,7 +1057,7 @@ POST https://openapi.akool.com/api/open/v4/voice/del
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| _ids          | Array    | true         |           | Voice list document IDs [getVoiceDocumentId](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
+| _ids          | Array    | true         |           | Voice list document IDs [getVoiceDocumentId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 
 **Response Attributes**
 
@@ -1217,7 +1217,7 @@ GET https://openapi.akool.com/api/open/v4/voice/detail/{_id}
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| _id           | String   | true         |           | Voice list document IDs [getVoiceDocumentId](https://docs.akool.io/ai-tools-suite/voiceLab#get-voice-list) |
+| _id           | String   | true         |           | Voice list document IDs [getVoiceDocumentId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 
 **Response Attributes**
 
