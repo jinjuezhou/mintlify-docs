@@ -1,111 +1,233 @@
 ---
 title: "Streaming Avatar SDK API Reference"
-description: "Learn what is in the Akool-Jssdk"
+description: "Complete API documentation for akool-streaming-avatar-sdk"
 ---
 
-## Documentation for StreamingAvatar Class
+## Overview
 
-This document provides a detailed explanation of the `StreamingAvatar` class and its usage, including the parameters, methods, events, and examples.
+This document provides comprehensive API documentation for the [akool-streaming-avatar-sdk](https://www.npmjs.com/package/akool-streaming-avatar-sdk) package. The SDK provides a generic JavaScript interface for integrating Agora RTC streaming avatar functionality into any JavaScript application.
 
-# **StreamingAvatar Class Documentation**
+**Package Links:**
+- [NPM Package](https://www.npmjs.com/package/akool-streaming-avatar-sdk)
+- [GitHub Repository](https://github.com/akool-rinku/akool-streaming-avatar-sdk)
+- **Current Version:** 1.0.6
+
+---
+
+# **GenericAgoraSDK Class Documentation**
 
 ## **Constructor**
 
-### **`new StreamingAvatar(params?: { token: string, openapiHost?: string })`**
+### **`new GenericAgoraSDK(options?: { mode?: string; codec?: SDK_CODEC })`**
 
-Creates an instance of `StreamingAvatar`.
+Creates an instance of the Generic Agora SDK.
 
 #### **Parameters:**
 
-- `params.token` (string) - Required. Open API authentication token.
-- `params.openapiHost` (string) - Optional. API host URL.
+- `options.mode` (string) - Optional. SDK mode (default: "rtc")
+- `options.codec` (SDK_CODEC) - Optional. Video codec (e.g., "vp8", "h264")
 
 #### **Example Usage:**
 
 ```javascript
-const avatar = new StreamingAvatar({ token: "your-api-token" });
+import { GenericAgoraSDK } from 'akool-streaming-avatar-sdk';
+
+const agoraSDK = new GenericAgoraSDK({ mode: "rtc", codec: "vp8" });
 ```
 
 ---
 
-## **Public Methods**
+## **Connection Management**
 
-### **`async startSession(videoContainer?: string, params?: InitParams): Promise<void>`**
+### **`async joinChannel(credentials: AgoraCredentials): Promise<void>`**
 
-Starts a new avatar session.
+Joins an Agora RTC channel using the provided credentials.
 
 #### **Parameters:**
 
-- `videoContainer` (string) - The ID of the HTML container where the avatar video will be displayed.
-- `params` (InitParams) - Configuration options for the avatar session.
+- `credentials` (AgoraCredentials) - Agora connection credentials
 
 #### **Example Usage:**
 
 ```javascript
-await avatar.startSession("avatarContainer", {
-  avatarId: "dvp_Tristan_cloth2_1080P",
-  voiceId: "iP95p4xoKVk53GoZ742B",
-  language: "en",
-  modeType: "Dialogue",
-  background: "https://example.com/background.jpg",
-  duration: 120,
+await agoraSDK.joinChannel({
+  agora_app_id: "your-agora-app-id",
+  agora_channel: "your-channel-name",
+  agora_token: "your-agora-token",
+  agora_uid: 12345
 });
 ```
 
----
+### **`async leaveChannel(): Promise<void>`**
 
-### **`async startSessionWithCredentials(videoContainer?: string, params?: CredentialParams): Promise<void>`**
+Leaves the current Agora RTC channel.
 
-Starts a session using predefined credentials.
+#### **Example Usage:**
+
+```javascript
+await agoraSDK.leaveChannel();
+```
+
+### **`async closeStreaming(cb?: () => void): Promise<void>`**
+
+Closes all connections and performs cleanup.
 
 #### **Parameters:**
 
-- `videoContainer` (string) - The ID of the HTML container for the avatar video.
-- `params` (CredentialParams) - Credential details for joining an Agora session.
+- `cb` (function) - Optional callback function to execute after closing
 
 #### **Example Usage:**
 
 ```javascript
-await avatar.startSessionWithCredentials("avatarContainer", {
-  _id: "session-id",
-  credentials: {
-    agora_uid: 12345,
-    agora_app_id: "your-agora-app-id",
-    agora_channel: "your-channel-name",
-    agora_token: "your-agora-token",
-  },
+await agoraSDK.closeStreaming(() => {
+  console.log("Streaming closed successfully");
 });
 ```
 
----
+### **`isConnected(): boolean`**
 
-### **`async closeStreaming(): Promise<void>`**
+Checks if the SDK is connected to Agora services.
 
-Closes the current streaming session.
+#### **Returns:**
+
+- `boolean` - Connection status
 
 #### **Example Usage:**
 
 ```javascript
-await avatar.closeStreaming();
+const connected = agoraSDK.isConnected();
+console.log("Connected:", connected);
+```
+
+### **`isChannelJoined(): boolean`**
+
+Checks if the SDK has joined a channel.
+
+#### **Returns:**
+
+- `boolean` - Channel join status
+
+#### **Example Usage:**
+
+```javascript
+const joined = agoraSDK.isChannelJoined();
+console.log("Channel joined:", joined);
 ```
 
 ---
 
-### **`async sendMessage(message: string): Promise<void>`**
+## **Chat Management**
+
+### **`async joinChat(metadata: Metadata): Promise<void>`**
+
+Initializes the avatar chat session with the specified parameters.
+
+#### **Parameters:**
+
+- `metadata` (Metadata) - Avatar configuration parameters
+
+#### **Example Usage:**
+
+```javascript
+await agoraSDK.joinChat({
+  vid: "voice-id-12345",
+  lang: "en",
+  mode: 2, // 1 for repeat mode, 2 for dialog mode
+  bgurl: "https://example.com/background.jpg"
+});
+```
+
+### **`setParameters(metadata: Metadata): void`**
+
+Sets avatar parameters. Refer to the avatar parameter documentation for details.
+
+#### **Parameters:**
+
+- `metadata` (Metadata) - Avatar configuration parameters
+
+#### **Example Usage:**
+
+```javascript
+agoraSDK.setParameters({
+  vid: "new-voice-id",
+  lang: "es",
+  mode: 1
+});
+```
+
+### **`async leaveChat(): Promise<void>`**
+
+Leaves the chat session but maintains the channel connection.
+
+#### **Example Usage:**
+
+```javascript
+await agoraSDK.leaveChat();
+```
+
+### **`async sendMessage(content: string): Promise<void>`**
 
 Sends a text message to the avatar.
 
 #### **Parameters:**
 
-- `message` (string) - The message to send.
+- `content` (string) - The message content to send
 
 #### **Example Usage:**
 
 ```javascript
-await avatar.sendMessage("Hello, how are you?");
+await agoraSDK.sendMessage("Hello, how are you today?");
+```
+
+### **`async interrupt(): Promise<void>`**
+
+Interrupts the current avatar response.
+
+#### **Example Usage:**
+
+```javascript
+await agoraSDK.interrupt();
+```
+
+### **`getMessages(): Message[]`**
+
+Returns all chat messages in the current session.
+
+#### **Returns:**
+
+- `Message[]` - Array of chat messages
+
+#### **Example Usage:**
+
+```javascript
+const messages = agoraSDK.getMessages();
+console.log("All messages:", messages);
+```
+
+### **`getMessage(messageId: string): Message | undefined`**
+
+Returns a specific message by its ID.
+
+#### **Parameters:**
+
+- `messageId` (string) - The ID of the message to retrieve
+
+#### **Returns:**
+
+- `Message | undefined` - The message object or undefined if not found
+
+#### **Example Usage:**
+
+```javascript
+const message = agoraSDK.getMessage("msg-123");
+if (message) {
+  console.log("Message text:", message.text);
+}
 ```
 
 ---
+
+## **Audio Management**
 
 ### **`async toggleMic(): Promise<void>`**
 
@@ -114,182 +236,349 @@ Toggles the microphone on or off.
 #### **Example Usage:**
 
 ```javascript
-await avatar.toggleMic();
+await agoraSDK.toggleMic();
+console.log("Microphone enabled:", agoraSDK.isMicEnabled());
 ```
 
----
+### **`isMicEnabled(): boolean`**
 
-### **`initDom(containerId: string, params?: InitParams): void`**
+Checks if the microphone is currently enabled.
 
-Initializes the user interface for the avatar.
+#### **Returns:**
 
-#### **Parameters:**
-
-- `containerId` (string) - The ID of the HTML element to contain the avatar UI.
-- `params` (InitParams) - Optional parameters for session configuration.
+- `boolean` - Microphone status
 
 #### **Example Usage:**
 
 ```javascript
-avatar.initDom("avatarContainer", {
-  avatarId: "dvp_Tristan_cloth2_1080P",
-  voiceId: "iP95p4xoKVk53GoZ742B",
-  language: "en",
-  modeType: "Dialogue",
-  background: "https://example.com/background.jpg",
-  duration: 120,
-});
+const micEnabled = agoraSDK.isMicEnabled();
+console.log("Microphone is:", micEnabled ? "on" : "off");
+```
+
+---
+
+## **Client Access**
+
+### **`getClient(): RTCClient`**
+
+Returns the underlying Agora RTC client instance for advanced operations.
+
+#### **Returns:**
+
+- `RTCClient` - The Agora RTC client
+
+#### **Example Usage:**
+
+```javascript
+const client = agoraSDK.getClient();
+// Use client for advanced Agora operations
 ```
 
 ---
 
 ## **Event Handling**
 
-### **`on(event: StreamEvents, handler: (event: CustomEvent) => void): void`**
+### **`on(events: SDKEvents): void`**
 
-Registers an event listener.
+Registers event handlers for various SDK events.
 
 #### **Parameters:**
 
-- `event` (StreamEvents) - The event name.
-- `handler` (function) - The callback function to execute when the event occurs.
+- `events` (SDKEvents) - Object containing event handler functions
 
 #### **Example Usage:**
 
 ```javascript
-avatar.on(StreamEvents.ONMESSAGE, (event) => {
-  console.log("Message received:", event.detail);
+agoraSDK.on({
+  onStreamMessage: (uid, message) => {
+    console.log(`Message from ${uid}:`, message);
+  },
+  onException: (error) => {
+    console.error("SDK Exception:", error);
+  },
+  onMessageReceived: (message) => {
+    console.log("New message received:", message);
+  },
+  onMessageUpdated: (message) => {
+    console.log("Message updated:", message);
+  },
+  onNetworkStatsUpdated: (stats) => {
+    console.log("Network stats updated:", stats);
+  },
+  onTokenWillExpire: () => {
+    console.warn("Token will expire in 30 seconds");
+  },
+  onTokenDidExpire: () => {
+    console.error("Token has expired");
+  },
+  onUserPublished: async (user, mediaType) => {
+    if (mediaType === 'video') {
+      const remoteTrack = await agoraSDK.getClient().subscribe(user, mediaType);
+      remoteTrack?.play('video-container-id');
+    } else if (mediaType === 'audio') {
+      const remoteTrack = await agoraSDK.getClient().subscribe(user, mediaType);
+      remoteTrack?.play();
+    }
+  },
+  onUserUnpublished: (user, mediaType) => {
+    console.log(`User ${user.uid} stopped publishing ${mediaType}`);
+  }
 });
 ```
 
 ---
 
-### **`off(event: StreamEvents, handler: (event: CustomEvent) => void): void`**
+## **Type Definitions**
 
-Removes an event listener.
+### **`AgoraCredentials`**
 
-#### **Example Usage:**
+Interface for Agora connection credentials.
 
-```javascript
-avatar.off(StreamEvents.ONMESSAGE, messageHandler);
+```typescript
+interface AgoraCredentials {
+  agora_app_id: string;    // Agora App ID
+  agora_channel: string;   // Channel name
+  agora_token: string;     // Agora token
+  agora_uid: number;       // User ID
+}
+```
+
+### **`Metadata`**
+
+Interface for avatar configuration parameters.
+
+```typescript
+interface Metadata {
+  vid?: string;     // Voice ID
+  vurl?: string;    // Voice URL
+  lang?: string;    // Language code (e.g., "en", "es", "fr")
+  mode?: number;    // Mode type (1: repeat, 2: dialog)
+  bgurl?: string;   // Background image URL
+}
+```
+
+### **`Message`**
+
+Interface for chat messages.
+
+```typescript
+interface Message {
+  id: string;           // Unique message ID
+  text: string;         // Message content
+  isSentByMe: boolean;  // Whether the message was sent by the current user
+}
+```
+
+### **`NetworkStats`**
+
+Interface for network statistics.
+
+```typescript
+interface NetworkStats {
+  localNetwork: NetworkQuality;        // Local network quality
+  remoteNetwork: NetworkQuality;       // Remote network quality
+  video: RemoteVideoTrackStats;        // Video track statistics
+  audio: RemoteAudioTrackStats;        // Audio track statistics
+}
+```
+
+### **`SDKEvents`**
+
+Interface defining all available event handlers.
+
+```typescript
+interface SDKEvents {
+  onStreamMessage?: (uid: UID, message: StreamMessage) => void;
+  onException?: (error: { code: number; msg: string; uid: UID }) => void;
+  onNetworkQuality?: (stats: NetworkQuality) => void;
+  onUserJoined?: (user: IAgoraRTCRemoteUser) => void;
+  onUserLeft?: (user: IAgoraRTCRemoteUser, reason: string) => void;
+  onRemoteAudioStats?: (stats: RemoteAudioTrackStats) => void;
+  onRemoteVideoStats?: (stats: RemoteVideoTrackStats) => void;
+  onTokenWillExpire?: () => void;
+  onTokenDidExpire?: () => void;
+  onMessageReceived?: (message: Message) => void;
+  onMessageUpdated?: (message: Message) => void;
+  onNetworkStatsUpdated?: (stats: NetworkStats) => void;
+  onUserPublished?: (user: IAgoraRTCRemoteUser, mediaType: 'video' | 'audio' | 'datachannel') => void;
+  onUserUnpublished?: (user: IAgoraRTCRemoteUser, mediaType: 'video' | 'audio' | 'datachannel') => void;
+}
 ```
 
 ---
 
-### **`emit(event: StreamEvents, params?: any): void`**
+## **Complete Example**
 
-Manually triggers an event.
-
-#### **Example Usage:**
+Here's a comprehensive example demonstrating how to use the SDK:
 
 ```javascript
-avatar.emit(StreamEvents.READY, { ready: true });
+import { GenericAgoraSDK } from 'akool-streaming-avatar-sdk';
+
+// Initialize the SDK
+const agoraSDK = new GenericAgoraSDK({ mode: "rtc", codec: "vp8" });
+
+// Set up event handlers
+agoraSDK.on({
+  onStreamMessage: (uid, message) => {
+    console.log("Received message from", uid, ":", message);
+  },
+  onException: (error) => {
+    console.error("An exception occurred:", error);
+  },
+  onMessageReceived: (message) => {
+    console.log("New message:", message);
+    // Update UI with new message
+    updateMessageDisplay(message);
+  },
+  onMessageUpdated: (message) => {
+    console.log("Message updated:", message);
+    // Update existing message in UI
+    updateExistingMessage(message);
+  },
+  onNetworkStatsUpdated: (stats) => {
+    console.log("Network stats:", stats);
+    // Update network quality indicator
+    updateNetworkQuality(stats);
+  },
+  onTokenWillExpire: () => {
+    console.log("Token will expire in 30s");
+    // Refresh token from backend
+    refreshToken();
+  },
+  onTokenDidExpire: () => {
+    console.log("Token expired");
+    // Handle token expiration
+    handleTokenExpiry();
+  },
+  onUserPublished: async (user, mediaType) => {
+    if (mediaType === 'video') {
+      const remoteTrack = await agoraSDK.getClient().subscribe(user, mediaType);
+      remoteTrack?.play('remote-video-container');
+    } else if (mediaType === 'audio') {
+      const remoteTrack = await agoraSDK.getClient().subscribe(user, mediaType);
+      remoteTrack?.play();
+    }
+  }
+});
+
+// Function to initialize session
+async function initializeSession() {
+  try {
+    // Get session credentials from your backend
+    const response = await fetch('/api/get-agora-credentials');
+    const credentials = await response.json();
+
+    // Join the Agora channel
+    await agoraSDK.joinChannel({
+      agora_app_id: credentials.agora_app_id,
+      agora_channel: credentials.agora_channel,
+      agora_token: credentials.agora_token,
+      agora_uid: credentials.agora_uid
+    });
+
+    // Initialize avatar chat
+    await agoraSDK.joinChat({
+      vid: "your-voice-id",
+      lang: "en",
+      mode: 2
+    });
+
+    console.log("Session initialized successfully");
+  } catch (error) {
+    console.error("Failed to initialize session:", error);
+  }
+}
+
+// Function to send a message
+async function sendMessage(content) {
+  try {
+    await agoraSDK.sendMessage(content);
+    console.log("Message sent successfully");
+  } catch (error) {
+    console.error("Failed to send message:", error);
+  }
+}
+
+// Function to toggle microphone
+async function toggleMicrophone() {
+  try {
+    await agoraSDK.toggleMic();
+    const isEnabled = agoraSDK.isMicEnabled();
+    console.log("Microphone is now:", isEnabled ? "enabled" : "disabled");
+    updateMicButton(isEnabled);
+  } catch (error) {
+    console.error("Failed to toggle microphone:", error);
+  }
+}
+
+// Function to clean up when leaving
+async function cleanup() {
+  try {
+    await agoraSDK.closeStreaming();
+    console.log("Session ended successfully");
+  } catch (error) {
+    console.error("Error during cleanup:", error);
+  }
+}
+
+// Initialize the session
+initializeSession();
 ```
 
 ---
 
-## **Properties**
+## **Error Handling**
 
-### **`micStatus: boolean`**
-
-Returns the current microphone status.
-
-#### **Example Usage:**
+The SDK provides comprehensive error handling through the `onException` event:
 
 ```javascript
-console.log(avatar.micStatus); // true or false
-```
-
----
-
-### **`classStatus: object`**
-
-Returns the current state of the `StreamingAvatar` instance.
-
-#### **Example Usage:**
-
-```javascript
-console.log(avatar.classStatus);
-```
-
----
-
-## **Enums**
-
-### **`StreamEvents`**
-
-Defines event types emitted by the class.
-
-| Event Name   | Description                                |
-| ------------ | ------------------------------------------ |
-| `READY`      | Fired when the session is ready.           |
-| `ONMESSAGE`  | Fired when a message is received.          |
-| `ERROR`      | Fired when an error occurs.                |
-| `WILLEXPIRE` | Fired when the session is about to expire. |
-| `EXPIRED`    | Fired when the session expires.            |
-| `CLOSED`     | Fired when the session is closed.          |
-
-#### **Example Usage:**
-
-```javascript
-avatar.on(StreamEvents.ERROR, (event) => {
-  console.error("Error:", event.detail);
+agoraSDK.on({
+  onException: (error) => {
+    console.error("SDK Error:", error.code, error.msg);
+    
+    // Handle specific error codes
+    switch (error.code) {
+      case 1001:
+        // Handle authentication error
+        handleAuthError();
+        break;
+      case 1002:
+        // Handle network error
+        handleNetworkError();
+        break;
+      default:
+        // Handle other errors
+        handleGenericError(error);
+    }
+  }
 });
 ```
 
 ---
 
-## **Interfaces**
+## **Requirements**
 
-### **`InitParams`**
-
-Defines parameters for initializing a session.
-
-| Property               | Type    | Description                                |
-| ---------------------- | ------- | ------------------------------------------ |
-| `avatarId`             | string  | Avatar ID.                                 |
-| `voiceId`              | string  | Voice ID.                                  |
-| `language`             | string  | Language code (e.g., 'en').                |
-| `modeType`             | string  | Interaction mode ('Repeat' or 'Dialogue'). |
-| `background`           | string  | Background image URL.                      |
-| `voice_interaction_on` | boolean | Enable voice interaction.                  |
-| `duration`             | number  | Session duration in seconds.               |
+- Node.js 14 or higher (for development)
+- Modern browser with WebRTC support
+- Valid Agora credentials
+- Akool API access
 
 ---
 
-### **`CredentialParams`**
+## **Browser Support**
 
-Defines credentials for joining an existing session.
-
-| Property      | Type   | Description           |
-| ------------- | ------ | --------------------- |
-| `voiceId`     | string | Voice ID.             |
-| `language`    | string | Language code.        |
-| `modeType`    | string | Interaction mode.     |
-| `background`  | string | Background image URL. |
-| `_id`         | string | Session ID.           |
-| `credentials` | object | Agora credentials.    |
+- Chrome 56+
+- Firefox 44+
+- Safari 11+
+- Edge 79+
+- Opera 43+
 
 ---
 
-## **Example Usage**
+## **Additional Resources**
 
-```javascript
-const avatar = new StreamingAvatar({ token: "your-api-token" });
-
-avatar.initDom("avatarContainer", {
-  avatarId: "dvp_Tristan_cloth2_1080P",
-  voiceId: "iP95p4xoKVk53GoZ742B",
-  language: "en",
-  modeType: "Dialogue",
-  background: "https://example.com/background.jpg",
-  duration: 120,
-});
-
-avatar.on(StreamEvents.ONMESSAGE, (event) => {
-  console.log("Received message:", event.detail.text);
-});
-
-await avatar.startSession();
-await avatar.sendMessage("Hello!");
-```
+- [Getting Started Guide](/sdk/jssdk-start)
+- [Best Practices](/sdk/jssdk-best-practice)
+- [NPM Package](https://www.npmjs.com/package/akool-streaming-avatar-sdk)
+- [GitHub Repository](https://github.com/akool-rinku/akool-streaming-avatar-sdk)
+- [Akool API Documentation](/authentication/usage)
