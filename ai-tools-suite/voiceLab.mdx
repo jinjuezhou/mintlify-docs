@@ -906,6 +906,7 @@ GET https://openapi.akool.com/api/open/v4/voice/list
 | -- duration   | Integer  | 9822                             | Audio duration in milliseconds |
 | -- status     | Integer  | 3                                | Voice status: 【1:queueing, 2:processing, 3:completed, 4:failed】 |
 | -- create_time | Long    | 1751608916162                    | Creation timestamp |
+| -- update_time | Long    | 1751608916162                    | Update timestamp |
 | -- style      | Array    | ["Authoritative", "Calm"]        | Voice style tags |
 | -- scenario   | Array    | ["Advertisement"]                | Scenario tags |
 | -- age        | Array    | ["Elderly", "Middle"]            | Age tags |
@@ -1245,6 +1246,7 @@ GET https://openapi.akool.com/api/open/v4/voice/detail/{_id}
 | - support_stream | Boolean   | true  | Supported stream: true/false, Akool Multilingual 1 & Akool Multilingual 3 only support stream. |
 | - language | String | "Chinese"                           | Voice language |
 | - locale | String | "zh"                           | Voice locale |
+| - update_time | Long    | 1751608916162                    | Update timestamp |
 
 **Example**
 
@@ -1349,6 +1351,150 @@ print(response.text)
         "locale": "zh",
         "voice_model_name": "Akool Multilingual 3",
         "support_stream": true
+    }
+}
+```
+
+### Get Voice Result Detail
+
+```
+GET https://openapi.akool.com/api/open/v4/voice/resource/detail/{_id}
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                               |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+
+**Path Attributes**
+
+| **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
+|---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| _id           | String   | true         |           | Voice result document ID [getVoiceResultId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-results-list) |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Value**                        | **Description**                                                                                                                                                                                                                                                                                                        |
+| ------------- | -------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| code          | int      | 1000                             | Interface returns business status code(1000:success)                                                                                                                                                                                                                                                                   |
+| msg           | String   |                                  | Interface returns status information                                                                                                                                                                                                                                                                                   |
+| data          | Object   |                                  | Response data object |
+| - result      | Object   |                                  | Voice result object |
+| -- _id        | String   | "688afbd9d2b4b269d1123ffb"       | Document ID |
+| -- create_time | Long    | 1753938905005                    | Creation timestamp |
+| -- update_time | Long    | 0                                | Update timestamp |
+| -- uid        | Integer  | 101400                           | User ID |
+| -- team_id    | String   | "6805fb69e92d9edc7ca0b409"       | Team ID |
+| -- input_text | String   | "Życie jak wspinaczka górska..." | Input text content |
+| -- rate       | String   | "100%"                           | Processing rate |
+| -- status     | Integer  | 1                                | Status: 【1:queueing, 2:processing, 3:completed, 4:failed】 |
+| -- webhookUrl | String   | "http://localhost:3004/api/open/v4/content/test/thirdpart/webhook" | Callback URL |
+| -- duration   | Integer  | 0                                | Audio duration in milliseconds |
+| -- file_name  | String   | "1753938905005.mp3"              | File name |
+| -- gender     | String   | "Male"                           | Voice gender |
+| -- deduction_credit | Float | 0.5148                        | Deducted credits |
+| -- name       | String   | "26ca668a9eb448b7b9a3806fa86207f3" | Resource name |
+| -- priority   | Integer  | 2                                | Priority level |
+| -- language_code | String | "pt"                            | Language code |
+| -- __v        | Integer  | 0                                | Version number |
+| -- preview    | String   | null                             | Preview audio URL |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b269d1123ffb' \
+--header 'Authorization: Bearer {{token}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("text/plain");
+RequestBody body = RequestBody.create(mediaType, "");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b269d1123ffb")
+  .method("GET", body)
+  .addHeader("Authorization", "Bearer {{token}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {{token}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b269d1123ffb", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer {{token}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b269d1123ffb', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b269d1123ffb"
+
+payload = {}
+headers = {
+  'Authorization': 'Bearer {{token}}'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+    "code": 1000,
+    "msg": "OK",
+    "data": {
+        "result": {
+            "_id": "688afbd9d2b4b269d1123ffb",
+            "create_time": 1753938905005,
+            "update_time": 0,
+            "uid": 101400,
+            "team_id": "6805fb69e92d9edc7ca0b409",
+            "input_text": "Życie jak wspinaczka górska: ważniejsza od wysokości szczytu jest postawa, z jaką się wspinasz. Gdy czujesz, że stopy",
+            "rate": "100%",
+            "status": 1,
+            "webhookUrl": "http://localhost:3004/api/open/v4/content/test/thirdpart/webhook",
+            "duration": 0,
+            "file_name": "1753938905005.mp3",
+            "gender": "Male",
+            "deduction_credit": 0.5148,
+            "name": "26ca668a9eb448b7b9a3806fa86207f3",
+            "priority": 2,
+            "language_code": "pt",
+            "__v": 0,
+            "preview": null
+        }
     }
 }
 ```
