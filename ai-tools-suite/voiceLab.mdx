@@ -39,7 +39,7 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 | - scenario    | Array    | false        |           | Use case tags (e.g., ["Advertisement", "Education"]) |
 | name          | String   | false        |           | Audio name |
 | text          | String   | true         |           | Preview text content |
-| webhookUrl    | String   | true         |           | Callback url address based on HTTP request |
+| webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
 
 **Response Attributes**
 
@@ -268,7 +268,7 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 | - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - emotion     | String   | false        |           | Emotion (happy, sad, angry, fearful, disgusted, surprised, neutral) , It only supports Chinese voice. Supported voice models: Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - volume      | Integer  | false        |           | Volume (0-100) , Supported voice models: Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
-| webhookUrl    | String   | true         |           | Callback url address based on HTTP request |
+| webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
 | language_code    | String   | false         |           | Currently supported: Akool Multilingual 1, Akool Multilingual 3 and Akool Multilingual 4. When passing in, only Language code (ISO 639-1) such as "zh", "pt" is supported. |
 
 **Response Attributes**
@@ -511,7 +511,7 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 | - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
-| webhookUrl    | String   | true         |           | Callback url address based on HTTP request |
+| webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
 
 **Response Attributes**
 
