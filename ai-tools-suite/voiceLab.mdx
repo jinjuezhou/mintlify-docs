@@ -269,7 +269,7 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 | - emotion     | String   | false        |           | Emotion (happy, sad, angry, fearful, disgusted, surprised, neutral) , It only supports Chinese voice. Supported voice models: Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - volume      | Integer  | false        |           | Volume (0-100) , Supported voice models: Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
-| language_code    | String   | false         |           | Currently supported: Akool Multilingual 1, Akool Multilingual 3 and Akool Multilingual 4. When passing in, only Language code (ISO 639-1) such as "zh", "pt" is supported. |
+| language_code    | String   | false         |           | Currently supported: Akool Multilingual 1, Akool Multilingual 3 and Akool Multilingual 4. When passing in, only Language code (ISO 639-1) such as "zh", "pt" is supported. This parameter is designed to enhance the use of minority languages. Adding audio effects will make it better, but it cannot achieve the effect of translation.|
 
 **Response Attributes**
 
