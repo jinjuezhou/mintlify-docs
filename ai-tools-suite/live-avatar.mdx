@@ -309,6 +309,138 @@ print(response.text)
 }
 ```
 
+### Get Streaming Avatar Detail
+
+```http
+GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/detail
+```
+
+**Request Headers**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
+
+**Query Parameters**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|-----------|------|----------|-------------|
+| avatar_id | String | Yes | Unique identifier for the streaming avatar |
+
+**Response Properties**
+
+| **Property** | **Type** | **Description** |
+|----------|------|-------------|
+| code | Integer | Response status code (1000 indicates success) |
+| msg | String | Response status message |
+| data | Object | Container for response data |
+
+**Streaming Avatar Object Properties**
+
+| **Property** | **Type** | **Description** |
+|----------|------|-------------|
+| avatar_id | String | Unique identifier for the streaming avatar |
+| voice_id | String | Associated voice model identifier |
+| name | String | Display name of the avatar |
+| url | String | URL to access the streaming avatar |
+| thumbnailUrl | String | URL for the avatar's preview thumbnail |
+| gender | String | Avatar's gender designation |
+| available | Boolean | Indicates if the avatar is currently available for use |
+| type | Number | Avatar type identifier (2 for streaming avatars) |
+| from | Number | Source identifier for the avatar, 2 for official and 3 for user created |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/liveAvatar/avatar/detail?avatar_id=dvp_Tristan_cloth2_1080P' \
+--header 'Authorization: Bearer {{Authorization}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("text/plain");
+RequestBody body = RequestBody.create(mediaType, "");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/liveAvatar/avatar/detail?avatar_id=dvp_Tristan_cloth2_1080P")
+  .method("GET", body)
+  .addHeader("Authorization", "Bearer {{Authorization}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {{Authorization}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow",
+};
+
+fetch(
+  "https://openapi.akool.com/api/open/v4/liveAvatar/avatar/detail?avatar_id=dvp_Tristan_cloth2_1080P",
+  requestOptions
+)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => '{{Authorization}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/liveAvatar/avatar/detail?avatar_id=dvp_Tristan_cloth2_1080P', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v4/liveAvatar/avatar/detail?avatar_id=dvp_Tristan_cloth2_1080P"
+
+payload = {}
+headers = {
+  'Authorization': 'Bearer {{Authorization}}'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "67498e55cd053926b2e75cf2",
+    "uid": 1,
+    "type": 2,
+    "from": 2,
+    "avatar_id": "dvp_Tristan_cloth2_1080P",
+    "voice_id": "iP95p4xoKVk53GoZ742B",
+    "name": "tristan_dvp",
+    "url": "https://static.website-files.org/assets/avatar/avatar/streaming_avatar/tristan_10s_silence.mp4",
+    "thumbnailUrl": "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024728-tristan_cloth2_20240522.webp",
+    "gender": "male"
+  }
+}
+```
+
 ### Create session
 
 ```
