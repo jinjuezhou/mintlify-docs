@@ -3,6 +3,10 @@ title: "Streaming Avatar Integration: using Agora SDK"
 description: "Learn how to integrate streaming avatars using the Agora SDK"
 ---
 
+<Info>
+**🎉 New Feature Available!** Video interaction with streaming avatars is now live! You can now enable two-way video communication with your avatars, including camera switching capabilities and video quality controls. Check out the [Video Interaction](#video-interaction-with-the-avatar) section for implementation details.
+</Info>
+
 ## Overview
 
 The Streaming Avatar feature allows you to create interactive, real-time avatar experiences in your application. This guide provides a comprehensive walkthrough of integrating streaming avatars using the Agora SDK, including:
@@ -97,8 +101,8 @@ sequenceDiagram
         Agora->>Client: Forward avatar response
     end
 
-    %% Video Flow (Coming Soon)
-    opt Video Interaction (Future Feature)
+    %% Video Flow
+    opt Video Interaction
         Client->>Agora: Publish video track
         Agora->>Akool: Forward video stream
         Akool->>Agora: Stream avatar response
@@ -502,16 +506,11 @@ async function initializeWithAudio() {
 
 For more details about Agora's audio functionality, refer to the [Agora Web SDK Documentation](https://docs.agora.io/en/voice-calling/get-started/get-started-sdk?platform=web#publish-a-local-audio-track).
 
-### 8. Video Interaction With The Avatar (coming soon)
-
-<Warning>
-Video interaction is currently under development and will be available in a future release. The following implementation details are provided as a reference for upcoming features.
-</Warning>
+### 8. Video Interaction With The Avatar
 
 To enable video interaction with the avatar, you'll need to publish your local video stream:
 
 ```ts
-// Note: This is a preview of upcoming functionality
 async function publishVideo(client: IAgoraRTCClient) {
   // Create a camera video track
   const videoTrack = await AgoraRTC.createCameraVideoTrack();
@@ -528,7 +527,7 @@ async function publishVideo(client: IAgoraRTCClient) {
   }
 }
 
-// Example usage with video controls (Preview of upcoming features)
+// Example usage with video controls
 async function setupVideoInteraction(client: IAgoraRTCClient) {
   let videoTrack;
   
@@ -577,13 +576,13 @@ async function setupVideoInteraction(client: IAgoraRTCClient) {
 }
 ```
 
-The upcoming video features will include:
+The video features now include:
 - Two-way video communication
 - Camera switching capabilities
 - Video quality controls
 - Integration with existing audio features
 
-Stay tuned for updates on when video interaction becomes available.
+For more details about Agora's video functionality, refer to the [Agora Web SDK Documentation](https://docs.agora.io/en/video-calling/get-started/get-started-sdk?platform=web#publish-a-local-video-track).
 
 ### 9. Integrating your own LLM service (optional)
 
