@@ -5,24 +5,69 @@ description: "Learn what is the Streaming Avatar SDK"
 
 ## Overview
 
-The JSSDK provides access to Akool Streaming Avatar services, enabling programmatic control of avatar interactions. You can connect and manage avatars in live sessions using WebSockets for seamless communication. This allows you to send text commands to avatars, enabling real-time speech with customizable voices. The JSSDK simplifies the creation, management, and termination of avatar sessions programmatically.
+The [Akool Streaming Avatar SDK](https://www.npmjs.com/package/akool-streaming-avatar-sdk) provides a generic JavaScript SDK for integrating Agora RTC streaming avatar functionality into any JavaScript application. This TypeScript-supported SDK enables programmatic control of avatar interactions with real-time video streaming capabilities.
 
-- Vanilla javascript and light weight dependency files
-- Integrating interactive avatar just by one line js code
-- Handling avatar interactions and responses
-- Managing audio streams
+**Key Features:**
+- Easy-to-use API for Agora RTC integration
+- TypeScript support with full type definitions
+- Multiple bundle formats (ESM, CommonJS, IIFE)
+- CDN distribution via unpkg and jsDelivr
+- Event-based architecture for handling messages and state changes
+- Message management with history and updates
+- Network quality monitoring and statistics
+- Microphone control for voice interactions
+- Chunked message sending for large text
+- Automatic rate limiting for message chunks
+- Token expiry handling
+- Error handling and logging
 
 The integration uses Agora's Real-Time Communication (RTC) SDK for reliable, low-latency streaming and our avatar service for generating responsive avatar behaviors.
+
+## Package Information
+
+- **NPM Package:** [akool-streaming-avatar-sdk](https://www.npmjs.com/package/akool-streaming-avatar-sdk)
+- **GitHub Repository:** [akool-rinku/akool-streaming-avatar-sdk](https://github.com/akool-rinku/akool-streaming-avatar-sdk)
+- **Current Version:** 1.0.6
+- **License:** ISC
 
 ## Prerequisites
 
 - Get your [Akool API Token](https://www.akool.com) from [Akool Authentication API](/authentication/usage#get-the-token)
+- Basic knowledge of JavaScript and HTTP Requests
+- Modern browser with WebRTC support
 
-- Basic knowledge of JavaScript and Http Request
+## Browser Support
 
-## Getting Started
+The SDK requires a modern browser with WebRTC support, including:
+- Chrome 56+
+- Firefox 44+
+- Safari 11+
+- Edge 79+
+- Opera 43+
 
-1.To get started with the Streaming Avatar SDK, you just need one html page, and one div container:
+## Installation
+
+### NPM (Node.js/Modern JavaScript)
+
+```bash
+npm install akool-streaming-avatar-sdk
+```
+
+### CDN (Browser)
+
+```html
+<!-- Using unpkg -->
+<script src="https://unpkg.com/akool-streaming-avatar-sdk"></script>
+
+<!-- Using jsDelivr -->
+<script src="https://cdn.jsdelivr.net/npm/akool-streaming-avatar-sdk"></script>
+```
+
+## Quick Start
+
+### 1. HTML Setup
+
+Create a basic HTML page with a video container:
 
 ```html
 <!DOCTYPE html>
@@ -31,73 +76,133 @@ The integration uses Agora's Real-Time Communication (RTC) SDK for reliable, low
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Streaming Avatar SDK</title>
+    <title>Akool Streaming Avatar SDK</title>
   </head>
   <body>
     <div id="app">
       <h1>Streaming Avatar Demo</h1>
-      <div id="yourAvatarContainer" class="avatarContainer"></div>
+      <div id="remote-video" style="width: 640px; height: 480px;"></div>
+      <button id="join-btn">Join Channel</button>
+      <button id="send-msg-btn">Send Message</button>
+      <input type="text" id="message-input" placeholder="Type your message..." />
     </div>
   </body>
 </html>
-<style media="screen">
-  #app {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
-  }
-  #app > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  body {
-    margin: 0;
-    display: flex;
-    place-items: center;
-    min-width: 320px;
-    min-height: 100vh;
-  }
-</style>
 ```
 
-2.Importing Streaming Avatar SDK and a few js code to access the interactive avatar stream.
+### 2. Basic Usage with Modern JavaScript/TypeScript
 
-```bash
-  npm install @akool/streaming-avatar-sdk
-  # or
-  yarn add @akool/streaming-avatar-sdk
+```javascript
+import { GenericAgoraSDK } from 'akool-streaming-avatar-sdk';
+
+// Create an instance of the SDK
+const agoraSDK = new GenericAgoraSDK({ mode: "rtc", codec: "vp8" });
+
+// Register event handlers
+agoraSDK.on({
+  onStreamMessage: (uid, message) => {
+    console.log("Received message from", uid, ":", message);
+  },
+  onException: (error) => {
+    console.error("An exception occurred:", error);
+  },
+  onMessageReceived: (message) => {
+    console.log("New message:", message);
+  },
+  onUserPublished: async (user, mediaType) => {
+    if (mediaType === 'video') {
+      const remoteTrack = await agoraSDK.getClient().subscribe(user, mediaType);
+      remoteTrack?.play('remote-video'); // play the video in the div with id 'remote-video'
+    } else if (mediaType === 'audio') {
+      const remoteTrack = await agoraSDK.getClient().subscribe(user, mediaType);
+      remoteTrack?.play();
+    }
+  }
+});
+
+// Get session info from your backend
+const akoolSession = await fetch('your-backend-url-to-get-session-info');
+const { data: { credentials, id } } = await akoolSession.json();
+
+// Join a channel
+await agoraSDK.joinChannel({
+  agora_app_id: credentials.agora_app_id,
+  agora_channel: credentials.agora_channel,
+  agora_token: credentials.agora_token,
+  agora_uid: credentials.agora_uid
+});
+
+// Initialize chat with avatar parameters
+await agoraSDK.joinChat({
+  vid: "voice-id",
+  lang: "en",
+  mode: 2 // 1 for repeat mode, 2 for dialog mode
+});
+
+// Send a message
+await agoraSDK.sendMessage("Hello, world!");
 ```
 
-```js
-import { StreamingAvatar, StreamEvents } from "streaming-avatar-sdk";
-const myStreamingAvatar = new StreamingAvatar({ token: "your-api-token" });
-myStreamingAvatar.initDom("yourAvatarContainer");
-```
-
-or by vanilla js way
+### 3. Browser Usage (Global/IIFE)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/pigmore/docs/streamingAvatar-min.js"></script>
-```
+<script src="https://unpkg.com/akool-streaming-avatar-sdk"></script>
+<script>
+  // The SDK is available as AkoolStreamingAvatar global
+  const agoraSDK = new AkoolStreamingAvatar.GenericAgoraSDK({ mode: "rtc", codec: "vp8" });
 
-```html
-<script type="text/javascript">
-  var myStreamingAvatar = new StreamingAvatar({ token: "your-api-token" });
-  myStreamingAvatar.initDom("yourAvatarContainer");
+  // Register event handlers
+  agoraSDK.on({
+    onUserPublished: async (user, mediaType) => {
+      if (mediaType === 'video') {
+        const remoteTrack = await agoraSDK.getClient().subscribe(user, mediaType);
+        remoteTrack?.play('remote-video');
+      }
+    }
+  });
+
+  // Initialize when page loads
+  async function initializeSDK() {
+    await agoraSDK.joinChannel({
+      agora_app_id: "YOUR_APP_ID",
+      agora_channel: "YOUR_CHANNEL", 
+      agora_token: "YOUR_TOKEN",
+      agora_uid: 12345
+    });
+
+    await agoraSDK.joinChat({
+      vid: "YOUR_VOICE_ID",
+      lang: "en", 
+      mode: 2
+    });
+  }
+
+  initializeSDK().catch(console.error);
 </script>
 ```
 
-- Then you will get the result:
-  <Frame>
-    <img src="/images/jssdk_start.jpg" style={{ borderRadius: "0.5rem" }} />
-  </Frame>
+### 4. Quick Demo Result
+
+After following the setup, you'll have a working streaming avatar with real-time video and chat capabilities:
+
+<Frame>
+  <img src="/images/jssdk_start.jpg" style={{ borderRadius: "0.5rem" }} />
+</Frame>
 
 <Tip>
-  - [Learn how to get your api token](/authentication/usage#get-the-token) -
-  [Best Practice with your own service for
-  security](/implementation-guide/jssdk-best-practice)
+  - [Learn how to get your API token](/authentication/usage#get-the-token)
+  - [Best practices for security and production usage](/sdk/jssdk-best-practice)
 </Tip>
-## Additional Resources - [Streaming Avatar SDK API Interface](/implementation-guide/jssdk-api)
-- [AKool OpenAPI Error Codes](/ai-tools-suite/live-avatar#response-code-description)
+
+## Next Steps
+
+- [Complete API Reference](/sdk/jssdk-api) - Explore all available methods and events
+- [Best Practices Guide](/sdk/jssdk-best-practice) - Learn secure implementation patterns
+- [Create Live Avatar Session](/ai-tools-suite/live-avatar#create-session) - Backend session creation
+- [Error Codes Reference](/ai-tools-suite/error-code) - Handle errors effectively
+
+## Additional Resources
+
+- [NPM Package](https://www.npmjs.com/package/akool-streaming-avatar-sdk)
+- [GitHub Repository](https://github.com/akool-rinku/akool-streaming-avatar-sdk)
+- [Akool OpenAPI Error Codes](/ai-tools-suite/live-avatar#response-code-description)
