@@ -31,7 +31,7 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| source_voice_file       | String   | true         |           | Original audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL |
+| source_voice_file       | String   | true         |           | Original audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL, The maximum file size is 30MB.|
 | voice_options | Object   | false        |           | Audio tagging options |
 | - style       | Array    | false        |           | Voice style tags (e.g., ["Authoritative", "Calm"]) |
 | - gender      | Array    | false        |           | Gender tags (e.g., ["Male", "Female"]) |
@@ -505,7 +505,7 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | voice_id      | String   | true         |           | Voice ID， get this voice_id from your cloned voices or akool voice list.[getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
-| source_voice_file    | String   | true         |           | Audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL |
+| source_voice_file    | String   | true         |           | Audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL, The maximum file size is 50MB. |
 | voice_options | Object   | false        |           | Audio settings |
 | - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
