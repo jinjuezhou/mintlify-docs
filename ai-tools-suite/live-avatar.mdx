@@ -184,6 +184,7 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list
 
 | **Parameter** | **Type** | **Required** | **Default** | **Description** |
 |-----------|------|----------|---------|-------------|
+| platform | String | No | open | open: openapi, aigc: akool web app |
 | page | Number | No | 1 | Page number for pagination |
 | size | Number | No | 100 | Number of items per page (max 100) |
 
@@ -436,7 +437,8 @@ print(response.text)
     "name": "tristan_dvp",
     "url": "https://static.website-files.org/assets/avatar/avatar/streaming_avatar/tristan_10s_silence.mp4",
     "thumbnailUrl": "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024728-tristan_cloth2_20240522.webp",
-    "gender": "male"
+    "gender": "male",
+    "platform": "open"
   }
 }
 ```
