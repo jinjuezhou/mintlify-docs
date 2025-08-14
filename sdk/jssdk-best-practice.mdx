@@ -1,149 +1,115 @@
 ---
-title: "Streaming Avatar SDK Best Practice"
-description: "Learn how implement Streaming Avatar SDK step by step"
+title: "Streaming Avatar SDK Best Practices"
+description: "Learn how to implement the Akool Streaming Avatar SDK securely and efficiently"
 ---
 
 ## Overview
 
-When implementing a JavaScript SDK, especially one that interacts with sensitive resources or APIs, it is critical to ensure the security of private keys, tokens, and other sensitive credentials. Exposing such sensitive information in a client-side environment (e.g., browsers) can lead to vulnerabilities, including unauthorized access, token theft, and API abuse. This document outlines best practices for securing private keys and tokens in your Streaming Avatar SDK implementation while exposing only the necessary session data to the client.
+This guide provides comprehensive best practices for implementing the [akool-streaming-avatar-sdk](https://www.npmjs.com/package/akool-streaming-avatar-sdk) package securely and efficiently. When implementing a JavaScript SDK that interacts with sensitive resources or APIs, it is critical to ensure the security of private keys, tokens, and other sensitive credentials.
 
-- Never Expose Private Keys in the Client-Side Code
-- Use Short-Lived Session as token
-- Delegate Authentication to a Backend Server
-- Handling avatar interactions and responses
-- Managing audio streams and events
+**Key Security Principles:**
+- Never expose private keys in client-side code
+- Use short-lived session tokens
+- Delegate authentication to a backend server
+- Implement proper error handling and logging
+- Follow secure coding practices for real-time communication
 
-The integration uses Agora's Real-Time Communication (RTC) SDK for reliable, low-latency streaming and our avatar service for generating responsive avatar behaviors.
+**Package Information:**
+- [NPM Package](https://www.npmjs.com/package/akool-streaming-avatar-sdk)
+- [GitHub Repository](https://github.com/akool-rinku/akool-streaming-avatar-sdk)
+- **Current Version:** 1.0.6
 
 ## Prerequisites
 
 - Get your [Akool API Token](https://www.akool.com) from [Akool Authentication API](/authentication/usage#get-the-token)
+- Basic knowledge of backend services and internet security
+- Understanding of JavaScript and HTTP requests
+- Node.js 14+ (for development)
+- Modern browser with WebRTC support
 
-- Basic knowledge of backend services and internet security.
+## Security Best Practices
 
-- Basic knowledge of JavaScript and Http Request
+### 1. Backend Session Management
 
-## Getting Started
-
-1.To get started with the Streaming Avatar SDK, you just need one html page with lots of elements like below:
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Streaming Avatar SDK</title>
-  </head>
-  <body>
-    <div id="app">
-      <h1>Streaming Avatar Demo</h1>
-      <div id="yourAvatarContainer" class="avatarContainer">
-        <div id="videoWrap" class="videoWrap" style="width: fit-content;">
-          <video
-            id="yourStreamingVideoDom"
-            autoplay=""
-            playsinline=""
-            loop=""
-          ></video>
-          <div id="messageWrap"></div>
-        </div>
-        <div id="controls">
-          <div>
-            <button id="toggleSession">Start Session</button>
-          </div>
-          <div style="display: flex; gap: 10px;">
-            <input
-              type="text"
-              id="userInput"
-              disabled=""
-              placeholder="Type anything to communicate with the avatar..."
-            />
-            <button id="sendButton" disabled="">Send</button>
-            <button id="voiceButton" disabled="">Turn Voice on</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
-</html>
+**❌ Never do this (Client-side token exposure):**
+```javascript
+// BAD: Exposing sensitive credentials on client
+const agoraSDK = new GenericAgoraSDK();
+await agoraSDK.joinChannel({
+  agora_app_id: "YOUR_SENSITIVE_APP_ID", // ❌ Exposed
+  agora_token: "YOUR_SENSITIVE_TOKEN",   // ❌ Exposed
+  agora_uid: 12345
+});
 ```
 
-2.importing Streaming Avatar SDK:
+**✅ Do this instead (Secure backend delegation):**
+```javascript
+// GOOD: Get credentials from secure backend
+const credentials = await fetch('/api/secure/get-agora-session', {
+  method: 'POST',
+  headers: { 'Authorization': `Bearer ${userToken}` },
+  body: JSON.stringify({ userId, sessionType: 'avatar' })
+});
+const sessionData = await credentials.json();
 
-```html
-<script src="https://cdn.jsdelivr.net/gh/pigmore/docs/streamingAvatar-min.js"></script>
+await agoraSDK.joinChannel(sessionData.credentials);
 ```
 
-3.Instantiation StreamingAvatar class and get session params form your backend:
+### 2. Backend Implementation Example
 
-```js
-var stream = new StreamingAvatar();
-// info: start your stream session with Credentials.
-// Best Practice: get from Akool Session_ID and Credentials from your backend service.
-const paramsWithCredentials = await YOUR_BACK_END_API_FOR_START_SESSION();
-```
+Create secure endpoints in your backend to handle sensitive operations:
 
-<Tip> YOUR_BACK_END_API_FOR_START_SESSION may like below:</Tip>
-
-```js
-  async function fetchAccessToken() {
-    const id = YOUR_CLIENT_ID;
-    const apiKey = AKOOL_SECRET_KEY;
-    const response = await fetch(
-      "https://openapi.akool.com/api/open/v3/getToken",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          "clientId": id
-          "clientSecret": apiKey
-        }),
-        redirect: "follow",
-      }
-    );
-
-    const { data } = await response.json();
-    return data.token;
+```javascript
+// Backend: Node.js/Express example
+app.post('/api/secure/get-agora-session', authenticateUser, async (req, res) => {
+  try {
+    // Step 1: Get Akool access token
+    const akoolToken = await getAkoolAccessToken();
+    
+    // Step 2: Create avatar session
+    const sessionData = await createAvatarSession(akoolToken, req.body);
+    
+    // Step 3: Return only necessary data to client
+    res.json({
+      credentials: sessionData.credentials,
+      sessionId: sessionData.id,
+      expiresIn: sessionData.expires_in
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Session creation failed' });
   }
+});
 
-  async function createSession(token,avatar_id,duration) {
-    const id = YOUR_CLIENT_ID;
-    const apiKey = AKOOL_SECRET_KEY;
-    const response = await fetch(
-      "https://openapi.akool.com/api/open/v4/liveAvatar/session/create",
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          avatar_id;
-          duration;
-        }),
-        redirect: "follow",
-      }
-    );
+async function getAkoolAccessToken() {
+  const response = await fetch('https://openapi.akool.com/api/open/v3/getToken', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      clientId: process.env.AKOOL_CLIENT_ID,      // Server-side env var
+      clientSecret: process.env.AKOOL_SECRET_KEY  // Server-side env var
+    })
+  });
+  
+  const { data } = await response.json();
+  return data.token;
+}
 
-    const { data } = await response.json();
-    return data;
-  }
-
-  const token = await fetchAccessToken()
-        avatar_id = "dvp_Tristan_cloth2_1080P"
-        duration = 300;
-  const paramsWithCredentials = await createSession(token,avatar_id,duration)
+async function createAvatarSession(token, sessionConfig) {
+  const response = await fetch('https://openapi.akool.com/api/open/v4/liveAvatar/session/create', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      avatar_id: sessionConfig.avatarId || "dvp_Tristan_cloth2_1080P",
+      duration: sessionConfig.duration || 300
+    })
+  });
+  
+  return await response.json();
+}
 ```
-
-<Note>
-  {" "}
-  Make sure the YOUR_BACK_END_API_FOR_START_SESSION return the paramsWithCredentials
-  from your backend{" "}
-</Note>
 
 4. Sign up functions for steaming events and button click events:
 
@@ -227,5 +193,10 @@ window.voiceButton.addEventListener("click", handleToggleMic);
 
 ## Additional Resources
 
-- [Streaming Avatar SDK API Interface](/implementation-guide/jssdk-api)
-- [AKool OpenAPI Error Codes](/ai-tools-suite/live-avatar#response-code-description)
+- [Complete API Reference](/sdk/jssdk-api) - Detailed API documentation
+- [Getting Started Guide](/sdk/jssdk-start) - Quick start tutorial  
+- [NPM Package](https://www.npmjs.com/package/akool-streaming-avatar-sdk) - Official package
+- [GitHub Repository](https://github.com/akool-rinku/akool-streaming-avatar-sdk) - Source code
+- [Akool Authentication API](/authentication/usage#get-the-token) - Authentication guide
+- [Error Codes Reference](/ai-tools-suite/error-code) - Error handling guide
+- [Live Avatar API](/ai-tools-suite/live-avatar#create-session) - Backend session creation
