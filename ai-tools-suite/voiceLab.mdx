@@ -81,7 +81,7 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
     },
     "name": "MyVoice0626-01",
     "text": "This is a voice clone model",
-    "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+    "webhookUrl": ""
 }
 ```
 
@@ -103,7 +103,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/voice/clone' \
     },
     "name": "MyVoice0626-01",
     "text": "This is a voice clone model",
-    "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+    "webhookUrl": ""
 }'
 ```
 
@@ -111,7 +111,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/voice/clone' \
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"source_voice_file\": \"https://drz0f01yeq1cx.cloudfront.net/1749809724389-audio.mp3\",\n    \"voice_options\": {\n        \"style\": [\"Authoritative\", \"Calm\"],\n        \"gender\": [\"Male\"],\n        \"age\": [\"Elderly\", \"Middle\"],\n        \"scenario\": [\"Advertisement\"]\n    },\n    \"name\": \"MyVoice0626-01\",\n    \"text\": \"This is a voice clone model\",\n    \"webhookUrl\": \"http://localhost:3007/api/open/v4/test/webhook\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"source_voice_file\": \"https://drz0f01yeq1cx.cloudfront.net/1749809724389-audio.mp3\",\n    \"voice_options\": {\n        \"style\": [\"Authoritative\", \"Calm\"],\n        \"gender\": [\"Male\"],\n        \"age\": [\"Elderly\", \"Middle\"],\n        \"scenario\": [\"Advertisement\"]\n    },\n    \"name\": \"MyVoice0626-01\",\n    \"text\": \"This is a voice clone model\",\n    \"webhookUrl\": \"\"\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/clone")
   .method("POST", body)
@@ -136,7 +136,7 @@ const raw = JSON.stringify({
   },
   "name": "MyVoice0626-01",
   "text": "This is a voice clone model",
-  "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+  "webhookUrl": ""
 });
 
 const requestOptions = {
@@ -169,7 +169,7 @@ $body = '{
   },
   "name": "MyVoice0626-01",
   "text": "This is a voice clone model",
-  "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+  "webhookUrl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v4/voice/clone', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -193,7 +193,7 @@ payload = json.dumps({
   },
   "name": "MyVoice0626-01",
   "text": "This is a voice clone model",
-  "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+  "webhookUrl": ""
 })
 headers = {
   'Authorization': 'Bearer {{token}}',
@@ -235,7 +235,7 @@ print(response.text)
             "Middle"
         ],
         "deduction_credit": 0,
-        "webhookUrl": "Callback URL",
+        "webhookUrl": "",
         "source_voice_file": "https://drz0f01yeq1cx.cloudfront.net/1751363983518-9431-audio1751363981879.webm",
         "_id": "686379d641e5eb74bb8dfe3f"
     }
@@ -319,7 +319,7 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
         "emotion": "happy",
         "volume": 50
     },
-    "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+    "webhookUrl": ""
 }
 ```
 
@@ -343,7 +343,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/voice/tts' \
         "emotion": "happy",
         "volume": 50
     },
-    "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+    "webhookUrl": ""
 }'
 ```
 
@@ -351,7 +351,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/voice/tts' \
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"input_text\": \"Welcome to the Akool generative AI content creation tool.\",\n    \"voice_id\": \"Tq06jbVyFH4l6R-Gjvo_V-p_nVYk5DRrYJZsxeDmlhEtyhcFKKLQODmgngI9llKw\",\n    \"voice_options\": {\n        \"stability\": 0.7,\n        \"similarity_boost\": 0.5,\n        \"style\": 0.6,\n        \"speed\": 0.8,\n        \"speaker_boost\": false,\n        \"emotion\": \"happy\",\n        \"volume\": 50\n    },\n    \"webhookUrl\": \"http://localhost:3007/api/open/v4/test/webhook\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"input_text\": \"Welcome to the Akool generative AI content creation tool.\",\n    \"voice_id\": \"Tq06jbVyFH4l6R-Gjvo_V-p_nVYk5DRrYJZsxeDmlhEtyhcFKKLQODmgngI9llKw\",\n    \"voice_options\": {\n        \"stability\": 0.7,\n        \"similarity_boost\": 0.5,\n        \"style\": 0.6,\n        \"speed\": 0.8,\n        \"speaker_boost\": false,\n        \"emotion\": \"happy\",\n        \"volume\": 50\n    },\n    \"webhookUrl\": \"\"\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/tts")
   .method("POST", body)
@@ -378,7 +378,7 @@ const raw = JSON.stringify({
     "emotion": "happy",
     "volume": 50
   },
-  "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+  "webhookUrl": ""
 });
 
 const requestOptions = {
@@ -413,7 +413,7 @@ $body = '{
     "emotion": "happy",
     "volume": 50
   },
-  "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+  "webhookUrl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v4/voice/tts', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -439,7 +439,7 @@ payload = json.dumps({
     "emotion": "happy",
     "volume": 50
   },
-  "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+  "webhookUrl": ""
 })
 headers = {
   'Authorization': 'Bearer {{token}}',
@@ -526,7 +526,7 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 | - preview         | String   | null | Generated audio URL, this value will be updated after task completion, you can view it in the resourceList. [getResourceList](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-results-list)|
 | - source_voice_file         | String   | "https://drz0f01yeq1cx.cloudfront.net/1749098405491-5858-1749019840512audio.mp3" | Original audio file URL |
 | - status      | Integer  | 1                                | Voice changer status: 【1:queueing, 2:processing, 3:completed, 4:failed】 |
-| - webhookUrl  | String   | "http://localhost:3004/api/open/v4/voice/test/thirdpart/webhook" | Callback URL |
+| - webhookUrl  | String   | "" | Callback URL |
 | - duration    | Integer  | 12800                               | Audio duration in milliseconds |
 | - file_name   | String   | "1749098405491-5858-1749019840512audio.mp3" | Generated file name |
 | - gender      | String   | "Female"                         | Voice gender |
@@ -555,7 +555,7 @@ POST https://openapi.akool.com/api/open/v4/voice/change
         "style": 1,
         "speaker_boost": false,
     },
-    "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+    "webhookUrl": ""
 }
 ```
 
@@ -576,7 +576,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/voice/change' \
         "style": 1,
         "speaker_boost": false,
     },
-    "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+    "webhookUrl": ""
 }'
 ```
 
@@ -584,7 +584,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/voice/change' \
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"voice_id\": \"hkfHEbBvdQFNX4uWHqRF\",\n    \"source_voice_file\": \"https://drz0f01yeq1cx.cloudfront.net/1749098405491-audio.mp3\",\n    \"voice_options\": {\n        \"stability\": 0.9,\n        \"similarity_boost\": 0.7,\n        \"speaker_boost\": false\n    },\n    \"webhookUrl\": \"http://localhost:3007/api/open/v4/test/webhook\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"voice_id\": \"hkfHEbBvdQFNX4uWHqRF\",\n    \"source_voice_file\": \"https://drz0f01yeq1cx.cloudfront.net/1749098405491-audio.mp3\",\n    \"voice_options\": {\n        \"stability\": 0.9,\n        \"similarity_boost\": 0.7,\n        \"speaker_boost\": false\n    },\n    \"webhookUrl\": \"\"\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/change")
   .method("POST", body)
@@ -608,7 +608,7 @@ const raw = JSON.stringify({
     "style": 1,
     "speaker_boost": false
   },
-  "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+  "webhookUrl": ""
 });
 
 const requestOptions = {
@@ -639,7 +639,7 @@ $body = '{
     "similarity_boost": 0.7,
     "speaker_boost": false
   },
-  "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+  "webhookUrl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v4/voice/change', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -662,7 +662,7 @@ payload = json.dumps({
     "style": 1,
     "speaker_boost": False
   },
-  "webhookUrl": "http://localhost:3007/api/open/v4/test/webhook"
+  "webhookUrl": ""
 })
 headers = {
   'Authorization': 'Bearer {{token}}',
@@ -689,7 +689,7 @@ print(response.text)
     "source_voice_file": "https://drz0f01yeq1cx.cloudfront.net/1749098405491-5858-1749019840512audio.mp3",
     "preview": null,
     "status": 1,
-    "webhookUrl": "http://localhost:3004/api/open/v4/voice/test/thirdpart/webhook",
+    "webhookUrl": "",
     "duration": 12800,
     "file_name": "1749098405491-5858-1749019840512audio.mp3",
     "gender": "Female",
@@ -911,7 +911,7 @@ GET https://openapi.akool.com/api/open/v4/voice/list
 | -- scenario   | Array    | ["Advertisement"]                | Scenario tags |
 | -- age        | Array    | ["Elderly", "Middle"]            | Age tags |
 | -- deduction_credit | Integer | 0                            | Deducted credits |
-| -- webhookUrl | String   | "http://172.31.16.178:3004/..."  | Callback URL |
+| -- webhookUrl | String   | ""  | Callback URL |
 | -- voice_model_name | String   | "Akool Multilingual 3"  | Supported voice model name |
 | -- support_stream | Boolean   | true  | Supported stream: true/false, Akool Multilingual 1 & Akool Multilingual 3 only support stream. |
 | - count       | Integer  | 9                                | Total count of voices |
@@ -1030,7 +1030,7 @@ print(response.text)
                     "Middle"
                 ],
                 "deduction_credit": 0,
-                "webhookUrl": "http://172.31.16.178:3004/api/open/v4/content/test/thirdpart/webhook",
+                "webhookUrl": "",
                 "voice_model_name": "Akool Multilingual 3",
                 "support_stream": true
             }
@@ -1346,7 +1346,7 @@ print(response.text)
             "Middle"
         ],
         "deduction_credit": 0,
-        "webhookUrl": "http://localhost:3004/api/open/v4/voice/test/thirdpart/webhook",
+        "webhookUrl": "",
         "language": "Chinese",
         "locale": "zh",
         "voice_model_name": "Akool Multilingual 3",
@@ -1389,7 +1389,7 @@ GET https://openapi.akool.com/api/open/v4/voice/resource/detail/{_id}
 | -- input_text | String   | "Życie jak wspinaczka górska..." | Input text content |
 | -- rate       | String   | "100%"                           | Processing rate |
 | -- status     | Integer  | 1                                | Status: 【1:queueing, 2:processing, 3:completed, 4:failed】 |
-| -- webhookUrl | String   | "http://localhost:3004/api/open/v4/content/test/thirdpart/webhook" | Callback URL |
+| -- webhookUrl | String   | "" | Callback URL |
 | -- duration   | Integer  | 0                                | Audio duration in milliseconds |
 | -- file_name  | String   | "1753938905005.mp3"              | File name |
 | -- gender     | String   | "Male"                           | Voice gender |
@@ -1484,7 +1484,7 @@ print(response.text)
             "input_text": "Życie jak wspinaczka górska: ważniejsza od wysokości szczytu jest postawa, z jaką się wspinasz. Gdy czujesz, że stopy",
             "rate": "100%",
             "status": 1,
-            "webhookUrl": "http://localhost:3004/api/open/v4/content/test/thirdpart/webhook",
+            "webhookUrl": "",
             "duration": 0,
             "file_name": "1753938905005.mp3",
             "gender": "Male",

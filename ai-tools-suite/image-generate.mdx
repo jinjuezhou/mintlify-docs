@@ -43,7 +43,7 @@ POST https://openapi.akool.com/api/open/v3/content/image/createbyprompt
     "prompt": "Sun Wukong is surrounded by heavenly soldiers and generals", // Describe the information needed to generate the image
     "scale": "1:1",
     "source_image": "https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png", // Need to generate the original image link of the image 【If you want to perform imageToImage operation you can pass in this parameter】
-    "webhookUrl":"http://localhost:3007/image/webhook" //  Callback url address based on HTTP request
+    "webhookUrl":"" //  Callback url address based on HTTP request
 }
 ```
 
@@ -60,7 +60,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/image/createbypro
     "prompt": "Sun Wukong is surrounded by heavenly soldiers and generals",
     "source_image": "https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png",
      "scale": "1:1",
-    "webhookUrl":"http://localhost:3007/image/webhook"
+    "webhookUrl":""
 }
 '
 ```
@@ -69,7 +69,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/image/createbypro
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"prompt\": \"Sun Wukong is surrounded by heavenly soldiers and generals\", \n    \"source_image\": \"https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png\", \n    \"webhookUrl\":\"http://localhost:3007/image/webhook\" \n}\n");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"prompt\": \"Sun Wukong is surrounded by heavenly soldiers and generals\", \n    \"source_image\": \"https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png\", \n    \"webhookUrl\":\"\" \n}\n");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/content/image/createbyprompt")
   .method("POST", body)
@@ -88,7 +88,7 @@ const raw = JSON.stringify({
   "prompt": "Sun Wukong is surrounded by heavenly soldiers and generals",
   "source_image": "https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png",
  "scale": "1:1",
-  "webhookUrl": "http://localhost:3007/image/webhook"
+  "webhookUrl": ""
 });
 
 const requestOptions = {
@@ -115,7 +115,7 @@ $body = '{
   "prompt": "Sun Wukong is surrounded by heavenly soldiers and generals",
   "source_image": "https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png",
  "scale": "1:1",
-  "webhookUrl": "http://localhost:3007/image/webhook"
+  "webhookUrl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/image/createbyprompt', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -132,7 +132,7 @@ payload = json.dumps({
   "prompt": "Sun Wukong is surrounded by heavenly soldiers and generals",
   "source_image": "https://drz0f01yeq1cx.cloudfront.net/1708333063911-9cbe39b7-3c5f-4a35-894c-359a6cbb76c3-3283.png",
  "scale": "1:1",
-  "webhookUrl": "http://localhost:3007/image/webhook"
+  "webhookUrl": ""
 })
 headers = {
   'Authorization': 'Bearer token',
@@ -207,7 +207,7 @@ POST https://openapi.akool.com/api/open/v3/content/image/createbybutton
 {
     "_id": "65d3206b83ccf5ab7d46cdc6",  // the image【_id】 you had generated, you can got it from https://openapi.akool.com/api/open/v3/content/image/createbyprompt
     "button": "U2",  // the type of operation you want to perform, You can get the field（display_buttons） value from https://content.akool.com/api/v1/content/image/infobyid 【U(1-4): Generate a single 4k image based on the corresponding serial number original image， V(1-4)：Generate a single variant image based on the corresponding serial number original image】
-    "webhookUrl":"http://localhost:3007/image/webhook" //  Callback url address based on HTTP request
+    "webhookUrl":"" //  Callback url address based on HTTP request
 }
 ```
 
@@ -222,7 +222,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/image/createbybut
 --data '{
     "_id": "65d3206b83ccf5ab7d46cdc6",
     "button": "U2",
-    "webhookUrl":"http://localhost:3007/image/webhook"
+    "webhookUrl":""
 }'
 ```
 
@@ -230,7 +230,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/image/createbybut
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"_id\": \"65d3206b83ccf5ab7d46cdc6\",  \n    \"button\": \"U2\",  \n    \"webhookUrl\":\"http://localhost:3007/image/webhook\" \n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"_id\": \"65d3206b83ccf5ab7d46cdc6\",  \n    \"button\": \"U2\",  \n    \"webhookUrl\":\"\" \n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/content/image/createbybutton")
   .method("POST", body)
@@ -248,7 +248,7 @@ myHeaders.append("Content-Type", "application/json");
 const raw = JSON.stringify({
   "_id": "65d3206b83ccf5ab7d46cdc6",
   "button": "U2",
-  "webhookUrl": "http://localhost:3007/image/webhook"
+  "webhookUrl": ""
 });
 
 const requestOptions = {
@@ -274,7 +274,7 @@ $headers = [
 $body = '{
   "_id": "65d3206b83ccf5ab7d46cdc6",
   "button": "U2",
-  "webhookUrl": "http://localhost:3007/image/webhook"
+  "webhookUrl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/image/createbybutton', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -290,7 +290,7 @@ url = "https://openapi.akool.com/api/open/v3/content/image/createbybutton"
 payload = json.dumps({
   "_id": "65d3206b83ccf5ab7d46cdc6",
   "button": "U2",
-  "webhookUrl": "http://localhost:3007/image/webhook"
+  "webhookUrl": ""
 })
 headers = {
   'Authorization': 'Bearer token',

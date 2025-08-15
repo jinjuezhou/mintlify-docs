@@ -216,7 +216,7 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
             "url": "https://drz0f01yeq1cx.cloudfront.net/1729666642023-bd6ad5f1-d558-40c7-b720-ad729688f814-6403.mp3"
         }
     ],
-    "webhookUrl": "http://localhost:3007/api/open/v3/test/webhook"
+    "webhookUrl": ""
 }
 ```
 
@@ -225,7 +225,7 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://openapi-test.akool.io/api/open/v3/talkingavatar/create' \
+curl --location 'https://openapi.akool.com/api/open/v3/talkingavatar/create' \
 --header 'Authorization: Bearer token' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -267,7 +267,7 @@ OkHttpClient client = new OkHttpClient().newBuilder()
 MediaType mediaType = MediaType.parse("application/json");
 RequestBody body = RequestBody.create(mediaType, "{\n    \"width\": 3840,\n    \"height\": 2160,\n    \"avatar_from\": 3,\n    \"elements\": [\n        {\n            \"type\": \"image\",\n            \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1729480978805-talkingAvatarbg.png\",\n            \"width\": 780,\n            \"height\": 438,\n            \"scale_x\": 1,\n            \"scale_y\": 1,\n            \"offset_x\": 1920,\n            \"offset_y\": 1080\n        },\n        {\n            \"type\": \"avatar\",\n            \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1735009621724-7ce105c6-ed9a-4d13-9061-7e3df59d9798-7953.mp4\",\n            \"scale_x\": 1,\n            \"scale_y\": 1,\n            \"width\": 1080,\n            \"height\": 1080,\n            \"offset_x\": 1920,\n            \"offset_y\": 1080\n        },\n        {\n            \"type\": \"audio\",\n            \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1729666642023-bd6ad5f1-d558-40c7-b720-ad729688f814-6403.mp3\"\n        }\n    ]\n}");
 Request request = new Request.Builder()
-  .url("https://openapi-test.akool.io/api/open/v3/talkingavatar/create")
+  .url("https://openapi.akool.com/api/open/v3/talkingavatar/create")
   .method("POST", body)
   .addHeader("Authorization", "Bearer token")
   .addHeader("Content-Type", "application/json")
@@ -319,7 +319,7 @@ const requestOptions = {
   redirect: "follow"
 };
 
-fetch("https://openapi-test.akool.io/api/open/v3/talkingavatar/create", requestOptions)
+fetch("https://openapi.akool.com/api/open/v3/talkingavatar/create", requestOptions)
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.error(error));
@@ -363,7 +363,7 @@ $body = '{
     }
   ]
 }';
-$request = new Request('POST', 'https://openapi-test.akool.io/api/open/v3/talkingavatar/create', $headers, $body);
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v3/talkingavatar/create', $headers, $body);
 $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ```
@@ -372,7 +372,7 @@ echo $res->getBody();
 import requests
 import json
 
-url = "https://openapi-test.akool.io/api/open/v3/talkingavatar/create"
+url = "https://openapi.akool.com/api/open/v3/talkingavatar/create"
 
 payload = json.dumps({
   "width": 3840,
@@ -451,7 +451,7 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 | **Parameter**  | **Type** | **Value** | **Description**                                                                                                                       |
 | -------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| video_model_id | String   | NULL      | video db id: You can get it based on the `_id` field returned by [https://openapi.akool.com/api/open/v3/talkingavatar/create](https://docstest.akool.io/ai-tools-suite/talkingavatar#create-talking-avatar) . |
+| video_model_id | String   | NULL      | video db id: You can get it based on the `_id` field returned by [https://openapi.akool.com/api/open/v3/talkingavatar/create](https://docs.akool.com/ai-tools-suite/talking-avatar#create-talking-avatar) . |
 
 **Response Attributes**
 
@@ -702,7 +702,7 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://landing-test.akool.io/interface/stats-api/api/open/v3/avatar/create' \
+curl --location 'https://openapi.akool.com/api/open/v3/avatar/create' \
 --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDk4NWM1NTcxNzI5ZDNlMjk5OTQ3NyIsInVpZCI6Mzc4MzM3LCJlbWFpbCI6Imh1Y2hlbkBha29vbC5jb20iLCJjcmVkZW50aWFsSWQiOiI2NjE1MGZmM2Q5MWRmYjc4OWYyNjFmNjEiLCJmaXJzdE5hbWUiOiJjaGVuIiwiZnJvbSI6InRvTyIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzEyNzE0ODI4LCJleHAiOjIwMjM3NTQ4Mjh9.e050LbczNhUx-Gprqb1NSYhBCKKH2xMqln3cMnAABmE' \
 --header 'Content-Type: application/json' \
 --data '{

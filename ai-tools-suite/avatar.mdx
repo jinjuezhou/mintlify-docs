@@ -495,7 +495,7 @@ POST https://openapi.akool.com/api/open/v3/avatar/createVideo
       "avatarFrom": 3
     }
   ],
-  "webhookUrl": "http://localhost:3007/api/open/v3/test/webhook"
+  "webhookUrl": ""
 }
 ```
 
@@ -541,7 +541,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/avatar/createVideo' \
     "background": "#ffffff",
     "avatarFrom": 3
   }],
-  "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"
+  "webhookUrl":""
 }'
 ```
 
@@ -549,7 +549,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/avatar/createVideo' \
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"data\": [{\n        \"width\": 1920,\n        \"height\": 1080,\n        \"duration\": 18938.75,\n        \"voice\": {\n         \"voice_url\": \"https://drz0f01yeq1cx.cloudfront.net/1712113284451-fe73dd6c-f981-46df-ba73-0b9d85c1be9c-8195.mp3\"\n        },\n        \"elements\": [\n            {\n                \"url\": \"https://d11fbe263bhqij.cloudfront.net/agicontent/avatar/elements/landscape_furniture1.png\",\n                \"scale_x\": 1,\n                \"scale_y\": 1,\n                \"offset_x\": 960,\n                \"offset_y\": 540,\n                \"type\": \"image\",\n                \"layer_number\": 1\n            },\n            {\n                \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1712025503602-leijun-2s.mp4\",\n                \"scale_x\": 0.5,\n                \"scale_y\": 0.5,\n                \"offset_x\": 1457.22,\n                \"offset_y\": 72.91,\n                \"type\": \"video\",\n                \"layer_number\": 2\n            },\n            {\n                \"id\": \"avatar\",\n                \"url\": \"https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786295159-e450163c-7b50-4714-9763-ed7a0e09d8b2-8298.png\",\n                \"scale_x\": 1,\n                \"scale_y\": 1,\n                \"offset_x\": 1380,\n                \"offset_y\": 540,\n                \"type\": \"avatar\",\n                \"avatar_id\": \"Barbara_in_Black_suit_20231121\",\n                \"layer_number\": 3\n            }\n        ],\n        \"ratio\": \"16:9\",\n        \"avatarFrom\": 2\n    }],\n    \"webhookUrl\":\"http://localhost:3007/api/open/v3/test/webhook\" \n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"data\": [{\n        \"width\": 1920,\n        \"height\": 1080,\n        \"duration\": 18938.75,\n        \"voice\": {\n         \"voice_url\": \"https://drz0f01yeq1cx.cloudfront.net/1712113284451-fe73dd6c-f981-46df-ba73-0b9d85c1be9c-8195.mp3\"\n        },\n        \"elements\": [\n            {\n                \"url\": \"https://d11fbe263bhqij.cloudfront.net/agicontent/avatar/elements/landscape_furniture1.png\",\n                \"scale_x\": 1,\n                \"scale_y\": 1,\n                \"offset_x\": 960,\n                \"offset_y\": 540,\n                \"type\": \"image\",\n                \"layer_number\": 1\n            },\n            {\n                \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1712025503602-leijun-2s.mp4\",\n                \"scale_x\": 0.5,\n                \"scale_y\": 0.5,\n                \"offset_x\": 1457.22,\n                \"offset_y\": 72.91,\n                \"type\": \"video\",\n                \"layer_number\": 2\n            },\n            {\n                \"id\": \"avatar\",\n                \"url\": \"https://drz0f01yeq1cx.cloudfront.net/avatar/thumbnail/1700786295159-e450163c-7b50-4714-9763-ed7a0e09d8b2-8298.png\",\n                \"scale_x\": 1,\n                \"scale_y\": 1,\n                \"offset_x\": 1380,\n                \"offset_y\": 540,\n                \"type\": \"avatar\",\n                \"avatar_id\": \"Barbara_in_Black_suit_20231121\",\n                \"layer_number\": 3\n            }\n        ],\n        \"ratio\": \"16:9\",\n        \"avatarFrom\": 2\n    }],\n    \"webhookUrl\":\"\" \n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/avatar/createVideo")
   .method("POST", body)
@@ -601,7 +601,7 @@ const raw = JSON.stringify({
       avatarFrom: 3,
     },
   ],
-  webhookUrl: "http://localhost:3007/api/open/v3/test/webhook",
+  webhookUrl: "",
 });
 
 const requestOptions = {
@@ -661,7 +661,7 @@ $body = '{
     "background": "#ffffff",
     "avatarFrom": 3
   }],
-  "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"
+  "webhookUrl":""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/avatar/createVideo', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -708,7 +708,7 @@ payload = json.dumps({
     "background": "#ffffff",
     "avatarFrom": 3
   }],
-  "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"
+  "webhookUrl":""
 })
 headers = {
   'Authorization': 'Bearer token',
@@ -780,7 +780,7 @@ print(response.text)
         "background": "#ffffff",
         "avatarFrom": 3
       }],
-      "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"
+      "webhookUrl":""
       "userId": "64ddd5fa3a458a183f71f665"
     },
     "_id": "660bcabb6e2f6d2bba67f1fd",

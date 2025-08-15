@@ -44,7 +44,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto
 {
     "talking_photo_url":"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
     "audio_url":"https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
-    "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"  
+    "webhookUrl":""  
 }
 ```
 
@@ -59,7 +59,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytal
 --data '{
     "talking_photo_url":"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
      "audio_url":"https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
-     "webhookUrl":"http://localhost:3007/api/open/v3/test/webhook"  
+     "webhookUrl":""  
 }'
 ```
 
@@ -67,7 +67,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytal
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"talking_photo_url\":\"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg\",\n     \"audio_url\":\"https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3\",\n     \"webhookUrl\":\"http://localhost:3007/api/open/v3/test/webhook\"  \n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"talking_photo_url\":\"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg\",\n     \"audio_url\":\"https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3\",\n     \"webhookUrl\":\"\"  \n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto")
   .method("POST", body)
@@ -86,7 +86,7 @@ myHeaders.append("Content-Type", "application/json");
 const raw = JSON.stringify({
   "talking_photo_url": "https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
   "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
-  "webhookUrl": "http://localhost:3007/api/open/v3/test/webhook"
+  "webhookUrl": ""
 });
 
 const requestOptions = {
@@ -112,7 +112,7 @@ $headers = [
 $body = '{
   "talking_photo_url": "https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
   "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
-  "webhookUrl": "http://localhost:3007/api/open/v3/test/webhook"
+  "webhookUrl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -129,7 +129,7 @@ url = "https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto"
 payload = json.dumps({
   "talking_photo_url": "https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
   "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
-  "webhookUrl": "http://localhost:3007/api/open/v3/test/webhook"
+  "webhookUrl": ""
 })
 headers = {
   'Authorization': 'Bearer token',
