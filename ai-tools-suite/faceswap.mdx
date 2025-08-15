@@ -58,7 +58,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage
     ],
     "face_enhance": 0,  // Whether facial enhancement: 1 means open， 0 means close
     "modifyImage": "https://d21ksh0k4smeql.cloudfront.net/bdd1c994c4cd7a58926088ae8a479168-1705462506461-1966.jpeg", // Modify the link address of the image
-    "webhookUrl":"http://localhost:3007/api/webhook" // Callback url address based on HTTP request
+    "webhookUrl":"" // Callback url address based on HTTP request
 }
 ```
 
@@ -87,7 +87,7 @@ curl -X POST --location "https://openapi.akool.com/api/open/v3/faceswap/highqual
           ],
           "face_enhance": 0,
           "modifyImage": "https://d21ksh0k4smeql.cloudfront.net/bdd1c994c4cd7a58926088ae8a479168-1705462506461-1966.jpeg",
-          "webhookUrl": "http://localhost:3007/api/webhook"
+          "webhookUrl": ""
         }'
 ```
 
@@ -95,7 +95,7 @@ curl -X POST --location "https://openapi.akool.com/api/open/v3/faceswap/highqual
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"sourceImage\": [    \n        {\n            \"path\": \"https://d21ksh0k4smeql.cloudfront.net/crop_1694593694387-4562-0-1694593694575-0526.png\", \n            \"opts\": \"262,175:363,175:313,215:272,279\" \n        }\n    ],\n    \"targetImage\": [    \n        {\n            \"path\": \"https://d21ksh0k4smeql.cloudfront.net/crop_1705462509874-9254-0-1705462510015-9261.png\",  \n            \"opts\": \"239,364:386,366:317,472:266,539\"   \n        }\n    ],\n    \"face_enhance\": 0,  \n    \"modifyImage\": \"https://d21ksh0k4smeql.cloudfront.net/bdd1c994c4cd7a58926088ae8a479168-1705462506461-1966.jpeg\", \n    \"webhookUrl\":\"http://localhost:3007/api/webhook\" \n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"sourceImage\": [    \n        {\n            \"path\": \"https://d21ksh0k4smeql.cloudfront.net/crop_1694593694387-4562-0-1694593694575-0526.png\", \n            \"opts\": \"262,175:363,175:313,215:272,279\" \n        }\n    ],\n    \"targetImage\": [    \n        {\n            \"path\": \"https://d21ksh0k4smeql.cloudfront.net/crop_1705462509874-9254-0-1705462510015-9261.png\",  \n            \"opts\": \"239,364:386,366:317,472:266,539\"   \n        }\n    ],\n    \"face_enhance\": 0,  \n    \"modifyImage\": \"https://d21ksh0k4smeql.cloudfront.net/bdd1c994c4cd7a58926088ae8a479168-1705462506461-1966.jpeg\", \n    \"webhookUrl\":\"\" \n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage")
   .method("POST", body)
@@ -125,7 +125,7 @@ const raw = JSON.stringify({
   ],
   "face_enhance": 0,
   "modifyImage": "https://d21ksh0k4smeql.cloudfront.net/bdd1c994c4cd7a58926088ae8a479168-1705462506461-1966.jpeg",
-  "webhookUrl": "http://localhost:3007/api/webhook"
+  "webhookUrl": ""
 });
 
 const requestOptions = {
@@ -163,7 +163,7 @@ $body = '{
   ],
   "face_enhance": 0,
   "modifyImage": "https://d21ksh0k4smeql.cloudfront.net/bdd1c994c4cd7a58926088ae8a479168-1705462506461-1966.jpeg",
-  "webhookUrl": "http://localhost:3007/api/webhook"
+  "webhookUrl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -191,7 +191,7 @@ payload = json.dumps({
   ],
   "face_enhance": 0,
   "modifyImage": "https://d21ksh0k4smeql.cloudfront.net/bdd1c994c4cd7a58926088ae8a479168-1705462506461-1966.jpeg",
-  "webhookUrl": "http://localhost:3007/api/webhook"
+  "webhookUrl": ""
 })
 headers = {
   'Authorization': 'Bearer token',
@@ -269,7 +269,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo
     ],
     "face_enhance":0,
     "modifyVideo": "https://d21ksh0k4smeql.cloudfront.net/avatar_01-1705479314627-0092.mp4",    // modifyImage represents the original image you need to change the face;
-    "webhookUrl":"http://localhost:3007/api/webhook2" // Callback url address based on HTTP request
+    "webhookUrl":"" // Callback url address based on HTTP request
 
 }
 ```
@@ -298,7 +298,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/faceswap/highquality/spec
     ],
     "face_enhance": 0,
     "modifyVideo": "https://d21ksh0k4smeql.cloudfront.net/avatar_01-1705479314627-0092.mp4",
-    "webhookUrl":"http://localhost:3007/api/webhook2"
+    "webhookUrl":""
 
 }'
 ```
@@ -307,7 +307,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/faceswap/highquality/spec
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"sourceImage\": [    \n        {\n            \"path\": \"https://d21ksh0k4smeql.cloudfront.net/crop_1705475757658-3362-0-1705475757797-3713.png\",   \n            \"opts\": \"239,364:386,366:317,472:266,539\"   \n        }\n    ],\n    \"targetImage\": [    \n        {\n            \"path\": \"https://d21ksh0k4smeql.cloudfront.net/crop_1705479323786-0321-0-1705479323896-7695.png\",   \n            \"opts\": \"176,259:243,259:209,303:183,328\" \n        }\n    ],\n    \"modifyVideo\": \"https://d21ksh0k4smeql.cloudfront.net/avatar_01-1705479314627-0092.mp4\",    \n    \"webhookUrl\":\"http://localhost:3007/api/webhook2\" \n\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"sourceImage\": [    \n        {\n            \"path\": \"https://d21ksh0k4smeql.cloudfront.net/crop_1705475757658-3362-0-1705475757797-3713.png\",   \n            \"opts\": \"239,364:386,366:317,472:266,539\"   \n        }\n    ],\n    \"targetImage\": [    \n        {\n            \"path\": \"https://d21ksh0k4smeql.cloudfront.net/crop_1705479323786-0321-0-1705479323896-7695.png\",   \n            \"opts\": \"176,259:243,259:209,303:183,328\" \n        }\n    ],\n    \"modifyVideo\": \"https://d21ksh0k4smeql.cloudfront.net/avatar_01-1705479314627-0092.mp4\",    \n    \"webhookUrl\":\"\" \n\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo")
   .method("POST", body)
@@ -337,7 +337,7 @@ const raw = JSON.stringify({
   ],
  "face_enhance": 0,
   "modifyVideo": "https://d21ksh0k4smeql.cloudfront.net/avatar_01-1705479314627-0092.mp4",
-  "webhookUrl": "http://localhost:3007/api/webhook2"
+  "webhookUrl": ""
 });
 
 const requestOptions = {
@@ -375,7 +375,7 @@ $body = '{
   ],
  "face_enhance": 0,
   "modifyVideo": "https://d21ksh0k4smeql.cloudfront.net/avatar_01-1705479314627-0092.mp4",
-  "webhookUrl": "http://localhost:3007/api/webhook2"
+  "webhookUrl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -403,7 +403,7 @@ payload = json.dumps({
   ],
  "face_enhance": 0,
   "modifyVideo": "https://d21ksh0k4smeql.cloudfront.net/avatar_01-1705479314627-0092.mp4",
-  "webhookUrl": "http://localhost:3007/api/webhook2"
+  "webhookUrl": ""
 })
 headers = {
   'Authorization': 'Bearer token',

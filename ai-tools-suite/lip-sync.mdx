@@ -44,7 +44,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/lipsync
 {
   "video_url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/global_reach/Global_reach_EN_01.mp4",
   "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1712719410293-driving_audio_2.wav",
-  "webhookUrl": "https://openapitest.akool.com/api/open/v3/test/webhook"
+  "webhookUrl": ""
 }
 ```
 
@@ -59,7 +59,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/lipsync' \
 --data '{
     "video_url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/global_reach/Global_reach_EN_01.mp4",
     "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1712719410293-driving_audio_2.wav",
-    "webhookUrl":"https://openapitest.akool.com/api/open/v3/test/webhook"
+    "webhookUrl":""
 }'
 ```
 
@@ -67,7 +67,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/lipsync' \
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"video_url\": \"https://d11fbe263bhqij.cloudfront.net/agicontent/video/global_reach/Global_reach_EN_01.mp4\",\n    \"audio_url\": \"https://drz0f01yeq1cx.cloudfront.net/1712719410293-driving_audio_2.wav\",\n    \"webhookUrl\":\"https://openapitest.akool.com/api/open/v3/test/webhook\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"video_url\": \"https://d11fbe263bhqij.cloudfront.net/agicontent/video/global_reach/Global_reach_EN_01.mp4\",\n    \"audio_url\": \"https://drz0f01yeq1cx.cloudfront.net/1712719410293-driving_audio_2.wav\",\n    \"webhookUrl\":\"\"\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/content/video/lipsync")
   .method("POST", body)
@@ -87,7 +87,7 @@ const raw = JSON.stringify({
     "https://d11fbe263bhqij.cloudfront.net/agicontent/video/global_reach/Global_reach_EN_01.mp4",
   audio_url:
     "https://drz0f01yeq1cx.cloudfront.net/1712719410293-driving_audio_2.wav",
-  webhookUrl: "https://openapitest.akool.com/api/open/v3/test/webhook",
+  webhookUrl: "",
 });
 
 const requestOptions = {
@@ -116,7 +116,7 @@ $headers = [
 $body = '{
   "video_url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/global_reach/Global_reach_EN_01.mp4",
   "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1712719410293-driving_audio_2.wav",
-  "webhookUrl": "https://openapitest.akool.com/api/open/v3/test/webhook"
+  "webhookUrl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/video/lipsync', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -133,7 +133,7 @@ url = "https://openapi.akool.com/api/open/v3/content/video/lipsync"
 payload = json.dumps({
   "video_url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/global_reach/Global_reach_EN_01.mp4",
   "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1712719410293-driving_audio_2.wav",
-  "webhookUrl": "https://openapitest.akool.com/api/open/v3/test/webhook"
+  "webhookUrl": ""
 })
 headers = {
   'authorization': 'Bearer token',
@@ -169,7 +169,7 @@ print(response.text)
     "video": "", // the url of Generated video
     "storage_loc": 1,
     "input_audio": "https://drz0f01yeq1cx.cloudfront.net/1712719410293-driving_audio_2.wav",
-    "webhookUrl": "https://openapitest.akool.com/api/open/v3/test/webhook",
+    "webhookUrl": "",
     "task_id": "66160b3ee3ef778679dfd30f",
     "lipsync": true,
     "_id": "66160f989dfc997ac289037b",

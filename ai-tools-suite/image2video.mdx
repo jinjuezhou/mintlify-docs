@@ -94,7 +94,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt
   "video_length": 10,
   "is_premium_model": true,
   "effect_code": "squish_89244231312",
-  "webhookurl": "http://localhost:3000/demo"
+  "webhookurl": ""
 }
 ```
 
@@ -117,7 +117,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/image2Video/createBySourc
   "video_length": 10,
   "is_premium_model": true,
   "effect_code": "squish_89244231312",
-  "webhookurl": "http://localhost:3000/demo"
+  "webhookurl": ""
 }'
 ```
 
@@ -125,7 +125,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/image2Video/createBySourc
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n  \"image_url\": \"https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png\",\n  \"prompt\": \"Animate this image with smooth camera movement and subtle object motion.\",\n  \"negative_prompt\": \"blurry, distorted hands, missing fingers, unnatural pose, double hands, extra limbs, bad anatomy, low quality, cartoonish, exaggerated features, open mouth, aggressive expression, modern clothing, pixelated, vibrant colors, overexposed, flickering, blurry details, subtitles, logo, style, artwork, painting, picture, static, overall grayish, worst quality, JPEG compression artifacts, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn face, deformed, disfigured, malformed limbs, fused fingers, static characters, messy background, three legs, crowded background, walking backwards\",\n  \"extend_prompt\": true,\n  \"resolution\": \"4k\",\n  \"audio_url\": \"https://drz0f01yeq1cx.cloudfront.net/1753772497950-9213-1749809724426audio.mp3\",\n  \"audio_type\": 2,\n  \"video_length\": 10,\n  \"is_premium_model\": true,\n  \"effect_code\": \"squish_89244231312\",\n  \"webhookurl\": \"http://localhost:3000/demo\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"image_url\": \"https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png\",\n  \"prompt\": \"Animate this image with smooth camera movement and subtle object motion.\",\n  \"negative_prompt\": \"blurry, distorted hands, missing fingers, unnatural pose, double hands, extra limbs, bad anatomy, low quality, cartoonish, exaggerated features, open mouth, aggressive expression, modern clothing, pixelated, vibrant colors, overexposed, flickering, blurry details, subtitles, logo, style, artwork, painting, picture, static, overall grayish, worst quality, JPEG compression artifacts, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn face, deformed, disfigured, malformed limbs, fused fingers, static characters, messy background, three legs, crowded background, walking backwards\",\n  \"extend_prompt\": true,\n  \"resolution\": \"4k\",\n  \"audio_url\": \"https://drz0f01yeq1cx.cloudfront.net/1753772497950-9213-1749809724426audio.mp3\",\n  \"audio_type\": 2,\n  \"video_length\": 10,\n  \"is_premium_model\": true,\n  \"effect_code\": \"squish_89244231312\",\n  \"webhookurl\": \"\"\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt")
   .method("POST", body)
@@ -151,7 +151,7 @@ const raw = JSON.stringify({
   "video_length": 10,
   "is_premium_model": true,
   "effect_code": "squish_89244231312",
-  "webhookurl": "http://localhost:3000/demo"
+  "webhookurl": ""
 });
 
 const requestOptions = {
@@ -185,7 +185,7 @@ $body = '{
   "video_length": 10,
   "is_premium_model": true,
   "effect_code": "squish_89244231312",
-  "webhookurl": "http://localhost:3000/demo"
+  "webhookurl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -210,7 +210,7 @@ payload = json.dumps({
   "video_length": 10,
   "is_premium_model": true,
   "effect_code": "squish_89244231312",
-  "webhookurl": "http://localhost:3000/demo"
+  "webhookurl": ""
 })
 headers = {
   'Authorization': 'Bearer {{token}}',
@@ -234,7 +234,7 @@ print(response.text)
     "uid": 101400,
     "team_id": "6805fb69e92d9edc7ca0b409",
     "status": 1,
-    "webhookUrl": "http://localhost:3000/demo",
+    "webhookUrl": "",
     "resolution": "4k",
     "file_name": "Image2Video_Animate this image with .mp4",
     "effect_name": "Squish",
@@ -407,7 +407,7 @@ print(response.text)
         "team_id": "6805fb69e92d9edc7ca0b409",
         "update_time": 1754374394023,
         "video_duration": 5.063,
-        "webhookUrl": "http://localhost:3000/demo",
+        "webhookUrl": "",
         "file_name": "Image2Video_Animate this image with .mp4",
         "effect_name": "Squish",
         "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
@@ -427,7 +427,7 @@ print(response.text)
         "team_id": "6805fb69e92d9edc7ca0b409",
         "sub_type": 1501,
         "video_duration": 5.063,
-        "webhookUrl": "http://localhost:3000/demo",
+        "webhookUrl": "",
         "file_name": "Image2Video_Animate this image with .mp4",
         "effect_name": "Squish",
         "update_time": 1754377293090,
@@ -742,7 +742,7 @@ print(response.text)
     "team_id": "6805fb69e92d9edc7ca0b409",
     "update_time": 1754374394023,
     "video_duration": 5.063,
-    "webhookUrl": "http://localhost:3000/demo",
+    "webhookUrl": "",
     "resolution": "4k",
     "file_name": "Image2Video_Animate this image with .mp4",
     "effect_name": "Squish",

@@ -520,7 +520,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/liveAvatar/session/create
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"avatar_id\": \"dvp_Tristan_cloth2_1080P\",\n    \"webhookUrl\":\"https://openapitest.akool.com/api/open/v4/test/webhook\",\n    \"knowledge_id\":\"64f8a1b2c3d4e5f6a7b8c9d0\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"avatar_id\": \"dvp_Tristan_cloth2_1080P\",\n    \"webhookUrl\":\"\",\n    \"knowledge_id\":\"64f8a1b2c3d4e5f6a7b8c9d0\"\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/liveAvatar/session/create")
   .method("POST", body)
@@ -538,7 +538,7 @@ myHeaders.append("content-type", "application/json");
 const raw = JSON.stringify({
   avatar_id: "dvp_Tristan_cloth2_1080P",
   background_url: "https://static.website-files.org/assets/images/generator/text2image/1716867976184-c698621e-9bf3-4924-8d79-0ba1856669f2-6178_thumbnail.webp",
-  webhookUrl: "https://openapitest.akool.com/api/open/v4/test/webhook",
+  webhookUrl: "",
   knowledge_id: "64f8a1b2c3d4e5f6a7b8c9d0"
 });
 
@@ -567,7 +567,7 @@ $headers = [
 ];
 $body = '{
   "avatar_id": "dvp_Tristan_cloth2_1080P",
-  "webhookUrl": "https://openapitest.akool.com/api/open/v4/test/webhook",
+  "webhookUrl": "",
   "knowledge_id": "64f8a1b2c3d4e5f6a7b8c9d0"
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v4/liveAvatar/session/create', $headers, $body);
@@ -584,7 +584,7 @@ url = "https://openapi.akool.com/api/open/v4/liveAvatar/session/create"
 
 pld = json.dumps({
   "avatar_id": "dvp_Tristan_cloth2_1080P",
-  "webhookUrl": "https://openapitest.akool.com/api/open/v4/test/webhook",
+  "webhookUrl": "",
   "knowledge_id": "64f8a1b2c3d4e5f6a7b8c9d0"
 })
 headers = {
