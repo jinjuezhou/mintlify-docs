@@ -262,7 +262,7 @@ print(response.text)
 ### Upload Avatar
 
 ```
-GET https://openapi.akool.com/api/open/v3/avatar/create
+POST https://openapi.akool.com/api/open/v3/avatar/create
 ```
 
 **Request Headers**
@@ -277,6 +277,7 @@ GET https://openapi.akool.com/api/open/v3/avatar/create
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
 | avatar_id     | String   |           | avatar unique ID，Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
+| name          | String   |           | Avatar display name for easier identification and management.                                                                                                     |
 | type          | Number   | 1，2      | Avatar type, 1 represents real avatar, 2 represents stream avatar, When type is 2, you need to wait until status is 3 before you can use it, You can get the current status in real time through the interface *https://openapi.akool.com/api/open/v3/avatar/create*.                                                                                                 |
 | url_from      | Number   | 1，2      | url source, 1 means akool and other links, 2 means other third-party links (currently only supports YouTube / TikTok / X / Google Drive)                          |
 
@@ -296,14 +297,22 @@ GET https://openapi.akool.com/api/open/v3/avatar/create
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/avatar/create' \
---header 'Authorization: Bearer {{Authorization}}'
+--header 'Authorization: Bearer {{Authorization}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
+  "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "name": "My Custom Avatar",
+  "type": 1,
+  "url_from": 1
+}'
 ```
 
 ```java Java
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("text/plain");
-RequestBody body = RequestBody.create(mediaType, "{\n    \n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4\",\n    \"avatar_id\": \"HHdEKhn7k7vVBlR5FSi0e\",\n    \"type\": 1,\n   \"url_from\": 1\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4\",\n    \"avatar_id\": \"HHdEKhn7k7vVBlR5FSi0e\",\n    \"name\": \"My Custom Avatar\",\n    \"type\": 1,\n   \"url_from\": 1\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/avatar/create")
   .method("POST", body)
@@ -319,6 +328,7 @@ myHeaders.append("Authorization", "Bearer {{Authorization}}");
 const raw = JSON.stringify({
   "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
   "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "name": "My Custom Avatar",
   "type": 1,
   "url_from": 1
 });
@@ -348,6 +358,7 @@ $headers = [
 $body = '{
   "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
   "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "name": "My Custom Avatar",
   "type": 1,
   "url_from": 1
 }';
@@ -364,6 +375,7 @@ url = "https://openapi.akool.com/api/open/v3/avatar/create"
 payload = json.dumps({
   "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
   "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "name": "My Custom Avatar",
   "type": 1,
   "url_from": 1
 });
