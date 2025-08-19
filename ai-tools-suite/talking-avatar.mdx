@@ -685,6 +685,7 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
 | avatar_id     | String   |           | avatar unique ID，Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
+| name          | String   |           | Avatar display name for easier identification and management.                                                                                                     |
 | type          | String   | 1         | Avatar type, 1 represents talking avatar                                                                                                 |
 
 **Response Attributes**
@@ -708,6 +709,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/avatar/create' \
 --data '{
     "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
     "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+    "name": "My Talking Avatar",
     "type": 1
 }'
 ```
@@ -716,7 +718,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/avatar/create' \
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("text/plain");
-RequestBody body = RequestBody.create(mediaType, "{\n    \n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4\",\n    \"avatar_id\": \"HHdEKhn7k7vVBlR5FSi0e\",\n    \"type\": 1\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4\",\n    \"avatar_id\": \"HHdEKhn7k7vVBlR5FSi0e\",\n    \"name\": \"My Talking Avatar\",\n    \"type\": 1\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/avatar/create")
   .method("POST", body)
@@ -732,6 +734,7 @@ myHeaders.append("Authorization", "Bearer {{Authorization}}");
 const raw = JSON.stringify({
   "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
   "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "name": "My Talking Avatar",
   "type": 1
 });
 
@@ -760,6 +763,7 @@ $headers = [
 $body = '{
   "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
   "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "name": "My Talking Avatar",
   "type": 1
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/avatar/create', $headers, $body);
@@ -775,6 +779,7 @@ url = "https://openapi.akool.com/api/open/v3/avatar/create"
 payload = json.dumps({
   "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
   "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "name": "My Talking Avatar",
   "type": 1
 });
 headers = {
