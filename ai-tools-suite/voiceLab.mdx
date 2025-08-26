@@ -13,7 +13,6 @@ description: "VoiceLab API documentation"
 |Text-to-Speech           |4.4 credits/1000 characters        |3.2 credits/1000 characters    |2.4 credits/1000 characters |  Customized  |
 |Instant voice clone    |30 voices                          |180 voices                     |500 voices |   Customized |
 |Voice changer          |4.4 credits/minute                 |3.2 credits/minute             |2.4 credits/minute |  Customized |
-|Maximum number of characters for a single Text-to-Speech request          |5000                 |10000             |50000 |  Customized |
 
 
 ### Create Voice Clone
@@ -259,7 +258,7 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| input_text    | String   | true         |           | Preview text content, Maximum number of characters per request reference: [Rates](https://docs.akool.com/ai-tools-suite/voiceLab#rates) |
+| input_text    | String   | true         |           | Preview text content, Max characters per request :Subscription level is pro, with a maximum character limit of 5000. Subscription level is max, with a maximum character limit of 10000. Subscription level is Business, with a maximum character limit of 50000.  |
 | voice_id      | String   | true         |           | Voice ID, get this voice_id from your cloned voices or akool voice list.[getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 | voice_options | Object   | false        |           | Audio settings |
 | - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
