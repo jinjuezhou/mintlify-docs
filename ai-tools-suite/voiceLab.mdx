@@ -16,6 +16,7 @@ description: "VoiceLab API documentation"
 
 
 ### Create Voice Clone
+> Default preview text: Hello, I'm your personalized Al voice. Nice to meet you. I hope my voice brings your content to life!
 
 ```
 POST https://openapi.akool.com/api/open/v4/voice/clone
@@ -39,7 +40,6 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 | - scenario    | Array    | false        |           | Use case tags (e.g., ["Advertisement", "Education"]) |
 | - remove_background_noise    | Boolean    | false        |      false     | Remove background noise, disabled by default |
 | name          | String   | false        |           | Audio name |
-| text          | String   | true         |           | Preview text content |
 | webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
 
 **Response Attributes**
