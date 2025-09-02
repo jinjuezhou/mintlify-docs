@@ -12,7 +12,7 @@ description: ""
 Experience our video translation technology in action by exploring our interactive demo on GitHub: [AKool Video Translation Demo](https://github.com/AKOOL-Official/akool-video-translation-demo).
 </Info>
 
-### Get Language List Result
+## Get Language List Result
 
 ```
 GET https://openapi.akool.com/api/open/v3/language/list
@@ -28,11 +28,11 @@ GET https://openapi.akool.com/api/open/v3/language/list
 
 | **Parameter** | **Type** | **Value**                                                      | **Description**                                      |
 | ------------- | -------- | -------------------------------------------------------------- | ---------------------------------------------------- |
-| code          | int      | 1000                                                           | Interface returns business status code(1000:success) |
-| msg           | String   | OK                                                             | Interface returns status information                 |
-| data          | Array    | `{ lang_list:[ {"lang_code":"en", "lang_name": "English" } ]}` | lang_code: Lang code supported by video translation  |
+| code          | Int      | <p align="center">1000</p>                                                           | API returns status code (1000:success) |
+| msg           | String   | <p align="center">OK</p>                                                             | API returns status message                  |
+| data          | Array    | <p align="center">`{ lang_list:[ {"lang_code":"en", "lang_name": "English" } ]}`</p>| lang_code: Lang code supported by video translation  |
 
-**Example**
+### Example
 
 **Request**
 
@@ -127,7 +127,7 @@ print(response.text)
 }
 ```
 
-### Create video translation
+## Create Video Translation
 
 ```
 POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
@@ -142,23 +142,23 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
 
 | **Parameter**   | **Type** | **Value**  | **Description**                                                                                 |
 | --------------- | -------- | ---------- | ----------------------------------------------------------------------------------------------- |
-| url             | String   |            | The video url address you want to translate.                                                    |
+| url             | String   |            | The video URL address you want to translate.                                                    |
 | source_language | String   |            | The original language of the video.                                                             |
 | language        | String   |            | The language you want to translate into.                                                        |
 | lipsync         | Boolean  | true/false | Get synchronized mouth movements with the audio track in a translated video.                    |
 | ~~merge_interval~~  | Number   | 1          | The segmentation interval of video translation, the default is 1 second. ***This field is deprecated***                       |
 | ~~face_enhance~~    | Boolean  | true/false | Whether to facial process the translated video, this parameter only works when lipsync is true. ***This field is deprecated*** |
-| webhookUrl      | String   |            | Callback url address based on HTTP request.                                                     |
+| webhookUrl      | String   |            | Callback URL address based on HTTP request.                                                     |
 
 **Response Attributes**
 
 | **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                        |
 | ------------- | -------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| code          | int      | 1000                                            | Interface returns business status code(1000:success)                                                                                                   |
-| msg           | String   |                                                 | Interface returns status information                                                                                                                   |
-| data          | Object   | `{ "_id": "", "video_status": 1, "video": "" }` | `id`: Interface returns data, video_status: the status of video： [1:queueing, 2:processing, 3:completed, 4:failed], video: the url of Generated video |
+| code          | Int     | <p align="center">1000</p>                                           | API returns status code(1000:success)                                                                                                   |
+| msg           | String   |                                                 | API returns status message                                                                                                                    |
+| data          | Object   | <p align="center">`{ "_id": "", "video_status": 1, "video": "" }`</p> | `id`: Interface returns data, video_status: the status of video： [1: queueing, 2: processing, 3: completed, 4: failed], video: the URL of Generated video |
 
-**Example**
+### Example
 
 **Body**
 
@@ -313,7 +313,7 @@ print(response.text)
 }
 ```
 
-### Get Video Info Result
+## Get Video Info Result
 
 ```
 GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64dd838cf0b6684651e90217
@@ -323,7 +323,7 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 | ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token)|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token)|
 
 **Query Attributes**
 
@@ -335,11 +335,11 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 | **Parameter** | **Type** | **Value**                              | **Description**                                                                                                                                         |
 | ------------- | -------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | int      | 1000                                   | Interface returns business status code(1000:success)                                                                                                    |
-| msg           | String   | OK                                     | Interface returns status information                                                                                                                    |
-| data          | Object   | `{ video_status:1, _id:"", video:"" }` | video_status: the status of video：【1:queueing, 2:processing, 3:completed, 4:failed】 video: Generated video resource url \_id: Interface returns data |
+| code          | Int      | <p align="center">1000</p>             | API returns status code(1000:success)                                                                                                    |
+| msg           | String   | <p align="center">OK</p>                                    | API returns status message                                                                                                                     |
+| data          | Object   | <p align="center">`{ video_status:1, _id:"", video:"" }`</p> | video_status: the status of video：【1:queueing, 2:processing, 3:completed, 4:failed】 video: Generated video resource url \_id: Interface returns data |
 
-**Example**
+### Example
 
 **Request**
 
@@ -445,18 +445,18 @@ print(response.text)
 
 | **Parameter** | **Value** | **Description**                                                                    |
 | ------------- | --------- | ---------------------------------------------------------------------------------- |
-| code          | 1000      | Success                                                                            |
-| code          | 1003      | Parameter error or Parameter can not be empty                                      |
-| code          | 1008      | The content you get does not exist                                                 |
-| code          | 1009      | You do not have permission to operate                                              |
-| code          | 1101      | Invalid authorization or The request token has expired                             |
+| code          | 1000      | Request completed successfully                                                                            |
+| code          | 1003      | Invalid or missing parameters                                      |
+| code          | 1008      | The request content does not exist                                                 |
+| code          | 1009      | Permission denied                                             |
+| code          | 1101      | Invalid authorization or the request token has expired                             |
 | code          | 1102      | Authorization cannot be empty                                                      |
-| code          | 1200      | The account has been banned                                                        |
-| code          | 1201      | create audio error, please try again later                                         |
+| code          | 1200      | The account has been suspended                                                       |
+| code          | 1201      | Audio creation processing error                                         |
 | code          | 1202      | The same video cannot be translated lipSync in the same language more than 1 times |
-| code          | 1203      | video should be with audio                                                         |
+| code          | 1203      | Video should be with audio                                                         |
 | code          | 1204      | Your video duration is exceed 60s!                                                 |
-| code          | 1205      | Create video error, please try again later                                         |
-| code          | 1207      | The video you are using exceeds the size limit allowed by the system by 300M       |
-| code          | 1209      | Please upload a video in another encoding format                                   |
-| code          | 1210      | The video you are using exceeds the value allowed by the system by 30fp            |
+| code          | 1205      | Video creation processing error                                         |
+| code          | 1207      | Video size exceed. The size limit allowed by the system is 300M.  |
+| code          | 1209      | The video encoding format is not supported                                 |
+| code          | 1210      | Video fps exceeded. The value allowed by the system is 30fps     |

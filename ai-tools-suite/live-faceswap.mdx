@@ -30,7 +30,7 @@ POST https://openapi.akool.com/api/open/v3/getToken
 | clientId | String | Client ID |
 | clientSecret | String | Client secret |
 
-**Example Request**
+### Example Request
 
 ```json
 {
@@ -62,7 +62,7 @@ POST https://sg3.akool.com/detect
 | image_url | String | Image URL for face detection |
 | img | String | Base64 encoded image (optional) |
 
-**Example Request**
+### Example Request
 
 ```json
 {
@@ -75,15 +75,15 @@ POST https://sg3.akool.com/detect
 
 | **Parameter** | **Type** | **Description** |
 |----------|----------|----------|
-| error_code | int | Error code (0: success) |
+| error_code | Int | Error code (0: success) |
 | error_msg | String | Error message |
 | landmarks | Array | Facial landmarks coordinates array |
 | landmarks_str | Array | Facial landmarks coordinates string array |
 | region | Array | Face region coordinates |
-| seconds | float | Processing time in seconds |
+| seconds | Float | Processing time in seconds |
 | trx_id | String | Transaction ID |
 
-**Response Example**
+### Response Example
 
 ```json
 {
@@ -131,7 +131,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/live/create
 |----------|----------|----------|
 | sourceImage | Array | Source image information array, each element contains path and opts properties |
 
-**Example Request**
+### Example Request
 
 ```json
 {
@@ -148,11 +148,11 @@ POST https://openapi.akool.com/api/open/v3/faceswap/live/create
 
 | **Parameter** | **Type** | **Description** |
 |----------|----------|----------|
-| code | int | API response business status code (1000: success) |
+| code | Int | API response business status code (1000: success) |
 | msg | String | API response status information |
 | data | Object | Response data object |
 
-**Response Example**
+### Response Example
 
 ```json
 {
@@ -200,7 +200,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/live/update
 | _id | String | Session ID |
 | sourceImage | Array | Source image information array, each element contains path and opts properties |
 
-**Example Request**
+### Example Request
 
 ```json
 {
@@ -214,7 +214,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/live/update
 }
 ```
 
-**Response Example**
+### Response Example
 
 ```json
 {
@@ -244,7 +244,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/live/close
 |----------|----------|----------|
 | _id | String | Session ID |
 
-**Example Request**
+### Example Request
 
 ```json
 {
@@ -252,7 +252,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/live/close
 }
 ```
 
-**Response Example**
+### Response Example
 
 ```json
 {
@@ -261,7 +261,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/live/close
 }
 ```
 
-## Code Examples
+### Code Examples
 
 <CodeGroup>
 

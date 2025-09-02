@@ -9,7 +9,7 @@ description: ''
 Experience our age adjustment technology in action by exploring our interactive demo on GitHub: [AKool Reage Demo](https://github.com/AKOOL-Official/akool-reage-demo).
 </Info>
 
-### Image Reage
+## Image Reage
 
 ```
 POST https://openapi.akool.com/api/open/v3/faceswap/highquality/imgreage
@@ -19,26 +19,26 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/imgreage
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
 | Parameter   | Type   | Value                 | Description                                                                                                                                                                                                                                                                                                                                                                         |
 |-------------|--------|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| targetImage | Array  | `[{path:"",opts:""}]` | Replacement target image information(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images. opts: Key information of the face detected in the target image【You can get it through the face [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect) API, You can get the landmarks_str value returned by the api interface as the value of opts) |
-| face_reage  | Int    | [-30, 30]             | Reage ranges                                                                                                                                                                                                                                                                                                                                                                        |
+| targetImage | Array  | `[{path:"",opts:""}]` | Replacement target image information (each array element is an object, and the object contains 2 properties, path: links to faces detected in target images. opts: key information of the face detected in the target image【You can get it through the face [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect) API, You can get the landmarks_str value returned by the api interface as the value of opts) |
+| face_reage  | Int    | <p align="center">[-30, 30]</p> | Reage ranges                                                                                                                                                                                                                                                                                                                                                                        |
 | modifyImage | String |                       | Modify the link address of the image                                                                                                                                                                                                                                                                                                                                                |
-| webhookUrl  | String |                       | Callback url address based on HTTP request                                                                                                                                                                                                                                                                                                                                          |
+| webhookUrl  | String |                       | Callback URL address based on HTTP request                                                                                                                                                                                                                                                                                                                                          |
 
 **Response Attributes**
 
 | Parameter | Type   | Value                         | Description                                                                               |
 |-----------|--------|-------------------------------|-------------------------------------------------------------------------------------------|
-| code      | int    | 1000                          | Interface returns business status code(1000:success)                                      |
-| msg       | String |                               | Interface returns status information                                                      |
-| data      | Object | `{_id:"",url: "",job_id: ""}` | `_id`: Interface returns data url: faceswwap result url job_id: Task processing unique id |
+| code      | Int    | <p align="center">1000</p>                          | API returns status code(1000:success)                                      |
+| msg       | String |                               | API returns status message                                                    |
+| data      | Object | <p align="center">`{_id:"",url: "",job_id: ""}` </p>| `_id`: Interface returns data URL: face swwap result URL job_id: Task processing unique id |
 
-**Example**
+### Example
 
 **Body**
 
@@ -178,7 +178,7 @@ print(response.text)
 
 ```json
 {
-  "code": 1000, // Interface returns business status code
+  "code": 1000, // API returns status code
   "msg": "Please be patient! If your results are not generated in three hours, please check your input image.", // Interface returns status information
   "data": {
     "_id": "6593c94c0ef703e8c055e3c8",  // Interface returns data
@@ -188,7 +188,7 @@ print(response.text)
 }
 ```
 
-### Video Reage
+## Video Reage
 
 ```
 POST https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage
@@ -205,21 +205,21 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage
 
 | Parameter   | Type   | Value      | Description                                                                                                                                                                                                                                                                                                                                                                         |
 |-------------|--------|------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| targetImage | Array  | `[]`       | Replacement target image information(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images. opts: Key information of the face detected in the target image【You can get it through the face [https://sg3.akool.com/detect]((https://docs.akool.com/ai-tools-suite/faceswap#face-detect)) API, You can get the landmarks_str value returned by the api interface as the value of opts) |
-| face_reage  | Int    | `[-30,30]` | Reage ranges                                                                                                                                                                                                                                                                                                                                                                        |
+| targetImage | Array  | <p align="center">`[]`</p>       | Replacement target image information(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images. opts: Key information of the face detected in the target image【You can get it through the face [https://sg3.akool.com/detect]((https://docs.akool.com/ai-tools-suite/faceswap#face-detect)) API, You can get the landmarks_str value returned by the api interface as the value of opts) |
+| face_reage  | Int    | <p align="center">`[-30,30]`</p> | Reage ranges                                                                                                                                                                                                                                                                                                                                                                        |
 | modifyVideo | String |            | Modify the link address of the video                                                                                                                                                                                                                                                                                                                                                |
-| webhookUrl  | String |            | Callback url address based on HTTP request                                                                                                                                                                                                                                                                                                                                          |
+| webhookUrl  | String |            | Callback URL address based on HTTP request                                                                                                                                                                                                                                                                                                                                          |
 
 
 **Response Attributes**
 
 | Parameter | Type   | Value                              | Description                                                                                |
 |-----------|--------|------------------------------------|--------------------------------------------------------------------------------------------|
-| code      | int    | 1000                               | Interface returns business status code (1000: success)                                     |
-| msg       | String |                                    | Interface returns status information                                                       |
+| code      | int    | 1000                               | API returns status code (1000: success)                                     |
+| msg       | String |                                    | API returns status message                                                     |
 | data      | Object | `{ _id: "", url: "", job_id: "" }` | `_id`: Interface returns data, url: faceswap result url, job_id: Task processing unique id |
 
-**Example**
+### Example
 
 **Body**
 
@@ -359,7 +359,7 @@ print(response.text)
 
 ```json
 {
-  "code": 1000, // Interface returns business status code
+  "code": 1000, // API returns status code
   "msg": "Please be patient! If your results are not generated in three hours, please check your input image.", // Interface returns status information
   "data": {
     "_id": "6593c94c0ef703e8c055e3c8",  // Interface returns data
@@ -369,7 +369,7 @@ print(response.text)
 }
 ```
 
-### Get Reage Result List Byids
+## Get Reage Result List Byids
 
 ```
 GET https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f27b33f466877701c6a
@@ -392,11 +392,11 @@ GET https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f2
 
 | Parameter | Type   | Value                                                       | Description                                                                                                                                                        |
 |-----------|--------|-------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| code      | int    | 1000                                                        | Interface returns business status code (1000: success)                                                                                                             |
-| msg       | String |                                                             | Interface returns status information                                                                                                                               |
+| code      | int    | 1000                                                        | API returns status code (1000: success)                                                                                                             |
+| msg       | String |                                                             | API returns status message                                                                                                                             |
 | data      | Object | `result: [{ faceswap_status: "", url: "", createdAt: "" }]` | faceswap_status: faceswap result status (1 In Queue, 2 Processing, 3 Success, 4 Failed), url: faceswap result url, createdAt: current faceswap action created time |
 
-**Example**
+### Example
 
 **Request**
 
@@ -492,7 +492,7 @@ print(response.text)
 }
 ```
 
-### Reage Task cancel
+## Reage Task cancel
 
 ```
 POST https://openapi.akool.com/api/open/v3/faceswap/job/del
@@ -502,20 +502,20 @@ POST https://openapi.akool.com/api/open/v3/faceswap/job/del
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
 | Parameter | Type   | Value | Description                                                                                                                                                                                              |
 |-----------|--------|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| job_ids   | String |       | Task id, You can get it by returning the job_id field based on [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage](https://docs.akool.com/ai-tools-suite/reage#image-reage) or [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo](https://docs.akool.com/ai-tools-suite/reage#video-reage) api. |
+| job_ids   | String |       | Task id, you can get it by returning the job_id field based on [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage](https://docs.akool.com/ai-tools-suite/reage#image-reage) or [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo](https://docs.akool.com/ai-tools-suite/reage#video-reage) api. |
 
 **Response Attributes**
 
 | Parameter | Type   | Value | Description                                            |
 |-----------|--------|-------|--------------------------------------------------------|
-| code      | int    | 1000  | Interface returns business status code (1000: success) |
-| msg       | String |       | Interface returns status information                   |
+| code      | Int    | 1000  | API returns status code (1000: success) |
+| msg       | String |       | API returns status message                 |
 
 **Example**
 
@@ -622,16 +622,16 @@ print(response.text)
 }
 ```
 
-**Response Code Description**
+## Response Code Description
 
 <Note> Please note that if the value of the response code is not equal to 1000, the request is failed or wrong</Note>
 | **Parameter** | **Value** | **Description**                                      |
 |---------------|-----------|------------------------------------------------------|
-| code          | 1000      | Success |
-| code          | 1003      | Parameter error  or Parameter can not be empty |
-| code          | 1005      | Operation is too frequent  |
-| code          | 1006      | Your quota is not enough  |
+| code          | 1000      | Request completed successfully |
+| code          | 1003      | Invalid or missing parameters|
+| code          | 1005      | Requests are being made too frequently  |
+| code          | 1006      | Your available quota is not enough  |
 | code          | 1007      | The number of people who can have their faces changed cannot exceed 8  |
-| code          | 1101      | Invalid authorization or The request token has expired  |
+| code          | 1101      | Invalid authorization or the request token has expired  |
 | code          | 1102      | Authorization cannot be empty  |
 | code          | 1200      | The account has been banned  |
