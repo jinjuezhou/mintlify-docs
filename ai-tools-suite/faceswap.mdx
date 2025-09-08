@@ -237,6 +237,7 @@ POST https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage
 |---------------|----------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | targetImage   | Array    | `[{path:""}]` | A collection of faces in the original image (Each array element is an object containing path: Links to faces in the original image) |
 | sourceImage   | Array    | `[{path:""}]` | Replacement target image information (Each array element is an object containing path: Links to replacement faces)          |
+| model_name    | String   | "akool_faceswap_image_hq" | Model name for face swap processing (Enum: ["akool_faceswap_image_hq"])                                                     |
 | webhookUrl    | String   |                       | Callback url address based on HTTP request                                                                                                                                                  |
 
 **Response Attributes**
@@ -263,6 +264,7 @@ POST https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage
             "path": "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"  // Links to faces detected in target images
         }
     ],
+    "model_name": "akool_faceswap_image_hq",    // Model name for face swap processing
     "webhookUrl":"https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage" // Callback url address based on HTTP request
 }
 ```
@@ -286,6 +288,7 @@ curl -X POST --location "https://openapi.akool.com/api/open/v4/faceswap/faceswap
               "path": "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"
             }
           ],
+          "model_name": "akool_faceswap_image_hq",
           "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
         }'
 ```
@@ -294,7 +297,7 @@ curl -X POST --location "https://openapi.akool.com/api/open/v4/faceswap/faceswap
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"targetImage\": [\n        {\n            \"path\": \"https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png\"\n        }\n    ],\n    \"sourceImage\": [\n        {\n            \"path\": \"https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg\"\n        }\n    ],\n    \"webhookUrl\": \"https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"targetImage\": [\n        {\n            \"path\": \"https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png\"\n        }\n    ],\n    \"sourceImage\": [\n        {\n            \"path\": \"https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg\"\n        }\n    ],\n    \"model_name\": \"akool_faceswap_image_hq\",\n    \"webhookUrl\": \"https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage\"\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage")
   .method("POST", body)
@@ -320,6 +323,7 @@ const raw = JSON.stringify({
       "path": "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"
     }
   ],
+  "model_name": "akool_faceswap_image_hq",
   "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
 });
 
@@ -354,6 +358,7 @@ $body = '{
       "path": "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"
     }
   ],
+  "model_name": "akool_faceswap_image_hq",
   "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage', $headers, $body);
@@ -378,6 +383,7 @@ payload = json.dumps({
       "path": "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"
     }
   ],
+  "model_name": "akool_faceswap_image_hq",
   "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
 })
 headers = {
