@@ -237,14 +237,14 @@ POST https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage
 |---------------|----------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | targetImage   | Array    | `[{path:""}]` | A collection of faces in the original image (Each array element is an object containing path: Links to faces in the original image) |
 | sourceImage   | Array    | `[{path:""}]` | Replacement target image information (Each array element is an object containing path: Links to replacement faces)          |
-| model_name    | String   | "akool_faceswap_image_hq" | Model name for face swap processing (Enum: ["akool_faceswap_image_hq"])                                                     |
+| model_name    | String   | "akool_faceswap_image_hq" | The model name used for face swap processing. Enum: ["akool_faceswap_image_hq"]. The 'akool_faceswap_image_hq' model only supports high-quality face swapping for a single face in an image. |
 | webhookUrl    | String   |                       | Callback url address based on HTTP request                                                                                                                                                  |
 
 **Response Attributes**
 
 | Parameter | Type   | Value                         | Description                                                                             |
 |-----------|--------|-------------------------------|-----------------------------------------------------------------------------------------|
-| code      | int    | 1000                          | Interface returns business status code(1000: success)                                   |
+| code      | Int    | 1000                          | Interface returns business status code(1000: success)                                   |
 | msg       | String |                               | Interface returns status information                                                    |
 | data      | Object | `{_id:"",url: "",job_id: ""}` | _id: Interface returns data url: faceswap result url job_id: Task processing unique id |
 
