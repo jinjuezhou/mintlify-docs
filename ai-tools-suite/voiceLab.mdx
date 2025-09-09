@@ -39,6 +39,9 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 | - age         | Array    | false        |           | Age tags (e.g., ["Young", "Middle", "Elderly"]) |
 | - scenario    | Array    | false        |           | Use case tags (e.g., ["Advertisement", "Education"]) |
 | - remove_background_noise    | Boolean    | false        |      false     | Remove background noise, disabled by default |
+| - language    | String    | false        |      en     | Language code (ISO 639-1) of the audio file. Defaults to "en" if not specified |
+| - clone_prompt    | String    | false        |           |   Must match the audio content exactly, including punctuation, to enhance clone quality   |
+| - need_volume_normalization    | Boolean    | false        |      false     | Audio cloning parameter: Enable volume normalization, defaults to false |
 | name          | String   | false        |           | Audio name |
 | webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
 
@@ -260,7 +263,7 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | input_text    | String   | true         |           | For input text, the per-request character limit depends on the subscription plan: Pro – 5,000, Pro Max – 10,000, Business – 50,000.  |
-| voice_id      | String   | true         |           | Voice ID, get this voice_id from your cloned voices or akool voice list.[getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
+| voice_id      | String   | true         |           | Voice ID, Voice synthesis ID. If both timber_weights and voice_id fields have values, timber_weights will not take effect.get this voice_id from your cloned voices or akool voice list.[getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 | voice_options | Object   | false        |           | Audio settings |
 | - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
@@ -271,6 +274,31 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 | - volume      | Integer  | false        |           | Volume (0-100) , Supported voice models: Akool Multilingual 2, Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
 | language_code    | String   | false         |           | Currently supported: Akool Multilingual 1, Akool Multilingual 3 and Akool Multilingual 4. When passing in, only Language code (ISO 639-1) such as "zh", "pt" is supported. This parameter is designed to enhance the use of minority languages. Adding audio effects will make it better, but it cannot achieve the effect of translation.|
+| extra_options |  Object  | false        |           | Additional parameter settings |
+| - previous_text |  String  | false      |           | Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation. |
+| - next_text    |  String  | false       |           | Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation. |
+| - apply_text_normalization    |  String  | false    |           | Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). This parameter controls text normalization with three modes: ‘auto’, ‘on’, and ‘off’. When set to ‘auto’, the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With ‘on’, text normalization will always be applied, while with ‘off’, it will be skipped.  |
+| - apply_language_text_normalization    | Boolean   | false         |    false  | Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). This parameter controls language text normalization. This helps with proper pronunciation of text in some supported languages. WARNING: This parameter can heavily increase the latency of the request. Currently only supported for Japanese. |
+| - latex_read | Boolean   | false   |     false     | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Controls whether to read LaTeX formulas, defaults to false. Note: 1. Formulas in the request must be enclosed with $$ 2. Backslashes (\) in formulas must be escaped as \\ |
+| - text_normalization    | Boolean  | false    |    false    | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). This parameter supports Chinese and English text normalization, improving performance in number reading scenarios but slightly increasing latency. Defaults to false if not provided. |
+| - audio_setting    | Object   |    false      |           | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Audio generation parameter settings |
+| -- sample_rate    | Integer   | false         |    32000  | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Audio sampling rate. Available range [8000, 16000, 22050, 24000, 32000, 44100], defaults to 32000 |
+| -- bitrate    |  Integer  | false         |    128000       | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Audio bitrate. Available range [32000, 64000, 128000, 256000], defaults to 128000. This parameter only affects mp3 format audio |
+| -- format    | String   | false         |     mp3      | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Audio format. Available options [mp3, wav], defaults to mp3. WAV format is only supported in non-streaming output |
+| -- channel    | Integer   | false         |     1      | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Number of audio channels. Available options: [1,2], where 1 is mono and 2 is stereo, defaults to 1 |
+| - timber_weights    | Array   | false         |           | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). List of mixed timbres, supporting up to 4 voice timbres. The higher the weight of a single timbre, the more similar the synthesized voice will be to that timbre. If both timber_weights and voice_id fields have values, timber_weights will not take effect.|
+| -- voice_id    |  String  | Required within timber_weights parameter   |           | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list).  Voice timbre ID, must be filled in together with the weight parameter. Get this voice_id from your cloned voices or akool voice list.[getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)  |
+| -- weight    |  Integer         |   Required within timber_weights parameter |       | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Weight of each voice timbre, must be filled in together with voice_id. Available range [1, 100], the higher the weight, the more similar the synthesized voice will be to that timbre |
+| - pronunciation_dict    |  Object  |    false      |          | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Pronunciation rules |
+| -- tone    | Array   |    false      |    ["燕少飞/(yan4)(shao3)(fei1)", "omg/oh my god"]      | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Define special pronunciation rules for characters or symbols. For Chinese text, tones are represented by numbers: 1 for first tone, 2 for second tone, 3 for third tone, 4 for fourth tone, 5 for neutral tone  |
+| - voice_modify    |  Object  |    false      |          | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Voice parameter adjustments |
+| -- pitch    |  Integer  |    false      |          | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Pitch adjustment (deep/bright), range [-100,100]. Values closer to -100 make the voice deeper; closer to 100 make it brighter |
+| -- intensity    |  Integer  |   false       |          | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Intensity adjustment (powerful/soft), range [-100,100]. Values closer to -100 make the voice more powerful; closer to 100 make it softer |
+| -- timbre    |  Integer  |   false       |          | Timbre adjustment (resonant/crisp), range [-100,100]. Values closer to -100 make the voice more resonant; closer to 100 make it crisper |
+| -- sound_effects    | String   |   false       |          | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Sound effects settings, only one can be selected at a time. Available options: spacious_echo (spacious echo), auditorium_echo (auditorium broadcast), lofi_telephone (telephone distortion), robotic (electronic voice) |
+| - subtitle_enable    | Boolean   |   false       |          | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Controls whether to enable subtitle service, defaults to false. This parameter is only effective in non-streaming output scenarios |
+| - pitch    | Integer   |   false       |          | Supported voice models: Akool Multilingual 3, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list). Voice pitch, range [-12, 12], where 0 outputs the original timbre. Value must be an integer. |
+
 
 **Response Attributes**
 
@@ -309,18 +337,59 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 
 ```json
 {
-    "input_text": "Welcome to the Akool generative AI content creation tool.",
-    "voice_id": "Tq06jbVyFH4l6R-Gjvo_V-p_nVYk5DRrYJZsxeDmlhEtyhcFKKLQODmgngI9llKw",
+    "input_text": "暮春时节，牡丹园内千层叠瓣的姚黄魏紫次第苏醒。晨露未晞时，花瓣边缘凝着水晶般的珠光，内里丝绸质地的绛红由浅及深晕染开来，如同将晚霞裁作衣裳。风过处，花浪翻涌，金蕊颤动间暗香浮动，引得蜂蝶在花心盘旋出金色的漩涡。最是那株绿牡丹，初绽时青玉雕琢似的瓣尖泛着月白，待全盛时竟如翡翠盏中盛着冰酿，教人疑心是王母瑶池遗落的仙品。偶有花瓣飘落，便成了绣毯上滚动的玛瑙珠，连泥土都浸染了雍容的芬芳。这般倾国之色，难怪刘禹锡咏道唯有牡丹真国色，花开时节动京城——它用整季的绚烂，诠释了何为花中魁首的盛大气象。",
+    "voice_id": "6889b628662160e2caad5dbc",
     "voice_options": {
-        "stability": 0.7,
-        "similarity_boost": 0.5,
-        "style": 0.6,
-        "speed": 0.8,
-        "speaker_boost": false,
-        "emotion": "happy",
-        "volume": 50
+        "speed": 1.0
     },
-    "webhookUrl": ""
+    "pitch": -5,
+    "webhookUrl": "http://u4e68589.natappfree.cc/aiVedioGenerate/generateAiVedioWebhook",
+    "language_code": "zh",
+    "extra_options": {
+        "previous_text": "暮春时节，牡丹园内千层叠瓣的姚黄魏紫次第苏醒。晨露未晞时，花瓣边缘凝着水晶般的珠光，内里丝绸质地的绛红由浅及深晕染开来，如同将晚霞裁作衣裳。风过处，花浪翻涌，金蕊颤动间暗香浮动，引得蜂蝶在花心盘旋出金色的漩涡。最是那株绿牡丹，初绽时青玉雕琢似的瓣尖泛着月白，待全盛时竟如翡翠盏中盛着冰酿，教人疑心是王母瑶池遗落的仙品。偶有花瓣飘落，便成了绣毯上滚动的玛瑙珠，连泥土都浸染了雍容的芬芳。这般倾国之色，难怪刘禹锡咏道唯有牡丹真国色，花开时节动京城——它用整季的绚烂，诠释了何为花中魁首的盛大气象。",
+        "next_text": "暮春时节，牡丹园内千层叠瓣的姚黄魏紫次第苏醒。晨露未晞时，花瓣边缘凝着水晶般的珠光，内里丝绸质地的绛红由浅及深晕染开来，如同将晚霞裁作衣裳。风过处，花浪翻涌，金蕊颤动间暗香浮动，引得蜂蝶在花心盘旋出金色的漩涡。最是那株绿牡丹，初绽时青玉雕琢似的瓣尖泛着月白，待全盛时竟如翡翠盏中盛着冰酿，教人疑心是王母瑶池遗落的仙品。偶有花瓣飘落，便成了绣毯上滚动的玛瑙珠，连泥土都浸染了雍容的芬芳。这般倾国之色，难怪刘禹锡咏道唯有牡丹真国色，花开时节动京城——它用整季的绚烂，诠释了何为花中魁首的盛大气象。",
+        "apply_text_normalization": "auto",
+        "apply_language_text_normalization": true,
+        "latex_read": true,
+        "text_normalization": true,
+        "audio_setting": {
+            "sample_rate": 24000,
+            "bitrate": 32000,
+            "format": "mp3",
+            "channel": 2
+        },
+        "timber_weights": [
+            {
+                "voice_id": "6889b7f4662160e2caad60e9",
+                "weight": 80
+            },
+            {
+                "voice_id": "6889b7f3662160e2caad60e8",
+                "weight": 60
+            },
+            {
+                "voice_id": "6889b7f3662160e2caad60e7",
+                "weight": 30
+            },
+            {
+                "voice_id": "6889b7f2662160e2caad60e6",
+                "weight": 10
+            }
+        ],
+        "pronunciation_dict": {
+            "tone" : [
+                    "雍容/(yong3)(neng4)",
+                    "牡丹/(mu4)(dan3)"
+                ]
+        },
+        "voice_modify": {
+            "pitch": 50,
+            "intensity": 30,
+            "timbre": -50,
+            "sound_effects": "robotic"
+        },
+        "subtitle_enable": true
+    }
 }
 ```
 
@@ -512,6 +581,7 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 | - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
+| - file_format | String | false | mp3 | File format, supports mp3 and wav formats.|
 | webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
 
 **Response Attributes**
