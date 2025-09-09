@@ -35,7 +35,7 @@ yarn add agora-rtc-sdk-ng
 import AgoraRTC, { IAgoraRTCClient } from "agora-rtc-sdk-ng";
 ```
 
-3. Add the hidden API of Agora SDK
+3. add the hidden API of Agora SDK
 
 Agora SDK's sendStreamMessage is not exposed, so we need to add it manually. And it has some limitations, so we need to handle it carefully.
 
@@ -377,7 +377,7 @@ export async function sendMessageToAvatar(client: RTCClient, messageId: string, 
 
 ### 6. Control Avatar Parameters
 
-Implement functions to control avatar settings:
+Implement functions to control avatar settingS:
 
 ```ts
 async function setAvatarParams(client: IAgoraRTCClient, params: {
@@ -663,7 +663,7 @@ async function sendMessageToAvatarWithLLM(
 
 ### 10. Cleanup
 
-Cleanup can also be performed either directly or through your backend:
+Cleanup can also be perforemd either directly or through your backend:
 
 ```ts
 // Browser Implementation
@@ -721,9 +721,9 @@ When implementing through your backend, make sure to:
 - Consider implementing session management and monitoring
 </Info>
 
-### 11. Putting It All Together
+### 11. Putting it all together
 
-Here's how to use all the components together:
+Here's how to use all the components togeter:
 
 ```ts
 async function initializeStreamingAvatar() {

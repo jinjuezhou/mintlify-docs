@@ -294,7 +294,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/resultsByIds
 | - deduction_credit | Integer | Actual credits deducted |
 | - effect_code | String  | Effect code |
 | - video_url  | String   | Generated video URL |
-| - status     | Integer  | Status: 1=queueing, 2=processing, 3=completed, 4=failed |
+| - status     | Integer  | Status: 1= queueing, 2= processing, 3= completed, 4= failed |
 | - only_add_audio | Boolean | Whether only audio was added |
 
 ### Example
@@ -463,17 +463,17 @@ GET https://openapi.akool.com/api/open/v4/image2Video/effects
 
 | **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
 | ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - code          | Integer  | API returns status code (1000:success)                                                                                                                                                                   |
-| - msg           | String   | API returns status message                                                                                                                                                                                   |
-| - data          | Object   | Response data object |
-| - result      | Array    | Array of effect objects |
-| - _id        | String   | Effect document ID |
-| - create_time | Long    | Creation timestamp |
-| - logo       | String   | Effect logo URL |
-| - name       | String   | Effect name |
-| - video_url  | String   | Effect preview video URL |
-| - effect_code | String  | Effect code |
-| - count       | Integer  | Total number of effects |
+| - code          | Integer  | API returns status code (1000:success)   |
+| - msg           | String   | API returns status message               |
+| - data          | Object   | Response data object                     |
+| - result        | Array    | Array of effect objects                  |
+| - _id           | String   | Effect document ID                       |
+| - create_time   | Long     | Creation timestamp                       |
+| - logo          | String   | Effect logo URL                          |
+| - name          | String   | Effect name                              |
+| - video_url     | String   | Effect preview video URL                 |
+| - effect_code   | String   | Effect code                              |
+| - count         | Integer  | Total number of effects                  |
 
 **Request**
 
@@ -600,30 +600,30 @@ POST https://openapi.akool.com/api/open/v4/image2Video/updateVideoAudio
 
 | **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
 | ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - code          | Integer  | API returns status code (1000:success)                                                                                                                                                                   |
-| - msg           | String   | API returns status message                                                                                                                                                                                   |
-| - data          | Object   | Response data object |
-| - create_time | Long     | Creation timestamp |
-| - uid         | Integer  | User ID |
-| - team_id     | String   | Team ID |
-| - update_time | Long     | Last update time |
-| - video_duration | Number | Video duration |
-| - webhookUrl  | String   | Callback URL |
-| - resolution  | String   | Resolution |
-| - file_name   | String   | File name |
-| - effect_name | String   | Effect name |
-| - _id         | String   | Document ID |
-| - pre_video_id | String  | Original video ID |
-| - image_url   | String   | Image URL |
-| - prompt      | String   | Prompt text |
-| - negative_prompt | String | Negative prompt |
-| - extend_prompt | Boolean | Whether extended prompts were used |
-| - audio_type  | Integer  | Audio type |
-| - audio_url   | String   | Audio URL |
-| - deduction_credit | Integer | Credits deducted |
-| - effect_code | String   | Effect code |
-| - status      | Integer  | Status: 1=queueing, 2=processing, 3=completed, 4=failed |
-| - only_add_audio | Boolean | Whether only audio was added |
+| - code                | Integer  | API returns status code (1000:success)                 |
+| - msg                 | String   | API returns status message                             |
+| - data                | Object   | Response data object                                   |
+| - create_time         | Long     | Creation timestamp                                     |
+| - uid                 | Integer  | User ID                                                |
+| - team_id             | String   | Team ID                                                |
+| - update_time         | Long     | Last update time                                       |
+| - video_duration      | Number   | Video duration                                         |
+| - webhookUrl          | String   | Callback URL                                           |
+| - resolution          | String   | Resolution                                             |
+| - file_name           | String   | File name                                              |
+| - effect_name         | String   | Effect name                                            |
+| - _id                 | String   | Document ID                                            |
+| - pre_video_id        | String   | Original video ID                                      |
+| - image_url           | String   | Image URL                                              |
+| - prompt              | String   | Prompt text                                            |
+| - negative_prompt     | String   | Negative prompt                                        |
+| - extend_prompt       | Boolean  | Whether extended prompts were used                     |
+| - audio_type          | Integer  | Audio type                                             |
+| - audio_url           | String   | Audio URL                                              |
+| - deduction_credit    | Integer  | Credits deducted                                       |
+| - effect_code         | String   | Effect code                                            |
+| - status              | Integer  | Status: 1=queueing, 2=processing, 3=completed, 4=failed|
+| - only_add_audio      | Boolean  | Whether only audio was added                           |
 
 ### Example
 
@@ -782,15 +782,15 @@ POST https://openapi.akool.com/api/open/v4/image2Video/delbyids
 
 **Response Attributes**
 
-| **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
-| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - code          | Integer  | API returns status code (1000:success)                                                                                                                                                                   |
-| - msg           | String   | API returns status message                                                                                                                                                                                   |
-| - data          | Object   | Response data object |
-| - successIds  | Array    | Successfully deleted video IDs |
-| - noPermissionItems | Array | Failed deletion information list |
-| - _id        | String   | Failed deletion video ID |
-| - msg        | String   | Failure reason |
+| **Parameter**       | **Type** | **Description**                                                                                                                                                                                                        |
+| ------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - code              | Integer  | API returns status code (1000:success)                                                                                                                                                                   |
+| - msg               | String   | API returns status message                                                                                                                                                                                   |
+| - data              | Object   | Response data object |
+| - successIds        | Array    | Successfully deleted video IDs |
+| - noPermissionItems | Array    | Failed deletion information list |
+| - _id               | String   | Failed deletion video ID |
+| - msg               | String   | Failure reason |
 
 ### Example
 
