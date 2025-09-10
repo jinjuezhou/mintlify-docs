@@ -42,6 +42,7 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 | - need_volume_normalization    | Boolean    | false        |      false     | Audio cloning parameter: Enable volume normalization, defaults to false |
 | name          | String   | false        |           | Audio name |
 | webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
+| voice_model_name    | String   | false         |           | The designated model for Clone, Supported voice models: Akool Multilingual 1, Akool Multilingual 3, Akool Multilingual 4. [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 
 **Response Attributes**
 
@@ -576,6 +577,7 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 | - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - file_format | String | false | mp3 | File format, supports mp3 and wav formats.|
 | webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
+| voice_model_name    | String   | false         |           | The designated model for Clone, Supported voice models: Akool Multilingual 1. [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 
 **Response Attributes**
 
