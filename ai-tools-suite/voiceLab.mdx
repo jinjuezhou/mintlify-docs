@@ -38,7 +38,7 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 | - scenario    | Array    | false        |           | Use case tags (e.g., ["Advertisement", "Education"]) |
 | - remove_background_noise    | Boolean    | false        |      false     | Remove background noise, disabled by default |
 | - language    | String    | false        |      en     | Language code (ISO 639-1) of the audio file. Defaults to "en" if not specified |
-| - clone_prompt    | String    | false        |           |   Must match the audio content exactly, including punctuation, to enhance clone quality   |
+| - clone_prompt    | String    | false        |           |   Must match the audio content exactly, including punctuation, to enhance clone quality. Sound reproduction example audio. Providing this parameter will help enhance the similarity and stability of the voice synthesis's sound quality. If using this parameter, a small sample audio segment must also be uploaded. The audio file uploaded must comply with the following specifications: The format of the uploaded audio file should be: mp3 or wav format; The duration of the uploaded audio file should be less than 8 seconds; The size of the uploaded audio file should not exceed 20 MB;   |
 | - need_volume_normalization    | Boolean    | false        |      false     | Audio cloning parameter: Enable volume normalization, defaults to false |
 | name          | String   | false        |           | Audio name |
 | webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
@@ -1268,7 +1268,7 @@ print(response.text)
 }
 ```
 
-### Get Voice Detail
+## Get Voice Detail
 
 ```
 GET https://openapi.akool.com/api/open/v4/voice/detail/{_id}
@@ -1421,7 +1421,7 @@ print(response.text)
 }
 ```
 
-### Get Voice Result Detail
+## Get Voice Result Detail
 
 ```
 GET https://openapi.akool.com/api/open/v4/voice/resource/detail/{_id}
