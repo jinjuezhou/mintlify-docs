@@ -65,7 +65,7 @@
     {
       "group": "AI Tools Suite",
       "pages": [
-        "ai-tools-suite/faceswap",
+        "ai-tools-suite/faceSwap",
         "ai-tools-suite/live-faceswap",
         "ai-tools-suite/reage",
         "ai-tools-suite/voiceLab",
@@ -74,7 +74,7 @@
         "ai-tools-suite/talking-avatar",
         "ai-tools-suite/background-change",
         "ai-tools-suite/lip-sync",
-        "ai-tools-suite/live-avatar",
+        "ai-tools-suite/streaming-avatar",
         "ai-tools-suite/image-generate",
         "ai-tools-suite/jarvis-moderator",
         "ai-tools-suite/image2video",
