@@ -14,20 +14,20 @@ This document provides comprehensive API documentation for the [akool-streaming-
 
 ---
 
-# **GenericAgoraSDK Class Documentation**
+# GenericAgoraSDK Class Documentation
 
-## **Constructor**
+## Constructor
 
 ### **`new GenericAgoraSDK(options?: { mode?: string; codec?: SDK_CODEC })`**
 
 Creates an instance of the Generic Agora SDK.
 
-#### **Parameters:**
+#### Parameters:
 
 - `options.mode` (string) - Optional. SDK mode (default: "rtc")
 - `options.codec` (SDK_CODEC) - Optional. Video codec (e.g., "vp8", "h264")
 
-#### **Example Usage:**
+#### Example Usage:
 
 ```javascript
 import { GenericAgoraSDK } from 'akool-streaming-avatar-sdk';
@@ -37,17 +37,17 @@ const agoraSDK = new GenericAgoraSDK({ mode: "rtc", codec: "vp8" });
 
 ---
 
-## **Connection Management**
+## Connection Management
 
-### **`async joinChannel(credentials: AgoraCredentials): Promise<void>`**
+### `async joinChannel(credentials: AgoraCredentials): Promise<void>`**
 
 Joins an Agora RTC channel using the provided credentials.
 
-#### **Parameters:**
+#### Parameters:
 
 - `credentials` (AgoraCredentials) - Agora connection credentials
 
-#### **Example Usage:**
+### **Example Usage:**
 
 ```javascript
 await agoraSDK.joinChannel({
@@ -62,7 +62,7 @@ await agoraSDK.joinChannel({
 
 Leaves the current Agora RTC channel.
 
-#### **Example Usage:**
+#### Example Usage:
 
 ```javascript
 await agoraSDK.leaveChannel();
@@ -141,11 +141,11 @@ await agoraSDK.joinChat({
 
 Sets avatar parameters. Refer to the avatar parameter documentation for details.
 
-#### **Parameters:**
+#### Parameters:
 
 - `metadata` (Metadata) - Avatar configuration parameters
 
-#### **Example Usage:**
+#### Example Usage:
 
 ```javascript
 agoraSDK.setParameters({
@@ -159,7 +159,7 @@ agoraSDK.setParameters({
 
 Leaves the chat session but maintains the channel connection.
 
-#### **Example Usage:**
+#### Example Usage:
 
 ```javascript
 await agoraSDK.leaveChat();
@@ -227,7 +227,7 @@ if (message) {
 
 ---
 
-## **Audio Management**
+## Audio Management
 
 ### **`async toggleMic(): Promise<void>`**
 
@@ -257,7 +257,7 @@ console.log("Microphone is:", micEnabled ? "on" : "off");
 
 ---
 
-## **Client Access**
+## Client Access
 
 ### **`getClient(): RTCClient`**
 
@@ -382,7 +382,7 @@ interface NetworkStats {
 }
 ```
 
-### **`SDKEvents`**
+### `SDKEvents`
 
 Interface defining all available event handlers.
 
@@ -407,8 +407,7 @@ interface SDKEvents {
 
 ---
 
-## **Complete Example**
-
+## Complete Example
 Here's a comprehensive example demonstrating how to use the SDK:
 
 ```javascript
@@ -527,7 +526,7 @@ initializeSession();
 
 ---
 
-## **Error Handling**
+## Error Handling
 
 The SDK provides comprehensive error handling through the `onException` event:
 
@@ -556,7 +555,7 @@ agoraSDK.on({
 
 ---
 
-## **Requirements**
+## Requirements
 
 - Node.js 14 or higher (for development)
 - Modern browser with WebRTC support
@@ -565,7 +564,7 @@ agoraSDK.on({
 
 ---
 
-## **Browser Support**
+## Browser Support
 
 - Chrome 56+
 - Firefox 44+
@@ -575,7 +574,7 @@ agoraSDK.on({
 
 ---
 
-## **Additional Resources**
+## Additional Resources
 
 - [Getting Started Guide](/sdk/jssdk-start)
 - [Best Practices](/sdk/jssdk-best-practice)

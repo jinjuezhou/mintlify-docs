@@ -16,7 +16,7 @@ To experience our live avatar streaming feature in action, explore our demo buil
 **Knowledge Base Integration:** You can enhance your streaming avatar with contextual AI responses by integrating a [Knowledge Base](/ai-tools-suite/knowledge-base). When creating a session, provide a `knowledge_id` parameter to enable the AI to use documents and URLs from your knowledge base for more accurate and relevant responses.
 </Note>
 
-### Upload Streaming Avatar
+## Upload Streaming Avatar
 
 ```
 POST https://openapi.akool.com/api/open/v3/avatar/create
@@ -26,27 +26,27 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 
 | **Parameter** | **Type** | **Required** | **Description** |
 |-----------|------|----------|-------------|
-| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [getToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
 
 **Body Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
-| avatar_id     | String   |           | avatar unique ID，Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
-| name          | String   |           | Avatar display name for easier identification and management.                                                                                                     |
-| type          | String   |    2      | Avatar type 2 represents stream avatar, When type is 2, you need to wait until status is 3 before you can use it, You can get the current status in real time through the interface *[GET https://openapi.akool.com/api/open/v3/avatar/detail](https://docs.akool.com/ai-tools-suite/talking-avatar#get-avatar-detail)*.                                                                                                 |
-| url_from      | Number   | 1，2      | url source, 1 means akool and other links, 2 means other third-party links (currently only supports YouTube / TikTok / X / Google Drive)                          |
+| url           | String   |           | The video should be approximately one minute long, with the avatar rotating slightly and remaining clear throughout the content. |
+| avatar_id     | String   |           | Avatar unique ID，can only contain /^a-z A-Z 0-9/.                                                                                                                                                 |
+| type          | String   |    2      | Avatar Type 2 refers to a stream avatar. When the type is set to 2, you must wait until the status is updated to 3 before it can be used. You can check the current status in real-time via the interface. *[GET https://openapi.akool.com/api/open/v3/avatar/detail](https://docs.akool.com/ai-tools-suite/talking-avatar#get-avatar-detail)*.                                                                                                 |
+| url_from      | Number   | 1，2      | URL source, 1 means akool and other links, 2 means other third-party links (currently only supports YouTube / TikTok / X / Google Drive)                          |
+
 
 **Response Attributes**
 
 | **Parameter** | **Type** | **Value**                                   | **Description**                                                                                                                                        |
 | ------------- | -------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| code          | int      | 1000                                        | Interface returns business status code(1000:success)                                                                                                   |
-| msg           | String   | OK                                          | Interface returns status information                                                                                                                   |
-| data          | Object   | `{ avatar_id: "xx", url: "", status: 1 }` | avatar_id: Used by creating live avatar interface. url: You can preview the avatar via the link. status: 1-queueing, 2-processing, 3-success, 4-failed |
+| code          | Int     | <p align="center">1000</p>                                       | API returns status code(1000:success)                                                                                                   |
+| msg           | String   | <p align="center">OK</p>                                          | API returns status message                                                                                                                   |
+| data          | Object   | <p align="center">`{ avatar_id: "xx", url: "", status: 1 }`</p>  | avatar_id: Used by creating live avatar interface. URL: You can preview the avatar via the link. status: (1: queueing, 2: processing, 3: success, 4: failed) |
 
-**Example**
+### Example
 
 **Request**
 
@@ -173,7 +173,7 @@ print(response.text)
 }
 ```
 
-### Get Streaming Avatar List
+## Get Streaming Avatar List
 
 ```http
 GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list
@@ -183,13 +183,13 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list
 
 | **Parameter** | **Type** | **Required** | **Description** |
 |-----------|------|----------|-------------|
-| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [getToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
 
 **Query Parameters**
 
 | **Parameter** | **Type** | **Required** | **Default** | **Description** |
 |-----------|------|----------|---------|-------------|
-| platform | String | No | open | open: openapi, aigc: akool web app |
+| platform | String | No | open | open: openAPI, aigc: akool web app |
 | page | Number | No | 1 | Page number for pagination |
 | size | Number | No | 100 | Number of items per page (max 100) |
 
@@ -217,7 +217,7 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list
 | type | Number | Avatar type identifier (2 for streaming avatars) |
 | from | Number | Source identifier for the avatar, 2 for official and 3 for user created |
 
-**Example**
+### Example
 
 **Request**
 
@@ -315,7 +315,7 @@ print(response.text)
 }
 ```
 
-### Get Streaming Avatar Detail
+## Get Streaming Avatar Detail
 
 ```http
 GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/detail
@@ -355,7 +355,7 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/detail
 | type | Number | Avatar type identifier (2 for streaming avatars) |
 | from | Number | Source identifier for the avatar, 2 for official and 3 for user created |
 
-**Example**
+### Example
 
 **Request**
 
@@ -448,7 +448,7 @@ print(response.text)
 }
 ```
 
-### Create session
+## Create session
 
 ```
 POST https://openapi.akool.com/api/open/v4/liveAvatar/session/create
@@ -464,8 +464,8 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/create
 
 | **Parameter** | **Type** | **Required** | **Description**                                                                                                                                                   |
 | ------------- | -------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| avatar_id     | String   | Yes          | Digital human model in real-time avatar, The current system provides only one option: "dvp_Tristan_cloth2_1080P". If you want to use a custom uploaded video, you need to call the *https://openapi.akool.com/api/open/v3/avatar/create* interface to create a template. This process takes some time to process. You can check the processing status through the interface *https://openapi.akool.com/api/open/v3/avatar/detail*. When status=3, you can use the avatar_id field to pass it in.|
-| duration      | Number   | No           | Session duration in seconds (max: 3600). Credits are pre-charged for the full duration, but any unused credits will be refunded after the session ends. Rates depend on your subscription plan. See our [API Pricing](https://akool.com/api-pricing) for details. |
+| avatar_id     | String   | Yes          | The system currently supports only one digital human model for real-time avatars: "dvp_Tristan_cloth2_1080P". To use a custom-uploaded video, you must first call the [Create Avatar Template](/https://openapi.akool.com/api/open/v3/avatar/create) API. This process may take some time. You can check the processing status via the [Avatar Detail](/https://openapi.akool.com/api/open/v3/avatar/detail) API. Once the status reaches 3, you can use the avatar_id field to proceed.|
+| duration      | Number   | No           | Session Duration is measured in seconds (maximum: 3600). Credits are charged for the full session duration, but any unused credits will be refunded once the session ends. The rates are based on your subscription plan. For more information, refer to our [API Pricing](https://akool.com/api-pricing). |
 | knowledge_id  | String   | No           | Knowledge base ID to provide context for AI responses. Create and manage knowledge bases using the [Knowledge Base API](/ai-tools-suite/knowledge-base). When provided, the AI will use documents and URLs from the knowledge base to enhance response accuracy. |
 | voice_id      | String   | No           | Voice ID to change avatar's voice. Get valid IDs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
 | voice_url     | String   | No           | Custom voice model URL. Get valid URLs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
@@ -478,18 +478,18 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/create
 
 | **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
 | ------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| speed         | double   |                                                 | Controls the speed of the generated speech. Values range from 0.8 to 1.2, with 1.0 being the default speed. |
+| speed         | Double   |                                                 | Controls the speed of the generated speech. Values range from 0.8 to 1.2, with 1.0 being the default speed. |
 | pron_map      | Object   |                                                 | Pronunciation mapping for custom words. Example: "pron_map": \{ "akool" : "ai ku er" \} |
 
 **Response Parameters**
 
 | **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
 | ------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | int      | 1000                                            | Interface returns business status code(1000:success)                                                                                                  |
-| msg           | String   |                                                 | Interface returns status information                                                                                                                  |
-| data          | Object   | `{ "_id": "", "status": 1, "credentials": {} }` | `_id`: Interface returns data, status: the status of session: [1:queueing, 2:processing, 3:completed, 4:failed], credentials: the join information for the Agora SDK |
+| code          | Int     | <p align="center">1000</p>                                            | API returns status code(1000:success)                                                                                                  |
+| msg           | String   |                                                 | API returns status message                                                                                                                  |
+| data          | Object   | <p align="center">`{ "_id": "", "status": 1, "credentials": {} }`</p> | `_id`: Interface returns data, status: the status of session: [1: queueing, 2: processing, 3: completed, 4: failed], credentials: the join information for the Agora SDK |
 
-**Example**
+### Example
 
 **Body**
 
@@ -627,7 +627,7 @@ print(response.text)
 }
 ```
 
-### Get Session Info Result
+## Get Session Info Result
 
 ```
 GET https://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420
@@ -637,23 +637,23 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 | ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](/authentication/usage#get-the-token) |
 
 **Query Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                    |
 | ------------- | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| id            | String   | NULL      | video db id: You can get it based on the `_id` field returned by [Create Session](/ai-tools-suite/live-avatar#create-session) . |
+|  id            | String   | NULL      | video db id: You can get it based on the `_id` field returned by [Create Session](/ai-tools-suite/live-avatar#create-session) . |
 
 **Response Attributes**
 
-| **Parameter** | **Type** | **Value**                              | **Description**                                                                                                                                          |
-| ------------- | -------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | int      | 1000                                   | Interface returns business status code(1000:success)                                                                                                     |
-| msg           | String   | OK                                     | Interface returns status information                                                                                                                     |
-| data          | Object   | `{ status:1, _id:"", credentials:{} }` | status: the status of live avatar:(1:queueing, 2:processing, 3:completed, 4:failed) credentials: the url of live avatar, \_id: Interface returns data |
+| **Parameter** | **Type** | **Value** | **Description**                                                                                                                    |
+| ------------- | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| code          | Int     | <p align="center">1000</p>                                  | API returns status code(1000:success)                                                                                                     |
+| msg           | String   | <p align="center">OK</p>                                    | API returns status message                                                                                                                     |
+| data          | Object   | <p align="center">`{ status:1, _id:"", credentials:{} }`</p> | status: the status of live avatar:(1: queueing, 2: processing, 3: completed, 4: failed) credentials: the URL of live avatar, \_id: Interface returns data |
 
-**Example**
+### Example
 
 **Request**
 
@@ -745,7 +745,7 @@ print(response.text)
 }
 ```
 
-### Close Session
+## Close Session
 
 ```
 POST https://openapi.akool.com/api/open/v4/liveAvatar/session/close
@@ -761,16 +761,16 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/close
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                   |
 | ------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| id            | String   | NULL      | session id: You can get it based on the `_id` field returned by [Create session](/ai-tools-suite/live-avatar#create-session) . |
+| id            | String   | NULL      | Session id: You can get it based on the `_id` field returned by [Create session](/ai-tools-suite/live-avatar#create-session) . |
 
 **Response Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                      |
 | ------------- | -------- | --------- | ---------------------------------------------------- |
-| code          | int      | 1000      | Interface returns business status code(1000:success) |
-| msg           | String   | OK        | Interface returns status information                 |
+| code          | Int     | 1000      | API returns status code(1000:success) |
+| msg           | String   | OK        | API returns status message                 |
 
-**Example**
+### Example
 
 **Request**
 
@@ -850,7 +850,7 @@ print(response.text)
 }
 ```
 
-### Get Session List
+## Get Session List
 
 ```
 GET https://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10&status=1
@@ -868,17 +868,17 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10
 | ------------- | -------- | --------- | -------------------------------------------------------------------- |
 | page          | Number   | 1         | Current number of pages, Default is 1.                               |
 | size          | Number   | 10        | Current number of returns per page, Default is 100.                  |
-| status        | Number   | NULL      | session status: (1:queueing, 2:processing, 3:completed, 4:failed). |
+| status        | Number   | NULL      | Session status: (1:queueing, 2:processing, 3:completed, 4:failed). |
 
 **Response Attributes**
 
 | **Parameter** | **Type** | **Value**                                                  | **Description**                                           |
 | ------------- | -------- | ---------------------------------------------------------- | --------------------------------------------------------- |
-| code          | int      | 1000                                                       | Interface returns business status code(1000:success)      |
-| msg           | String   | OK                                                         | Interface returns status information                      |
-| data          | Array    | `{count: 1, data: [{ credentials: {} }] }` | task_id: task id of session. url: the url of live avatar. |
+| code          | Int     | <p align="center">1000</p>                                                      | API returns status code(1000:success)      |
+| msg           | String   | <p align="center">OK</p>                                                        | API returns status message                      |
+| data          | Array    | <p align="center">`{count: 1, data: [{ credentials: {} }] }`</p> | task_id: task id of session. url: the url of live avatar. |
 
-**Example**
+### Example
 
 **Request**
 
@@ -975,7 +975,7 @@ print(response.text)
 }
 ```
 
-### Live Avatar Stream Message
+## Live Avatar Stream Message
 
 ```ts
 IAgoraRTCClient.on(event: "stream-message", listener: (uid: UID, pld: Uint8Array) => void)
@@ -983,13 +983,13 @@ IAgoraRTCClient.on(event: "stream-message", listener: (uid: UID, pld: Uint8Array
 IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Promise<void>;
 ```
 
-**Send Data**
+### Send Data
 
 **Chat Type Parameters**
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description** |
 | ------------- | -------- | ------------ | --------- | --------------- |
-| v | Number | Yes | 2 | Version of the message |
+| v | Number | Yes | <p align="center">2</p> | Version of the message |
 | type | String | Yes | chat | Message type for chat interactions |
 | mid | String | Yes | | Unique message identifier for conversation tracking |
 | idx | Number | Yes | | Sequential index of the message, start from 0 |
@@ -1001,7 +1001,7 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description** |
 | ------------- | -------- | ------------ | --------- | --------------- |
-| v | Number | Yes | 2 | Protocol version number |
+| v | Number | Yes | <p align="center">2</p> | Protocol version number |
 | type | String | Yes | command | Specifies this is a system command message |
 | mid | String | Yes | | Unique ID to track and correlate command messages |
 | pld | Object | Yes | | Contains the command details and parameters |
@@ -1066,31 +1066,31 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 
 </CodeGroup>
 
-**Receive Data** 
+### Receive Data 
 
 **Chat Type Parameters**
 
 | **Parameter** | **Type** | **Value** | **Description** |
 | ------------- | -------- | --------- | --------------- |
-| v | Number | 2 | Version of the message |
-| type | String | chat | Message type for chat interactions |
+| v | Number | <p align="center">2</p> | Version of the message |
+| type | String | <p align="center">chat </p>| Message type for chat interactions |
 | mid | String | | Unique message identifier for tracking conversation flow |
 | idx | Number | | Sequential index of the message part |
 | fin | Boolean | | Indicates if this is the final part of the response |
 | pld | Object | | Container for message payload |
-| pld.from | String | "bot" or "user" | Source of the message - "bot" for avatar responses, "user" for speech recognition input |
+| pld.from | String | <p align="center">"bot" or "user" </p> | Source of the message - "bot" for avatar responses, "user" for speech recognition input |
 | pld.text | String | | Text content of the message |
 
 **Command Type Parameters**
 
 | **Parameter** | **Type** | **Value** | **Description** |
 | ------------- | -------- | --------- | --------------- |
-| v | Number | 2 | Version of the message |
-| type | String | command | Message type for system commands |
+| v | Number | <p align="center">2</p> | Version of the message |
+| type | String | <p align="center">command</p> | Message type for system commands |
 | mid | String | | Unique identifier for tracking related messages in a conversation |
 | pld | Object | | Container for command payload |
-| pld.cmd | String | "set-params", "interrupt" | Command to execute: **"set-params"** to update avatar settings, **"interrupt"** to stop current response |
-| pld.code | Number | 1000 | Response code from the server, 1000 indicates success |
+| pld.cmd | String | <p align="center">"set-params", "interrupt"</p> | Command to execute: **"set-params"** to update avatar settings, **"interrupt"** to stop current response |
+| pld.code | Number | <p align="center">1000</p> | Response code from the server, 1000 indicates success |
 | pld.msg | String | | Response message from the server |
 
 **JSON Example**
@@ -1191,7 +1191,7 @@ const interruptResponse = async () => {
 
 </CodeGroup>
 
-### Integrating Your Own LLM Service
+## Integrating Your Own LLM Service
 
 Before dispatching a message to the WebSocket, consider executing an HTTP request to your LLM service.
 
@@ -1247,7 +1247,7 @@ client.sendStreamMessage(JSON.stringify(message), false);
 
 </CodeGroup>
 
-### Response Code Description
+## Response Code Description
 
 <Note>
   {" "}
@@ -1257,19 +1257,19 @@ client.sendStreamMessage(JSON.stringify(message), false);
 
 | **Parameter** | **Value** | **Description**                                                                   |
 | ------------- | --------- | --------------------------------------------------------------------------------- |
-| code          | 1000      | Success                                                                           |
-| code          | 1003      | Parameter error or Parameter can not beempty                                      |
-| code          | 1008      | The content you get does not exist                                                |
-| code          | 1009      | Youdo not have permission to operate                                              |
-| code          | 1101      | Invalid authorization or Therequest token has expired                             |
+| code          | 1000      | Request completed successfully                                                                           |
+| code          | 1003      | Invalid or missing parameters                                      |
+| code          | 1008      | The request content does not exist                                                |
+| code          | 1009      | Permission denied                                              |
+| code          | 1101      | Invalid authorization or the request token has expired                             |
 | code          | 1102      | Authorization cannot be empty                                                     |
-| code          | 1200      | The account has been banned                                                       |
-| code          | 1201      | create audio error, pleasetry again later                                         |
-| code          | 1202      | The same video cannot be translated lipSync inthe same language more than 1 times |
+| code          | 1200      | The account has been suspended                                                       |
+| code          | 1201      | Audio creation processing error                       |
+| code          | 1202      | The same video cannot be translated lipSync in the same language more than 1 times |
 | code          | 1203      | video should be with audio                                                        |
 | code          | 1204      | Your video duration is exceed 60s!                                                |
-| code          | 1205      | Create videoerror, please try again later                                         |
-| code          | 1207      | The video you are using exceeds thesize limit allowed by the system by 300M       |
-| code          | 1209      | Please upload a videoin another encoding format                                   |
-| code          | 1210      | The video you are using exceeds thevalue allowed by the system by 60fp            |
-| code          | 1211      | Create lipsync error, pleasetry again later                                       |
+| code          | 1205      | Video creation processing error                                        |
+| code          | 1207      | Video size exceed. The size limit allowed by the system is 300M.      |
+| code          | 1209      | The video encoding format is not supported                                  |
+| code          | 1210      | Video fps exceeded. The value allowed by the system is 60fps           |
+| code          | 1211      | Creating lipsync error                                   |

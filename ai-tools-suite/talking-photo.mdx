@@ -8,7 +8,7 @@ description: ''
 Experience our talking photo technology in action by exploring our interactive demo on GitHub: [AKool Talking Photo Demo](https://github.com/AKOOL-Official/akool-talking-photo-demo).
 </Info>
 
-### Talking Photo
+## Talking Photo
 
 ```
 POST https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto
@@ -18,25 +18,22 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token). |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token). |
 
 **Body Attributes**
 
-| Parameter         | Type   | Value | Description                                |
-|-------------------|--------|-------|--------------------------------------------|
-| talking_photo_url | String |       | resource address of the talking picture    |
-| audio_url         | String |       | resource address of the talking audio      |
-| webhookUrl        | String |       | Callback url address based on HTTP request |
-
-**Response Attributes**
+| **Parameter**        | Type   | Value | Description                                |
+|----------------------|--------|-------|--------------------------------------------|
+| talking_photo_url    | String |       | Resource address of the talking picture    |
+| audio_url            | String |       | Resource address of the talking audio      |
 
 | Parameter | Type   | Value                                    | Description                                                                                                                                       |
 |-----------|--------|------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| code      | int    | 1000                                     | Interface returns business status code (1000:success)                                                                                             |
-| msg       | String |                                          | Interface returns status information                                                                                                              |
-| data      | Object | `{  _id:"",  video_status:3, video:"" }` | `_id`: Interface returns data status: the status of video: [1:queueing, 2:processing, 3:completed, 4:failed], `video`: the url of Generated video |
+| code      | Int   | <p align="center">1000</p>                                  |  API returns status code (1000:success)                                                                                             |
+| msg       | String |                                          |  API returns status message                                                                                                               |
+| data      | Object | <p align="center">`{  _id:"",  video_status:3, video:"" }`</p> | `_id`: Interface returns data status: the status of video: [1:queueing, 2:processing, 3:completed, 4:failed], `video`: the url of Generated video |
 
-**Example**
+### Example
 
 **Body**
 
@@ -44,7 +41,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto
 {
     "talking_photo_url":"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
     "audio_url":"https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
-    "webhookUrl":""  
+    "webhookUrl":""
 }
 ```
 
@@ -59,7 +56,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytal
 --data '{
     "talking_photo_url":"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
      "audio_url":"https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
-     "webhookUrl":""  
+     "webhookUrl":""
 }'
 ```
 
@@ -102,7 +99,7 @@ fetch("https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto"
   .catch((error) => console.error(error));
 ```
 
-```php PHP 
+```php PHP
 <?php
 $client = new Client();
 $headers = [
@@ -120,7 +117,7 @@ echo $res->getBody();
 
 ```
 
-```python Python 
+```python Python
 import requests
 import json
 
@@ -169,7 +166,7 @@ print(response.text)
 }
 ```
 
-### Get Video Info Result
+## Get Video Info Result
 
 ```
 GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64dd838cf0b6684651e90217
@@ -193,11 +190,11 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 | **Parameter** | **Type** | **Value**                              | **Description**                                                                                                                                              |
 |---------------|----------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| code          | int      | 1000                                   | Interface returns business status code (1000:success)                                                                                                        |
-| msg           | String   | OK                                     | Interface returns status information                                                                                                                         |
-| data          | Object   | `{ video_status:1, _id:"", video:"" }` | `video_status`: the status of video: [1:queueing, 2:processing, 3:completed, 4:failed], `video`: Generated video resource url, `_id`: Interface returns data |
+| code          | Int     | <p align="center">1000</p>                                 |  API returns status code (1000:success)                                                                                                        |
+| msg           | String   | <p align="center">OK</p>                                  |  API returns status message                                                                                                                          |
+| data          | Object   | <p align="center">`{ video_status:1, _id:"", video:"" }`</p>   | `video_status`: the status of video: [1: queueing, 2: processing, 3: completed, 4: failed], `video`: Generated video resource url, `_id`: Interface returns data |
 
-**Example**
+### Example
 
 **Request**
 
@@ -208,7 +205,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/infobymodel
 --header 'Authorization: Bearer token'
 ```
 
-```java Java 
+```java Java
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("text/plain");
@@ -237,7 +234,7 @@ fetch("https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_m
   .catch((error) => console.error(error));
 ```
 
-```php PHP 
+```php PHP
 <?php
 $client = new Client();
 $headers = [
@@ -248,7 +245,7 @@ $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ```
 
-```python Python 
+```python Python
 import requests
 
 url = "https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64dd838cf0b6684651e90217"
@@ -294,13 +291,13 @@ print(response.text)
 <Note> Please note that if the value of the response code is not equal to 1000, the request is failed or wrong</Note>
 | **Parameter** | **Value** | **Description**                                      |
 |---------------|-----------|------------------------------------------------------|
-| code          | 1000      | Success |
-| code          | 1003      | Parameter error  or Parameter can not be empty |
-| code          | 1008      | The content you get does not exist  |
-| code          | 1009      | You do not have permission to operate  |
+| code          | 1000      | Request completed successfully |
+| code          | 1003      | Invalid or missing parameters |
+| code          | 1008      | The request content does not exist  |
+| code          | 1009      | YPermission denied  |
 | code          | 1015      | Create video error, please try again later  |
-| code          | 1101      | Invalid authorization or The request token has expired  |
+| code          | 1101      | Invalid authorization or the request token has expired  |
 | code          | 1102      | Authorization cannot be empty  |
-| code          | 1200      | The account has been banned  |
-| code          | 1201      | Create audio error, please try again later  |
+| code          | 1200      | The account has been suspended  |
+| code          | 1201      | Audio creation processing error |
 

@@ -35,11 +35,11 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
-| **Parameter** | **Type** | **Required** | **Description**                                                                                                                                        |
+| **parameter** | **Type** | **Required** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | image_url     | String   | true         | Image URL to be animated |
 | prompt        | String   | true         | Prompt text describing how to animate the image |
@@ -50,16 +50,16 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt
 | audio_type    | Integer  | true         | Audio type: 1 = AI generate, 2 = user custom upload, 3 = none (no audio) |
 | video_length  | Integer  | true         | Video duration in seconds, options: 5, 10 (10s only available for pro and above subscriptions) |
 | is_premium_model | Boolean | false      | Whether to use premium video model for faster generation (pro and above subscriptions only) |
-| effect_code   | String   | false        | Effect code: if specified, prompt content will be ignored.[getEffectCode](https://docs.akool.com/ai-tools-suite/image2video#get-available-effects) |
+| effect_code   | String   | false        | Effect code: if specified, prompt content will be ignored. [getEffectCode](https://docs.akool.com/ai-tools-suite/image2video#get-available-effects) |
 | webhookurl    | String   | false        | Callback URL for POST requests |
 
 **Response Attributes**
 
 | **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
 | ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | Integer  | Interface returns business status code (1000:success)                                                                                                                                                                   |
-| msg           | String   | Interface returns status information                                                                                                                                                                                   |
-| data          | Object   | Response data object |
+| - code          | Integer  | API returns status code (1000:success) |
+| - msg           | String   | API returns status message             |
+| - data          | Object   | Response data object |
 | - create_time | Long     | Creation timestamp |
 | - uid         | Integer  | User ID |
 | - team_id     | String   | Team ID |
@@ -78,7 +78,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt
 | - deduction_credit | Integer | Credits deducted |
 | - effect_code | String   | Effect code used |
 
-**Example**
+### Example
 
 **Body**
 
@@ -261,7 +261,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/resultsByIds
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
@@ -273,31 +273,31 @@ POST https://openapi.akool.com/api/open/v4/image2Video/resultsByIds
 
 | **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
 | ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | Integer  | Interface returns business status code (1000:success)                                                                                                                                                                   |
-| msg           | String   | Interface returns status information                                                                                                                                                                                   |
-| data          | Object   | Response data object |
+| - code          | Integer  | API returns status code (1000:success)                                                                                                                                                                   |
+| - msg           | String   | API returns status message                                                                                                                                                                                   |
+| - data          | Object   | Response data object |
 | - result      | Array    | Array of result objects |
-| -- _id        | String   | Document ID |
-| -- create_time | Long    | Creation timestamp |
-| -- uid        | Integer  | User ID |
-| -- team_id    | String   | Team ID |
-| -- update_time | Long    | Last update time/completion time |
-| -- video_duration | Number | Actual video duration |
-| -- webhookUrl | String   | Callback URL |
-| -- file_name  | String   | File name |
-| -- effect_name | String  | Effect name |
-| -- image_url  | String   | Image URL |
-| -- prompt     | String   | Prompt text |
-| -- resolution | String   | Resolution |
-| -- audio_type | Integer  | Audio type |
-| -- audio_url  | String   | Audio URL |
-| -- deduction_credit | Integer | Actual credits deducted |
-| -- effect_code | String  | Effect code |
-| -- video_url  | String   | Generated video URL |
-| -- status     | Integer  | Status: 1=queueing, 2=processing, 3=completed, 4=failed |
-| -- only_add_audio | Boolean | Whether only audio was added |
+| - _id        | String   | Document ID |
+| - create_time | Long    | Creation timestamp |
+| - uid        | Integer  | User ID |
+| - team_id    | String   | Team ID |
+| - update_time | Long    | Last update time/completion time |
+| - video_duration | Number | Actual video duration |
+| - webhookUrl | String   | Callback URL |
+| - file_name  | String   | File name |
+| - effect_name | String  | Effect name |
+| - image_url  | String   | Image URL |
+| - prompt     | String   | Prompt text |
+| - resolution | String   | Resolution |
+| - audio_type | Integer  | Audio type |
+| - audio_url  | String   | Audio URL |
+| - deduction_credit | Integer | Actual credits deducted |
+| - effect_code | String  | Effect code |
+| - video_url  | String   | Generated video URL |
+| - status     | Integer  | Status: 1= queueing, 2= processing, 3= completed, 4= failed |
+| - only_add_audio | Boolean | Whether only audio was added |
 
-**Example**
+### Example
 
 **Body**
 
@@ -457,23 +457,23 @@ GET https://openapi.akool.com/api/open/v4/image2Video/effects
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
 
 **Response Attributes**
 
 | **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
 | ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | Integer  | Interface returns business status code (1000:success)                                                                                                                                                                   |
-| msg           | String   | Interface returns status information                                                                                                                                                                                   |
-| data          | Object   | Response data object |
-| - result      | Array    | Array of effect objects |
-| -- _id        | String   | Effect document ID |
-| -- create_time | Long    | Creation timestamp |
-| -- logo       | String   | Effect logo URL |
-| -- name       | String   | Effect name |
-| -- video_url  | String   | Effect preview video URL |
-| -- effect_code | String  | Effect code |
-| - count       | Integer  | Total number of effects |
+| - code          | Integer  | API returns status code (1000:success)   |
+| - msg           | String   | API returns status message               |
+| - data          | Object   | Response data object                     |
+| - result        | Array    | Array of effect objects                  |
+| - _id           | String   | Effect document ID                       |
+| - create_time   | Long     | Creation timestamp                       |
+| - logo          | String   | Effect logo URL                          |
+| - name          | String   | Effect name                              |
+| - video_url     | String   | Effect preview video URL                 |
+| - effect_code   | String   | Effect code                              |
+| - count         | Integer  | Total number of effects                  |
 
 **Request**
 
@@ -586,7 +586,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/updateVideoAudio
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
@@ -594,38 +594,38 @@ POST https://openapi.akool.com/api/open/v4/image2Video/updateVideoAudio
 |---------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | pre_video_id  | String   | true         |  Image to Video result _id |
 | audio_url     | String   | true         | Audio URL, required when audio_type = 2 |
-| audio_type    | Integer  | true         | 1 = AI Generate, 2 = user custom upload |
+| audio_type    | Integer  | true         | 1 = AI generate, 2 = user custom upload |
 
-**Response Attributes**
+**Response Attributes** 
 
 | **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
 | ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | Integer  | Interface returns business status code (1000:success)                                                                                                                                                                   |
-| msg           | String   | Interface returns status information                                                                                                                                                                                   |
-| data          | Object   | Response data object |
-| - create_time | Long     | Creation timestamp |
-| - uid         | Integer  | User ID |
-| - team_id     | String   | Team ID |
-| - update_time | Long     | Last update time |
-| - video_duration | Number | Video duration |
-| - webhookUrl  | String   | Callback URL |
-| - resolution  | String   | Resolution |
-| - file_name   | String   | File name |
-| - effect_name | String   | Effect name |
-| - _id         | String   | Document ID |
-| - pre_video_id | String  | Original video ID |
-| - image_url   | String   | Image URL |
-| - prompt      | String   | Prompt text |
-| - negative_prompt | String | Negative prompt |
-| - extend_prompt | Boolean | Whether extended prompts were used |
-| - audio_type  | Integer  | Audio type |
-| - audio_url   | String   | Audio URL |
-| - deduction_credit | Integer | Credits deducted |
-| - effect_code | String   | Effect code |
-| - status      | Integer  | Status: 1=queueing, 2=processing, 3=completed, 4=failed |
-| - only_add_audio | Boolean | Whether only audio was added |
+| - code                | Integer  | API returns status code (1000:success)                 |
+| - msg                 | String   | API returns status message                             |
+| - data                | Object   | Response data object                                   |
+| - create_time         | Long     | Creation timestamp                                     |
+| - uid                 | Integer  | User ID                                                |
+| - team_id             | String   | Team ID                                                |
+| - update_time         | Long     | Last update time                                       |
+| - video_duration      | Number   | Video duration                                         |
+| - webhookUrl          | String   | Callback URL                                           |
+| - resolution          | String   | Resolution                                             |
+| - file_name           | String   | File name                                              |
+| - effect_name         | String   | Effect name                                            |
+| - _id                 | String   | Document ID                                            |
+| - pre_video_id        | String   | Original video ID                                      |
+| - image_url           | String   | Image URL                                              |
+| - prompt              | String   | Prompt text                                            |
+| - negative_prompt     | String   | Negative prompt                                        |
+| - extend_prompt       | Boolean  | Whether extended prompts were used                     |
+| - audio_type          | Integer  | Audio type                                             |
+| - audio_url           | String   | Audio URL                                              |
+| - deduction_credit    | Integer  | Credits deducted                                       |
+| - effect_code         | String   | Effect code                                            |
+| - status              | Integer  | Status: 1=queueing, 2=processing, 3=completed, 4=failed|
+| - only_add_audio      | Boolean  | Whether only audio was added                           |
 
-**Example**
+### Example
 
 **Body**
 
@@ -772,7 +772,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/delbyids
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
@@ -782,17 +782,17 @@ POST https://openapi.akool.com/api/open/v4/image2Video/delbyids
 
 **Response Attributes**
 
-| **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
-| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | Integer  | Interface returns business status code (1000:success)                                                                                                                                                                   |
-| msg           | String   | Interface returns status information                                                                                                                                                                                   |
-| data          | Object   | Response data object |
-| - successIds  | Array    | Successfully deleted video IDs |
-| - noPermissionItems | Array | Failed deletion information list |
-| -- _id        | String   | Failed deletion video ID |
-| -- msg        | String   | Failure reason |
+| **Parameter**       | **Type** | **Description**                                                                                                                                                                                                        |
+| ------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - code              | Integer  | API returns status code (1000:success)                                                                                                                                                                   |
+| - msg               | String   | API returns status message                                                                                                                                                                                   |
+| - data              | Object   | Response data object |
+| - successIds        | Array    | Successfully deleted video IDs |
+| - noPermissionItems | Array    | Failed deletion information list |
+| - _id               | String   | Failed deletion video ID |
+| - msg               | String   | Failure reason |
 
-**Example**
+### Example
 
 **Body**
 

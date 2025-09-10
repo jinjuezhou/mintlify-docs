@@ -2,37 +2,37 @@
 title: 'Jarvis Moderator'
 description: ''
 ---
-# Overview
+## Overview
 
-Automate content moderation reduces the cost of your image, video, text, and voice moderation by accurately detecting inappropriate content.
+Automated content moderation reduces the cost of moderating images, videos, text, and voice by accurately detecting inappropriate content.
 
-Jarvis Moderator provides services through open application programming interfaces (APIs). You can obtain the inference result by calling APIs. It helps you build an intelligent service system and improves service efficiency. 
+Jarvis Moderator provides services through open application programming interfaces (APIs). You can obtain inference results by calling these APIs, which helps you build an intelligent service system and improve efficiency.
 
 - A software tool such as curl and Postman
 
 These are good options if you are more comfortable writing code, HTTP requests, and API calls. For details, see Using Postman to Call Jarvis.
 
-# Internationalization labels
+## Internationalization labels
 The following content will be subject to review and detection to ensure compliance with relevant laws, regulations, and platform policies:
 
-	1.	Advertising: Detects malicious advertising and redirection content to prevent users from being led to unsafe or inappropriate sites.
-	2.	Violent Content: Detects violent or terrorist content to prevent the dissemination of harmful information.
-	3.	Political Content: Reviews political content to ensure that it does not involve sensitive or inflammatory political information.
-	4.	Specified Speech: Detects specified speech or voice content to identify and manage audio that meets certain conditions.
-	5.	Specified Lyrics: Detects specified lyrics content to prevent the spread of inappropriate or harmful lyrics.
-	6.	Sexual Content: Reviews content related to sexual behavior or sexual innuendo to protect users from inappropriate information.
-	7.	Moaning Sounds: Detects sounds related to sexual activity, such as moaning, to prevent the spread of such audio.
-	8.	Contraband: Identifies and blocks all illegal or prohibited content.
-	9.	Profane Language: Reviews and filters content containing profanity or vulgar language.
-	10.	Religious Content: Reviews religious content to avoid controversy or offense to specific religious beliefs.
-	11.	Cyberbullying: Detects cyberbullying behavior to prevent such content from harming users.
-	12.	Harmful or Inappropriate Content: Reviews and manages harmful or inappropriate content to maintain a safe and positive environment on the platform.
-	13.	Silent Audio: Detects silent audio content to identify and address potential technical issues or other anomalies.
-	14.	Customized Content: Allows users to define and review specific types of content according to business needs or compliance requirements.
+	1.	**Advertising:** Detects malicious advertising and redirection content to prevent users from being led to unsafe or inappropriate sites.
+	2.	**Violent Content:** Detects violent or terrorist content to prevent the dissemination of harmful information.
+	3.	**Political Content:** Reviews political content to ensure that it does not involve sensitive or inflammatory political information.
+	4.	**Specified Speech:** Detects specified speech or voice content to identify and manage audio that meets certain conditions.
+	5.	**Specified Lyrics:** Detects specified lyrics content to prevent the spread of inappropriate or harmful lyrics.
+	6.	**Sexual Content:** Reviews content related to sexual behavior or sexual innuendo to protect users from inappropriate information.
+	7.	**Moaning Sounds:** Detects sounds related to sexual activity, such as moaning, to prevent the spread of such audio.
+	8.	**Contraband:** Identifies and blocks all illegal or prohibited content.
+	9.	**Profane Language:** Reviews and filters content containing profanity or vulgar language.
+	10.	**Religious Content:** Reviews religious content to avoid controversy or offense to specific religious beliefs.
+	11.	**Cyberbullying:** Detects cyberbullying behavior to prevent such content from harming users.
+	12.	**Harmful or Inappropriate Content:** Reviews and manages harmful or inappropriate content to maintain a safe and positive environment on the platform.
+	13.	**Silent Audio:** Detects silent audio content to identify and address potential technical issues or other anomalies.
+	14.	**Customized Content:** Allows users to define and review specific types of content according to business needs or compliance requirements.
 
 This content will be thoroughly detected by our review system to ensure that all content on the platform meets the relevant standards and regulations.
 
-# Subscribing to the Service
+## Subscribing to the Service
 **NOTE:**
 This service is available only to enterprise users now.
 
@@ -60,16 +60,16 @@ POST https://openapi.akool.com/api/open/v3/content/analysis/sentiment
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token). |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token). |
 
 **Body Attributes**
 
 | **Parameter** | **Type** | **Value**  | **Description**                                                              |
 |---------------|----------|------------|------------------------------------------------------------------------------|
-| content       | String   |            | url or text， when the content is a image, video, or audio, a url must be provided. When the content provided is text, it can be either text content or a url.                                                     |
+| content       | String   |            | URL or text，when the content is a image, video, or audio, a URL must be provided. When the content provided is text, it can be either text content or a URL.                                                     |
 | type          | Number   |            | 1: image  2:video  3: auido  4: text                                |
 | language      | String   |        | When type=2 or 3 or 4, it is best to provide the language to ensure the accuracy of the results。 Supplying the input language in ISO-639-1 format         |
-| webhookUrl    | String   |            | Callback url address based on HTTP request.                                  |
+| webhookUrl    | String   |            | Callback URL address based on HTTP request.                                  |
 | input         | String   |     Optional       |  The user defines the content to be detected in words |
 
 <Note>We restrict image to 20MB. we currently support PNG (.png), JPEG (.jpeg and .jpg), WEBP (.webp), and non-animated GIF (.gif).</Note>
@@ -85,11 +85,11 @@ POST https://openapi.akool.com/api/open/v3/content/analysis/sentiment
 
 | **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
 |---------------|----------|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| code          | int      | 1000                                            | Interface returns business status code(1000:success)                                                                                                  |
-| msg           | String   |                                                 | Interface returns status information                                                                                                                  |
-| data          | Object   | `{ "_id": "", "status": 1 }` | `_id`: Interface returns data, status: the status of video： [1:queueing, 2:processing, 3:completed, 4:failed] |
+| code          | int      | <p align="center">1000</p>                                            | API returns status code (1000:success)                                                                                                  |
+| msg           | String   |                                                 | API returns status message                                                                                                                  |
+| data          | Object   | <p align="center">`{ "_id": "", "status": 1 }`</p> | `_id`: Interface returns data, status: the status of video： [1:queueing, 2:processing, 3:completed, 4:failed] |
 
-**Example**
+### Example
 
 **Body**
 
@@ -226,7 +226,7 @@ GET https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662df792
 
 | **Parameter** | **Value**    | **Description**                                                                                                |
 |---------------|--------------|----------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token)|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token)|
 
 **Query Attributes**
 
@@ -238,11 +238,11 @@ GET https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662df792
 
 | **Parameter** | **Type** | **Value**                              | **Description**                                                                                                                                      |
 |---------------|----------|----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| code          | int      | 1000                                   | Interface returns business status code(1000:success)                                                                                                 |
-| msg           | String   | OK                                     | Interface returns status information                                                                                                                 |
-| data          | Object   | `{ status:1, _id:"", result:"", final_conclusion: "" }` | video_status: the status of video：【1:queueing, 2:processing, 3:completed, 4:failed】 result:  sentiment analysis result【Related information returned by the detection content】 final_conclusion: final conclusion.【Non-Compliant、Compliant、Unknown】 _id: Interface returns data |
+| code          | int      | <p align="center">1000</p>                                    | API returns status code(1000:success)                                                                                                 |
+| msg           | String   | OK                                     | API returns status message                                                                                                                 |
+| data          | Object   | <p align="center">`{ status:1, _id:"", result:"", final_conclusion: "" }`</p> | video_status: the status of video：【1:queueing, 2:processing, 3:completed, 4:failed】 result:  sentiment analysis result【related information returned by the detection content】 final_conclusion: final conclusion.【non-compliant、compliant、unknown】 _id: Interface returns data |
 
-**Example**
+### Example
 
 **Request**
 
@@ -336,13 +336,13 @@ print(response.text)
 <Note> Please note that if the value of the response code is not equal to 1000, the request is failed or wrong</Note>
 | **Parameter** | **Value** | **Description**                                      |
 |---------------|-----------|------------------------------------------------------|
-| code          | 1000      | Success |
-| code          | 1003      | Parameter error  or Parameter can not be empty |
-| code          | 1008      | The content you get does not exist  |
-| code          | 1009      | You do not have permission to operate  |
-| code          | 1101      | Invalid authorization or The request token has expired  |
+| code          | 1000      | Request completed successfully |
+| code          | 1003      | Invalid or missing parameters |
+| code          | 1008      | The request content does not exist  |
+| code          | 1009      | Permission denied  |
+| code          | 1101      | Invalid authorization or the request token has expired  |
 | code          | 1102      | Authorization cannot be empty  |
-| code          | 1200      | The account has been banned  |
-| code          | 1201      | create audio error, please try again later  |
+| code          | 1200      | The account has been suspended  |
+| code          | 1201      | Audio creation processing error |
 | code          | 1202      | The same video cannot be translated lipSync in the same language more than 1 times  |
-| code          | 1203      | video should be with audio  |
+| code          | 1203      | Video should be with audio  |
