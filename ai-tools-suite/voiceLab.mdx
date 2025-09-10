@@ -30,16 +30,15 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| - source_voice_file       | String   | true         |           | Original audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL, The maximum file size is 30MB.|
-| - voice_options | Object   | false        |           | Audio tagging options |
+| source_voice_file       | String   | true         |           | Original audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL, The maximum file size is 30MB.|
+| voice_options | Object   | false        |           | Audio tagging options |
 | - style       | Array    | false        |           | Voice style tags (e.g., ["Authoritative", "Calm"]) |
 | - gender      | Array    | false        |           | Gender tags (e.g., ["Male", "Female"]) |
 | - age         | Array    | false        |           | Age tags (e.g., ["Young", "Middle", "Elderly"]) |
 | - scenario    | Array    | false        |           | Use case tags (e.g., ["Advertisement", "Education"]) |
-| - name          | String   | false        |           | Audio name |
-| - text          | String   | true         |           | Preview text content |
-| - webhookUrl    | String   | false         |           | Callback URL address based on HTTP request |
-| - voice_model_name    | String   | false         |           | The designated model for Clone, Supported voice models: Akool Multilingual 1, Akool Multilingual 3, Akool Multilingual 4. [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
+| name          | String   | false        |           | Audio name |
+| webhookUrl    | String   | false         |           | Callback URL address based on HTTP request |
+| voice_model_name    | String   | false         |           | The designated model for Clone, Supported voice models: Akool Multilingual 1, Akool Multilingual 3, Akool Multilingual 4. [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 
 **Response Attributes**
 
@@ -258,9 +257,9 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| - input_text    | String   | true         |           | Preview text content |
-| - voice_id      | String   | true         |           | Voice ID, get this voice_id from your cloned voices or akool voice list. [getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
-| - voice_options | Object   | false        |           | Audio settings |
+| input_text    | String   | true         |           | Preview text content |
+| voice_id      | String   | true         |           | Voice ID, get this voice_id from your cloned voices or akool voice list. [getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
+| voice_options | Object   | false        |           | Audio settings |
 | - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
@@ -504,15 +503,15 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 
 |**Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| - voice_id      | String   | true         |           | Voice ID， get this voice_id from your cloned voices or akool voice list. [getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
-| - source_voice_file    | String   | true         |           | Audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL, The maximum file size is 50MB. |
-| - voice_options | Object   | false        |           | Audio settings |
+| voice_id      | String   | true         |           | Voice ID， get this voice_id from your cloned voices or akool voice list. [getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
+| source_voice_file    | String   | true         |           | Audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL, The maximum file size is 50MB. |
+| voice_options | Object   | false        |           | Audio settings |
 | - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
-| - webhookUrl    | String   | false         |           | Callback URL address based on HTTP request |
-| - voice_model_name    | String   | false         |           | The designated model for Clone, Supported voice models: Akool Multilingual 1. [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
+| webhookUrl    | String   | false         |           | Callback URL address based on HTTP request |
+| voice_model_name    | String   | false         |           | The designated model for Clone, Supported voice models: Akool Multilingual 1. [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 
 **Response Attributes**
 
