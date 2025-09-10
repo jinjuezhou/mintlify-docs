@@ -7,15 +7,15 @@ description: "Talking Avatar API documentation"
 
 ### Description
 
-- First you need to generate the voice through the following method or directly provide a link to the available voice file
+- First you need to generate the voice through the following method or directly provide a link to the available voice file.
   - If you want to use the system's sound model to generate speech, you need to generate a link by calling the interface [Create TTS](https://docs.akool.com/ai-tools-suite/voiceLab#create-text-to-speech)
   - If you want to use the sound model you provide to generate speech, you need to generate a link by calling the interface [Create Voice Clone](https://docs.akool.com/ai-tools-suite/voiceLab#create-voice-clone)
 - Secondly, you need to provide an avatar link, which can be a picture or video.
-  - If you want to use the avatar provided by the system, you can obtain it through the interface [Get Avatar List](https://docs.akool.com/ai-tools-suite/talking-avatar#get-talking-avatar-list) .Or provide your own avatar url.
+  - If you want to use the avatar provided by the system, you can obtain it through the interface [Get Avatar List](https://docs.akool.com/ai-tools-suite/talking-avatar#get-talking-avatar-list) .Or provide your own avatar URL.
 - Then, you need to generate an avatar video by calling the API [Create Talking Avatar](https://docs.akool.com/ai-tools-suite/talking-avatar#create-talking-avatar)
-- Finally,The processing status will be returned promptly through the provided callback address, or you can also query it by calling the interface [Get Video Info](https://docs.akool.com/ai-tools-suite/talking-avatar#get-video-info)
+- Finally, the processing status will be returned promptly through the provided callback address, or you can also query it by calling the interface [Get Video Info](https://docs.akool.com/ai-tools-suite/talking-avatar#get-video-info)
 
-### Get Talking Avatar List
+## Get Talking Avatar List
 
 ```http
 GET https://openapi.akool.com/api/open/v3/avatar/list
@@ -31,20 +31,20 @@ GET https://openapi.akool.com/api/open/v3/avatar/list
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                               |
 | ------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| from          | Number   | 2、3      | 2 represents the official avatar of Akool, 3 represents the avatar uploaded by the user themselves，If empty, returns all avatars by default. |
-| type          | Number   | 1、2      | 1 represents the talking avatar of Akool, 2 represents the streaming avatar of Akool，If empty, returns all avatars by default. |
-| page          | Number   | 1         | Current number of pages，Default is 1.                                                                                                        |
-| size          | Number   | 10        | Current number of returns per page，Default is 100.                                                                                           |
+| from          | Number   | <p align="center">2、3 </p>     | 2 represents the official avatar of Akool, 3 represents the avatar uploaded by the user themselves，If empty, returns all avatars by default. |
+| type          | Number   | <p align="center">1、2 </p>     | 1 represents the talking avatar of Akool, 2 represents the streaming avatar of Akool，if empty, returns all avatars by default. |
+| page          | Number   | <p align="center">1</p>        | Current number of pages，Default is 1.                                                                                                        |
+| size          | Number   | <p align="center">10</p>        | Current number of returns per page，Default is 100.                                                                                           |
 
 **Response Attributes**
 
-| **Parameter** | **Type** | **Value**                        | **Description**                                                                                                  |
-| ------------- | -------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| code          | int      | 1000                             | Interface returns business status code(1000:success)                                                             |
-| msg           | String   | OK                               | Interface returns status information                                                                             |
-| data          | Array    | `[{ avatar_id: "xx", url: "" }]` | avatar_id: Used by avatar interface and creating avatar interface. url: You can preview the avatar via the link. |
+| **Parameter** | **Type** | **Value**                                                | **Description**                                                                                                  |
+| ------------- | -------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| code          | Int      | <p align="center">1000</p>                               | API returns status code(1000:success)                                                                            |
+| msg           | String   | <p align="center">OK</p>                                 | API returns status message                                                                                       |
+| data          | Array    | <p align="center"> `[{ avatar_id: "xx", url: "" }]`</p>  | avatar_id: Used by avatar interface and creating avatar interface. URL: You can preview the avatar via the link. |
 
-**Example**
+### Example
 
 **Request**
 
@@ -150,29 +150,30 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 
 | Parameter                      | Type     | Value | Description                                                                                                                                                                                                                                                                               |
 | ------------------------------ | -------- | ----- | ------------------------------------------------------------------------------------------------------------ |
-| width                          | Number   | 3840  | Set the output video width,must be 3840                                                                                   |
-| height                         | Number   | 2160  | Set the output video height,must be 2160                                                                                 |
-| avatar_from                    | Number   |   2 or 3    | You use the avatar from of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://docs.akool.com/ai-tools-suite/talking-avatar#get-avatar-list) api, you will obtain the field 【from】 and pass it here. If you provide an avatar URL yourself, avatar_from must be 3.                                                      |
-| webhookUrl                     | String   |       | Callback url address based on HTTP request.                                                                  |
-| elements                       | [Object] |       | Collection of elements passed in in the video                                                                |
-| [elements].url                 | String |         | Link to element(When type is equal to image, url can be either a link or a Hexadecimal Color Code). When avatar_from =2, you don't need to pass this parameter. The image formats currently only support ".png", ".jpg", ".jpeg", ".webp", and the video formats currently only support ".mp4", ".mov", ".avi"          |
-| [elements].scale_x             | Number |     1  | Horizontal scaling ratio(Required when type is equal to image or avatar)                                                                |
-| [elements].scale_y             | Number |     1  | Vertical scaling ratio (Required when type is equal to image or avatar)                                                                  |
+| width                          | Number   | <p align="center">3840</p>  | Set the output video width, must be 3840                                                                                   |
+| height                         | Number   | <p align="center">2160</p>  | Set the output video height, must be 2160                                                                                 |
+| avatar_from                    | Number   | <p align="center">2 or 3</p>    | You can use the avatar_from field from the avatar model, which can be retrieved via the [https://openapi.akool.com/api/open/v3/avatar/list](https://docs.akool.com/ai-tools-suite/talking-avatar#get-avatar-list), The API response will provide the from field, which you should pass here. If you provide your own avatar URL, set avatar_from to 3.                                                      |
+| webhookUrl                     | String   |       | Callback URL address based on HTTP request.                                                                  |
+| elements                       | [Object] |       | Collection of elements passed in the video.                                                                |
+| [elements].url                 | String |         | When the type is set to 'image,' the URL can either be a direct link to the image or a hexadecimal color code. If 'avatar_from' is set to 2, you do not need to provide the URL. Supported image formats include .png, .jpg, .jpeg, and .webp. Supported video formats include .mp4, .mov, and .avi. |
+| [elements].scale_x             | Number |  <p align="center">1</p>  | Horizontal scaling ratio (Required when type is equal to image or avatar)                                                                |
+| [elements].scale_y             | Number |  <p align="center"> 1</p>  | Vertical scaling ratio (Required when type is equal to image or avatar)                                                                  |
 | [elements].offset_x            | Number |       | Horizontal offset of the upper left corner of the element from the video setting area (in pixels)(Required when type is equal to image or avatar)               |
 | [elements].offset_y            | Number |       | Vertical offset of the upper left corner of the element from the video setting area (in pixels)(Required when type is equal to image or avatar)                 |
 | [elements].height              | Number |       |       The height of the element           |
 | [elements].width               | Number |       |        The width of the element         |
 | [elements].type                | String |       | Element type（avatar、image、audio）                                                                                   |
 | [elements].avatar_id           | String |       |When type is equal to avatar, you use the avatar_id of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://docs.akool.com/ai-tools-suite/talking-avatar#get-avatar-list) api, you will obtain the field 【avatar_id】 and pass it here。 If you provide an avatar URL yourself, you don't need to pass this parameter.                                                     |
-
+| [elements].input_text                | String |       | Audio element support, for input text, the per-request character limit depends on the subscription plan: Pro – 5,000, Pro Max – 10,000, Business – 50,000.   If both the URL and the input text fields are passed, the URL takes precedence.  The "input_text" and "voice_id" fields must both be present.                                                                               |
+| [elements].voice_id                | String |       | Audio element support. [getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)                                                                                  |
 
 **Response Attributes**
 
 | Parameter | Type   | Value                                  | Description                                                                                                                                         |
 | --------- | ------ | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code      | int    | 1000                                   | Interface returns business status code (1000:success)                                                                                               |
-| msg       | String |                                        | Interface returns status information                                                                                                                |
-| data      | Object | `{ _id:"", video_status:3, video:"" }` | `_id`: Interface returns data status: the status of video: 【1:queueing, 2:processing, 3:completed, 4:failed】, `video`: the url of Generated video |
+| code      | Int    | <p align="center">1000</p>                                  | API returns status code (1000:success)                                                                                               |
+| msg       | String |                                        | API returns status message                                                                                                                 |
+| data      | Object | <p align="center">`{ _id:"", video_status:3, video:"" }`</p>  | `_id`: Interface returns data status: the status of video: 【1:queueing, 2:processing, 3:completed, 4:failed】, `video`: the URL of Generated video |
 
 <Note>
   Please note that the generated video link can only be obtained when video_status is equal to 3. 
@@ -181,7 +182,7 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
     2. Obtain by polling the following interface [Get Video Info](https://docs.akool.com/ai-tools-suite/avatar#get-video-info)
 </Note>
 
-**Example**
+### Example
 
 **Body**
 
@@ -213,7 +214,9 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
         },
         {
             "type": "audio",
-            "url": "https://drz0f01yeq1cx.cloudfront.net/1729666642023-bd6ad5f1-d558-40c7-b720-ad729688f814-6403.mp3"
+            "url": "https://drz0f01yeq1cx.cloudfront.net/1729666642023-bd6ad5f1-d558-40c7-b720-ad729688f814-6403.mp3",
+            "input_text": "A military parade is a formation of military personnels whose movement is restricted by close-order manoeuvering known as drilling or marching. Large military parades are today held on major holidays and military events around the world.A military parade is a formation of military personnels whose movement is restricted by close-order manoeuvering known as drilling or marching. Large military parades are today held on major holidays and military events around the world.A military parade is a formation of military personnels whose movement is restricted by close-order manoeuvering known as drilling or marching. Large military parades are today held on major holidays and military events around the world.",
+            "voice_id": "6889b628662160e2caad5dbc"
         }
     ],
     "webhookUrl": ""
@@ -255,7 +258,9 @@ curl --location 'https://openapi.akool.com/api/open/v3/talkingavatar/create' \
         },
         {
             "type": "audio",
-            "url": "https://drz0f01yeq1cx.cloudfront.net/1729666642023-bd6ad5f1-d558-40c7-b720-ad729688f814-6403.mp3"
+            "url": "https://drz0f01yeq1cx.cloudfront.net/1729666642023-bd6ad5f1-d558-40c7-b720-ad729688f814-6403.mp3",
+            "input_text": "A military parade is a formation of military personnels whose movement is restricted by close-order manoeuvering known as drilling or marching. Large military parades are today held on major holidays and military events around the world.A military parade is a formation of military personnels whose movement is restricted by close-order manoeuvering known as drilling or marching. Large military parades are today held on major holidays and military events around the world.A military parade is a formation of military personnels whose movement is restricted by close-order manoeuvering known as drilling or marching. Large military parades are today held on major holidays and military events around the world.",
+            "voice_id": "6889b628662160e2caad5dbc"
         }
     ]
 }'
@@ -307,7 +312,9 @@ const raw = JSON.stringify({
     },
     {
       "type": "audio",
-      "url": "https://drz0f01yeq1cx.cloudfront.net/1729666642023-bd6ad5f1-d558-40c7-b720-ad729688f814-6403.mp3"
+      "url": "https://drz0f01yeq1cx.cloudfront.net/1729666642023-bd6ad5f1-d558-40c7-b720-ad729688f814-6403.mp3",
+      "input_text": "A military parade is a formation of military personnels whose movement is restricted by close-order manoeuvering known as drilling or marching. Large military parades are today held on major holidays and military events around the world.A military parade is a formation of military personnels whose movement is restricted by close-order manoeuvering known as drilling or marching. Large military parades are today held on major holidays and military events around the world.A military parade is a formation of military personnels whose movement is restricted by close-order manoeuvering known as drilling or marching. Large military parades are today held on major holidays and military events around the world.",
+      "voice_id": "6889b628662160e2caad5dbc"
     }
   ]
 });
@@ -435,7 +442,7 @@ print(response.text)
 }
 ```
 
-### Get Video Info
+## Get Video Info
 
 ```
 GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64dd838cf0b6684651e90217
@@ -445,7 +452,7 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 | **Parameter** | **Value**    | **Description**                                                                                                |
 | ------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token). |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token). |
 
 **Query Attributes**
 
@@ -457,11 +464,11 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 | **Parameter** | **Type** | **Value**                              | **Description**                                                                                                                                         |
 | ------------- | -------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | int      | 1000                                   | Interface returns business status code(1000:success)                                                                                                    |
-| msg           | String   | OK                                     | Interface returns status information                                                                                                                    |
-| data          | Object   | `{ video_status:1, _id:"", video:"" }` | video_status: the status of video：【1:queueing, 2:processing, 3:completed, 4:failed】 video: Generated video resource url \_id: Interface returns data |
+| code          | Int      | <p align="center">1000</p>                                   | API returns status code(1000:success)                                                                                                    |
+| msg           | String   | <p align="center">OK</p>                                       | API returns status message                                                                                                                     |
+| data          | Object   | <p align="center">`{ video_status:1, _id:"", video:"" }`</p>   | video_status: the status of video：【1: queueing, 2: processing, 3: completed, 4: failed】 video: Generated video resource url \_id: Interface returns data |
 
-**Example**
+### Example
 
 **Request**
 
@@ -550,7 +557,7 @@ print(response.text)
 }
 ```
 
-### Get Avatar Detail
+## Get Avatar Detail
 
 ```
 GET https://openapi.akool.com/api/open/v3/avatar/detail
@@ -566,17 +573,17 @@ GET https://openapi.akool.com/api/open/v3/avatar/detail
 
 | **Parameter** | **Type** | **Value** | **Description**   |
 | ------------- | -------- | --------- | ----------------- |
-| id            | String   |           | avatar record id. |
+| id            | String   |           | Avatar record id. |
 
 **Response Attributes**
 
 | **Parameter** | **Type** | **Value**                                    | **Description**                                                                                                                                                           |
 | ------------- | -------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | int      | 1000                                         | Interface returns business status code(1000:success)                                                                                                                      |
-| msg           | String   | OK                                           | Interface returns status information                                                                                                                                      |
-| data          | Array    | `[{ avatar_id: "xx", url: "", status: "" }]` | avatar_id: Used by avatar interface and creating avatar interface. url: You can preview the avatar via the link. status: 1-queueing 2-processing），3：completed 4-failed |
+| code          | Int      | <p align="center">1000</p>                                         | API returns status code (1000:success)                                                                                                                      |
+| msg           | String   | <p align="center">OK</p>                                            | API returns status message                                                                                                                                       |
+| data          | Array    | <p align="center">`[{ avatar_id: "xx", url: "", status: "" }]`</p>  | avatar_id: Used by avatar interface and creating avatar interface. URL: You can preview the avatar via the link. status: (1: queueing 2: processing 3：completed 4:failed) |
 
-**Example**
+### Example
 
 **Request**
 
@@ -667,7 +674,7 @@ print(response.text)
 }
 ```
 
-### Upload Talking Avatar
+## Upload Talking Avatar
 
 ```
 POST https://openapi.akool.com/api/open/v3/avatar/create
@@ -684,19 +691,19 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
-| avatar_id     | String   |           | avatar unique ID，Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
-| name          | String   |           | Avatar display name for easier identification and management.                                                                                                     |
-| type          | String   | 1         | Avatar type, 1 represents talking avatar                                                                                                 |
+| avatar_id     | String   |           | Avatar unique ID，Can only contain /^a-zA-Z0-9/.
+| name          | String   |           | Avatar display name for easier identification and management.                                                                                                                                                  |
+| type          | String   | <p align="center">1</p>       | Avatar type, 1 represents talking avatar                                                                                                 |
 
 **Response Attributes**
 
 | **Parameter** | **Type** | **Value**                                   | **Description**                                                                                                                                        |
 | ------------- | -------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| code          | int      | 1000                                        | Interface returns business status code(1000:success)                                                                                                   |
-| msg           | String   | OK                                          | Interface returns status information                                                                                                                   |
-| data          | Array    | `[{ avatar_id: "xx", url: "", status: 1 }]` | avatar_id: Used by creating live avatar interface. url: You can preview the avatar via the link. status: 1-queueing, 2-processing, 3-success, 4-failed |
+| code          | Int     | <p align="center">1000</p>                                       | API returns status code (1000:success)                                                                                                   |
+| msg           | String   |<p align="center"> OK</p>                                          | API returns status message                                                                                                                    |
+| data          | Array    | <p align="center">`[{ avatar_id: "xx", url: "", status: 1 }]`</p> | avatar_id: Used by creating live avatar interface. URL: you can preview the avatar via the link. status: (1: queueing, 2: processing, 3: success, 4: failed |
 
-**Example**
+### Example
 
 **Request**
 
@@ -830,10 +837,10 @@ print(response.text)
 
 | **Parameter** | **Value** | **Description**                               |
 | ------------- | --------- | --------------------------------------------- |
-| code          | 1000      | Success                                       |
-| code          | 1003      | Parameter error or Parameter can not be empty |
-| code          | 1006      | Your quota is not enough                      |
-| code          | 1109      | create avatar video error                     |
-| code          | 1102      | Authorization cannot be empty                 |
-| code          | 1200      | The account has been banned                   |
-| code          | 1201      | Create audio error, please try again later    |
+| code          | 1000      | Request completed successfully                                       |
+| code          | 1003      | Invalid or missing parameters |
+| code          | 1006      | Your available quota is not enough          |
+| code          | 1102      | Authorization cannot be empty             |
+| code          | 1105      | Avatar processing error     |
+| code          | 1200      | The account has been suspended                  |
+| code          | 1201      | Audio creation processing error   |
