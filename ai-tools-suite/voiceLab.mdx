@@ -30,8 +30,8 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 
 | **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| - source_voice_file       | String   | true         |           | Original audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL, The maximum file size is 30MB.|
-| - voice_options | Object   | false        |           | Audio tagging options |
+| source_voice_file       | String   | true         |           | Original audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL, The maximum file size is 30MB.|
+| voice_options | Object   | false        |           | Audio tagging options |
 | - style       | Array    | false        |           | Voice style tags (e.g., ["Authoritative", "Calm"]) |
 | - gender      | Array    | false        |           | Gender tags (e.g., ["Male", "Female"]) |
 | - age         | Array    | false        |           | Age tags (e.g., ["Young", "Middle", "Elderly"]) |
@@ -40,9 +40,8 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 | - language    | String    | false        |      en     | Language code (ISO 639-1) of the audio file. Defaults to "en" if not specified |
 | - clone_prompt    | String    | false        |           |   Must match the audio content exactly, including punctuation, to enhance clone quality   |
 | - need_volume_normalization    | Boolean    | false        |      false     | Audio cloning parameter: Enable volume normalization, defaults to false |
-| - name          | String   | false        |           | Audio name |
-| - webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
-| - voice_model_name    | String   | false         |           | The designated model for Clone, Supported voice models: Akool Multilingual 1, Akool Multilingual 3, Akool Multilingual 4. [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
+| name          | String   | false        |           | Audio name |
+| webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
 
 **Response Attributes**
 
@@ -83,7 +82,6 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
         "scenario": ["Advertisement"]
     },
     "name": "MyVoice0626-01",
-    "text": "This is a voice clone model",
     "webhookUrl": ""
 }
 ```
@@ -105,7 +103,6 @@ curl --location 'https://openapi.akool.com/api/open/v4/voice/clone' \
         "scenario": ["Advertisement"]
     },
     "name": "MyVoice0626-01",
-    "text": "This is a voice clone model",
     "webhookUrl": ""
 }'
 ```
@@ -114,7 +111,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/voice/clone' \
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"source_voice_file\": \"https://drz0f01yeq1cx.cloudfront.net/1749809724389-audio.mp3\",\n    \"voice_options\": {\n        \"style\": [\"Authoritative\", \"Calm\"],\n        \"gender\": [\"Male\"],\n        \"age\": [\"Elderly\", \"Middle\"],\n        \"scenario\": [\"Advertisement\"]\n    },\n    \"name\": \"MyVoice0626-01\",\n    \"text\": \"This is a voice clone model\",\n    \"webhookUrl\": \"\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"source_voice_file\": \"https://drz0f01yeq1cx.cloudfront.net/1749809724389-audio.mp3\",\n    \"voice_options\": {\n        \"style\": [\"Authoritative\", \"Calm\"],\n        \"gender\": [\"Male\"],\n        \"age\": [\"Elderly\", \"Middle\"],\n        \"scenario\": [\"Advertisement\"]\n    },\n    \"name\": \"MyVoice0626-01\",\n  \"webhookUrl\": \"\"\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/clone")
   .method("POST", body)
@@ -138,7 +135,6 @@ const raw = JSON.stringify({
     "scenario": ["Advertisement"]
   },
   "name": "MyVoice0626-01",
-  "text": "This is a voice clone model",
   "webhookUrl": ""
 });
 
@@ -171,7 +167,6 @@ $body = '{
     "scenario": ["Advertisement"]
   },
   "name": "MyVoice0626-01",
-  "text": "This is a voice clone model",
   "webhookUrl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v4/voice/clone', $headers, $body);
@@ -195,7 +190,6 @@ payload = json.dumps({
     "scenario": ["Advertisement"]
   },
   "name": "MyVoice0626-01",
-  "text": "This is a voice clone model",
   "webhookUrl": ""
 })
 headers = {
@@ -573,16 +567,15 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 
 |**Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| - voice_id      | String   | true         |           | Voice ID， get this voice_id from your cloned voices or akool voice list. [getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
-| - source_voice_file    | String   | true         |           | Audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL, The maximum file size is 50MB. |
-| - voice_options | Object   | false        |           | Audio settings |
+| voice_id      | String   | true         |           | Voice ID， get this voice_id from your cloned voices or akool voice list. [getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
+| source_voice_file    | String   | true         |           | Audio file URL, supports mp3, mp4, wav, etc. Must be a public accessible URL, The maximum file size is 50MB. |
+| voice_options | Object   | false        |           | Audio settings |
 | - stability   | Number   | false        |           | Voice stability (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - similarity_boost | Number | false     |           | Similarity boost (0-1) , Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
-| - webhookUrl    | String   | false         |           | Callback URL address based on HTTP request |
-| - voice_model_name    | String   | false         |           | The designated model for Clone, Supported voice models: Akool Multilingual 1. [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 | - file_format | String | false | mp3 | File format, supports mp3 and wav formats.|
+| webhookUrl    | String   | false         |           | Callback url address based on HTTP request |
 
 **Response Attributes**
 
