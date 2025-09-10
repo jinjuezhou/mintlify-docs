@@ -39,6 +39,7 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 | - name          | String   | false        |           | Audio name |
 | - text          | String   | true         |           | Preview text content |
 | - webhookUrl    | String   | false         |           | Callback URL address based on HTTP request |
+| - voice_model_name    | String   | false         |           | The designated model for Clone, Supported voice models: Akool Multilingual 1, Akool Multilingual 3, Akool Multilingual 4. [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 
 **Response Attributes**
 
@@ -511,6 +512,7 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 | - style       | Number   | false        |           | Voice style (0-1) , Supported voice models: Akool Multilingual 1, Akool Multilingual 2. Style examples: cheerful, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - speaker_boost | Boolean | false      |           | Speaker boost, Supported voice models: Akool Multilingual 1, [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)|
 | - webhookUrl    | String   | false         |           | Callback URL address based on HTTP request |
+| - voice_model_name    | String   | false         |           | The designated model for Clone, Supported voice models: Akool Multilingual 1. [getVoiceModelName](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list) |
 
 **Response Attributes**
 
