@@ -37,6 +37,7 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 | type          | String   |    2      | Avatar Type 2 refers to a stream avatar. When the type is set to 2, you must wait until the status is updated to 3 before it can be used. You can check the current status in real-time via the interface. *[GET https://openapi.akool.com/api/open/v3/avatar/detail](https://docs.akool.com/ai-tools-suite/talking-avatar#get-avatar-detail)*.                                                                                                 |
 | url_from      | Number   | 1，2      | URL source, 1 means akool and other links, 2 means other third-party links (currently only supports YouTube / TikTok / X / Google Drive)                          |
 
+
 **Response Attributes**
 
 | **Parameter** | **Type** | **Value**                                   | **Description**                                                                                                                                        |
@@ -58,6 +59,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/avatar/create' \
 --data '{
     "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
     "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+    "name": "My Streaming Avatar",
     "type": 2,
     "url_from": 1
 }'
@@ -67,7 +69,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/avatar/create' \
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("text/plain");
-RequestBody body = RequestBody.create(mediaType, "{\n    \n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4\",\n    \"avatar_id\": \"HHdEKhn7k7vVBlR5FSi0e\",\n    \"type\": 2\n,    \"url_from\": 1\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4\",\n    \"avatar_id\": \"HHdEKhn7k7vVBlR5FSi0e\",\n    \"name\": \"My Streaming Avatar\",\n    \"type\": 2\n,    \"url_from\": 1\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/avatar/create")
   .method("POST", body)
@@ -83,6 +85,7 @@ myHeaders.append("Authorization", "Bearer {{Authorization}}");
 const raw = JSON.stringify({
   "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
   "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "name": "My Streaming Avatar",
   "type": 2,
   "url_from": 1
 });
@@ -112,6 +115,7 @@ $headers = [
 $body = '{
   "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
   "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "name": "My Streaming Avatar",
   "type": 2,
   "url_from": 1
 }';
@@ -128,6 +132,7 @@ url = "https://openapi.akool.com/api/open/v3/avatar/create"
 payload = json.dumps({
   "url": "https://drz0f01yeq1cx.cloudfront.net/1721197444322-leijun000.mp4",
   "avatar_id": "HHdEKhn7k7vVBlR5FSi0e",
+  "name": "My Streaming Avatar",
   "type": 2,
   "url_from": 1
 });
