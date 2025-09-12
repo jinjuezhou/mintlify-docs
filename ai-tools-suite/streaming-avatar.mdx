@@ -473,13 +473,34 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/create
 | mode_type     | Number   | No           | Avatar interaction style. "1" = Retelling (avatar repeats content), "2" = Dialogue (avatar engages in conversation) |
 | background_url| String   | No           | URL of background image/video for avatar scene. |
 | voice_params  | Object   | No           | Voice parameters to use for the session. |
+| stream_type   | String   | No           | Stream type to use for the session. "agora" = Agora (default), "livekit" = Livekit, "trtc" = TRTC |
+| credentials   | Object   | No           | Optional. Provide credentials so AKool's streaming avatar can join your stream. |
 
 **Voice Parameters**
 
-| **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                       |
-| ------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| speed         | Double   |                                                 | Controls the speed of the generated speech. Values range from 0.8 to 1.2, with 1.0 being the default speed. |
-| pron_map      | Object   |                                                 | Pronunciation mapping for custom words. Example: "pron_map": \{ "akool" : "ai ku er" \} |
+| **Parameter** | **Type** | **Required** | **Description** |
+| ------------- | -------- | ------------ | --------------- |
+| speed         | double   | No | Controls the speed of the generated speech. Values range from 0.8 to 1.2, with 1.0 being the default speed. |
+| pron_map      | Object   | No | Pronunciation mapping for custom words. Example: "pron_map": \{ "akool" : "ai ku er" \} |
+
+**Credentials**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+| ------------- | -------- | ------------ | --------------- |
+| agora_uid     | Number   | Required when stream_type is "agora" | Agora SDK user ID. |
+| agora_app_id  | String   | Optional when stream_type is "agora" | Agora App ID. |
+| agora_channel | String   | Required when stream_type is "agora" | Agora channel name. |
+| agora_token   | String   | Required when stream_type is "agora" | Agora access token. |
+| livekit_url   | String   | Required when stream_type is "livekit" | Livekit server URL. |
+| livekit_token   | String   | Required when stream_type is "livekit" | Livekit access token. |
+| livekit_room_name   | String   | Optional when stream_type is "livekit" | Livekit room name. |
+| livekit_server_identity   | String   | Optional when stream_type is "livekit" | Livekit server identity. |
+| livekit_client_identity   | String   | Optional when stream_type is "livekit" | Livekit client identity. |
+| trtc_sdk_app_id   | Number   | Required when stream_type is "trtc" | TRTC App ID. |
+| trtc_sdk_room_id   | String   | Required when stream_type is "trtc" | TRTC room ID. |
+| trtc_sdk_user_id   | String   | Required when stream_type is "trtc" | TRTC user ID. |
+| trtc_sdk_user_sig   | String   | Required when stream_type is "trtc" | TRTC authentication token (userSig). |
+
 
 **Response Parameters**
 
