@@ -18,14 +18,14 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
 | **Parameter** | **Type** | **Value**             | **Description**                                                                                                                                                                                                                                                                                                                                                                             |
 |---------------|----------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| targetImage   | Array    | `[{path:"",opts:""}]` | A collection of faces in the original image(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in the original image.opts: Key information of faces detected in original pictures(You can get it through the face [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect) API,You can get the landmarks_str value returned by the api interface as the value of opts) |
-| sourceImage   | Array    | `[{path:"",opts:""}]` | Replacement target image information.(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images.opts: Key information of the face detected in the target image(You can get it through the face [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect) API,You can get the landmarks_str value returned by the api interface as the value of opts)          |
+| targetImage   | Array    | `[{path:"",opts:""}]` | A collection of faces in the original image(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in the original image.opts: Key information of faces detected in original pictures(You can get it through the face [Face Detect API](/ai-tools-suite/faceswap#face-detect) API,You can get the landmarks_str value returned by the api interface as the value of opts) |
+| sourceImage   | Array    | `[{path:"",opts:""}]` | Replacement target image information.(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images.opts: Key information of the face detected in the target image(You can get it through the face [Face Detect API](/ai-tools-suite/faceswap#face-detect) API,You can get the landmarks_str value returned by the api interface as the value of opts)          |
 | face_enhance  | Int      | 0 or 1                | Whether facial enhancement: 1 means open， 0 means close                                            |
 | modifyImage   | String   |                       | Modify the link address of the image                                                                                                                                                                                                                                                                                                                                                        |
 | webhookUrl    | String   |                       | Callback url address based on HTTP request                                                                                                                                                                                                                                                                                                                                                  |
@@ -229,7 +229,7 @@ POST https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
@@ -428,8 +428,8 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo
 
 | **Parameter** | **Type** | **Value**             | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 |---------------|----------|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| sourceImage   | Array    | `[{path:"",opts:""}]` | Replacement target image information:sourceImage means that you need to change it to the link collection of the face you need. You need to pass your image through the [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect) interface. Obtain the link and key point data and fill them here, and ensure that they correspond to the order of the targetImage. You need to pay attention to that each picture in the sourceImage must be a single face, otherwise the face change may fail. (Each array element is an object, and the object contains 2 properties, path:Links to faces detected in the original image. opts: Key information of faces detected in original pictures【You can get it through the face [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect) API, You can get the landmarks_str value returned by the api interface as the value of opts) |
-| targetImage   | Array    | `[{path:"",opts:""}]` |  A collection of faces in the original video： targetImage represents the collection of faces after face detection using modifyVideo. When the original video has multiple faces, here is the image link and key point data of each face. You need to pass [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect) interface to obtain data.(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images. opts: Key information of the face detected in the target image【You can get it through the face [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect) API, You can get the landmarks_str value returned by the api interface as the value of opts)                                                                                                                                                                       |
+| sourceImage   | Array    | `[{path:"",opts:""}]` | Replacement target image information:sourceImage means that you need to change it to the link collection of the face you need. You need to pass your image through the [Face Detect API](/ai-tools-suite/faceswap#face-detect) interface. Obtain the link and key point data and fill them here, and ensure that they correspond to the order of the targetImage. You need to pay attention to that each picture in the sourceImage must be a single face, otherwise the face change may fail. (Each array element is an object, and the object contains 2 properties, path:Links to faces detected in the original image. opts: Key information of faces detected in original pictures【You can get it through the face [Face Detect API](/ai-tools-suite/faceswap#face-detect) API, You can get the landmarks_str value returned by the api interface as the value of opts) |
+| targetImage   | Array    | `[{path:"",opts:""}]` |  A collection of faces in the original video： targetImage represents the collection of faces after face detection using modifyVideo. When the original video has multiple faces, here is the image link and key point data of each face. You need to pass [Face Detect API](/ai-tools-suite/faceswap#face-detect) interface to obtain data.(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images. opts: Key information of the face detected in the target image【You can get it through the face [Face Detect API](/ai-tools-suite/faceswap#face-detect) API, You can get the landmarks_str value returned by the api interface as the value of opts)                                                                                                                                                                       |
 | face_enhance  | Int      | 0 or 1                | Whether facial enhancement: 1 means open， 0 means close                                            |
 | modifyVideo   | String   |                       | modifyImage represents the original image you need to change the face                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | webhookUrl    | String   |                       | Callback url address based on HTTP request                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -636,14 +636,14 @@ GET https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f2
 
 | **Parameter** |   **Value**    | **Description**                                                                                               |
 |---------------|----------------|---------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 
 **Query Attributes**
 
 | Parameter | Type   | Value | Description                                                                                                                                                                                                                          |
 |-----------|--------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| _ids      | String |       | result ids are strings separated by commas【You can get it by returning the _id field from [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage](https://docs.akool.com/ai-tools-suite/faceswap#image-faceswap) or [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo](https://docs.akool.com/ai-tools-suite/faceswap#video-faceswap) api.】 |
+| _ids      | String |       | result ids are strings separated by commas【You can get it by returning the _id field from [Image Faceswap API](/ai-tools-suite/faceswap#image-faceswap) or [Video Faceswap API](/ai-tools-suite/faceswap#video-faceswap) api.】 |
 
 **Response Attributes**
 
@@ -761,7 +761,7 @@ GET https://openapi.akool.com/api/open/v3/faceswap/quota/info
 
 | **Parameter**  | **Value**       | **Description**                                          |
 |----------------|-----------------|----------------------------------------------------------|
-| Authorization  | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token)              |
+| Authorization  | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token)              |
 
 **Response Attributes**
 
@@ -862,7 +862,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/result/delbyids
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 
 **Body Attributes**
@@ -994,7 +994,7 @@ POST https://sg3.akool.com/detect
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
