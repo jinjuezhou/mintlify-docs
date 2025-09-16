@@ -26,17 +26,17 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 
 | **Parameter** | **Type** | **Required** | **Description** |
 |-----------|------|----------|-------------|
-| Authorization | String | Yes | Bearer token for API authentication. Obtain from [getToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [Get Token](/authentication/usage#get-the-token) endpoint. |
 
 **Body Attributes**
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                                                   |
 | ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| url           | String   |           | The video should be approximately one minute long, with the avatar rotating slightly and remaining clear throughout the content. |
-| avatar_id     | String   |           | Avatar unique ID，can only contain /^a-z A-Z 0-9/.                                                                                                                                                 |
-| type          | String   |    2      | Avatar Type 2 refers to a stream avatar. When the type is set to 2, you must wait until the status is updated to 3 before it can be used. You can check the current status in real-time via the interface. *[GET https://openapi.akool.com/api/open/v3/avatar/detail](https://docs.akool.com/ai-tools-suite/talking-avatar#get-avatar-detail)*.                                                                                                 |
-| url_from      | Number   | 1，2      | URL source, 1 means akool and other links, 2 means other third-party links (currently only supports YouTube / TikTok / X / Google Drive)                          |
-
+| url           | String   |           | Avatar resource link. It is recommended that the video be about one minute long, and the avatar in the video content should rotate at a small angle and be clear. |
+| avatar_id     | String   |           | avatar unique ID，Can only contain /^a-zA-Z0-9/.                                                                                                                                                 |
+| name          | String   |           | Avatar display name for easier identification and management.                                                                                                     |
+| type          | String   |    2      | Avatar type 2 represents stream avatar, When type is 2, you need to wait until status is 3 before you can use it, You can get the current status in real time through the interface *[Get Avatar Detail API](/ai-tools-suite/talking-avatar#get-avatar-detail)*.                                                                                                 |
+| url_from      | Number   | 1，2      | url source, 1 means akool and other links, 2 means other third-party links (currently only supports YouTube / TikTok / X / Google Drive)                          |
 
 **Response Attributes**
 
@@ -183,7 +183,7 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list
 
 | **Parameter** | **Type** | **Required** | **Description** |
 |-----------|------|----------|-------------|
-| Authorization | String | Yes | Bearer token for API authentication. Obtain from [getToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [Get Token](/authentication/usage#get-the-token) endpoint. |
 
 **Query Parameters**
 
@@ -325,7 +325,7 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/detail
 
 | **Parameter** | **Type** | **Required** | **Description** |
 |-----------|------|----------|-------------|
-| Authorization | String | Yes | Bearer token for API authentication. Obtain from [GetToken](https://docs.akool.com/authentication/usage#get-the-token) endpoint. |
+| Authorization | String | Yes | Bearer token for API authentication. Obtain from [Get Token](/authentication/usage#get-the-token) endpoint. |
 
 **Query Parameters**
 
@@ -467,8 +467,8 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/create
 | avatar_id     | String   | Yes          | Digital human model in real-time avatar, If you want to use a custom uploaded video, you need to call the *https://openapi.akool.com/api/open/v3/avatar/create* interface to create a template. This process takes some time to process. You can check the processing status through the interface *https://openapi.akool.com/api/open/v3/avatar/detail*. When status=3, you can use the avatar_id field to pass it in.|
 | duration      | Number   | No           | Session duration in seconds (max: 3600). Credits are pre-charged for the full duration, but any unused credits will be refunded after the session ends. Rates depend on your subscription plan. See our [API Pricing](https://akool.com/api-pricing) for details. |
 | knowledge_id  | String   | No           | Knowledge base ID to provide context for AI responses. Create and manage knowledge bases using the [Knowledge Base API](/ai-tools-suite/knowledge-base). When provided, the AI will use documents and URLs from the knowledge base to enhance response accuracy. |
-| voice_id      | String   | No           | Voice ID to change avatar's voice. Get valid IDs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
-| voice_url     | String   | No           | Custom voice model URL. Get valid URLs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
+| voice_id      | String   | No           | Voice ID to change avatar's voice. Get valid IDs from [Voice List API](/ai-tools-suite/voiceLab#get-voice-list) |
+| voice_url     | String   | No           | Custom voice model URL. Get valid URLs from [Voice List API](/ai-tools-suite/voiceLab#get-voice-list) |
 | language      | String   | No           | Language code to use for the session. Get valid codes from [Language List API](/ai-tools-suite/video-translation#get-language-list-result) |
 | mode_type     | Number   | No           | Avatar interaction style. "1" = Retelling (avatar repeats content), "2" = Dialogue (avatar engages in conversation) |
 | background_url| String   | No           | URL of background image/video for avatar scene. |
@@ -1028,14 +1028,14 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 | pld | Object | Yes | | Contains the command details and parameters |
 | pld.cmd | String | Yes | | Command action to execute. Valid values: **"set-params"** (update avatar settings), **"interrupt"** (stop current avatar response) |
 | pld.data | Object | No | | Parameters for the command (required for **"set-params"**) |
-| pld.data.vid | String | No | | **Deprecated. Use pld.data.vparams.vid instead.** Voice ID to change avatar's voice. Only used with **"set-params"**. Get valid IDs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
-| pld.data.vurl | String | No | | **Deprecated. Use pld.data.vparams.vurl instead.** Custom voice model URL. Only used with **"set-params"**. Get valid URLs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
+| pld.data.vid | String | No | | **Deprecated. Use pld.data.vparams.vid instead.** Voice ID to change avatar's voice. Only used with **"set-params"**. Get valid IDs from [Voice List API](/ai-tools-suite/voiceLab#get-voice-list) |
+| pld.data.vurl | String | No | | **Deprecated. Use pld.data.vparams.vurl instead.** Custom voice model URL. Only used with **"set-params"**. Get valid URLs from [Voice List API](/ai-tools-suite/voiceLab#get-voice-list) |
 | pld.data.lang | String | No | | Language code for avatar responses (e.g. "en", "es"). Only used with **"set-params"**. Get valid codes from [Language List API](/ai-tools-suite/video-translation#get-language-list-result) |
 | pld.data.mode | Number | No | | Avatar interaction style. Only used with **"set-params"**. "1" = Retelling (avatar repeats content), "2" = Dialogue (avatar engages in conversation) |
 | pld.data.bgurl | String | No | | URL of background image/video for avatar scene. Only used with **"set-params"** |
 | pld.data.vparams | Object | No | | Voice parameters to use for the session. |
-| pld.data.vparams.vid | String | No | | Voice ID to change avatar's voice. Only used with **"set-params"**. Get valid IDs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
-| pld.data.vparams.vurl | String | No | | Custom voice model URL. Only used with **"set-params"**. Get valid URLs from [Voice List API](/ai-tools-suite/audio#get-voice-list-result) |
+| pld.data.vparams.vid | String | No | | Voice ID to change avatar's voice. Only used with **"set-params"**. Get valid IDs from [Voice List API](/ai-tools-suite/voiceLab#get-voice-list) |
+| pld.data.vparams.vurl | String | No | | Custom voice model URL. Only used with **"set-params"**. Get valid URLs from [Voice List API](/ai-tools-suite/voiceLab#get-voice-list) |
 | pld.data.vparams.speed | double | No | 1 | Controls the speed of the generated speech. Values range from 0.8 to 1.2, with 1.0 being the default speed. |
 | pld.data.vparams.pron_map | Object | No |  | Pronunciation mapping for custom words. Example: "pron_map": \{ "akool" : "ai ku er" \} |
 

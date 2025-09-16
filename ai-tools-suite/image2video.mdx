@@ -35,7 +35,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
@@ -50,7 +50,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt
 | audio_type    | Integer  | true         | Audio type: 1 = AI generate, 2 = user custom upload, 3 = none (no audio) |
 | video_length  | Integer  | true         | Video duration in seconds, options: 5, 10 (10s only available for pro and above subscriptions) |
 | is_premium_model | Boolean | false      | Whether to use premium video model for faster generation (pro and above subscriptions only) |
-| effect_code   | String   | false        | Effect code: if specified, prompt content will be ignored. [getEffectCode](https://docs.akool.com/ai-tools-suite/image2video#get-available-effects) |
+| effect_code   | String   | false        | Effect code: if specified, prompt content will be ignored.[Get Effect Code](/ai-tools-suite/image2video#get-available-effects) |
 | webhookurl    | String   | false        | Callback URL for POST requests |
 
 **Response Attributes**
@@ -261,7 +261,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/resultsByIds
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
@@ -457,7 +457,7 @@ GET https://openapi.akool.com/api/open/v4/image2Video/effects
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Response Attributes**
 
@@ -586,7 +586,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/updateVideoAudio
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
@@ -772,7 +772,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/delbyids
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 

@@ -19,14 +19,14 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/imgreage
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
 | Parameter   | Type   | Value                 | Description                                                                                                                                                                                                                                                                                                                                                                         |
 |-------------|--------|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| targetImage | Array  | `[{path:"",opts:""}]` | Replacement target image information (each array element is an object, and the object contains 2 properties, path: links to faces detected in target images. opts: key information of the face detected in the target image【You can get it through the face [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect) API, You can get the landmarks_str value returned by the api interface as the value of opts) |
-| face_reage  | Int    | <p align="center">[-30, 30]</p> | Reage ranges                                                                                                                                                                                                                                                                                                                                                                        |
+| targetImage | Array  | `[{path:"",opts:""}]` | Replacement target image information(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images. opts: Key information of the face detected in the target image【You can get it through the face [Face Detect API](/ai-tools-suite/faceswap#face-detect) API, You can get the landmarks_str value returned by the api interface as the value of opts) |
+| face_reage  | Int    | [-30, 30]             | Reage ranges                                                                                                                                                                                                                                                                                                                                                                        |
 | modifyImage | String |                       | Modify the link address of the image                                                                                                                                                                                                                                                                                                                                                |
 | webhookUrl  | String |                       | Callback URL address based on HTTP request                                                                                                                                                                                                                                                                                                                                          |
 
@@ -198,15 +198,15 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 
 **Body Attributes**
 
 | Parameter   | Type   | Value      | Description                                                                                                                                                                                                                                                                                                                                                                         |
 |-------------|--------|------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| targetImage | Array  | <p align="center">`[]`</p>       | Replacement target image information(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images. opts: Key information of the face detected in the target image【You can get it through the face [https://sg3.akool.com/detect]((https://docs.akool.com/ai-tools-suite/faceswap#face-detect)) API, You can get the landmarks_str value returned by the api interface as the value of opts) |
-| face_reage  | Int    | <p align="center">`[-30,30]`</p> | Reage ranges                                                                                                                                                                                                                                                                                                                                                                        |
+| targetImage | Array  | `[]`       | Replacement target image information(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images. opts: Key information of the face detected in the target image【You can get it through the face [Face Detect API](/ai-tools-suite/faceswap#face-detect) API, You can get the landmarks_str value returned by the api interface as the value of opts) |
+| face_reage  | Int    | `[-30,30]` | Reage ranges                                                                                                                                                                                                                                                                                                                                                                        |
 | modifyVideo | String |            | Modify the link address of the video                                                                                                                                                                                                                                                                                                                                                |
 | webhookUrl  | String |            | Callback URL address based on HTTP request                                                                                                                                                                                                                                                                                                                                          |
 
@@ -379,13 +379,13 @@ GET https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f2
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Query Attributes**
 
 | Parameter | Type   | Value | Description                                                                                                                                                                                                                            |
 |-----------|--------|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `_ids`    | String |       | Result ids are strings separated by commas. You can get it by returning the `_id` field from [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage](https://docs.akool.com/ai-tools-suite/reage#image-reage) or [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo](https://docs.akool.com/ai-tools-suite/reage#video-reage) api. |
+| `_ids`    | String |       | Result ids are strings separated by commas. You can get it by returning the `_id` field from [Image Reage API](/ai-tools-suite/reage#image-reage) or [Video Reage API](/ai-tools-suite/reage#video-reage) api. |
 
 
 **Response Attributes**
@@ -502,13 +502,13 @@ POST https://openapi.akool.com/api/open/v3/faceswap/job/del
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
 | Parameter | Type   | Value | Description                                                                                                                                                                                              |
 |-----------|--------|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| job_ids   | String |       | Task id, you can get it by returning the job_id field based on [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage](https://docs.akool.com/ai-tools-suite/reage#image-reage) or [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo](https://docs.akool.com/ai-tools-suite/reage#video-reage) api. |
+| job_ids   | String |       | Task id, You can get it by returning the job_id field based on [Image Reage API](/ai-tools-suite/reage#image-reage) or [Video Reage API](/ai-tools-suite/reage#video-reage) api. |
 
 **Response Attributes**
 
@@ -523,7 +523,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/job/del
 
 ```json
 {
-    "job_ids":""    // task id, You can get it by returning the job_id field based on [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage](https://docs.akool.com/ai-tools-suite/reage#image-reage) or [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo](https://docs.akool.com/ai-tools-suite/reage#video-reage) api.
+    "job_ids":""    // task id, You can get it by returning the job_id field based on [Image Reage API](/ai-tools-suite/reage#image-reage) or [Video Reage API](/ai-tools-suite/reage#video-reage) api.
 }
 ```
 
