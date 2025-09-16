@@ -8,7 +8,7 @@ description: ''
 Experience our face swap technology in action by exploring our interactive demo on GitHub: [AKool Face Swap Demo](https://github.com/AKOOL-Official/akool-face-swap-demo).
 </Info>
 
-## Image Face Swap
+### Image Faceswap
 
 ```bash
 POST https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage
@@ -16,29 +16,29 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage
 
 **Request Headers**
 
-| **Parameter**   | **Value**        | **Description**                             |
-|-----------------|------------------|---------------------------------------------|
-| Authorization   | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| **Parameter** | **Value**    | **Description**                             |
+|---------------|--------------|---------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
-| **Parameter** | **Type** | **Value**                  | **Description**                                                                                                                                                                                                                                                                                                                                                                             |
-|---------------|----------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| targetImage   | Array    | `[{path:"",opts:""}]`      | A collection of faces detected in the original image, where each element in the array is an object containing two properties: path, which is a link to the detected face in the original image, and opts, which holds key information about the detected face. This information can be retrieved through the [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect) API, where the landmarks_str value returned by the API serves as the value for opts. |
-| sourceImage   | Array    | `[{path:"",opts:""}]`      | Replacement target image information. (each array element is an object, and the object contains 2 properties, path:links to faces detected in target images.opts: key information of the face detected in the target image (you can get it through the face [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect) API, you can get the landmarks_str value returned by the API interface as the value of opts)          |
-| face_enhance  | Int    |<p align="center">0 or 1</p>| Whether facial enhancement: "1" means open， "0" means close                                            |
-| modifyImage   | String   |                            | Modify the link address of the image                                                                                                                                                                                                                                                                                                                                                        |
-| webhookUrl    | String   |                            | Callback URL address based on HTTP request                                                                                                                                                                                                                                                                                                                                                  |
+| **Parameter** | **Type** | **Value**             | **Description**                                                                                                                                                                                                                                                                                                                                                                             |
+|---------------|----------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| targetImage   | Array    | `[{path:"",opts:""}]` | A collection of faces in the original image(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in the original image.opts: Key information of faces detected in original pictures(You can get it through the face [Face Detect API](/ai-tools-suite/faceswap#face-detect) API,You can get the landmarks_str value returned by the api interface as the value of opts) |
+| sourceImage   | Array    | `[{path:"",opts:""}]` | Replacement target image information.(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images.opts: Key information of the face detected in the target image(You can get it through the face [Face Detect API](/ai-tools-suite/faceswap#face-detect) API,You can get the landmarks_str value returned by the api interface as the value of opts)          |
+| face_enhance  | Int      | 0 or 1                | Whether facial enhancement: 1 means open， 0 means close                                            |
+| modifyImage   | String   |                       | Modify the link address of the image                                                                                                                                                                                                                                                                                                                                                        |
+| webhookUrl    | String   |                       | Callback url address based on HTTP request                                                                                                                                                                                                                                                                                                                                                  |
 
 **Response Attributes**
 
-| Parameter | Type   | Value                                               | Description                                                                             |
-|-----------|--------|-----------------------------------------------------|-----------------------------------------------------------------------------------------|
-| code      | Int  | <p align="center">1000</p>                          | API returns status code  (1000: success)                                                |
-| msg       | String |                                                     | API returns status message                                                              |
-| data      | Object | <p align="center">`{_id:"",url: "",job_id: ""}`</p> | _id: Interface returns data URL: faceswwap result URL job_id: Task processing unique id |
+| Parameter | Type   | Value                         | Description                                                                             |
+|-----------|--------|-------------------------------|-----------------------------------------------------------------------------------------|
+| code      | int    | 1000                          | Interface returns business status code(1000: success)                                   |
+| msg       | String |                               | Interface returns status information                                                    |
+| data      | Object | `{_id:"",url: "",job_id: ""}` | _id: Interface returns data url: faceswwap result url job_id: Task processing unique id |
 
-## Example
+**Example**
 
 **Body**
 
@@ -209,7 +209,7 @@ print(response.text)
 
 ```json
 {
-  "code": 1000, // API returns status code 
+  "code": 1000, // Interface returns business status code
   "msg": "Please be patient! If your results are not generated in three hours, please check your input image.", // Interface returns status information
   "data": {
     "_id": "6593c94c0ef703e8c055e3c8",  // Interface returns data
@@ -219,7 +219,200 @@ print(response.text)
 }
 ```
 
-## Video Face Swap
+### V4 Image Faceswap (Simplified)
+
+```bash
+POST https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                             |
+|---------------|--------------|---------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Value**             | **Description**                                                                                                                                                                             |
+|---------------|----------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| targetImage   | Array    | `[{path:""}]` | A collection of faces in the original image (Each array element is an object containing path: Links to faces in the original image) |
+| sourceImage   | Array    | `[{path:""}]` | Replacement target image information (Each array element is an object containing path: Links to replacement faces)          |
+| model_name    | String   | "akool_faceswap_image_hq" | The model name used for face swap processing. Enum: ["akool_faceswap_image_hq"]. The 'akool_faceswap_image_hq' model only supports high-quality face swapping for a single face in an image. |
+| webhookUrl    | String   |                       | Callback url address based on HTTP request                                                                                                                                                  |
+
+**Response Attributes**
+
+| Parameter | Type   | Value                         | Description                                                                             |
+|-----------|--------|-------------------------------|-----------------------------------------------------------------------------------------|
+| code      | Int    | 1000                          | Interface returns business status code(1000: success)                                   |
+| msg       | String |                               | Interface returns status information                                                    |
+| data      | Object | `{_id:"",url: "",job_id: ""}` | _id: Interface returns data url: faceswap result url job_id: Task processing unique id |
+
+**Example**
+
+**Body**
+
+```json
+{
+    "targetImage": [    // A collection of faces in the original image
+        {
+            "path": "https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png" // Links to faces detected in the original image
+        }
+    ],
+    "sourceImage": [    // Replacement target image information
+        {
+            "path": "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"  // Links to faces detected in target images
+        }
+    ],
+    "model_name": "akool_faceswap_image_hq",    // Model name for face swap processing
+    "webhookUrl":"https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage" // Callback url address based on HTTP request
+}
+```
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST --location "https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage" \
+    -H "Authorization: Bearer token" \
+    -H "Content-Type: application/json" \
+    -d '{
+          "targetImage": [
+            {
+              "path": "https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png"
+            }
+          ],
+          "sourceImage": [
+            {
+              "path": "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"
+            }
+          ],
+          "model_name": "akool_faceswap_image_hq",
+          "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
+        }'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"targetImage\": [\n        {\n            \"path\": \"https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png\"\n        }\n    ],\n    \"sourceImage\": [\n        {\n            \"path\": \"https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg\"\n        }\n    ],\n    \"model_name\": \"akool_faceswap_image_hq\",\n    \"webhookUrl\": \"https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage\"\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage")
+  .method("POST", body)
+  .addHeader("Authorization", "Bearer token")
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer token");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "targetImage": [
+    {
+      "path": "https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png"
+    }
+  ],
+  "sourceImage": [
+    {
+      "path": "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"
+    }
+  ],
+  "model_name": "akool_faceswap_image_hq",
+  "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP  
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer token',
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "targetImage": [
+    {
+      "path": "https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png"
+    }
+  ],
+  "sourceImage": [
+    {
+      "path": "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"
+    }
+  ],
+  "model_name": "akool_faceswap_image_hq",
+  "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python  
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage"
+
+payload = json.dumps({
+  "targetImage": [
+    {
+      "path": "https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png"
+    }
+  ],
+  "sourceImage": [
+    {
+      "path": "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"
+    }
+  ],
+  "model_name": "akool_faceswap_image_hq",
+  "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
+})
+headers = {
+  'Authorization': 'Bearer token',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000, // Interface returns business status code
+  "msg": "Please be patient! If your results are not generated in three hours, please check your input image.", // Interface returns status information
+  "data": {
+    "_id": "6593c94c0ef703e8c055e3c8",  // Interface returns data
+    "url": "https://***.cloudfront.net/final_71688047459_.pic-1704184129269-4947-f8abc658-fa82-420f-b1b3-c747d7f18e14-8535.jpg",    // faceswap result url
+    "job_id": "20240102082900592-5653"  // Task processing unique id
+  }
+}
+```
+
+### Video Faceswap
 
 ```
 POST https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo
@@ -227,29 +420,29 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo
 
 **Request Headers**
 
-| **Parameter** | **Value**        | **Description**                             |
-|---------------|------------------|---------------------------------------------|
+| **Parameter** | **Value**    | **Description**                             |
+|---------------|--------------|---------------------------------------------|
 | Authorization | Bearer `{token}` | Your API Key used for request authorization |
 
 **Body Attributes**
 
-| **Parameter** | **Type** | **Value**                   | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-|---------------|----------|-----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| sourceImage   | Array    | `[{path:"",opts:""}]`       | Replacement Target Image Information: The sourceImage should contain a collection of face links to be swapped. To obtain these links and key point data, pass your image through the [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect). Ensure the data corresponds to the order of the targetImage. Each image in the sourceImage must contain only one face, or the face swap may fail. Each element in the array is an object with two properties: path, which is the link to the detected face in the original image, and opts, which contains key information about the face, retrievable via the API using the landmarks_str value.                                                                                                                                            |
-| targetImage   | Array    | `[{path:"",opts:""}]`       | Collection of Faces in the Original Video: targetImage represents the collection of faces detected after using modifyVideo. If the original video contains multiple faces, this includes the image link and key point data for each detected face. To obtain this data, pass the video through the [https://sg3.akool.com/detect](https://docs.akool.com/ai-tools-suite/faceswap#face-detect). Each element in the array is an object with two properties: path, which links to the faces detected in the target images, and opts, which holds key information about the detected faces, retrievable via the API using the landmarks_str value.                                                                                                                                                                               |
-| face_enhance  | Int    | <p align="center">0 or 1</p>| Whether facial enhancement: "1" means open， "0" means close                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| modifyVideo   | String   |                             | ModifyImage represents the original image you need to change the face                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| webhookUrl    | String   |                             | Callback URL address based on HTTP request                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **Parameter** | **Type** | **Value**             | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+|---------------|----------|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sourceImage   | Array    | `[{path:"",opts:""}]` | Replacement target image information:sourceImage means that you need to change it to the link collection of the face you need. You need to pass your image through the [Face Detect API](/ai-tools-suite/faceswap#face-detect) interface. Obtain the link and key point data and fill them here, and ensure that they correspond to the order of the targetImage. You need to pay attention to that each picture in the sourceImage must be a single face, otherwise the face change may fail. (Each array element is an object, and the object contains 2 properties, path:Links to faces detected in the original image. opts: Key information of faces detected in original pictures【You can get it through the face [Face Detect API](/ai-tools-suite/faceswap#face-detect) API, You can get the landmarks_str value returned by the api interface as the value of opts) |
+| targetImage   | Array    | `[{path:"",opts:""}]` |  A collection of faces in the original video： targetImage represents the collection of faces after face detection using modifyVideo. When the original video has multiple faces, here is the image link and key point data of each face. You need to pass [Face Detect API](/ai-tools-suite/faceswap#face-detect) interface to obtain data.(Each array element is an object, and the object contains 2 properties, path:Links to faces detected in target images. opts: Key information of the face detected in the target image【You can get it through the face [Face Detect API](/ai-tools-suite/faceswap#face-detect) API, You can get the landmarks_str value returned by the api interface as the value of opts)                                                                                                                                                                       |
+| face_enhance  | Int      | 0 or 1                | Whether facial enhancement: 1 means open， 0 means close                                            |
+| modifyVideo   | String   |                       | modifyImage represents the original image you need to change the face                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| webhookUrl    | String   |                       | Callback url address based on HTTP request                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 **Response Attributes**
 
-| **Parameter** | **Type**   | **Value**                     | **Description**                                                                          |
+| Parameter | Type   | Value                         | Description                                                                             |
 |-----------|--------|-------------------------------|-----------------------------------------------------------------------------------------|
-| code      | Int  | <p align="center">1000</p> | API returns status code (1000: success)                                   |
-| msg       | String |                               | API returns status message                                                  |
-| data      | Object | <p align="center">`{_id:"",url: "",job_id: ""}`</p> | `_id`: Interface returns data URL: face Swap result URL job_id: Task processing unique id |
+| code      | int    | 1000                          | Interface returns business status code(1000: success)                                   |
+| msg       | String |                               | Interface returns status information                                                    |
+| data      | Object | `{_id:"",url: "",job_id: ""}` | `_id`: Interface returns data url: faceswwap result url job_id: Task processing unique id |
 
-### Example
+**Example**
 
 **Body**
 
@@ -422,7 +615,7 @@ print(response.text)
 
 ```json
 {
-  "code": 1000, // API returns status code 
+  "code": 1000, // Interface returns business status code
   "msg": "Please be patient! If your results are not generated in three hours, please check your input image.", // Interface returns status information
   "data": {
     "_id": "6582bf774e47940151d8fa1e",  // db id
@@ -432,7 +625,7 @@ print(response.text)
 }
 ```
 
-## Get Face Swap Result List Byids
+### Get Faceswap Result List Byids
 
 ```
 GET https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f27b33f466877701c6a
@@ -443,24 +636,24 @@ GET https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f2
 
 | **Parameter** |   **Value**    | **Description**                                                                                               |
 |---------------|----------------|---------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 
 **Query Attributes**
 
-| **Parameter** | **Type**   | **Value** | **Description**                                                                                                                                                                                                                          |
+| Parameter | Type   | Value | Description                                                                                                                                                                                                                          |
 |-----------|--------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| _ids      | String |       | result ids are strings separated by commas【You can get it by returning the _id field from [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage](https://docs.akool.com/ai-tools-suite/faceswap#image-faceswap) or [https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo](https://docs.akool.com/ai-tools-suite/faceswap#video-faceswap) api.】 |
+| _ids      | String |       | result ids are strings separated by commas【You can get it by returning the _id field from [Image Faceswap API](/ai-tools-suite/faceswap#image-faceswap) or [Video Faceswap API](/ai-tools-suite/faceswap#video-faceswap) api.】 |
 
 **Response Attributes**
 
-| Parameter | Type   | Value                                                                        | Description                                                                                                                                                   |
-|-----------|--------|------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| code      | Int  | <p align="center">1000</p>                                                   | API returns status code  (1000: success)                                                                                                         |
-| msg       | String |                                                                              | API returns status message                                                                                                                        |
-| data      | Object | <p align="center">`result: [{faceswap_status:"",url: "",createdAt: ""}]`</p> | faceswap_status: faceswap result status: 1 In Queue 2 Processing 3 Success 4 failed URL: face swap result URL createdAt: current face swap action created time |
+| Parameter | Type   | Value                                                  | Description                                                                                                                                                   |
+|-----------|--------|--------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| code      | int    | 1000                                                   | Interface returns business status code(1000: success)                                                                                                         |
+| msg       | String |                                                        | Interface returns status information                                                                                                                          |
+| data      | Object | `result: [{faceswap_status:"",url: "",createdAt: ""}]` | faceswap_status: faceswap result status: 1 In Queue 2 Processing 3 Success 4 failed url: faceswwap result url createdAt: current faceswap action created time |
 
-### Example
+**Example**
 
 **Request**
 
@@ -557,7 +750,7 @@ print(response.text)
 }
 ```
 
-## Get Face Swap User Credit Info
+### GET Faceswap User Credit Info
 
 ```
 GET https://openapi.akool.com/api/open/v3/faceswap/quota/info
@@ -568,17 +761,17 @@ GET https://openapi.akool.com/api/open/v3/faceswap/quota/info
 
 | **Parameter**  | **Value**       | **Description**                                          |
 |----------------|-----------------|----------------------------------------------------------|
-| Authorization  | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token)              |
+| Authorization  | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token)              |
 
 **Response Attributes**
 
-| Parameter | Type   | Value                                                               | Description                                           |
-|-----------|--------|---------------------------------------------------------------------|-------------------------------------------------------|
-| code      | Int  | <p align="center">1000</p>| API returns status code (1000: success) |
-| msg       | String |                                                                     | API returns status message                |
-| data      | Object | <p align="center">`{"credit": 0 }`</p>                              | credit:  Account balance                              |
+| Parameter | Type   | Value            | Description                                           |
+|-----------|--------|------------------|-------------------------------------------------------|
+| code      | int    | 1000             | Interface returns business status code(1000: success) |
+| msg       | String |                  | Interface returns status information                  |
+| data      | Object | `{"credit": 0 }` | credit:  Account balance                              |
 
-### Example
+**Example**
 
 **Request**
 
@@ -659,7 +852,7 @@ print(response.text)
 }
 ```
 
-## POST Face Swap Result Del Byids
+### POST Faceswap Result Del Byids
 
 ```
 POST https://openapi.akool.com/api/open/v3/faceswap/result/delbyids
@@ -667,26 +860,26 @@ POST https://openapi.akool.com/api/open/v3/faceswap/result/delbyids
 
 **Request Headers**
 
-| **Parameter** | **Value**        | **Description**                             |
-|---------------|------------------|---------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| **Parameter** | **Value**    | **Description**                             |
+|---------------|--------------|---------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 
 **Body Attributes**
 
-| **Parameter** | Type   | Value | Description                                |
-|---------------|--------|-------|--------------------------------------------|
-| _ids          | String |       | Result ids are strings separated by commas |
+| Parameter | Type   | Value | Description                                |
+|-----------|--------|-------|--------------------------------------------|
+| _ids      | String |       | result ids are strings separated by commas |
 
 **Response Attributes**
 
-| **Parameter** | Type   | Value | Description                                          |
-|---------------|--------|-------|------------------------------------------------------|
-| code          | Int  | 1000  | API returns status code  (1000:success) |
-| msg           | String |       | API returns status message               |
+| Parameter | Type   | Value | Description                                          |
+|-----------|--------|-------|------------------------------------------------------|
+| code      | int    | 1000  | Interface returns business status code(1000:success) |
+| msg       | String |       | Interface returns status information                 |
 
 
-### Example
+**Example**
 
 **Body**
 
@@ -791,7 +984,7 @@ print(response.text)
 }
 ```
 
-## Face Detect
+###  Face Detect
 
 ```
 POST https://sg3.akool.com/detect
@@ -799,27 +992,27 @@ POST https://sg3.akool.com/detect
 
 **Request Headers**
 
-| **Parameter** | **Value**        | **Description**                             |
-|---------------|------------------|---------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| **Parameter** | **Value**    | **Description**                             |
+|---------------|--------------|---------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
 | Parameter   | Type    | Value      | Description                                                                                                                                           |
 |-------------|---------|------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| single_face | Boolean | true/false | It is a single face picture: This should be true when the incoming picture has only one face, and false when the incoming picture has multiple faces. |
-| image_url   | String  |            | Image link: You can choose to enter this parameter or the img parameter.                                                                              |
-| img         | String  |            | Image base64 information: You can choose to enter this parameter or the image_URL parameter.                                                          |
+| single_face | Boolean | true/false | Is it a single face picture: This should be true when the incoming picture has only one face, and false when the incoming picture has multiple faces. |
+| image_url   | String  |            | image link: You can choose to enter this parameter or the img parameter.                                                                              |
+| img         | String  |            | Image base64 information: You can choose to enter this parameter or the image_url parameter.                                                          |
 
 **Response Attributes**
 
-| **Parameter**  | Type     | Value                   | Description                                       |
-|----------------|----------|-------------------------|---------------------------------------------------|
-| error_code     | Int    | <p align="center">0</p> | API returns status code (0:success)               |
-| error_msg      | String   |                         | Error message of this API                         |
-| landmarks      | Array    | <p align="center">[]</p>| Key point data of face                            |
+| Parameter  | Type   | Value | Description                                       |
+|------------|--------|-------|---------------------------------------------------|
+| error_code | int    | 0     | Interface returns business status code(0:success) |
+| error_msg  | String |       | error message of this api                         |
+| landmarks  | Array  | []    | Key point data of face                            |
 
-### Example
+**Example**
 
 **Body**
 
@@ -964,16 +1157,16 @@ print(response.text)
   "trx_id": "74178dc5-199a-479a-89d0-4b0e1c161219"
 }
 ```
-## Response Code Description
+**Response Code Description**
 
 <Note> Please note that if the value of the response code is not equal to 1000, the request is failed or wrong</Note>
 | **Parameter** | **Value** | **Description**                                      |
 |---------------|-----------|------------------------------------------------------|
-| code          | 1000      | Request completed successfully |
-| code          | 1003      | Invalid or missing parameters |
-| code          | 1005      | Requests are being made too frequently |
-| code          | 1006      | Your available quota is not enough  |
+| code          | 1000      | Success |
+| code          | 1003      | Parameter error  or Parameter can not be empty |
+| code          | 1005      | Operation is too frequent  |
+| code          | 1006      | Your quota is not enough  |
 | code          | 1007      | The number of people who can have their faces changed cannot exceed 8  |
-| code          | 1101      | Invalid authorization or the request token has expired  |
+| code          | 1101      | Invalid authorization or The request token has expired  |
 | code          | 1102      | Authorization cannot be empty  |
-| code          | 1200      | The account has been suspended |
+| code          | 1200      | The account has been banned  |

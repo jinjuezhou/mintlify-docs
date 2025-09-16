@@ -7,13 +7,13 @@ description: "Talking Avatar API documentation"
 
 ### Description
 
-- First you need to generate the voice through the following method or directly provide a link to the available voice file.
-  - If you want to use the system's sound model to generate speech, you need to generate a link by calling the interface [Create TTS](https://docs.akool.com/ai-tools-suite/voiceLab#create-text-to-speech)
-  - If you want to use the sound model you provide to generate speech, you need to generate a link by calling the interface [Create Voice Clone](https://docs.akool.com/ai-tools-suite/voiceLab#create-voice-clone)
+- First you need to generate the voice through the following method or directly provide a link to the available voice file
+  - If you want to use the system's sound model to generate speech, you need to generate a link by calling the interface [Create TTS](/ai-tools-suite/voiceLab#create-text-to-speech)
+  - If you want to use the sound model you provide to generate speech, you need to generate a link by calling the interface [Create Voice Clone](/ai-tools-suite/voiceLab#create-voice-clone)
 - Secondly, you need to provide an avatar link, which can be a picture or video.
-  - If you want to use the avatar provided by the system, you can obtain it through the interface [Get Avatar List](https://docs.akool.com/ai-tools-suite/talking-avatar#get-talking-avatar-list) .Or provide your own avatar URL.
-- Then, you need to generate an avatar video by calling the API [Create Talking Avatar](https://docs.akool.com/ai-tools-suite/talking-avatar#create-talking-avatar)
-- Finally, the processing status will be returned promptly through the provided callback address, or you can also query it by calling the interface [Get Video Info](https://docs.akool.com/ai-tools-suite/talking-avatar#get-video-info)
+  - If you want to use the avatar provided by the system, you can obtain it through the interface [Get Avatar List](/ai-tools-suite/talking-avatar#get-talking-avatar-list) .Or provide your own avatar url.
+- Then, you need to generate an avatar video by calling the API [Create Talking Avatar](/ai-tools-suite/talking-avatar#create-talking-avatar)
+- Finally,The processing status will be returned promptly through the provided callback address, or you can also query it by calling the interface [Get Video Info](/ai-tools-suite/talking-avatar#get-video-info)
 
 ## Get Talking Avatar List
 
@@ -25,7 +25,7 @@ GET https://openapi.akool.com/api/open/v3/avatar/list
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token) |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [Get Token](/authentication/usage#get-the-token) |
 
 **Query Attributes**
 
@@ -144,28 +144,28 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](https://docs.akool.com/authentication/usage#get-the-token). |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Body Attributes**
 
 | Parameter                      | Type     | Value | Description                                                                                                                                                                                                                                                                               |
 | ------------------------------ | -------- | ----- | ------------------------------------------------------------------------------------------------------------ |
-| width                          | Number   | <p align="center">3840</p>  | Set the output video width, must be 3840                                                                                   |
-| height                         | Number   | <p align="center">2160</p>  | Set the output video height, must be 2160                                                                                 |
-| avatar_from                    | Number   | <p align="center">2 or 3</p>    | You can use the avatar_from field from the avatar model, which can be retrieved via the [https://openapi.akool.com/api/open/v3/avatar/list](https://docs.akool.com/ai-tools-suite/talking-avatar#get-avatar-list), The API response will provide the from field, which you should pass here. If you provide your own avatar URL, set avatar_from to 3.                                                      |
-| webhookUrl                     | String   |       | Callback URL address based on HTTP request.                                                                  |
-| elements                       | [Object] |       | Collection of elements passed in the video.                                                                |
-| [elements].url                 | String |         | When the type is set to 'image,' the URL can either be a direct link to the image or a hexadecimal color code. If 'avatar_from' is set to 2, you do not need to provide the URL. Supported image formats include .png, .jpg, .jpeg, and .webp. Supported video formats include .mp4, .mov, and .avi. |
-| [elements].scale_x             | Number |  <p align="center">1</p>  | Horizontal scaling ratio (Required when type is equal to image or avatar)                                                                |
-| [elements].scale_y             | Number |  <p align="center"> 1</p>  | Vertical scaling ratio (Required when type is equal to image or avatar)                                                                  |
+| width                          | Number   | 3840  | Set the output video width,must be 3840                                                                                   |
+| height                         | Number   | 2160  | Set the output video height,must be 2160                                                                                 |
+| avatar_from                    | Number   |   2 or 3    | You use the avatar from of the avatar model, and you can get from [Get TalkingAvatar List](/ai-tools-suite/talking-avatar#get-avatar-list) api, you will obtain the field 【from】 and pass it here. If you provide an avatar URL yourself, avatar_from must be 3.                                                      |
+| webhookUrl                     | String   |       | Callback url address based on HTTP request.                                                                  |
+| elements                       | [Object] |       | Collection of elements passed in in the video                                                                |
+| [elements].url                 | String |         | Link to element(When type is equal to image, url can be either a link or a Hexadecimal Color Code). When avatar_from =2, you don't need to pass this parameter. The image formats currently only support ".png", ".jpg", ".jpeg", ".webp", and the video formats currently only support ".mp4", ".mov", ".avi"          |
+| [elements].scale_x             | Number |     1  | Horizontal scaling ratio(Required when type is equal to image or avatar)                                                                |
+| [elements].scale_y             | Number |     1  | Vertical scaling ratio (Required when type is equal to image or avatar)                                                                  |
 | [elements].offset_x            | Number |       | Horizontal offset of the upper left corner of the element from the video setting area (in pixels)(Required when type is equal to image or avatar)               |
 | [elements].offset_y            | Number |       | Vertical offset of the upper left corner of the element from the video setting area (in pixels)(Required when type is equal to image or avatar)                 |
 | [elements].height              | Number |       |       The height of the element           |
 | [elements].width               | Number |       |        The width of the element         |
 | [elements].type                | String |       | Element type（avatar、image、audio）                                                                                   |
-| [elements].avatar_id           | String |       |When type is equal to avatar, you use the avatar_id of the avatar model, and you can get from [https://openapi.akool.com/api/open/v3/avatar/list](https://docs.akool.com/ai-tools-suite/talking-avatar#get-avatar-list) api, you will obtain the field 【avatar_id】 and pass it here。 If you provide an avatar URL yourself, you don't need to pass this parameter.                                                     |
+| [elements].avatar_id           | String |       |When type is equal to avatar, you use the avatar_id of the avatar model, and you can get from [Get TalkingAvatar List](/ai-tools-suite/talking-avatar#get-avatar-list) api, you will obtain the field 【avatar_id】 and pass it here。 If you provide an avatar URL yourself, you don't need to pass this parameter.                                                     |
 | [elements].input_text                | String |       | Audio element support, for input text, the per-request character limit depends on the subscription plan: Pro – 5,000, Pro Max – 10,000, Business – 50,000.   If both the URL and the input text fields are passed, the URL takes precedence.  The "input_text" and "voice_id" fields must both be present.                                                                               |
-| [elements].voice_id                | String |       | Audio element support. [getVoiceId](https://docs.akool.com/ai-tools-suite/voiceLab#get-voice-list)                                                                                  |
+| [elements].voice_id                | String |       | Audio element support. [Get Voice List](/ai-tools-suite/voiceLab#get-voice-list)                                                                                  |
 
 **Response Attributes**
 
@@ -178,8 +178,8 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 <Note>
   Please note that the generated video link can only be obtained when video_status is equal to 3. 
   We provide 2 methods:
-    1. Obtain through [webhook](https://docs.akool.com/ai-tools-suite/webhook#encryption-and-decryption-technology-solution)
-    2. Obtain by polling the following interface [Get Video Info](https://docs.akool.com/ai-tools-suite/avatar#get-video-info)
+    1. Obtain through [webhook](/ai-tools-suite/webhook#encryption-and-decryption-technology-solution)
+    2. Obtain by polling the following interface [Get Video Info](/ai-tools-suite/avatar#get-video-info)
 </Note>
 
 ### Example
@@ -452,13 +452,13 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 | **Parameter** | **Value**    | **Description**                                                                                                |
 | ------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token). |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Query Attributes**
 
 | **Parameter**  | **Type** | **Value** | **Description**                                                                                                                       |
 | -------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| video_model_id | String   | NULL      | video db id: You can get it based on the `_id` field returned by [https://openapi.akool.com/api/open/v3/talkingavatar/create](https://docs.akool.com/ai-tools-suite/talking-avatar#create-talking-avatar) . |
+| video_model_id | String   | NULL      | video db id: You can get it based on the `_id` field returned by [Generate TalkingAvatar](/ai-tools-suite/talking-avatar#create-talking-avatar) . |
 
 **Response Attributes**
 
@@ -567,7 +567,7 @@ GET https://openapi.akool.com/api/open/v3/avatar/detail
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token)|
+| Authorization | Bearer `{token}`| Your API Key used for request authorization. [Get Token](/authentication/usage#get-the-token)|
 
 **Query Attributes**
 
@@ -684,7 +684,7 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                                     |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer token | Your API Key used for request authorization. [getToken](https://docs.akool.com/authentication/usage#get-the-token)|
+| Authorization | Bearer token | Your API Key used for request authorization. [Get Token](/authentication/usage#get-the-token)|
 
 **Body Attributes**
 
