@@ -149,7 +149,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
 | ~~merge_interval~~  | Number   | 1          | The segmentation interval of video translation, the default is 1 second. ***This field is deprecated***                       |
 | ~~face_enhance~~    | Boolean  | true/false | Whether to facial process the translated video, this parameter only works when lipsync is true. ***This field is deprecated*** |
 | webhookUrl      | String   |            | Callback url address based on HTTP request.                                                     |
-| speaker_num      | Number   |      1      | Number of speakers in the video, the default is 1.                                                     |
+| speaker_num      | Number   |      0      | Number of speakers in the video, the default is 0 (Auto Detect).                                                     |
 
 **Response Attributes**
 
