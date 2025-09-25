@@ -17,8 +17,9 @@ POST https://openapi.akool.com/api/open/v3/content/video/lipsync
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
-| ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Body Attributes**
 
@@ -187,8 +188,10 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
-| ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token)|
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+
 
 **Query Attributes**
 

@@ -24,9 +24,10 @@ POST https://openapi.akool.com/api/open/v3/avatar/create
 
 **Request Headers**
 
-| **Parameter** | **Type** | **Required** | **Description** |
-|-----------|------|----------|-------------|
-| Authorization | String | Yes | Bearer token for API authentication. Obtain from [Get Token](/authentication/usage#get-the-token) endpoint. |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Body Attributes**
 
@@ -181,9 +182,10 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/list
 
 **Request Headers**
 
-| **Parameter** | **Type** | **Required** | **Description** |
-|-----------|------|----------|-------------|
-| Authorization | String | Yes | Bearer token for API authentication. Obtain from [Get Token](/authentication/usage#get-the-token) endpoint. |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Query Parameters**
 
@@ -323,9 +325,10 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/avatar/detail
 
 **Request Headers**
 
-| **Parameter** | **Type** | **Required** | **Description** |
-|-----------|------|----------|-------------|
-| Authorization | String | Yes | Bearer token for API authentication. Obtain from [Get Token](/authentication/usage#get-the-token) endpoint. |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Query Parameters**
 
@@ -457,8 +460,9 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/create
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
-| ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](/authentication/usage#get-the-token)|
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Body Attributes**
 
@@ -657,8 +661,9 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
-| ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[getToken](/authentication/usage#get-the-token) |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Query Attributes**
 
@@ -775,8 +780,9 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/close
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
-| ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization. [getToken](/authentication/usage#get-the-token)|
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Body Attributes**
 
@@ -880,8 +886,9 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
-| ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [getToken](/authentication/usage#get-the-token) |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Query Attributes**
 

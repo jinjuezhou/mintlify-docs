@@ -13,7 +13,8 @@ POST https://openapi.akool.com/api/open/v3/content/analysis/sentiment
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer token | Your API Key used for request authorization. You can get from https://openapi.akool.com/api/open/v3/getToken api. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Body Attributes**
 
@@ -169,9 +170,10 @@ GET https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662df792
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                                                                                                |
-|---------------|--------------|----------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer token | Your API Key used for request authorization. You can get from https://openapi.akool.com/api/open/v3/getToken api. |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Query Attributes**
 

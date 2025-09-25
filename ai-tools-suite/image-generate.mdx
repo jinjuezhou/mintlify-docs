@@ -16,6 +16,7 @@ POST https://openapi.akool.com/api/open/v3/content/image/createbyprompt
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
 | Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Body Attributes**
 
@@ -182,6 +183,7 @@ POST https://openapi.akool.com/api/open/v3/content/image/createbybutton
 | **Parameter**  | **Value**       | **Description**                                          |
 |----------------|-----------------|----------------------------------------------------------|
 | Authorization  | Bearer `{token}`    | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token)|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Body Attributes**
 
@@ -338,6 +340,7 @@ GET https://openapi.akool.com/api/open/v3/content/image/infobymodelid?image_mode
 | **Parameter**  | **Value**       | **Description**                                          |
 |----------------|-----------------|----------------------------------------------------------|
 | Authorization  | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token)|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Query Attributes**
 

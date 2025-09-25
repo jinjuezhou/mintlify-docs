@@ -20,9 +20,10 @@ GET https://openapi.akool.com/api/open/v3/language/list
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                                                                                                                                                     |
-| ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [Get Token](/authentication/usage#get-the-token)|
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Response Attributes**
 
@@ -136,8 +137,10 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
-| ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [Get Token](/authentication/usage#get-the-token)|
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+
 **Body Attributes**
 
 | **Parameter**   | **Type** | **Value**  | **Description**                                                                                 |
@@ -322,8 +325,9 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 **Request Headers**
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
-| ------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token)|
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 
 **Query Attributes**
 
