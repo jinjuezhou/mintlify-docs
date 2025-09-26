@@ -105,7 +105,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt' \
---header 'Authorization: Bearer {{token}}' \
+--header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
   "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
@@ -172,7 +172,7 @@ fetch("https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt", 
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -214,7 +214,7 @@ payload = json.dumps({
   "webhookurl": ""
 })
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -315,7 +315,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/resultsByIds
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/image2Video/resultsByIds' \
---header 'Authorization: Bearer {{token}}' \
+--header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
   "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c"
@@ -362,7 +362,7 @@ fetch("https://openapi.akool.com/api/open/v4/image2Video/resultsByIds", requestO
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -384,7 +384,7 @@ payload = json.dumps({
   "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c"
 })
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -484,7 +484,7 @@ GET https://openapi.akool.com/api/open/v4/image2Video/effects
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/image2Video/effects' \
---header 'Authorization: Bearer {{token}}'
+--header 'x-api-key: {{API Key}}'
 ```
 
 ```java Java
@@ -518,7 +518,7 @@ fetch("https://openapi.akool.com/api/open/v4/image2Video/effects", requestOption
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}'
+  'x-api-key' =>'{{API Key}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/image2Video/effects', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -532,7 +532,7 @@ import requests
 url = "https://openapi.akool.com/api/open/v4/image2Video/effects"
 
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}'
+  'x-api-key':'{{API Key}}'
 }
 
 response = requests.request("GET", url, headers=headers)
@@ -647,7 +647,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/updateVideoAudio
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/image2Video/updateVideoAudio' \
---header 'Authorization: Bearer {{token}}' \
+--header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
   "pre_video_id": "6890830af27dfad2a3e6062d",
@@ -698,7 +698,7 @@ fetch("https://openapi.akool.com/api/open/v4/image2Video/updateVideoAudio", requ
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -724,7 +724,7 @@ payload = json.dumps({
   "audio_type": 2
 })
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -813,7 +813,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/delbyids
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/image2Video/delbyids' \
---header 'Authorization: Bearer {{token}}' \
+--header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
   "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c,6891a2295d612f78c9204f77"
@@ -860,7 +860,7 @@ fetch("https://openapi.akool.com/api/open/v4/image2Video/delbyids", requestOptio
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -882,7 +882,7 @@ payload = json.dumps({
   "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c,6891a2295d612f78c9204f77"
 })
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 

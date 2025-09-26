@@ -94,7 +94,7 @@ GET https://openapi.akool.com/api/open/v4/knowledge/list
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/knowledge/list?page=1&size=10' \
---header 'Authorization: Bearer YOUR_TOKEN'
+--header 'x-api-key: {{API Key}}'
 ```
 
 ```java Java
@@ -128,7 +128,7 @@ fetch("https://openapi.akool.com/api/open/v4/knowledge/list?page=1&size=10", req
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' YOUR_TOKEN'
+  'x-api-key' =>'{{API Key}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/knowledge/list?page=1&size=10', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -141,7 +141,7 @@ import requests
 url = "https://openapi.akool.com/api/open/v4/knowledge/list?page=1&size=10"
 
 headers = {
-  'x-api-key':'{{API Key}}' YOUR_TOKEN'
+  'x-api-key':'{{API Key}}'
 }
 
 response = requests.request("GET", url, headers=headers)
@@ -242,7 +242,7 @@ POST https://openapi.akool.com/api/open/v4/knowledge/create
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/knowledge/create' \
---header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
   "name": "Customer Support KB",
@@ -315,7 +315,7 @@ fetch("https://openapi.akool.com/api/open/v4/knowledge/create", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' YOUR_TOKEN',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -362,7 +362,7 @@ payload = json.dumps({
   ]
 })
 headers = {
-  'x-api-key':'{{API Key}}' YOUR_TOKEN',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -441,7 +441,7 @@ GET https://openapi.akool.com/api/open/v4/knowledge/detail
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/knowledge/detail?id=64f8a1b2c3d4e5f6a7b8c9d0' \
---header 'Authorization: Bearer YOUR_TOKEN'
+--header 'x-api-key: {{API Key}}'
 ```
 
 ```java Java
@@ -475,7 +475,7 @@ fetch("https://openapi.akool.com/api/open/v4/knowledge/detail?id=64f8a1b2c3d4e5f
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' YOUR_TOKEN'
+  'x-api-key' =>'{{API Key}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/knowledge/detail?id=64f8a1b2c3d4e5f6a7b8c9d0', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -488,7 +488,7 @@ import requests
 url = "https://openapi.akool.com/api/open/v4/knowledge/detail?id=64f8a1b2c3d4e5f6a7b8c9d0"
 
 headers = {
-  'x-api-key':'{{API Key}}' YOUR_TOKEN'
+  'x-api-key':'{{API Key}}'
 }
 
 response = requests.request("GET", url, headers=headers)
@@ -588,7 +588,7 @@ POST https://openapi.akool.com/api/open/v4/knowledge/update
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/knowledge/update' \
---header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
   "id": "64f8a1b2c3d4e5f6a7b8c9d0",
@@ -661,7 +661,7 @@ fetch("https://openapi.akool.com/api/open/v4/knowledge/update", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' YOUR_TOKEN',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -708,7 +708,7 @@ payload = json.dumps({
   ]
 })
 headers = {
-  'x-api-key':'{{API Key}}' YOUR_TOKEN',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -790,7 +790,7 @@ DELETE https://openapi.akool.com/api/open/v4/knowledge/delete
 
 ```bash cURL
 curl --location --request DELETE 'https://openapi.akool.com/api/open/v4/knowledge/delete' \
---header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
   "id": "64f8a1b2c3d4e5f6a7b8c9d0"
@@ -837,7 +837,7 @@ fetch("https://openapi.akool.com/api/open/v4/knowledge/delete", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' YOUR_TOKEN',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -858,7 +858,7 @@ payload = json.dumps({
   "id": "64f8a1b2c3d4e5f6a7b8c9d0"
 })
 headers = {
-  'x-api-key':'{{API Key}}' YOUR_TOKEN',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -925,7 +925,7 @@ Here's a complete workflow showing how to create a knowledge base and integrate 
 ```bash
 # 1. Create a knowledge base
 curl -X POST "https://openapi.akool.com/api/open/v4/knowledge/create" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "x-api-key: {{API Key}}" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Customer Support KB",
@@ -946,7 +946,7 @@ curl -X POST "https://openapi.akool.com/api/open/v4/knowledge/create" \
 
 # 2. Use the knowledge base in a streaming avatar session
 curl -X POST "https://openapi.akool.com/api/open/v4/liveAvatar/session/create" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "x-api-key: {{API Key}}" \
   -H "Content-Type: application/json" \
   -d '{
     "avatar_id": "your_avatar_id",
