@@ -35,8 +35,8 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
@@ -130,7 +130,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n  \"image_url\": \"https://
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt")
   .method("POST", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -138,7 +138,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -172,7 +172,7 @@ fetch("https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt", 
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}',
+  'x-api-key' =>'{{API Key}}' {{token}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -214,7 +214,7 @@ payload = json.dumps({
   "webhookurl": ""
 })
 headers = {
-  'Authorization': 'Bearer {{token}}',
+  'x-api-key':'{{API Key}}' {{token}}',
   'Content-Type': 'application/json'
 }
 
@@ -262,8 +262,8 @@ POST https://openapi.akool.com/api/open/v4/image2Video/resultsByIds
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
@@ -330,7 +330,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n  \"_ids\": \"68919a464b4db
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/image2Video/resultsByIds")
   .method("POST", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -338,7 +338,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -362,7 +362,7 @@ fetch("https://openapi.akool.com/api/open/v4/image2Video/resultsByIds", requestO
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}',
+  'x-api-key' =>'{{API Key}}' {{token}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -384,7 +384,7 @@ payload = json.dumps({
   "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c"
 })
 headers = {
-  'Authorization': 'Bearer {{token}}',
+  'x-api-key':'{{API Key}}' {{token}}',
   'Content-Type': 'application/json'
 }
 
@@ -459,8 +459,8 @@ GET https://openapi.akool.com/api/open/v4/image2Video/effects
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Response Attributes**
 
@@ -493,14 +493,14 @@ OkHttpClient client = new OkHttpClient().newBuilder()
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/image2Video/effects")
   .method("GET", null)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .build();
 Response response = client.newCall(request).execute();
 ```
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 
 const requestOptions = {
   method: "GET",
@@ -518,7 +518,7 @@ fetch("https://openapi.akool.com/api/open/v4/image2Video/effects", requestOption
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}'
+  'x-api-key' =>'{{API Key}}' {{token}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/image2Video/effects', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -532,7 +532,7 @@ import requests
 url = "https://openapi.akool.com/api/open/v4/image2Video/effects"
 
 headers = {
-  'Authorization': 'Bearer {{token}}'
+  'x-api-key':'{{API Key}}' {{token}}'
 }
 
 response = requests.request("GET", url, headers=headers)
@@ -589,8 +589,8 @@ POST https://openapi.akool.com/api/open/v4/image2Video/updateVideoAudio
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
@@ -664,7 +664,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n  \"pre_video_id\": \"68908
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/image2Video/updateVideoAudio")
   .method("POST", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -672,7 +672,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -698,7 +698,7 @@ fetch("https://openapi.akool.com/api/open/v4/image2Video/updateVideoAudio", requ
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}',
+  'x-api-key' =>'{{API Key}}' {{token}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -724,7 +724,7 @@ payload = json.dumps({
   "audio_type": 2
 })
 headers = {
-  'Authorization': 'Bearer {{token}}',
+  'x-api-key':'{{API Key}}' {{token}}',
   'Content-Type': 'application/json'
 }
 
@@ -776,8 +776,8 @@ POST https://openapi.akool.com/api/open/v4/image2Video/delbyids
 
 | **Parameter** | **Value**    | **Description**                                                                                                                                               |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
 
@@ -828,7 +828,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n  \"_ids\": \"68919a464b4db
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/image2Video/delbyids")
   .method("POST", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -836,7 +836,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -860,7 +860,7 @@ fetch("https://openapi.akool.com/api/open/v4/image2Video/delbyids", requestOptio
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}',
+  'x-api-key' =>'{{API Key}}' {{token}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -882,7 +882,7 @@ payload = json.dumps({
   "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c,6891a2295d612f78c9204f77"
 })
 headers = {
-  'Authorization': 'Bearer {{token}}',
+  'x-api-key':'{{API Key}}' {{token}}',
   'Content-Type': 'application/json'
 }
 

@@ -55,8 +55,8 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Body Attributes**
 
@@ -158,7 +158,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n    \"source_voice_file\": 
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/clone")
   .method("POST", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -166,7 +166,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -203,7 +203,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/clone", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}',
+  'x-api-key' =>'{{API Key}}' {{token}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -251,7 +251,7 @@ payload = json.dumps({
     "webhookUrl": "",
 })
 headers = {
-  'Authorization': 'Bearer {{token}}',
+  'x-api-key':'{{API Key}}' {{token}}',
   'Content-Type': 'application/json'
 }
 
@@ -307,8 +307,8 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Body Attributes**
 
@@ -530,7 +530,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n    \"input_text\": \"In la
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/tts")
   .method("POST", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -538,7 +538,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -620,7 +620,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/tts", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}',
+  'x-api-key' =>'{{API Key}}' {{token}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -758,7 +758,7 @@ payload = json.dumps({
     }
 })
 headers = {
-  'Authorization': 'Bearer {{token}}',
+  'x-api-key':'{{API Key}}' {{token}}',
   'Content-Type': 'application/json'
 }
 
@@ -814,8 +814,8 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Body Attributes**
 
@@ -917,7 +917,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n    \"voice_id\": \"6889b62
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/change")
   .method("POST", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -925,7 +925,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -961,7 +961,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/change", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}',
+  'x-api-key' =>'{{API Key}}' {{token}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -1007,7 +1007,7 @@ payload = json.dumps({
     "webhookUrl": ""
 })
 headers = {
-  'Authorization': 'Bearer {{token}}',
+  'x-api-key':'{{API Key}}' {{token}}',
   'Content-Type': 'application/json'
 }
 
@@ -1060,8 +1060,8 @@ GET https://openapi.akool.com/api/open/v4/voice/resource/list
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Query Attributes**
 
@@ -1118,14 +1118,14 @@ RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/resource/list?type=1&page=1&size=10")
   .method("GET", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .build();
 Response response = client.newCall(request).execute();
 ```
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 
 const requestOptions = {
   method: "GET",
@@ -1143,7 +1143,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/resource/list?type=1&page=1&s
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}'
+  'x-api-key' =>'{{API Key}}' {{token}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/resource/list?type=1&page=1&size=10', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -1158,7 +1158,7 @@ url = "https://openapi.akool.com/api/open/v4/voice/resource/list?type=1&page=1&s
 
 payload = {}
 headers = {
-  'Authorization': 'Bearer {{token}}'
+  'x-api-key':'{{API Key}}' {{token}}'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)
@@ -1212,8 +1212,8 @@ GET https://openapi.akool.com/api/open/v4/voice/list
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Query Attributes**
 
@@ -1281,14 +1281,14 @@ RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/list?type=1&page=1&size=10&style=Calm,Authoritative&gender=Male&name=MyVoice")
   .method("GET", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .build();
 Response response = client.newCall(request).execute();
 ```
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 
 const requestOptions = {
   method: "GET",
@@ -1306,7 +1306,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/list?type=1&page=1&size=10&st
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}'
+  'x-api-key' =>'{{API Key}}' {{token}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/list?type=1&page=1&size=10&style=Calm,Authoritative&gender=Male&name=MyVoice', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -1321,7 +1321,7 @@ url = "https://openapi.akool.com/api/open/v4/voice/list"
 
 payload = {}
 headers = {
-  'Authorization': 'Bearer {{token}}'
+  'x-api-key':'{{API Key}}' {{token}}'
 }
 
 params = {
@@ -1396,8 +1396,8 @@ POST https://openapi.akool.com/api/open/v4/voice/del
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Body Attributes**
 
@@ -1454,7 +1454,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n    \"_ids\": [\n        \"
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/del")
   .method("DELETE", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -1462,7 +1462,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -1489,7 +1489,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/del", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}',
+  'x-api-key' =>'{{API Key}}' {{token}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -1517,7 +1517,7 @@ payload = json.dumps({
   ]
 })
 headers = {
-  'Authorization': 'Bearer {{token}}',
+  'x-api-key':'{{API Key}}' {{token}}',
   'Content-Type': 'application/json'
 }
 
@@ -1557,8 +1557,8 @@ GET https://openapi.akool.com/api/open/v4/voice/detail/{_id}
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Path Attributes**
 
@@ -1613,14 +1613,14 @@ RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529fa")
   .method("GET", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .build();
 Response response = client.newCall(request).execute();
 ```
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 
 const requestOptions = {
   method: "GET",
@@ -1638,7 +1638,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}'
+  'x-api-key' =>'{{API Key}}' {{token}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529fa', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -1653,7 +1653,7 @@ url = "https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529
 
 payload = {}
 headers = {
-  'Authorization': 'Bearer {{token}}'
+  'x-api-key':'{{API Key}}' {{token}}'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)
@@ -1711,8 +1711,8 @@ GET https://openapi.akool.com/api/open/v4/voice/resource/detail/{_id}
 
 | **Parameter** | **Value**    | **Description**                                                                                                   |
 |---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Path Attributes**
 
@@ -1766,14 +1766,14 @@ RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b269d1123ffb")
   .method("GET", body)
-  .addHeader("Authorization", "Bearer {{token}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .build();
 Response response = client.newCall(request).execute();
 ```
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{token}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 
 const requestOptions = {
   method: "GET",
@@ -1791,7 +1791,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer {{token}}'
+  'x-api-key' =>'{{API Key}}' {{token}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b269d1123ffb', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -1806,7 +1806,7 @@ url = "https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b
 
 payload = {}
 headers = {
-  'Authorization': 'Bearer {{token}}'
+  'x-api-key':'{{API Key}}' {{token}}'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)
