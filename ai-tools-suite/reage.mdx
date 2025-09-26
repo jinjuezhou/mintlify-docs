@@ -63,7 +63,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/imgreage
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/highquality/imgreage' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "targetImage": [
@@ -245,7 +245,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "targetImage": [    // Replacement target image information
@@ -407,7 +407,7 @@ GET https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f2
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f27b33f466877701c6a' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java
@@ -538,7 +538,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/job/del
 ```bash cURL
 
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/job/del' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "job_ids":""

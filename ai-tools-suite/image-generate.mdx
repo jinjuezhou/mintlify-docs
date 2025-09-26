@@ -55,7 +55,7 @@ POST https://openapi.akool.com/api/open/v3/content/image/createbyprompt
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/image/createbyprompt' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "prompt": "Sun Wukong is surrounded by heavenly soldiers and generals",
@@ -219,7 +219,7 @@ POST https://openapi.akool.com/api/open/v3/content/image/createbybutton
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/image/createbybutton' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "_id": "65d3206b83ccf5ab7d46cdc6",
@@ -364,7 +364,7 @@ GET https://openapi.akool.com/api/open/v3/content/image/infobymodelid?image_mode
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/image/infobymodelid?image_model_id=662a10df4197b3af58532e89' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java

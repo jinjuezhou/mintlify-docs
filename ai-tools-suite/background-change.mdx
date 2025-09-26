@@ -110,7 +110,7 @@ POST https://openapi.akool.com/api/open/v3/content/image/bg/replace
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/image/bg/replace' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "canvas_size": "3840x3840",
@@ -282,7 +282,7 @@ GET https://openapi.akool.com/api/open/v3/content/image/infobymodelid?image_mode
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/image/infobymodelid?image_model_id=660d15b83ec46e810ca642f5' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java

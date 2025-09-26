@@ -183,7 +183,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytranslate' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "url": "https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4",
@@ -351,7 +351,7 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 ```bash cURL
 curl --location 'http://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64b126c4a680e8edea44f02b' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java

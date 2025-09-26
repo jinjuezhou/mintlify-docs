@@ -71,7 +71,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage
 
 ```bash cURL
 curl -X POST --location "https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyimage" \
-    -H "Authorization: Bearer token" \
+    -H "x-api-key: {{API Key}}" \
     -H "Content-Type: application/json" \
     -d '{
           "sourceImage": [
@@ -277,7 +277,7 @@ POST https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage
 
 ```bash cURL
 curl -X POST --location "https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage" \
-    -H "Authorization: Bearer token" \
+    -H "x-api-key: {{API Key}}" \
     -H "Content-Type: application/json" \
     -d '{
           "targetImage": [
@@ -477,7 +477,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/highquality/specifyvideo' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "sourceImage": [
@@ -666,7 +666,7 @@ GET https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f2
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f27b33f466877701c6a' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java 
@@ -785,7 +785,7 @@ GET https://openapi.akool.com/api/open/v3/faceswap/quota/info
 
 ```bash
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/quota/info' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java 
@@ -902,7 +902,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/result/delbyids
 ```bash cURL
 
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/result/delbyids' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "_ids":""
@@ -1037,7 +1037,7 @@ POST https://sg3.akool.com/detect
 
 ```bash cURL
 curl --location 'https://sg3.akool.com/detect' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
   "single_face": false,

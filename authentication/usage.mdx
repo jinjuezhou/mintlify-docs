@@ -13,14 +13,6 @@ OpenAPI uses API keys for authentication. Get your API token from our API interf
 
 <Tip>All API requests should include your API token or API Key in the HTTP header.
 Bearer tokens or API Keys are generally composed of a random string of characters. Formally, the API token takes the form of the "Bearer" keyword and the token value separated by spaces. You can choose to use either the API token or the API Key. If both values are present, the API Token will be used first and the API Key will be discarded.</Tip>
-<Tip>The following is the general form of a Bearer token:</Tip>
-```
-Authorization: Bearer {token}
-```
-<Tip>Here is an example of an actual Bearer token:</Tip>
-```
-Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTA2Mjg1N2YzNWNjNTJlM2UxNzYyMCIsInR5cGUiOiJ1c2VyIiwiZnJvbSI6InRvYiIsImVtYWlsIjoiZ3VvZG9uZ2RvbmdAYWtvb2wuY29tIiwiZmlyc3ROYW1lIjoiZGQiLCJ1aWQiOjkwMzI4LCJjb2RlIjoiNTY1NCIsImlhdCI6MTczMjg2NzczMiwiZXhwIjoxNzMyODY3NzMzfQ._pilTnv8sPsrKCzrAyh9Lsvyge8NPxUG5Y_8CTdxad0
-```
 <Tip>The following is the general form of a API Key:</Tip>
 ```
 x-api-key: {API Key}
@@ -28,6 +20,14 @@ x-api-key: {API Key}
 <Tip>Here is an example of an actual API Key:</Tip>
 ```
 V5i0GoBkbgA2kZITeCTcJ6nVbYOsaHnM
+```
+<Tip>The following is the general form of a Bearer token:</Tip>
+```
+Authorization: Bearer {token}
+```
+<Tip>Here is an example of an actual Bearer token:</Tip>
+```
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTA2Mjg1N2YzNWNjNTJlM2UxNzYyMCIsInR5cGUiOiJ1c2VyIiwiZnJvbSI6InRvYiIsImVtYWlsIjoiZ3VvZG9uZ2RvbmdAYWtvb2wuY29tIiwiZmlyc3ROYW1lIjoiZGQiLCJ1aWQiOjkwMzI4LCJjb2RlIjoiNTY1NCIsImlhdCI6MTczMjg2NzczMiwiZXhwIjoxNzMyODY3NzMzfQ._pilTnv8sPsrKCzrAyh9Lsvyge8NPxUG5Y_8CTdxad0
 ```
 
 Remember, your API token and API Key is secret! Do not share it with others or

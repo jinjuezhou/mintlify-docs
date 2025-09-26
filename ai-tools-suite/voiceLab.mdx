@@ -130,7 +130,7 @@ POST https://openapi.akool.com/api/open/v4/voice/clone
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/voice/clone' \
---header 'Authorization: Bearer {{token}}' \
+--header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
     "source_voice_file": "https://drz0f01yeq1cx.cloudfront.net/1755534706613-000a30e917d848d9bd166b636530ae21-38a696952ca94b9eb9ecf07ced494a58.mp3",
@@ -203,7 +203,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/clone", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -251,7 +251,7 @@ payload = json.dumps({
     "webhookUrl": "",
 })
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -457,7 +457,7 @@ POST https://openapi.akool.com/api/open/v4/voice/tts
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/voice/tts' \
---header 'Authorization: Bearer {{token}}' \
+--header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
     "input_text": "In late spring, the peony garden awakens with layers of petals of the Yao Huang and Wei Zi varieties. When the morning dew has not yet dried, the edges of the petals are glistening with crystal-like droplets, and the inner crimson, like silk, gradually deepens, as if the sunset had been cut into a dress. When the wind blows, the sea of flowers surges, and the golden stamens tremble, releasing a faint fragrance that lures bees and butterflies to swirl around the flower centers in golden vortices. The green peony, in particular, when it first blooms, has tips like jade carvings with a hint of moon white, and when it is in full bloom, it is like an ice wine in an emerald cup, making one suspect it is a divine creation from the Queen Mother's Jade Pool. Occasionally, a petal falls, becoming a rolling agate bead on the embroidered carpet, and even the soil is permeated with the elegant fragrance. Such a captivating beauty is why Liu Yuxi wrote that only the peony is truly the national color, and when it blooms, it moves the entire capital. It uses the entire season's brilliance to interpret the grandeur of being the queen of flowers.",
@@ -620,7 +620,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/tts", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -758,7 +758,7 @@ payload = json.dumps({
     }
 })
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -890,7 +890,7 @@ POST https://openapi.akool.com/api/open/v4/voice/change
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/voice/change' \
---header 'Authorization: Bearer {{token}}' \
+--header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
     "voice_id": "6889b628662160e2caad5dbc",
@@ -961,7 +961,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/change", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -1007,7 +1007,7 @@ payload = json.dumps({
     "webhookUrl": ""
 })
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -1107,7 +1107,7 @@ GET https://openapi.akool.com/api/open/v4/voice/resource/list
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/voice/resource/list?type=1&page=1&size=10' \
---header 'Authorization: Bearer {{token}}'
+--header 'x-api-key: {{API Key}}'
 ```
 
 ```java Java
@@ -1143,7 +1143,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/resource/list?type=1&page=1&s
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}'
+  'x-api-key' =>'{{API Key}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/resource/list?type=1&page=1&size=10', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -1158,7 +1158,7 @@ url = "https://openapi.akool.com/api/open/v4/voice/resource/list?type=1&page=1&s
 
 payload = {}
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}'
+  'x-api-key':'{{API Key}}'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)
@@ -1270,7 +1270,7 @@ GET https://openapi.akool.com/api/open/v4/voice/list
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/voice/list?type=1&page=1&size=10&style=Calm,Authoritative&gender=Male&name=MyVoice' \
---header 'Authorization: Bearer {{token}}'
+--header 'x-api-key: {{API Key}}'
 ```
 
 ```java Java
@@ -1306,7 +1306,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/list?type=1&page=1&size=10&st
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}'
+  'x-api-key' =>'{{API Key}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/list?type=1&page=1&size=10&style=Calm,Authoritative&gender=Male&name=MyVoice', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -1321,7 +1321,7 @@ url = "https://openapi.akool.com/api/open/v4/voice/list"
 
 payload = {}
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}'
+  'x-api-key':'{{API Key}}'
 }
 
 params = {
@@ -1436,7 +1436,7 @@ POST https://openapi.akool.com/api/open/v4/voice/del
 
 ```bash cURL
 curl --location --request DELETE 'https://openapi.akool.com/api/open/v4/voice/del' \
---header 'Authorization: Bearer {{token}}' \
+--header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
     "_ids": [
@@ -1489,7 +1489,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/del", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -1517,7 +1517,7 @@ payload = json.dumps({
   ]
 })
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -1602,7 +1602,7 @@ GET https://openapi.akool.com/api/open/v4/voice/detail/{_id}
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529fa' \
---header 'Authorization: Bearer {{token}}'
+--header 'x-api-key: {{API Key}}'
 ```
 
 ```java Java
@@ -1638,7 +1638,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}'
+  'x-api-key' =>'{{API Key}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529fa', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -1653,7 +1653,7 @@ url = "https://openapi.akool.com/api/open/v4/voice/detail/6836bafb5026505ab7a529
 
 payload = {}
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}'
+  'x-api-key':'{{API Key}}'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)
@@ -1755,7 +1755,7 @@ GET https://openapi.akool.com/api/open/v4/voice/resource/detail/{_id}
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b269d1123ffb' \
---header 'Authorization: Bearer {{token}}'
+--header 'x-api-key: {{API Key}}'
 ```
 
 ```java Java
@@ -1791,7 +1791,7 @@ fetch("https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}' {{token}}'
+  'x-api-key' =>'{{API Key}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b269d1123ffb', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -1806,7 +1806,7 @@ url = "https://openapi.akool.com/api/open/v4/voice/resource/detail/688afbd9d2b4b
 
 payload = {}
 headers = {
-  'x-api-key':'{{API Key}}' {{token}}'
+  'x-api-key':'{{API Key}}'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)

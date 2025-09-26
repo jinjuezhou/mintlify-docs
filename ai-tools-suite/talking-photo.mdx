@@ -55,7 +55,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "talking_photo_url":"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
@@ -207,7 +207,7 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64dd838cf0b6684651e90217' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java 

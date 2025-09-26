@@ -177,7 +177,7 @@ POST https://openapi.akool.com/api/open/v3/audio/create
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/audio/create' \
---header 'authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "input_text": "Choose from male and female voices for various use-cases. For tailored options, refer to voice settings or read further.There are both male and female voices to choose from",
@@ -344,7 +344,7 @@ POST https://openapi.akool.com/api/open/v3/audio/clone
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/audio/clone' \
---header 'authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
   "input_text": "Hello, this is Akool'\''s AI platform!",
@@ -491,7 +491,7 @@ GET https://openapi.akool.com/api/open/v3/audio/infobymodelid?audio_model_id=65f
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/audio/infobymodelid?audio_model_id=65f8017f56559aa67f0ecde7' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java

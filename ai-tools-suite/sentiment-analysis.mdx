@@ -54,7 +54,7 @@ POST https://openapi.akool.com/api/open/v3/content/analysis/sentiment
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/analysis/sentiment' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
    
@@ -197,7 +197,7 @@ GET https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662df792
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/analysis/infobyid?_id=662e20b93baa7aa53169a325' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java

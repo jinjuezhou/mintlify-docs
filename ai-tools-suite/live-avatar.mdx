@@ -538,7 +538,7 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/create
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v4/liveAvatar/session/create' \
---header 'authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'content-type: application/json' \
 --data '{
     "avatar_id": "dvp_Tristan_cloth2_1080P",
@@ -687,7 +687,7 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69
 
 ```bash cURL
 curl --location 'http://openapi.akool.com/api/open/v4/liveAvatar/session/detail?id=6698c9d69cf7b0d61d1b6420' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java
@@ -805,7 +805,7 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/close
 
 ```bash cURL
 curl --location 'http://openapi.akool.com/api/open/v4/liveAvatar/session/close' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java
@@ -914,7 +914,7 @@ GET https://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10
 
 ```bash cURL
 curl --location 'http://openapi.akool.com/api/open/v4/liveAvatar/session/list?page=1&size=10&status=1' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java

@@ -231,7 +231,7 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/talkingavatar/create' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "width": 3840,
@@ -479,7 +479,7 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64b126c4a680e8edea44f02b' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java
