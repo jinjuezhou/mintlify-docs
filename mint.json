@@ -74,7 +74,6 @@
         "ai-tools-suite/talking-avatar",
         "ai-tools-suite/background-change",
         "ai-tools-suite/lip-sync",
-        "ai-tools-suite/live-avatar",
         "ai-tools-suite/image-generate",
         "ai-tools-suite/jarvis-moderator",
         "ai-tools-suite/image2video",
@@ -83,23 +82,15 @@
       ]
     },
     {
-      "group": "Implementation guide",
+      "group": "Streaming Avatar",
       "pages": [
-        "implementation-guide/streaming-avatar"
-      ]
-    },
-    {
-      "group": "Streaming Avatar SDK",
-      "pages": [
+        "ai-tools-suite/live-avatar",
+        "implementation-guide/streaming-avatar",
         "sdk/jssdk-start",
         "sdk/jssdk-best-practice",
-        "sdk/jssdk-api"
-      ]
-    },
-    {
-      "group": "Streaming Avatar Knowledge Base",
-      "pages": [
-        "ai-tools-suite/knowledge-base"
+        "sdk/jssdk-api",
+        "ai-tools-suite/knowledge-base",
+        "ai-tools-suite/live-camera"
       ]
     }
   ]
