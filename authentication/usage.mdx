@@ -5,43 +5,67 @@ description: ''
 
 
 ### Overview
+OpenAPI supports two authentication methods. We **recommend using the direct API key method** for simplicity and better security.
 
-OpenAPI uses API keys for authentication. Get your API token from our API interfaces or simply use the API Key directly. We provide open APIs for Gen AI Platform by clicking on the top API button on this page [openAPI](https://akool.com/openapi).
-- First  you need to login to our website.
-- Then click the picture icon in the upper right corner of the website, and click the "APl Credentials" function to set the key pair (clientId, clientSecret) used when accessing the API and save it. <Tip>The clientSecret is the API Key displayed on the Website API Keys page.</Tip>
-- Use the secret key pair just saved to send the api interface to obtain the access token.
+#### Method 1: Direct API Key (Recommended)
+The simplest way to authenticate is by using your API Key directly. Get your API Key from our API interfaces by clicking on the top API button on this page openAPI.
 
-<Tip>All API requests should include your API token or API Key in the HTTP header.
-Bearer tokens or API Keys are generally composed of a random string of characters. Formally, the API token takes the form of the "Bearer" keyword and the token value separated by spaces. You can choose to use either the API token or the API Key. If both values are present, the API Token will be used first and the API Key will be discarded.</Tip>
-<Tip>The following is the general form of a API Key:</Tip>
+**Note:** In the frontend interface, this is displayed as "API Key", but in code implementation, it's the same value as your previous clientSecret.
+1. Login to our website
+2. Click API icon
+3. Click "API Credentials" to generate your API Key
+4. Use the API Key directly in your requests
+
+All API requests should include your API Key in the HTTP header:
+
+**Custom x-api-key header**
 ```
 x-api-key: {API Key}
 ```
-<Tip>Here is an example of an actual API Key:</Tip>
-```
-V5i0GoBkbgA2kZITeCTcJ6nVbYOsaHnM
-```
-<Tip>The following is the general form of a Bearer token:</Tip>
+#### Method 2: ClientId/API Key (clientSecret) - Legacy Method
+For backward compatibility, we also support the traditional clientId/clientSecret method:
+
+**Note:** Your API Key (displayed in frontend) is the same value as your previous clientSecret. In code, you can reference it as either clientSecret or use the x-api-key header format.
+
+1. Login to our website
+2. Click API icon
+3. Click "API Credentials" to set your key pair (clientId, API Key)
+4. Use the clientId/API Key to obtain an access token via the `/getToken` endpoint
+5. Use the obtained token in subsequent API calls
+
+Bearer tokens are generally composed of a random string of characters. Formally, it takes the form of the "Bearer" keyword and the token value separated by spaces:
+
 ```
 Authorization: Bearer {token}
 ```
-<Tip>Here is an example of an actual Bearer token:</Tip>
+
+Here is an example of an actual Bearer token:
+
 ```
 Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTA2Mjg1N2YzNWNjNTJlM2UxNzYyMCIsInR5cGUiOiJ1c2VyIiwiZnJvbSI6InRvYiIsImVtYWlsIjoiZ3VvZG9uZ2RvbmdAYWtvb2wuY29tIiwiZmlyc3ROYW1lIjoiZGQiLCJ1aWQiOjkwMzI4LCJjb2RlIjoiNTY1NCIsImlhdCI6MTczMjg2NzczMiwiZXhwIjoxNzMyODY3NzMzfQ._pilTnv8sPsrKCzrAyh9Lsvyge8NPxUG5Y_8CTdxad0
 ```
 
-Remember, your API token and API Key is secret! Do not share it with others or
-expose it in any client-side code (browser, application). Production
-requests must be routed through your own backend server, and your API
-token and API key can be securely loaded from environment variables or a key
-management service.
+**Security Note:** Your API Key/token is secret! Do not share it with others or expose it in any client-side code (browser, application). Production requests must be routed through your own backend server, and your API Key can be securely loaded from environment variables or a key management service.
+
 ### API
 
-#### Get the token
+#### Using Direct API Key (Recommended)
+When using the direct API Key method, you can include your API Key in the HTTP headers using either format:
+
+**Custom x-api-key header**
+
+```
+x-api-key: {your-api-key}
+```
+
+No additional token generation step is required. Your API Key serves as the authentication token directly.
+
+#### Get Token (Legacy Method)
 
 ```
 POST https://openapi.akool.com/api/open/v3/getToken
 ```
+For users still using the clientId/API Key (clientSecret) method, use this endpoint to obtain an access token:
 
 **Body Attributes**
 
@@ -60,6 +84,31 @@ POST https://openapi.akool.com/api/open/v3/getToken
 <Note>Please note that the generated token is valid for more than 1 year.</Note>
 
 #### Example
+
+##### Direct API Key Usage (Recommended)
+
+**Using x-api-key header**
+<CodeGroup>
+```bash cURL
+curl -X GET "https://openapi.akool.com/api/your-endpoint" \
+  -H "x-api-key: your-api-key-here" \
+  -H "Content-Type: application/json"
+```
+
+```bash Python
+import requests
+
+url = "https://openapi.akool.com/api/your-endpoint"
+headers = {
+    'x-api-key': 'your-api-key-here',  # API Key from frontend
+    'Content-Type': 'application/json'
+}
+
+response = requests.get(url, headers=headers)
+print(response.text)
+```
+
+### Legacy Token Generation Method
 
 **Body**
 

@@ -765,8 +765,8 @@ GET https://openapi.akool.com/api/open/v3/faceswap/quota/info
 
 | **Parameter**  | **Value**       | **Description**                                          |
 |----------------|-----------------|----------------------------------------------------------|
-| Authorization  | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token)              |
 | x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization  | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token)              |
 
 **Response Attributes**
 
@@ -1000,7 +1000,6 @@ POST https://sg3.akool.com/detect
 
 | **Parameter** | **Value**    | **Description**                             |
 |---------------|--------------|---------------------------------------------|
-| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 | Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
 
 **Body Attributes**
@@ -1037,7 +1036,7 @@ POST https://sg3.akool.com/detect
 
 ```bash cURL
 curl --location 'https://sg3.akool.com/detect' \
---header "x-api-key: {{API Key}}" \
+--header "Authorization: Bearer {{Authorization}}" \
 --header 'Content-Type: application/json' \
 --data '{
   "single_face": false,
@@ -1054,7 +1053,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n  \"single_face\": false, \
 Request request = new Request.Builder()
   .url("https://sg3.akool.com/detect")
   .method("POST", body)
-  .addHeader("x-api-key", "{{API Key}}")
+  .addHeader("Authorization", "Bearer {{Authorization}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -1062,7 +1061,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript 
 const myHeaders = new Headers();
-myHeaders.append("x-api-key", "{{API Key}}");
+myHeaders.append("Authorization", "Bearer {{Authorization}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -1088,7 +1087,7 @@ fetch("https://sg3.akool.com/detect", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'x-api-key' =>'{{API Key}}',
+  'Authorization' =>'Bearer {{Authorization}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -1113,7 +1112,7 @@ payload = json.dumps({
   "img": "data:image/jpeg;base64***"
 })
 headers = {
-  'x-api-key':'{{API Key}}',
+  'Authorization':'Bearer {{Authorization}}',
   'Content-Type': 'application/json'
 }
 
