@@ -49,9 +49,9 @@ POST https://sg3.akool.com/detect
 
 **Request Headers**
 
-| **Parameter** | **Value** | **Description** |
-|----------|--------|----------|
-| Authorization | Bearer token | API key for request authorization |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | Content-Type | application/json | Request content type |
 
 **Request Body**
@@ -120,9 +120,10 @@ POST https://openapi.akool.com/api/open/v3/faceswap/live/create
 
 **Request Headers**
 
-| **Parameter** | **Value** | **Description** |
-|----------|--------|----------|
-| Authorization | Bearer token | API key for request authorization |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | Content-Type | application/json | Request content type |
 
 **Request Body**
@@ -188,9 +189,10 @@ POST https://openapi.akool.com/api/open/v3/faceswap/live/update
 
 **Request Headers**
 
-| **Parameter** | **Value** | **Description** |
-|----------|--------|----------|
-| Authorization | Bearer token | API key for request authorization |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | Content-Type | application/json | Request content type |
 
 **Request Body**
@@ -233,9 +235,10 @@ POST https://openapi.akool.com/api/open/v3/faceswap/live/close
 
 **Request Headers**
 
-| **Parameter** | **Value** | **Description** |
-|----------|--------|----------|
-| Authorization | Bearer token | API key for request authorization |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 | Content-Type | application/json | Request content type |
 
 **Request Body**
@@ -276,7 +279,7 @@ curl -X POST "https://openapi.akool.com/api/open/v3/getToken" \
 
 # Face detection
 curl -X POST "https://sg3.akool.com/detect" \
-    -H "Authorization: Bearer token" \
+    -H "Authorization: Bearer {{Authorization}}" \
     -H "Content-Type: application/json" \
     -d '{
         "single_face": false,
@@ -285,7 +288,7 @@ curl -X POST "https://sg3.akool.com/detect" \
 
 # Create session
 curl -X POST "https://openapi.akool.com/api/open/v3/faceswap/live/create" \
-    -H "Authorization: Bearer token" \
+    -H "x-api-key: {{API Key}}" \
     -H "Content-Type: application/json" \
     -d '{
         "sourceImage": [
@@ -298,7 +301,7 @@ curl -X POST "https://openapi.akool.com/api/open/v3/faceswap/live/create" \
 
 # Update session
 curl -X POST "https://openapi.akool.com/api/open/v3/faceswap/live/update" \
-    -H "Authorization: Bearer token" \
+    -H "x-api-key: {{API Key}}" \
     -H "Content-Type: application/json" \
     -d '{
         "sourceImage": [
@@ -312,7 +315,7 @@ curl -X POST "https://openapi.akool.com/api/open/v3/faceswap/live/update" \
 
 # Close session
 curl -X POST "https://openapi.akool.com/api/open/v3/faceswap/live/close" \
-    -H "Authorization: Bearer token" \
+    -H "x-api-key: {{API Key}}" \
     -H "Content-Type: application/json" \
     -d '{
         "_id": "685ea0bb5aa150dd8b7116b1"
@@ -340,7 +343,7 @@ const detectFace = async (token, imageUrl) => {
     const response = await fetch('https://sg3.akool.com/detect', {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization: Bearer {{Authorization}}',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -356,7 +359,7 @@ const createSession = async (token, sourceImage) => {
     const response = await fetch('https://openapi.akool.com/api/open/v3/faceswap/live/create', {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'x-api-key': '{{API Key}}',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -371,7 +374,7 @@ const updateSession = async (token, sessionId, sourceImage) => {
     const response = await fetch('https://openapi.akool.com/api/open/v3/faceswap/live/update', {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'x-api-key': '{{API Key}}',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -387,7 +390,7 @@ const closeSession = async (token, sessionId) => {
     const response = await fetch('https://openapi.akool.com/api/open/v3/faceswap/live/close', {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'x-api-key': '{{API Key}}',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -434,7 +437,7 @@ def create_session(token, source_image):
         "sourceImage": source_image
     }
     headers = {
-        'Authorization': f'Bearer {token}',
+        'x-api-key': f'{API Key}',
         'Content-Type': 'application/json'
     }
     response = requests.post(url, headers=headers, json=payload)
@@ -448,7 +451,7 @@ def update_session(token, session_id, source_image):
         "sourceImage": source_image
     }
     headers = {
-        'Authorization': f'Bearer {token}',
+        'x-api-key':  f'{API Key}',
         'Content-Type': 'application/json'
     }
     response = requests.post(url, headers=headers, json=payload)
@@ -461,7 +464,7 @@ def close_session(token, session_id):
         "_id": session_id
     }
     headers = {
-        'Authorization': f'Bearer {token}',
+        'x-api-key':  f'{API Key}',
         'Content-Type': 'application/json'
     }
     response = requests.post(url, headers=headers, json=payload)

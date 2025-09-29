@@ -163,7 +163,7 @@ async function createSessionInBrowser(): Promise<Session> {
   const response = await fetch('https://openapi.akool.com/api/open/v4/liveAvatar/session/create', {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer YOUR_TOKEN', // Security risk: Token exposed in browser
+      'x-api-key':'{{API Key}}', // Security risk: Token exposed in browser
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
@@ -506,85 +506,7 @@ async function initializeWithAudio() {
 
 For more details about Agora's audio functionality, refer to the [Agora Web SDK Documentation](https://docs.agora.io/en/voice-calling/get-started/get-started-sdk?platform=web#publish-a-local-audio-track).
 
-### 8. Video Interaction With The Avatar
-
-To enable video interaction with the avatar, you'll need to publish your local video stream:
-
-```ts
-async function publishVideo(client: IAgoraRTCClient) {
-  // Create a camera video track
-  const videoTrack = await AgoraRTC.createCameraVideoTrack();
-  
-  try {
-    // Publish the video track to the channel
-    await client.publish(videoTrack);
-    console.log("Video publishing successful");
-    
-    return videoTrack;
-  } catch (error) {
-    console.error("Error publishing video:", error);
-    throw error;
-  }
-}
-
-// Example usage with video controls
-async function setupVideoInteraction(client: IAgoraRTCClient) {
-  let videoTrack;
-  
-  // Start video
-  async function startVideo() {
-    try {
-      videoTrack = await publishVideo(client);
-      // Play the local video in a specific HTML element
-      videoTrack.play('local-video-container');
-    } catch (error) {
-      console.error("Failed to start video:", error);
-    }
-  }
-
-  // Stop video
-  async function stopVideo() {
-    if (videoTrack) {
-      // Stop and close the video track
-      videoTrack.stop();
-      videoTrack.close();
-      await client.unpublish(videoTrack);
-      videoTrack = null;
-    }
-  }
-
-  // Enable/disable video
-  function toggleVideo(enabled: boolean) {
-    if (videoTrack) {
-      videoTrack.setEnabled(enabled);
-    }
-  }
-
-  // Switch camera (if multiple cameras are available)
-  async function switchCamera(deviceId: string) {
-    if (videoTrack) {
-      await videoTrack.setDevice(deviceId);
-    }
-  }
-
-  return {
-    startVideo,
-    stopVideo,
-    toggleVideo,
-    switchCamera
-  };
-}
-```
-
-The video features now include:
-- Two-way video communication
-- Camera switching capabilities
-- Video quality controls
-- Integration with existing audio features
-
-For more details about Agora's video functionality, refer to the [Agora Web SDK Documentation](https://docs.agora.io/en/video-calling/get-started/get-started-sdk?platform=web#publish-a-local-video-track).
-
-### 9. Integrating your own LLM service (optional)
+### 8. Integrating your own LLM service (optional)
 
 You can integrate your own LLM service to process messages before sending them to the avatar. Here's how to do it:
 
@@ -661,7 +583,7 @@ async function sendMessageToAvatarWithLLM(
 5. Cache common responses when appropriate
 </Info>
 
-### 10. Cleanup
+### 9. Cleanup
 
 Cleanup can also be performed either directly or through your backend:
 
@@ -671,7 +593,7 @@ async function cleanupInBrowser(client: IAgoraRTCClient, sessionId: string) {
   await fetch('https://openapi.akool.com/api/open/v4/liveAvatar/session/close', {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer YOUR_TOKEN'
+      'x-api-key':'{{API Key}}'
     },
     body: JSON.stringify({
       id: sessionId
@@ -721,7 +643,7 @@ When implementing through your backend, make sure to:
 - Consider implementing session management and monitoring
 </Info>
 
-### 11. Putting It All Together
+### 10. Putting It All Together
 
 Here's how to use all the components together:
 

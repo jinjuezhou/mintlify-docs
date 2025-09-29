@@ -44,7 +44,7 @@ The decrypted content of dataEncrypt is:
 
 ### Encryption and Decryption technology solution
 The encryption and decryption technical solution is implemented based on the AES encryption and decryption algorithm, as follows:
-1. clientSecret: This is the message encryption and decryption Key. The length is fixed at 24 characters. ClientSecret is used as the encryption key.
+1. clientSecret: This is the message encryption and decryption Key. The length is fixed at 24 characters. ClientSecret is used as the encryption key. <Tip>The clientSecret is the API Key displayed on the Website API Keys page.</Tip>
 2. AES adopts CBC mode, the secret key length is 24 bytes (192 bits), and the data is filled with PKCS#7; PKCS#7: K is the number of bytes of the secret key (24 is used), Buf is the content to be encrypted, N is its number of bytes. Buf needs to be filled to an integer multiple of K. Fill (K - N%K) bytes at the end of Buf, and the content of each byte is (K - N%K).
 3. The IV length of AES is 16 bytes, and clientId is used as the IV.
 

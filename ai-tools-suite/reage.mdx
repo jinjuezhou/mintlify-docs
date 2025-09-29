@@ -17,9 +17,10 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/imgreage
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                             |
-|---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Body Attributes**
 
@@ -62,7 +63,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/imgreage
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/highquality/imgreage' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "targetImage": [
@@ -85,7 +86,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n    \"targetImage\": [    \
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/faceswap/highquality/imgreage")
   .method("POST", body)
-  .addHeader("Authorization", "Bearer token")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -93,7 +94,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer token");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -125,7 +126,7 @@ fetch("https://openapi.akool.com/api/open/v3/faceswap/highquality/imgreage", req
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer token',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -162,7 +163,7 @@ payload = json.dumps({
   "webhookUrl": ""
 })
 headers = {
-  'Authorization': 'Bearer token',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -196,9 +197,10 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                             |
-|---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 
 **Body Attributes**
@@ -243,7 +245,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "targetImage": [    // Replacement target image information
@@ -266,7 +268,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n    \"targetImage\": [    \
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage")
   .method("POST", body)
-  .addHeader("Authorization", "Bearer token")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -274,7 +276,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer token");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -306,7 +308,7 @@ fetch("https://openapi.akool.com/api/open/v3/faceswap/highquality/vidreage", req
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer token',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -343,7 +345,7 @@ payload = json.dumps({
      "webhookUrl":"" // Callback url address based on HTTP request
 })
 headers = {
-  'Authorization': 'Bearer token',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -377,9 +379,10 @@ GET https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f2
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                             |
-|---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Query Attributes**
 
@@ -404,7 +407,7 @@ GET https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f2
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f27b33f466877701c6a' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java
@@ -415,14 +418,14 @@ RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f27b33f466877701c6a")
   .method("GET", body)
-  .addHeader("Authorization", "Bearer token")
+  .addHeader("x-api-key", "{{API Key}}")
   .build();
 Response response = client.newCall(request).execute();
 ```
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer token");
+myHeaders.append("x-api-key", "{{API Key}}");
 
 const requestOptions = {
   method: "GET",
@@ -440,7 +443,7 @@ fetch("https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer token'
+  'x-api-key' =>'{{API Key}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef2f27b33f466877701c6a', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -454,7 +457,7 @@ url = "https://openapi.akool.com/api/open/v3/faceswap/result/listbyids?_ids=64ef
 
 payload = {}
 headers = {
-  'Authorization': 'Bearer token'
+  'x-api-key':'{{API Key}}'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)
@@ -500,9 +503,10 @@ POST https://openapi.akool.com/api/open/v3/faceswap/job/del
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                             |
-|---------------|--------------|---------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Body Attributes**
 
@@ -534,7 +538,7 @@ POST https://openapi.akool.com/api/open/v3/faceswap/job/del
 ```bash cURL
 
 curl --location 'https://openapi.akool.com/api/open/v3/faceswap/job/del' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "job_ids":""
@@ -549,7 +553,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n    \"job_ids\":\"\"    \n}
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/faceswap/job/del")
   .method("POST", body)
-  .addHeader("Authorization", "Bearer token")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -557,7 +561,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer token");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -581,7 +585,7 @@ fetch("https://openapi.akool.com/api/open/v3/faceswap/job/del", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer token',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -602,7 +606,7 @@ payload = json.dumps({
   "job_ids": ""
 })
 headers = {
-  'Authorization': 'Bearer token',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
