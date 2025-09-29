@@ -144,7 +144,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
 | --------------- | -------- | ----------| ---------- | ----------------------------------------------------------------------------------------------- |
 | url             | String   |   true    |            | The video url address you want to translate.                                                    |
 | source_language | String   |   true    |            | The original language of the video.                                                             |
-| language        | String   |   true    |            | The language you want to translate into.                                                        |
+| language        | String   |   true    |            | The language you want to translate into. If you want to translate into multiple languages at once, separate them with commas in English format.                                                    |
 | lipsync         | Boolean  |   false   | true/false | Get synchronized mouth movements with the audio track in a translated video.                    |
 | ~~merge_interval~~  | Number |  false  | 1          | The segmentation interval of video translation, the default is 1 second. ***This field is deprecated***                       |
 | ~~face_enhance~~    | Boolean | false  | true/false | Whether to facial process the translated video, this parameter only works when lipsync is true. ***This field is deprecated*** |
@@ -166,7 +166,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
 ```json
 {
   "url": "https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4", //  The video address you want to translate
-  "language": "hi", // The language you want to translate into
+  "language": "hi,fr,ja", // The language you want to translate into
   "source_language": "zh", // The original language of the video.
   "lipsync": true, //  Get synchronized mouth movements with the audio track in a translated video.
   //"merge_interval": 1, // This field is deprecated
@@ -187,7 +187,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytra
 --data '{
     "url": "https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4",
     "source_language": "zh",
-    "language": "hi",
+    "language": "hi,fr,ja",
     "lipsync":true,
     "webhookUrl":""
 }'
@@ -197,7 +197,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytra
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4\", \n    \"language\": \"hi\", \n    \"source_language\": \"zh\", \n    \"lipsync\":true, \n  \"webhookUrl\":\"\"   \n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4\", \n    \"language\": \"hi,fr,ja\", \n    \"source_language\": \"zh\", \n    \"lipsync\":true, \n  \"webhookUrl\":\"\"   \n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/content/video/createbytranslate")
   .method("POST", body)
@@ -214,7 +214,7 @@ myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
   url: "https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4",
-  language: "hi",
+  language: "hi,fr,ja",
   source_language: "zh",
   lipsync: true,
   webhookUrl: "",
@@ -246,7 +246,7 @@ $headers = [
 ];
 $body = '{
   "url": "https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4",
-  "language": "hi",
+  "language": "hi,fr,ja",
   "source_language": "zh",
   "lipsync": true,
   # "speaker_num": 1,
@@ -265,7 +265,7 @@ url = "https://openapi.akool.com/api/open/v3/content/video/createbytranslate"
 
 payload = json.dumps({
   "url": "https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4",
-  "language": "hi",
+  "language": "hi,fr,ja",
   "source_language": "zh",
   "lipsync": true,
   # "speaker_num": 1,
@@ -289,13 +289,13 @@ print(response.text)
 {
     "code": 1000,
     "msg": "OK",
-    "data": {
+    "data": { // The final translation result of the language
         "_id": "68ccee42e267570255824ab5",
         "create_time": 1758260802773,
         "uid": 101400,
         "team_id": "6805fb69e92d9edc7ca0b409",
         "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-        "language": "zh",
+        "language": "ja",
         "source_language": "en",
         "video_id": "68ccee42f392598dae31999b",
         "video_status": 1, // current status of video： 【1：queueing（The requested operation is being processed），2：processing（The requested operation is being processing），3：completed（The request operation has been processed successfully），4：failed（The request operation processing failed, the reason for the failure can be viewed in the video translation details.）】
@@ -309,7 +309,81 @@ print(response.text)
         "lipSyncType": 0,
         "speaker_num": 1,
         "webhookUrl": ""
-    }
+    },
+    "all_results": [ // List of translation results for all languages
+        {
+            "code": 1000,
+            "msg": "OK",
+            "data": {
+                "_id": "68da023e776f4277705a7887",
+                "create_time": 1759117886720,
+                "uid": 101400,
+                "team_id": "6805fb69e92d9edc7ca0b409",
+                "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
+                "language": "hi",
+                "source_language": "en",
+                "video_id": "68da023ef392598dae319ada",
+                "video_status": 1,
+                "video_lock_duration": 16.44,
+                "deduction_lock_duration": 4,
+                "video": "",
+                "credentialId": "6823024be0c8e98471611c72",
+                "task_id": "68da023ef392598dae319ada",
+                "target_video_md5": "md5_1759117886236",
+                "lipsync": false,
+                "lipSyncType": 0,
+                "speaker_num": 1
+            }
+        },
+        {
+            "code": 1000,
+            "msg": "OK",
+            "data": {
+                "_id": "68da023f776f4277705a788b",
+                "create_time": 1759117887169,
+                "uid": 101400,
+                "team_id": "6805fb69e92d9edc7ca0b409",
+                "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
+                "language": "fr",
+                "source_language": "en",
+                "video_id": "68da023ff392598dae319adb",
+                "video_status": 1,
+                "video_lock_duration": 16.44,
+                "deduction_lock_duration": 4,
+                "video": "",
+                "credentialId": "6823024be0c8e98471611c72",
+                "task_id": "68da023ff392598dae319adb",
+                "target_video_md5": "md5_1759117886236",
+                "lipsync": false,
+                "lipSyncType": 0,
+                "speaker_num": 1
+            }
+        },
+        {
+            "code": 1000,
+            "msg": "OK",
+            "data": {
+                "_id": "68da023f776f4277705a7890",
+                "create_time": 1759117887643,
+                "uid": 101400,
+                "team_id": "6805fb69e92d9edc7ca0b409",
+                "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
+                "language": "ja",
+                "source_language": "en",
+                "video_id": "68da023f6ae5f91ba94f6f8e",
+                "video_status": 1,
+                "video_lock_duration": 16.44,
+                "deduction_lock_duration": 4,
+                "video": "",
+                "credentialId": "6823024be0c8e98471611c72",
+                "task_id": "68da023f6ae5f91ba94f6f8e",
+                "target_video_md5": "md5_1759117886236",
+                "lipsync": false,
+                "lipSyncType": 0,
+                "speaker_num": 1
+            }
+        }
+    ]
 }
 ```
 
