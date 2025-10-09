@@ -42,7 +42,7 @@ GET https://openapi.akool.com/api/open/v3/voice/list
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/voice/list?from=3' \
---header 'Authorization: Bearer {{Authorization}}'
+--header 'x-api-key: {{API Key}}'
 ```
 
 ```java Java
@@ -53,14 +53,14 @@ RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/voice/list?from=3")
   .method("GET", body)
-  .addHeader("Authorization", "Bearer {{Authorization}}")
+  .addHeader("x-api-key", "{{API Key}}")
   .build();
 Response response = client.newCall(request).execute();
 ```
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer {{Authorization}}");
+myHeaders.append("x-api-key", "{{API Key}}");
 
 const requestOptions = {
   method: "GET",
@@ -78,7 +78,7 @@ fetch("https://openapi.akool.com/api/open/v3/voice/list?from=3", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => '{{Authorization}}'
+  'x-api-key' => '{{API Key}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v3/voice/list?from=3', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -92,7 +92,7 @@ url = "https://openapi.akool.com/api/open/v3/voice/list?from=3"
 
 payload = {}
 headers = {
-  'Authorization': 'Bearer {{Authorization}}'
+  'x-api-key': '{{API Key}}'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)
@@ -177,7 +177,7 @@ POST https://openapi.akool.com/api/open/v3/audio/create
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/audio/create' \
---header 'authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "input_text": "Choose from male and female voices for various use-cases. For tailored options, refer to voice settings or read further.There are both male and female voices to choose from",
@@ -195,7 +195,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n    \"input_text\": \"Choos
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/audio/create")
   .method("POST", body)
-  .addHeader("authorization", "Bearer token")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -203,7 +203,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("authorization", "Bearer token");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -230,7 +230,7 @@ fetch("https://openapi.akool.com/api/open/v3/audio/create", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'authorization' => 'Bearer token',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -259,7 +259,7 @@ payload = json.dumps({
   "webhookUrl": ""
 })
 headers = {
-  'authorization': 'Bearer token',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -344,7 +344,7 @@ POST https://openapi.akool.com/api/open/v3/audio/clone
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/audio/clone' \
---header 'authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
   "input_text": "Hello, this is Akool'\''s AI platform!",
@@ -362,7 +362,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n  \"input_text\": \"Hello, 
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/audio/clone")
   .method("POST", body)
-  .addHeader("authorization", "Bearer token")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -370,7 +370,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("authorization", "Bearer token");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -397,7 +397,7 @@ fetch("https://openapi.akool.com/api/open/v3/audio/clone", requestOptions)
 <?php
 $client = new Client();
 $headers = [
-  'authorization' => 'Bearer token',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -426,7 +426,7 @@ payload = json.dumps({
   "webhookUrl": ""
 })
 headers = {
-  'authorization': 'Bearer token',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -491,7 +491,7 @@ GET https://openapi.akool.com/api/open/v3/audio/infobymodelid?audio_model_id=65f
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/audio/infobymodelid?audio_model_id=65f8017f56559aa67f0ecde7' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java
@@ -502,14 +502,14 @@ RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/audio/infobymodelid?audio_model_id=65f8017f56559aa67f0ecde7")
   .method("GET", body)
-  .addHeader("Authorization", "Bearer token")
+  .addHeader("x-api-key", "{{API Key}}")
   .build();
 Response response = client.newCall(request).execute();
 ```
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer token");
+myHeaders.append("x-api-key", "{{API Key}}");
 
 const requestOptions = {
   method: "GET",
@@ -527,7 +527,7 @@ fetch("https://openapi.akool.com/api/open/v3/audio/infobymodelid?audio_model_id=
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer token'
+  'x-api-key' =>'{{API Key}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v3/audio/infobymodelid?audio_model_id=65f8017f56559aa67f0ecde7', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -541,7 +541,7 @@ url = "https://openapi.akool.com/api/open/v3/audio/infobymodelid?audio_model_id=
 
 payload = {}
 headers = {
-  'Authorization': 'Bearer token'
+  'x-api-key':'{{API Key}}'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)

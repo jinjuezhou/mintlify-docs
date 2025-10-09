@@ -16,8 +16,9 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                                                                                                                                               |
-|---------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
 | Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 **Body Attributes**
@@ -54,7 +55,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto' \
---header 'Authorization: Bearer token' \
+--header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
     "talking_photo_url":"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
@@ -71,7 +72,7 @@ RequestBody body = RequestBody.create(mediaType, "{\n    \"talking_photo_url\":\
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto")
   .method("POST", body)
-  .addHeader("Authorization", "Bearer token")
+  .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
 Response response = client.newCall(request).execute();
@@ -80,7 +81,7 @@ Response response = client.newCall(request).execute();
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer token");
+myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -106,7 +107,7 @@ fetch("https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto"
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer token',
+  'x-api-key' =>'{{API Key}}',
   'Content-Type' => 'application/json'
 ];
 $body = '{
@@ -132,7 +133,7 @@ payload = json.dumps({
   "webhookUrl": ""
 })
 headers = {
-  'Authorization': 'Bearer token',
+  'x-api-key':'{{API Key}}',
   'Content-Type': 'application/json'
 }
 
@@ -178,9 +179,10 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 **Request Headers**
 
-| **Parameter** | **Value**    | **Description**                                                                                                                                               |
-|---------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Authorization | Bearer `{token}`| Your API Key used for request authorization. [Get Token](/authentication/usage#get-the-token) |
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
 
 
 **Query Attributes**
@@ -205,7 +207,7 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 ```bash cURL
 curl --location 'https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64dd838cf0b6684651e90217' \
---header 'Authorization: Bearer token'
+--header "x-api-key: {{API Key}}"
 ```
 
 ```java Java 
@@ -216,14 +218,14 @@ RequestBody body = RequestBody.create(mediaType, "");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64dd838cf0b6684651e90217")
   .method("GET", body)
-  .addHeader("Authorization", "Bearer token")
+  .addHeader("x-api-key", "{{API Key}}")
   .build();
 Response response = client.newCall(request).execute();
 ```
 
 ```js Javascript
 const myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer token");
+myHeaders.append("x-api-key", "{{API Key}}");
 
 const requestOptions = {
   method: "GET",
@@ -241,7 +243,7 @@ fetch("https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_m
 <?php
 $client = new Client();
 $headers = [
-  'Authorization' => 'Bearer token'
+  'x-api-key' =>'{{API Key}}'
 ];
 $request = new Request('GET', 'https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64dd838cf0b6684651e90217', $headers);
 $res = $client->sendAsync($request)->wait();
@@ -255,7 +257,7 @@ url = "https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_m
 
 payload = {}
 headers = {
-  'Authorization': 'Bearer token'
+  'x-api-key':'{{API Key}}'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)

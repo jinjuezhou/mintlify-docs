@@ -1,0 +1,82 @@
+---
+title: "Vision Sense"
+description: ""
+---
+
+### Video Interaction With The Avatar
+
+To enable video interaction with the avatar, you'll need to publish your local video stream:
+
+```ts
+async function publishVideo(client: IAgoraRTCClient) {
+  // Create a camera video track
+  const videoTrack = await AgoraRTC.createCameraVideoTrack();
+  
+  try {
+    // Publish the video track to the channel
+    await client.publish(videoTrack);
+    console.log("Video publishing successful");
+    
+    return videoTrack;
+  } catch (error) {
+    console.error("Error publishing video:", error);
+    throw error;
+  }
+}
+
+// Example usage with video controls
+async function setupVideoInteraction(client: IAgoraRTCClient) {
+  let videoTrack;
+  
+  // Start video
+  async function startVideo() {
+    try {
+      videoTrack = await publishVideo(client);
+      // Play the local video in a specific HTML element
+      videoTrack.play('local-video-container');
+    } catch (error) {
+      console.error("Failed to start video:", error);
+    }
+  }
+
+  // Stop video
+  async function stopVideo() {
+    if (videoTrack) {
+      // Stop and close the video track
+      videoTrack.stop();
+      videoTrack.close();
+      await client.unpublish(videoTrack);
+      videoTrack = null;
+    }
+  }
+
+  // Enable/disable video
+  function toggleVideo(enabled: boolean) {
+    if (videoTrack) {
+      videoTrack.setEnabled(enabled);
+    }
+  }
+
+  // Switch camera (if multiple cameras are available)
+  async function switchCamera(deviceId: string) {
+    if (videoTrack) {
+      await videoTrack.setDevice(deviceId);
+    }
+  }
+
+  return {
+    startVideo,
+    stopVideo,
+    toggleVideo,
+    switchCamera
+  };
+}
+```
+
+The video features now include:
+- Two-way video communication
+- Camera switching capabilities
+- Video quality controls
+- Integration with existing audio features
+
+For more details about Agora's video functionality, refer to the [Agora Web SDK Documentation](https://docs.agora.io/en/video-calling/get-started/get-started-sdk?platform=web#publish-a-local-video-track).
