@@ -325,7 +325,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
 | webhookUrl      | String  |    false |            | Callback url address based on HTTP request.                                                     |
 | speaker_num      | Number |   false |      0      | Number of speakers in the video, the default is 0 (Auto Detect).                                                     |
 | remove_bgm      | Boolean |   false |      false      |   Whether to remove background music (default: false)                                                   |
-| caption_type    | Number  |   false |      0      |  Caption type (default: 0, 0 none 1 add original subtitle 2 add target subtitle 3 translate and replace original subtitle 4 add translated subtitle)       |
+| caption_type    | Number  |   false |      0      |  Caption type (default: 0, 0 none；1 add original subtitle；2 add target subtitle；3 translate and replace original subtitle；4 add translated subtitle；)       |
 | caption_url     | String  |   false |            |   Caption URL (default: ""), subtitle file address, support SRT or ASS files.                                                   |
 | voices_map      | Object  |   false |            |   Voice Language maps                                                   |
 | -[language_code]      | Object  |   true |  `{"voice_id": "6889b755662160e2caad5fdf"}`          |      Target language code map                                                |
