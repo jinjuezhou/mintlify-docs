@@ -1,6 +1,6 @@
 ---
 title: "Video Translation"
-description: ""
+description: "API documentation for video translation service, including voice list, language list, and video translation operations."
 ---
 
 <Warning>
@@ -12,7 +12,169 @@ description: ""
 Experience our video translation technology in action by exploring our interactive demo on GitHub: [AKool Video Translation Demo](https://github.com/AKOOL-Official/akool-video-translation-demo).
 </Info>
 
-### Get Language List Result
+## Get AI Voices List
+
+```
+GET https://openapi.akool.com/api/open/v4/voice/videoTranslation
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                   |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+
+**Query Parameters**
+
+| **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
+|---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| language_code | String   | false        | zh-CN-shandong | Language code, used to filter voice list for specific language |
+| page          | Integer  | false        | 1         | Page number, default is 1 |
+| size          | Integer  | false        | 100       | Items per page, default is 100 |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description**                                      |
+| ------------- | -------- | ---------------------------------------------------- |
+| code          | Integer  | Interface returns business status code(1000:success) |
+| msg           | String   | Interface returns status information                 |
+| data          | Object   | Response data object                                |
+| - page        | Integer  | Current page number                                 |
+| - size        | Integer  | Items per page                                     |
+| - count       | Integer  | Total number of items                              |
+| - result      | Array    | Array of voice items                               |
+| -- _id        | String   | Unique identifier for the voice                    |
+| -- voice_id   | String   | Voice ID used for API calls                        |
+| -- gender     | String   | Voice gender (Male/Female)                         |
+| -- language   | String   | Voice language name                                |
+| -- name       | String   | Voice name                                         |
+| -- preview    | String   | Preview audio URL                                  |
+| -- thumbnailUrl| String  | Voice avatar image URL                             |
+| -- create_time| Integer  | Voice creation timestamp                           |
+| -- flag_url   | String   | Language flag image URL                            |
+| -- useCase    | String   | Voice use case category                            |
+| -- category   | String   | Voice category                                     |
+| -- age        | Array    | Age range tags                                     |
+| -- style      | Array    | Voice style tags                                   |
+| -- duration   | Integer  | Preview audio duration in milliseconds             |
+| -- scenario   | Array    | Recommended usage scenarios                        |
+| -- language_code| String | Language code identifier                           |
+
+**Example**
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/voice/videoTranslation?language_code=zh-CN-shandong&page=1&size=100' \
+--header 'x-api-key: {{API Key}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/voice/videoTranslation?language_code=zh-CN-shandong&page=1&size=100")
+  .method("GET", null)
+  .addHeader("x-api-key", "{{API Key}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("x-api-key", "{{API Key}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow",
+};
+
+fetch("https://openapi.akool.com/api/open/v4/voice/videoTranslation?language_code=zh-CN-shandong&page=1&size=100", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'x-api-key' => '{{API Key}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/videoTranslation?language_code=zh-CN-shandong&page=1&size=100', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v4/voice/videoTranslation"
+
+params = {
+    "language_code": "zh-CN-shandong",
+    "page": 1,
+    "size": 100
+}
+headers = {
+    'x-api-key': '{{API Key}}'
+}
+
+response = requests.request("GET", url, headers=headers, params=params)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+    "code": 1000,
+    "msg": "OK",
+    "data": {
+        "page": 1,
+        "size": 100,
+        "count": 1,
+        "result": [
+            {
+                "_id": "671777eadefc20dd56512948",
+                "voice_id": "6889b755662160e2caad5fdf",
+                "gender": "Male",
+                "language": "Chinese (Jilu Mandarin, Simplified)",
+                "name": "Honest Big Brother",
+                "preview": "https://d3c24lvfmudc1v.cloudfront.net/agicontent/voices/1749809765037-audio.mp3",
+                "thumbnailUrl": "https://static.website-files.org/assets/voiceover_face/compressed_image_1742893228182.jpg",
+                "create_time": 1729353600000,
+                "flag_url": "https://static.website-files.org/assets/national_flag/China.png",
+                "useCase": "Conversational",
+                "category": "conversational",
+                "age": [
+                    "Middle aged"
+                ],
+                "style": [
+                    "casual",
+                    "animated",
+                    "strong"
+                ],
+                "duration": 10116,
+                "scenario": [
+                    "chat",
+                    "podcast"
+                ],
+                "language_code": "zh-CN-shandong"
+            }
+        ]
+    }
+}
+```
+
+## Get Language List Result
 
 ```
 GET https://openapi.akool.com/api/open/v3/language/list
@@ -27,11 +189,16 @@ GET https://openapi.akool.com/api/open/v3/language/list
 
 **Response Attributes**
 
-| **Parameter** | **Type** | **Value**                                                      | **Description**                                      |
-| ------------- | -------- | -------------------------------------------------------------- | ---------------------------------------------------- |
-| code          | int      | 1000                                                           | Interface returns business status code(1000:success) |
-| msg           | String   | OK                                                             | Interface returns status information                 |
-| data          | Array    | `{ lang_list:[ {"lang_code":"en", "lang_name": "English" } ]}` | lang_code: Lang code supported by video translation  |
+| **Parameter** | **Type** | **Description**                                      |
+| ------------- | -------- | ---------------------------------------------------- |
+| code          | Integer  | Interface returns business status code(1000:success) |
+| msg           | String   | Interface returns status information                 |
+| data          | Object   | Response data object                                |
+| - lang_list   | Array    | Array of supported languages                        |
+| -- lang_name  | String   | Language name (e.g., "Afrikaans (South Africa)")    |
+| -- lang_code  | String   | Language code (e.g., "af-ZA")                      |
+| -- url        | String   | Language flag icon URL                              |
+| -- need_voice_id | Boolean| Whether this language requires selecting an AI voice ID |
 
 **Example**
 
@@ -110,25 +277,29 @@ print(response.text)
     "data": {
         "lang_list": [
             {
-                "lang_code": "en",
-                "lang_name": "English",
-                "url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/icons/En.png"
+                "lang_name": "Afrikaans (South Africa)",
+                "lang_code": "af-ZA",
+                "url": "https://d11fbe263bhqij.cloudfront.net/public/landing/icons/nf/af-ZA.png",
+                "need_voice_id": true
             },
             {
-                "lang_code": "fr",
-                "lang_name": "French",
-                "url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/icons/Fr.png"
+                "lang_name": "Albanian (Albania)",
+                "lang_code": "sq-AL",
+                "url": "https://d11fbe263bhqij.cloudfront.net/public/landing/icons/nf/sq-AL.png",
+                "need_voice_id": true
             },
             {
-                "lang_code": "zh",
-                "lang_name": "Chinese (Simplified)",
-                "url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/icons/Zh.png"
+                "lang_name": "Amharic (Ethiopia)",
+                "lang_code": "am-ET",
+                "url": "https://d11fbe263bhqij.cloudfront.net/public/landing/icons/nf/am-ET.png",
+                "need_voice_id": true
             }
-    ]
+      ]
+    }
 }
 ```
 
-### Create video translation
+## Create video translation
 
 ```
 POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
@@ -147,12 +318,24 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
 | --------------- | -------- | ----------| ---------- | ----------------------------------------------------------------------------------------------- |
 | url             | String   |   true    |            | The video url address you want to translate.                                                    |
 | source_language | String   |   true    |            | The original language of the video.                                                             |
-| language        | String   |   true    |            | The language you want to translate into. If you want to translate into multiple languages at once, separate them with commas in English format.                                                    |
+| language        | String   |   true    |            | The language you want to translate into. If you want to translate into multiple languages at once, separate them with commas in English format.         |
 | lipsync         | Boolean  |   false   | true/false | Get synchronized mouth movements with the audio track in a translated video.                    |
 | ~~merge_interval~~  | Number |  false  | 1          | The segmentation interval of video translation, the default is 1 second. ***This field is deprecated***                       |
 | ~~face_enhance~~    | Boolean | false  | true/false | Whether to facial process the translated video, this parameter only works when lipsync is true. ***This field is deprecated*** |
 | webhookUrl      | String  |    false |            | Callback url address based on HTTP request.                                                     |
-| speaker_num      | Number  |   false |      0      | Number of speakers in the video, the default is 0 (Auto Detect).                                                     |
+| speaker_num      | Number |   false |      0      | Number of speakers in the video, the default is 0 (Auto Detect).                                                     |
+| remove_bgm      | Boolean |   false |      false      |   Whether to remove background music (default: false)                                                   |
+| caption_type    | Number  |   false |      0      |  Caption type (default: 0, 0 none；1 add original subtitle；2 add target subtitle；3 translate and replace original subtitle；4 add translated subtitle；)       |
+| caption_url     | String  |   false |            |   Caption URL (default: ""), subtitle file address, support SRT or ASS files.                                                   |
+| voices_map      | Object  |   false |            |   Voice Language maps                                                   |
+| -[language_code]      | Object  |   true |  `{"voice_id": "6889b755662160e2caad5fdf"}`          |      Target language code map                                                |
+| --voice_id      | String  |   true |    "" or  "6889b755662160e2caad5fdf"  |      Voice ID corresponding to the target language code, [getVoiceId](/ai-tools-suite/video-translation#get-ai-voices-list)                                                |
+| studio_voice    | Object  |   false |            |    Studio voice settings                                                  |
+| -no_translate_words    | Array  |   false |  ["kaka","lal"]          |   List of words that do not need to be translated                                                   |
+| -style    | String  |   false |  professional          | Translation style, available values: 'affectionate', 'angry', 'calm', 'cheerful', 'depressed', 'disgruntled', 'embarrassed', 'empathetic', 'excited', 'fearful', 'friendly', 'unfriendly', 'sad', 'serious', 'relaxed', 'professional'               |
+| -fixed_words    | Object  |   false |  `{"hi": "hello", "bad": "good"}`          |    Translation word mapping table for corrections                                                  |
+| -pronounced_words    | Object  |   false |  `{"lel": "lele", "gga": "gaga"}`          |      Pronunciation correction word mapping table                                                |
+
 
 **Response Attributes**
 
@@ -160,7 +343,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
 | ------------- | -------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | code          | int      | 1000                                            | Interface returns business status code(1000:success)                                                                                                   |
 | msg           | String   |                                                 | Interface returns status information                                                                                                                   |
-| data          | Object   | `{ "_id": "", "video_status": 1, "video": "" }` | `id`: Interface returns data, video_status: the status of video： [1:queueing, 2:processing, 3:completed, 4:failed], video: the url of Generated video |
+| data          | Object   | `{ "_id": "", "video_status": 1, "video": "" }` | _id: Interface returns data, video_status: the status of video: [1:queueing, 2:processing, 3:completed, 4:failed], video: the url of Generated video |
 
 **Example**
 
@@ -168,14 +351,32 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
 
 ```json
 {
-  "url": "https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4", //  The video address you want to translate
-  "language": "hi,fr,ja", // The language you want to translate into
-  "source_language": "zh", // The original language of the video.
-  "lipsync": true, //  Get synchronized mouth movements with the audio track in a translated video.
-  //"merge_interval": 1, // This field is deprecated
-  //"face_enhance": true, //  Whether to facial process the translated video, this parameter only works when lipsync is true. This field is deprecated
-  "webhookUrl": "", //  Callback url address based on HTTP request
-  //"speaker_num": 1
+    "url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
+    "language": "ja,zh-CN-shandong,zh-CN-sichuan",
+    "source_language": "en",
+    "lipsync": false,
+    "speaker_num": 1,
+    "webhookUrl": "",
+    "remove_bgm": true,
+    "caption_type": 2,
+    "caption_url": "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt",
+    "voices_map": {
+        "ja": {
+            "voice_id": ""
+        },
+        "zh-CN-shandong": {
+            "voice_id": "6889b755662160e2caad5fdf"
+        },
+        "zh-CN-sichuan": {
+            "voice_id": "6889b74e662160e2caad5fd5"
+        }
+    },
+    "studio_voice": {
+      "no_translate_words": ["kaka","lal"],
+      "fixed_words": {"hi": "hello", "bad": "good"},
+      "pronounced_words": {"lel": "lele", "gga": "gaga"},
+      "style": "professional"
+   }
 }
 ```
 
@@ -188,11 +389,32 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytra
 --header "x-api-key: {{API Key}}" \
 --header 'Content-Type: application/json' \
 --data '{
-    "url": "https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4",
-    "source_language": "zh",
-    "language": "hi,fr,ja",
-    "lipsync":true,
-    "webhookUrl":""
+    "url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
+    "language": "ja,zh-CN-shandong,zh-CN-sichuan",
+    "source_language": "en",
+    "lipsync": false,
+    "speaker_num": 1,
+    "webhookUrl": "",
+    "remove_bgm": true,
+    "caption_type": 2,
+    "caption_url": "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt",
+    "voices_map": {
+        "ja": {
+            "voice_id": ""
+        },
+        "zh-CN-shandong": {
+            "voice_id": "6889b755662160e2caad5fdf"
+        },
+        "zh-CN-sichuan": {
+            "voice_id": "6889b74e662160e2caad5fd5"
+        }
+    },
+    "studio_voice": {
+      "no_translate_words": ["kaka","lal"],
+      "fixed_words": {"hi": "hello", "bad": "good"},
+      "pronounced_words": {"lel": "lele", "gga": "gaga"},
+      "style": "professional"
+   }
 }'
 ```
 
@@ -200,7 +422,34 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytra
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"url\": \"https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4\", \n    \"language\": \"hi,fr,ja\", \n    \"source_language\": \"zh\", \n    \"lipsync\":true, \n  \"webhookUrl\":\"\"   \n}");
+RequestBody body = RequestBody.create(mediaType, "{\n" +
+    "    \"url\": \"https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4\",\n" +
+    "    \"language\": \"ja,zh-CN-shandong,zh-CN-sichuan\",\n" +
+    "    \"source_language\": \"en\",\n" +
+    "    \"lipsync\": false,\n" +
+    "    \"speaker_num\": 1,\n" +
+    "    \"webhookUrl\": \"\",\n" +
+    "    \"remove_bgm\": true,\n" +
+    "    \"caption_type\": 2,\n" +
+    "    \"caption_url\": \"https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt\",\n" +
+    "    \"voices_map\": {\n" +
+    "        \"ja\": {\n" +
+    "            \"voice_id\": \"\"\n" +
+    "        },\n" +
+    "        \"zh-CN-shandong\": {\n" +
+    "            \"voice_id\": \"6889b755662160e2caad5fdf\"\n" +
+    "        },\n" +
+    "        \"zh-CN-sichuan\": {\n" +
+    "            \"voice_id\": \"6889b74e662160e2caad5fd5\"\n" +
+    "        }\n" +
+    "    },\n" +
+    "    \"studio_voice\": {\n" +
+    "        \"no_translate_words\": [\"kaka\",\"lal\"],\n" +
+    "        \"fixed_words\": {\"hi\": \"hello\", \"bad\": \"good\"},\n" +
+    "        \"pronounced_words\": {\"lel\": \"lele\", \"gga\": \"gaga\"},\n" +
+    "        \"style\": \"professional\"\n" +
+    "    }\n" +
+    "}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/content/video/createbytranslate")
   .method("POST", body)
@@ -216,12 +465,32 @@ myHeaders.append("x-api-key", "{{API Key}}");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
-  url: "https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4",
-  language: "hi,fr,ja",
-  source_language: "zh",
-  lipsync: true,
+  url: "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
+  language: "ja,zh-CN-shandong,zh-CN-sichuan",
+  source_language: "en",
+  lipsync: false,
+  speaker_num: 1,
   webhookUrl: "",
-  // speaker_num: 1,
+  remove_bgm: true,
+  caption_type: 2,
+  caption_url: "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt",
+  voices_map: {
+    ja: {
+      voice_id: ""
+    },
+    "zh-CN-shandong": {
+      voice_id: "6889b755662160e2caad5fdf"
+    },
+    "zh-CN-sichuan": {
+      voice_id: "6889b74e662160e2caad5fd5"
+    }
+  },
+  studio_voice: {
+    no_translate_words: ["kaka","lal"],
+    fixed_words: {"hi": "hello", "bad": "good"},
+    pronounced_words: {"lel": "lele", "gga": "gaga"},
+    style: "professional"
+  }
 });
 
 const requestOptions = {
@@ -248,12 +517,32 @@ $headers = [
   'Content-Type' => 'application/json'
 ];
 $body = '{
-  "url": "https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4",
-  "language": "hi,fr,ja",
-  "source_language": "zh",
-  "lipsync": true,
-  # "speaker_num": 1,
-  "webhookUrl": ""
+  "url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
+  "language": "ja,zh-CN-shandong,zh-CN-sichuan",
+  "source_language": "en",
+  "lipsync": false,
+  "speaker_num": 1,
+  "webhookUrl": "",
+  "remove_bgm": true,
+  "caption_type": 2,
+  "caption_url": "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt",
+  "voices_map": {
+    "ja": {
+      "voice_id": ""
+    },
+    "zh-CN-shandong": {
+      "voice_id": "6889b755662160e2caad5fdf"
+    },
+    "zh-CN-sichuan": {
+      "voice_id": "6889b74e662160e2caad5fd5"
+    }
+  },
+  "studio_voice": {
+    "no_translate_words": ["kaka","lal"],
+    "fixed_words": {"hi": "hello", "bad": "good"},
+    "pronounced_words": {"lel": "lele", "gga": "gaga"},
+    "style": "professional"
+  }
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/video/createbytranslate', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -267,12 +556,32 @@ import json
 url = "https://openapi.akool.com/api/open/v3/content/video/createbytranslate"
 
 payload = json.dumps({
-  "url": "https://drz0f01yeq1cx.cloudfront.net/1710470596011-facebook.mp4",
-  "language": "hi,fr,ja",
-  "source_language": "zh",
-  "lipsync": true,
-  # "speaker_num": 1,
-  "webhookUrl": ""
+  "url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
+  "language": "ja,zh-CN-shandong,zh-CN-sichuan",
+  "source_language": "en",
+  "lipsync": False,
+  "speaker_num": 1,
+  "webhookUrl": "",
+  "remove_bgm": True,
+  "caption_type": 2,
+  "caption_url": "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt",
+  "voices_map": {
+    "ja": {
+      "voice_id": ""
+    },
+    "zh-CN-shandong": {
+      "voice_id": "6889b755662160e2caad5fdf"
+    },
+    "zh-CN-sichuan": {
+      "voice_id": "6889b74e662160e2caad5fd5"
+    }
+  },
+  "studio_voice": {
+    "no_translate_words": ["kaka","lal"],
+    "fixed_words": {"hi": "hello", "bad": "good"},
+    "pronounced_words": {"lel": "lele", "gga": "gaga"},
+    "style": "professional"
+  }
 })
 headers = {
   'x-api-key':'{{API Key}}',
@@ -290,110 +599,110 @@ print(response.text)
 
 ```json
 {
-    "code": 1000,
-    "msg": "OK",
-    "data": { // The final translation result of the language
-        "_id": "68ccee42e267570255824ab5",
-        "create_time": 1758260802773,
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "68ccee42e267570255824ab5",
+    "create_time": 1758260802773,
+    "uid": 101400,
+    "team_id": "6805fb69e92d9edc7ca0b409",
+    "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
+    "language": "ja",
+    "source_language": "en",
+    "video_id": "68ccee42f392598dae31999b",
+    "video_status": 1,
+    "video_lock_duration": 16.44,
+    "deduction_lock_duration": 4,
+    "video": "",
+    "credentialId": "6823024be0c8e98471611c72",
+    "task_id": "68ccee42f392598dae31999b",
+    "target_video_md5": "md5_1758260802301",
+    "lipsync": false,
+    "lipSyncType": 0,
+    "speaker_num": 1,
+    "webhookUrl": ""
+  },
+  "all_results": [
+    {
+      "code": 1000,
+      "msg": "OK",
+      "data": {
+        "_id": "68da023e776f4277705a7887",
+        "create_time": 1759117886720,
+        "uid": 101400,
+        "team_id": "6805fb69e92d9edc7ca0b409",
+        "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
+        "language": "hi",
+        "source_language": "en",
+        "video_id": "68da023ef392598dae319ada",
+        "video_status": 1,
+        "video_lock_duration": 16.44,
+        "deduction_lock_duration": 4,
+        "video": "",
+        "credentialId": "6823024be0c8e98471611c72",
+        "task_id": "68da023ef392598dae319ada",
+        "target_video_md5": "md5_1759117886236",
+        "lipsync": false,
+        "lipSyncType": 0,
+        "speaker_num": 1
+      }
+    },
+    {
+      "code": 1000,
+      "msg": "OK",
+      "data": {
+        "_id": "68da023f776f4277705a788b",
+        "create_time": 1759117887169,
+        "uid": 101400,
+        "team_id": "6805fb69e92d9edc7ca0b409",
+        "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
+        "language": "fr",
+        "source_language": "en",
+        "video_id": "68da023ff392598dae319adb",
+        "video_status": 1,
+        "video_lock_duration": 16.44,
+        "deduction_lock_duration": 4,
+        "video": "",
+        "credentialId": "6823024be0c8e98471611c72",
+        "task_id": "68da023ff392598dae319adb",
+        "target_video_md5": "md5_1759117886236",
+        "lipsync": false,
+        "lipSyncType": 0,
+        "speaker_num": 1
+      }
+    },
+    {
+      "code": 1000,
+      "msg": "OK",
+      "data": {
+        "_id": "68da023f776f4277705a7890",
+        "create_time": 1759117887643,
         "uid": 101400,
         "team_id": "6805fb69e92d9edc7ca0b409",
         "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
         "language": "ja",
         "source_language": "en",
-        "video_id": "68ccee42f392598dae31999b",
-        "video_status": 1, // current status of video： 【1：queueing（The requested operation is being processed），2：processing（The requested operation is being processing），3：completed（The request operation has been processed successfully），4：failed（The request operation processing failed, the reason for the failure can be viewed in the video translation details.）】
+        "video_id": "68da023f6ae5f91ba94f6f8e",
+        "video_status": 1,
         "video_lock_duration": 16.44,
         "deduction_lock_duration": 4,
         "video": "",
         "credentialId": "6823024be0c8e98471611c72",
-        "task_id": "68ccee42f392598dae31999b",
-        "target_video_md5": "md5_1758260802301",
+        "task_id": "68da023f6ae5f91ba94f6f8e",
+        "target_video_md5": "md5_1759117886236",
         "lipsync": false,
         "lipSyncType": 0,
-        "speaker_num": 1,
-        "webhookUrl": ""
-    },
-    "all_results": [ // List of translation results for all languages
-        {
-            "code": 1000,
-            "msg": "OK",
-            "data": {
-                "_id": "68da023e776f4277705a7887",
-                "create_time": 1759117886720,
-                "uid": 101400,
-                "team_id": "6805fb69e92d9edc7ca0b409",
-                "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-                "language": "hi",
-                "source_language": "en",
-                "video_id": "68da023ef392598dae319ada",
-                "video_status": 1,
-                "video_lock_duration": 16.44,
-                "deduction_lock_duration": 4,
-                "video": "",
-                "credentialId": "6823024be0c8e98471611c72",
-                "task_id": "68da023ef392598dae319ada",
-                "target_video_md5": "md5_1759117886236",
-                "lipsync": false,
-                "lipSyncType": 0,
-                "speaker_num": 1
-            }
-        },
-        {
-            "code": 1000,
-            "msg": "OK",
-            "data": {
-                "_id": "68da023f776f4277705a788b",
-                "create_time": 1759117887169,
-                "uid": 101400,
-                "team_id": "6805fb69e92d9edc7ca0b409",
-                "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-                "language": "fr",
-                "source_language": "en",
-                "video_id": "68da023ff392598dae319adb",
-                "video_status": 1,
-                "video_lock_duration": 16.44,
-                "deduction_lock_duration": 4,
-                "video": "",
-                "credentialId": "6823024be0c8e98471611c72",
-                "task_id": "68da023ff392598dae319adb",
-                "target_video_md5": "md5_1759117886236",
-                "lipsync": false,
-                "lipSyncType": 0,
-                "speaker_num": 1
-            }
-        },
-        {
-            "code": 1000,
-            "msg": "OK",
-            "data": {
-                "_id": "68da023f776f4277705a7890",
-                "create_time": 1759117887643,
-                "uid": 101400,
-                "team_id": "6805fb69e92d9edc7ca0b409",
-                "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-                "language": "ja",
-                "source_language": "en",
-                "video_id": "68da023f6ae5f91ba94f6f8e",
-                "video_status": 1,
-                "video_lock_duration": 16.44,
-                "deduction_lock_duration": 4,
-                "video": "",
-                "credentialId": "6823024be0c8e98471611c72",
-                "task_id": "68da023f6ae5f91ba94f6f8e",
-                "target_video_md5": "md5_1759117886236",
-                "lipsync": false,
-                "lipSyncType": 0,
-                "speaker_num": 1
-            }
-        }
-    ]
+        "speaker_num": 1
+      }
+    }
+  ]
 }
 ```
 
-### Get Video Info Result
+## Get Video Info Result
 
 ```
-GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64dd838cf0b6684651e90217
+GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid
 ```
 
 **Request Headers**
@@ -415,7 +724,7 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 | ------------- | -------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | code          | int      | 1000                                   | Interface returns business status code(1000:success)                                                                                                    |
 | msg           | String   | OK                                     | Interface returns status information                                                                                                                    |
-| data          | Object   | `{ video_status:1, _id:"", video:"" }` | video_status: the status of video：【1:queueing, 2:processing, 3:completed, 4:failed】 video: Generated video resource url \_id: Interface returns data |
+| data          | Object   | `{ video_status:1, _id:"", video:"" }` | video_status: the status of video: [1:queueing, 2:processing, 3:completed, 4:failed] video: Generated video resource url \_id: Interface returns data |
 
 **Example**
 
@@ -505,10 +814,10 @@ print(response.text)
     "video_id": "0acfed62e24f4cfd8801c9e846347b1d",
     "video_lock_duration": 7.91,
     "deduction_lock_duration": 10,
-    "video_status": 2, // current status of video： 【1：queueing（The requested operation is being processed），2：processing（The requested operation is being processing），3：completed（The request operation has been processed successfully），4：failed（The request operation processing failed, the reason for the failure can be viewed in the video translation details.）】
+    "video_status": 2,
     "external_video": "",
-    "lipsync_video_url": "", //if you set lipsync = true, you can use lipsync_video_url
-    "video": "" //  Generated video resource url
+    "lipsync_video_url": "",
+    "video": ""
   }
 }
 ```
@@ -538,3 +847,5 @@ print(response.text)
 | code          | 1207      | The video you are using exceeds the size limit allowed by the system by 300M       |
 | code          | 1209      | Please upload a video in another encoding format                                   |
 | code          | 1210      | The video you are using exceeds the value allowed by the system by 30fp            |
+
+
