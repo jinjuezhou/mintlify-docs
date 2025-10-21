@@ -1,6 +1,6 @@
 ---
-title: "Streaming Avatar Integration: using Agora SDK"
-description: "Learn how to integrate streaming avatars using the Agora SDK"
+title: "Streaming Avatar Integration Guide"
+description: "Learn how to integrate streaming avatars using Agora, LiveKit, or TRTC SDK"
 ---
 
 <Info>
@@ -9,7 +9,7 @@ description: "Learn how to integrate streaming avatars using the Agora SDK"
 
 ## Overview
 
-The Streaming Avatar feature allows you to create interactive, real-time avatar experiences in your application. This guide provides a comprehensive walkthrough of integrating streaming avatars using the Agora SDK, including:
+The Streaming Avatar feature allows you to create interactive, real-time avatar experiences in your application. This guide provides a comprehensive walkthrough of integrating streaming avatars using **Agora SDK**, **LiveKit SDK**, or **TRTC SDK**, including:
 
 - Setting up real-time communication channels
 - Handling avatar interactions and responses
@@ -17,31 +17,57 @@ The Streaming Avatar feature allows you to create interactive, real-time avatar 
 - Implementing cleanup procedures
 - Optional LLM service integration
 
-The integration uses Agora's Real-Time Communication (RTC) SDK for reliable, low-latency streaming and our avatar service for generating responsive avatar behaviors.
+Choose between three reliable WebRTC-based SDKs for low-latency streaming with our avatar service. The code examples in this guide use **synchronized tabs** - select your preferred provider (Agora, LiveKit, or TRTC) in any code block, and all code examples on the page will automatically switch to match your selection.
 
 ## Prerequisites
 
-1. Install the Agora SDK in your project:
+### 1. Install the SDK
 
-```bash
+<CodeGroup tabs-group="provider">
+
+```bash Agora
 npm install agora-rtc-sdk-ng
 # or
 yarn add agora-rtc-sdk-ng
 ```
 
-2. Import the required dependencies:
+```bash LiveKit
+npm install livekit-client
+# or
+yarn add livekit-client
+```
 
-```ts
+```bash TRTC
+npm install trtc-sdk-v5
+# or
+yarn add trtc-sdk-v5
+```
+
+</CodeGroup>
+
+### 2. Import the required dependencies
+
+<CodeGroup tabs-group="provider">
+
+```ts Agora
 import AgoraRTC, { IAgoraRTCClient } from "agora-rtc-sdk-ng";
 ```
 
-3. Add the hidden API of Agora SDK
+```ts LiveKit
+import { Room, RoomEvent } from "livekit-client";
+```
 
-Agora SDK's sendStreamMessage is not exposed, so we need to add it manually. And it has some limitations, so we need to handle it carefully.
+```ts TRTC
+import TRTC from "trtc-sdk-v5";
+```
 
-We can infer [from the doc](https://docs.agora.io/en/voice-calling/troubleshooting/error-codes?platform=android#data-stream-related-error-codes) that the message size is limited to 1KB and the message frequency is limited to 6KB per second.
+</CodeGroup>
 
-The Agora SDK's `sendStreamMessage` method needs to be manually added to the type definitions:
+### 3. Understanding Data Channel Limitations
+
+<Accordion title="Agora SDK - Hidden API and Limitations">
+
+Agora SDK's `sendStreamMessage` is not exposed in the public API, so we need to add it manually to the type definitions:
 
 ```ts
 interface RTCClient extends IAgoraRTCClient {
@@ -50,34 +76,69 @@ interface RTCClient extends IAgoraRTCClient {
 ```
 
 <Info>
-**Important**: The Agora SDK has the following limitations:
-- Maximum message size: 1KB
-- Maximum message frequency: 6KB per second
+**Important**: The Agora SDK has the following limitations ([reference](https://docs.agora.io/en/voice-calling/troubleshooting/error-codes?platform=android#data-stream-related-error-codes)):
+- Maximum message size: **1 KB (1,024 bytes)**
+- Maximum message frequency: **6 KB per second**
 </Info>
 
+</Accordion>
+
+<Accordion title="LiveKit SDK - Data Channel Limitations">
+
+LiveKit uses WebRTC data channels for message communication with more generous limits:
+
+<Info>
+**Important**: LiveKit data channel has the following limitations:
+- **Reliable mode**: Maximum message size of **15 KiB (15,360 bytes)** per message
+- **Lossy mode**: Recommended to keep messages under 1,300 bytes
+- For this integration, we use reliable mode which provides significantly larger message capacity than Agora
+</Info>
+
+For more details, refer to [LiveKit's Data Channel Documentation](https://docs.livekit.io/home/client/data/packets/).
+
+</Accordion>
+
+<Accordion title="TRTC SDK - Data Channel Limitations">
+
+TRTC uses custom messages and SEI messages for communication with specific limitations:
+
+<Info>
+**Important**: TRTC data channel has the following limitations:
+- **Custom messages**: Maximum message size of **1 KB (1,024 bytes)** per message
+- **SEI messages**: Maximum message size of **1 KB (1,024 bytes)** per message
+- **Rate limit**: 8 KB/s for custom messages
+- Messages are sent reliably and in order by default
+</Info>
+
+For more details, refer to [TRTC's Custom Message Documentation](https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/TRTC.html#sendCustomMessage).
+
+</Accordion>
+
 ## Integration Flow
+
+The integration follows the same pattern regardless of which SDK you choose (Agora, LiveKit, or TRTC):
 
 ```mermaid
 sequenceDiagram
     participant Client
     participant YourBackend
     participant Akool
-    participant Agora
+    participant RTC Provider (Agora/LiveKit/TRTC)
 
     %% Session Creation - Two Paths
     alt Direct Browser Implementation
         Client->>Akool: Create session
-        Akool-->>Client: Return Agora credentials
+        Akool-->>Client: Return RTC credentials
     else Backend Implementation
         Client->>YourBackend: Request session
         YourBackend->>Akool: Create session
-        Akool-->>YourBackend: Return Agora credentials
-        YourBackend-->>Client: Forward Agora credentials
+        Akool-->>YourBackend: Return RTC credentials
+        YourBackend-->>Client: Forward RTC credentials
     end
 
-    %% Agora Connection
-    Client->>Agora: Join channel with credentials
-    Agora-->>Client: Connection established
+    %% RTC Connection
+    Client->>RTC Provider (Agora/LiveKit/TRTC): Connect with credentials
+    RTC Provider (Agora/LiveKit/TRTC)-->>Client: Connection established
 
     %% Optional LLM Integration
     alt Using Custom LLM service
@@ -86,35 +147,35 @@ sequenceDiagram
     end
 
     %% Message Flow
-    Client->>Agora: Send message
-    Agora->>Akool: Forward message
+    Client->>RTC Provider (Agora/LiveKit/TRTC): Send message
+    RTC Provider (Agora/LiveKit/TRTC)->>Akool: Forward message
     
     %% Response Flow
-    Akool->>Agora: Stream avatar response
-    Agora->>Client: Forward streamed response
+    Akool->>RTC Provider (Agora/LiveKit/TRTC): Stream avatar response
+    RTC Provider (Agora/LiveKit/TRTC)->>Client: Forward streamed response
 
     %% Audio Flow (Optional)
     opt Audio Interaction
-        Client->>Agora: Publish audio track
-        Agora->>Akool: Forward audio stream
-        Akool->>Agora: Stream avatar response
-        Agora->>Client: Forward avatar response
+        Client->>RTC Provider (Agora/LiveKit/TRTC): Publish audio track
+        RTC Provider (Agora/LiveKit/TRTC)->>Akool: Forward audio stream
+        Akool->>RTC Provider (Agora/LiveKit/TRTC): Stream avatar response
+        RTC Provider (Agora/LiveKit/TRTC)->>Client: Forward avatar response
     end
 
     %% Video Flow
     opt Video Interaction
-        Client->>Agora: Publish video track
-        Agora->>Akool: Forward video stream
-        Akool->>Agora: Stream avatar response
-        Agora->>Client: Forward avatar response
+        Client->>RTC Provider (Agora/LiveKit/TRTC): Publish video track
+        RTC Provider (Agora/LiveKit/TRTC)->>Akool: Forward video stream
+        Akool->>RTC Provider (Agora/LiveKit/TRTC): Stream avatar response
+        RTC Provider (Agora/LiveKit/TRTC)->>Client: Forward avatar response
     end
 
     %% Cleanup - Two Paths
     alt Direct Browser Implementation
-        Client->>Agora: Leave channel
+        Client->>RTC Provider (Agora/LiveKit/TRTC): Disconnect
         Client->>Akool: Close session
     else Backend Implementation
-        Client->>Agora: Leave channel
+        Client->>RTC Provider (Agora/LiveKit/TRTC): Disconnect
         Client->>YourBackend: Request session closure
         YourBackend->>Akool: Close session
     end
@@ -181,11 +242,13 @@ async function createSessionInBrowser(): Promise<Session> {
 }
 ```
 
-### 2. Initialize Agora Client
+### 2. Initialize the Client/Room
 
-Create and configure the Agora client:
+Create and configure the client or room:
 
-```ts
+<CodeGroup tabs-group="provider">
+
+```ts Agora
 async function initializeAgoraClient(credentials) {
   const client = AgoraRTC.createClient({
     mode: 'rtc',
@@ -208,11 +271,61 @@ async function initializeAgoraClient(credentials) {
 }
 ```
 
-### 3. Subscribe Audio and Video Stream
+```ts LiveKit
+import { Room } from 'livekit-client';
+
+async function initializeLiveKitRoom(credentials) {
+  const room = new Room({
+    adaptiveStream: true,
+    dynacast: true,
+  });
+
+  try {
+    await room.connect(
+      credentials.livekit_url,
+      credentials.livekit_token,
+      {
+        autoSubscribe: true,
+      }
+    );
+    
+    return room;
+  } catch (error) {
+    console.error('Error connecting to room:', error);
+    throw error;
+  }
+}
+```
+
+```ts TRTC
+async function initializeTRTCClient(credentials) {
+  const client = TRTC.create();
+
+  try {
+    await client.enterRoom({
+      sdkAppId: credentials.trtc_app_id,
+      roomId: credentials.trtc_room_id,
+      userId: credentials.trtc_user_id,
+      userSig: credentials.trtc_user_sig,
+    });
+    
+    return client;
+  } catch (error) {
+    console.error('Error entering room:', error);
+    throw error;
+  }
+}
+```
+
+</CodeGroup>
+
+### 3. Subscribe to Audio and Video Stream
 
 Subscribe to the audio and video stream of the avatar:
 
-```ts
+<CodeGroup tabs-group="provider">
+
+```ts Agora
 async function subscribeToAvatarStream(client: IAgoraRTCClient) { 
   const onUserPublish = async (user: IAgoraRTCRemoteUser, mediaType: 'video' | 'audio') => {
     const remoteTrack = await client.subscribe(user, mediaType);
@@ -228,11 +341,82 @@ async function subscribeToAvatarStream(client: IAgoraRTCClient) {
 }
 ```
 
+```ts LiveKit
+import { RoomEvent, RemoteVideoTrack, RemoteAudioTrack } from 'livekit-client';
+
+async function subscribeToAvatarStream(room: Room) {
+  room.on(RoomEvent.TrackSubscribed, (track, publication, participant) => {
+    if (track.kind === 'video' && track instanceof RemoteVideoTrack) {
+      const videoElement = document.getElementById('remote-video') as HTMLVideoElement;
+      if (videoElement) {
+        track.attach(videoElement);
+        videoElement.play();
+      }
+    } else if (track.kind === 'audio' && track instanceof RemoteAudioTrack) {
+      const audioElement = document.createElement('audio');
+      audioElement.autoplay = true;
+      audioElement.volume = 1.0;
+      document.body.appendChild(audioElement);
+      track.attach(audioElement);
+    }
+  });
+
+  room.on(RoomEvent.TrackUnsubscribed, (track, publication, participant) => {
+    track.detach();
+  });
+}
+```
+
+```ts TRTC
+async function subscribeToAvatarStream(client: TRTC) {
+  // Handle remote user video stream
+  client.on(TRTC.EVENT.REMOTE_VIDEO_AVAILABLE, (event) => {
+    const { userId, streamType } = event;
+    const videoElement = document.getElementById('remote-video') as HTMLVideoElement;
+    if (videoElement) {
+      client.startRemoteView({
+        userId,
+        streamType: streamType || TRTC.TRTCVideoStreamTypeBig,
+        view: videoElement
+      });
+    }
+  });
+
+  // Handle remote user audio stream
+  client.on(TRTC.EVENT.REMOTE_AUDIO_AVAILABLE, (event) => {
+    const { userId } = event;
+    client.startRemoteAudio({
+      userId,
+      volume: 100
+    });
+  });
+
+  // Handle stream removal
+  client.on(TRTC.EVENT.REMOTE_VIDEO_UNAVAILABLE, (event) => {
+    const { userId } = event;
+    client.stopRemoteView({
+      userId
+    });
+  });
+
+  client.on(TRTC.EVENT.REMOTE_AUDIO_UNAVAILABLE, (event) => {
+    const { userId } = event;
+    client.stopRemoteAudio({
+      userId
+    });
+  });
+}
+```
+
+</CodeGroup>
+
 ### 4. Set Up Message Handling
 
 Configure message listeners to handle avatar responses:
 
-```ts
+<CodeGroup tabs-group="provider">
+
+```ts Agora
 function setupMessageHandlers(client: IAgoraRTCClient) {
   let answer = '';
   client.on('stream-message', (uid, message) => {
@@ -264,11 +448,86 @@ function setupMessageHandlers(client: IAgoraRTCClient) {
 }
 ```
 
+```ts LiveKit
+import { RoomEvent } from 'livekit-client';
+
+function setupMessageHandlers(room: Room) {
+  let answer = '';
+  
+  room.on(RoomEvent.DataReceived, (payload: Uint8Array, participant) => {
+    try {
+      const message = new TextDecoder().decode(payload);
+      const parsedMessage = JSON.parse(message);
+      
+      if (parsedMessage.type === 'chat') {
+        const payload = parsedMessage.pld;
+        
+        if (payload.from === 'bot') {
+          if (!payload.fin) {
+            answer += payload.text;
+          } else {
+            console.log('Avatar response:', answer);
+            answer = '';
+          }
+        } else if (payload.from === 'user') {
+          console.log('User message:', payload.text);
+        }
+      } else if (parsedMessage.type === 'command') {
+        if (parsedMessage.pld.code !== 1000) {
+          console.error('Command failed:', parsedMessage.pld.msg);
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing message:', error);
+    }
+  });
+}
+```
+
+```ts TRTC
+function setupMessageHandlers(client: TRTC) {
+  let answer = '';
+  
+  client.on(TRTC.EVENT.CUSTOM_MESSAGE, (event) => {
+    try {
+      const { data } = event;
+      const message = new TextDecoder().decode(new Uint8Array(data));
+      const parsedMessage = JSON.parse(message);
+      
+      if (parsedMessage.type === 'chat') {
+        const payload = parsedMessage.pld;
+        
+        if (payload.from === 'bot') {
+          if (!payload.fin) {
+            answer += payload.text;
+          } else {
+            console.log('Avatar response:', answer);
+            answer = '';
+          }
+        } else if (payload.from === 'user') {
+          console.log('User message:', payload.text);
+        }
+      } else if (parsedMessage.type === 'command') {
+        if (parsedMessage.pld.code !== 1000) {
+          console.error('Command failed:', parsedMessage.pld.msg);
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing message:', error);
+    }
+  });
+}
+```
+
+</CodeGroup>
+
 ### 5. Send Messages to Avatar
 
 Implement functions to interact with the avatar:
 
-```ts
+<CodeGroup tabs-group="provider">
+
+```ts Agora
 async function sendMessageToAvatar(client: IAgoraRTCClient, question: string) {
   const message = {
     v: 2,
@@ -290,7 +549,62 @@ async function sendMessageToAvatar(client: IAgoraRTCClient, question: string) {
 }
 ```
 
-In real-world scenarios, the message size is limited to 1KB and the message frequency is limited to 6KB per second, so we need to split the message into chunks and send them separately.
+```ts LiveKit
+async function sendMessageToAvatar(room: Room, question: string) {
+  const message = {
+    v: 2,
+    type: "chat",
+    mid: `msg-${Date.now()}`,
+    idx: 0,
+    fin: true,
+    pld: {
+      text: question,
+    }
+  };
+
+  try {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(JSON.stringify(message));
+    await room.localParticipant.publishData(data, { reliable: true });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    throw error;
+  }
+}
+```
+
+```ts TRTC
+async function sendMessageToAvatar(client: TRTC, question: string) {
+  const message = {
+    v: 2,
+    type: "chat",
+    mid: `msg-${Date.now()}`,
+    idx: 0,
+    fin: true,
+    pld: {
+      text: question,
+    }
+  };
+
+  try {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(JSON.stringify(message));
+    await client.sendCustomMessage({
+      cmdId: 1,
+      data: data.buffer
+    });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    throw error;
+  }
+}
+```
+
+</CodeGroup>
+
+<Accordion title="Agora: Handling Large Messages with Chunking">
+
+In real-world scenarios with Agora, the message size is limited to 1KB and the message frequency is limited to 6KB per second, so we need to split large messages into chunks and send them separately:
 
 ```ts
 export async function sendMessageToAvatar(client: RTCClient, messageId: string, content: string) {
@@ -375,11 +689,21 @@ export async function sendMessageToAvatar(client: RTCClient, messageId: string, 
 }
 ```
 
+</Accordion>
+
+<Info>
+**LiveKit Note**: Unlike Agora's 1KB limit, LiveKit supports messages up to 15 KiB in reliable mode, so chunking is generally not needed for typical conversational messages. For very large messages (over 15 KiB), you would need to implement similar chunking logic.
+
+**TRTC Note**: TRTC has the same 1KB message size limit as Agora, so you would need to implement similar chunking logic for large messages. The chunking approach shown above for Agora can be adapted for TRTC by replacing `client.sendStreamMessage()` with `client.sendCustomMessage()`.
+</Info>
+
 ### 6. Control Avatar Parameters
 
 Implement functions to control avatar settings:
 
-```ts
+<CodeGroup tabs-group="provider">
+
+```ts Agora
 async function setAvatarParams(client: IAgoraRTCClient, params: {
   vid?: string;
   lang?: string;
@@ -413,11 +737,97 @@ async function interruptAvatar(client: IAgoraRTCClient) {
 }
 ```
 
+```ts LiveKit
+async function setAvatarParams(room: Room, params: {
+  vid?: string;
+  lang?: string;
+  mode?: number;
+  bgurl?: string;
+}) {
+  const message = {
+    v: 2,
+    type: 'command',
+    mid: `msg-${Date.now()}`,
+    pld: {
+      cmd: 'set-params',
+      data: params
+    }
+  };
+
+  const encoder = new TextEncoder();
+  const data = encoder.encode(JSON.stringify(message));
+  await room.localParticipant.publishData(data, { reliable: true });
+}
+
+async function interruptAvatar(room: Room) {
+  const message = {
+    v: 2,
+    type: 'command',
+    mid: `msg-${Date.now()}`,
+    pld: {
+      cmd: 'interrupt'
+    }
+  };
+
+  const encoder = new TextEncoder();
+  const data = encoder.encode(JSON.stringify(message));
+  await room.localParticipant.publishData(data, { reliable: true });
+}
+```
+
+```ts TRTC
+async function setAvatarParams(client: TRTC, params: {
+  vid?: string;
+  lang?: string;
+  mode?: number;
+  bgurl?: string;
+}) {
+  const message = {
+    v: 2,
+    type: 'command',
+    mid: `msg-${Date.now()}`,
+    pld: {
+      cmd: 'set-params',
+      data: params
+    }
+  };
+
+  const encoder = new TextEncoder();
+  const data = encoder.encode(JSON.stringify(message));
+  await client.sendCustomMessage({
+    cmdId: 1,
+    data: data.buffer
+  });
+}
+
+async function interruptAvatar(client: TRTC) {
+  const message = {
+    v: 2,
+    type: 'command',
+    mid: `msg-${Date.now()}`,
+    pld: {
+      cmd: 'interrupt'
+    }
+  };
+
+  const encoder = new TextEncoder();
+  const data = encoder.encode(JSON.stringify(message));
+  await client.sendCustomMessage({
+    cmdId: 1,
+    data: data.buffer
+  });
+}
+```
+
+</CodeGroup>
+
 ### 7. Audio Interaction With The Avatar
 
 To enable audio interaction with the avatar, you'll need to publish your local audio stream:
 
-```ts
+<CodeGroup tabs-group="provider">
+
+```ts Agora
 async function publishAudio(client: IAgoraRTCClient) {
   // Create a microphone audio track
   const audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
@@ -477,9 +887,127 @@ async function setupAudioInteraction(client: IAgoraRTCClient) {
 }
 ```
 
+```ts LiveKit
+import { createLocalAudioTrack } from 'livekit-client';
+
+async function publishAudio(room: Room) {
+  // Create a microphone audio track
+  const audioTrack = await createLocalAudioTrack();
+  
+  try {
+    // Publish the audio track to the room
+    await room.localParticipant.publishTrack(audioTrack);
+    console.log("Audio publishing successful");
+    
+    return audioTrack;
+  } catch (error) {
+    console.error("Error publishing audio:", error);
+    throw error;
+  }
+}
+
+// Example usage with audio controls
+async function setupAudioInteraction(room: Room) {
+  let audioTrack;
+  
+  // Start audio
+  async function startAudio() {
+    try {
+      audioTrack = await publishAudio(room);
+    } catch (error) {
+      console.error("Failed to start audio:", error);
+    }
+  }
+
+  // Stop audio
+  async function stopAudio() {
+    if (audioTrack) {
+      // Stop and unpublish the audio track
+      audioTrack.stop();
+      await room.localParticipant.unpublishTrack(audioTrack);
+      audioTrack = null;
+    }
+  }
+
+  // Mute/unmute audio
+  function toggleAudio(muted: boolean) {
+    if (audioTrack) {
+      audioTrack.setMuted(muted);
+    }
+  }
+
+  return {
+    startAudio,
+    stopAudio,
+    toggleAudio
+  };
+}
+```
+
+```ts TRTC
+async function publishAudio(client: TRTC) {
+  try {
+    // Start local audio capture
+    await client.startLocalAudio({
+      quality: TRTC.TRTCAudioQualityDefault
+    });
+    
+    console.log("Audio publishing successful");
+    return true;
+  } catch (error) {
+    console.error("Error publishing audio:", error);
+    throw error;
+  }
+}
+
+// Example usage with audio controls
+async function setupAudioInteraction(client: TRTC) {
+  let isAudioEnabled = false;
+  
+  // Start audio
+  async function startAudio() {
+    try {
+      await publishAudio(client);
+      isAudioEnabled = true;
+    } catch (error) {
+      console.error("Failed to start audio:", error);
+    }
+  }
+
+  // Stop audio
+  async function stopAudio() {
+    if (isAudioEnabled) {
+      try {
+        await client.stopLocalAudio();
+        isAudioEnabled = false;
+      } catch (error) {
+        console.error("Failed to stop audio:", error);
+      }
+    }
+  }
+
+  // Mute/unmute audio
+  function toggleAudio(muted: boolean) {
+    if (isAudioEnabled) {
+      client.muteLocalAudio(muted);
+    }
+  }
+
+  return {
+    startAudio,
+    stopAudio,
+    toggleAudio
+  };
+}
+```
+
+</CodeGroup>
+
 Now you can integrate audio controls into your application:
 
-```ts
+<CodeGroup tabs-group="provider">
+
+```ts Agora
 async function initializeWithAudio() {
   try {
     // Initialize avatar
@@ -504,7 +1032,61 @@ async function initializeWithAudio() {
 }
 ```
 
-For more details about Agora's audio functionality, refer to the [Agora Web SDK Documentation](https://docs.agora.io/en/voice-calling/get-started/get-started-sdk?platform=web#publish-a-local-audio-track).
+```ts LiveKit
+async function initializeWithAudio() {
+  try {
+    // Initialize avatar
+    const room = await initializeStreamingAvatar();
+    
+    // Setup audio controls
+    const audioControls = await setupAudioInteraction(room);
+    
+    // Start audio when needed
+    await audioControls.startAudio();
+    
+    // Example of muting/unmuting
+    audioControls.toggleAudio(true); // mute
+    audioControls.toggleAudio(false); // unmute
+    
+    // Stop audio when done
+    await audioControls.stopAudio();
+    
+  } catch (error) {
+    console.error("Error initializing with audio:", error);
+  }
+}
+```
+
+```ts TRTC
+async function initializeWithAudio() {
+  try {
+    // Initialize avatar
+    const client = await initializeStreamingAvatar();
+    
+    // Setup audio controls
+    const audioControls = await setupAudioInteraction(client);
+    
+    // Start audio when needed
+    await audioControls.startAudio();
+    
+    // Example of muting/unmuting
+    audioControls.toggleAudio(true); // mute
+    audioControls.toggleAudio(false); // unmute
+    
+    // Stop audio when done
+    await audioControls.stopAudio();
+    
+  } catch (error) {
+    console.error("Error initializing with audio:", error);
+  }
+}
+```
+
+</CodeGroup>
+
+**Additional Resources:**
+- [Agora Web SDK Documentation](https://docs.agora.io/en/voice-calling/get-started/get-started-sdk?platform=web#publish-a-local-audio-track)
+- [LiveKit Web SDK Documentation](https://docs.livekit.io/client-sdk-js/)
 
 ### 8. Integrating your own LLM service (optional)
 
@@ -544,7 +1126,11 @@ async function processWithLLM(question: string): Promise<LLMResponse> {
     throw error;
   }
 }
+```
 
+<CodeGroup tabs-group="provider">
+
+```ts Agora
 async function sendMessageToAvatarWithLLM(
   client: IAgoraRTCClient, 
   question: string
@@ -555,6 +1141,7 @@ async function sendMessageToAvatarWithLLM(
 
     // Prepare the message with LLM response
     const message = {
+      v: 2,
       type: "chat",
       mid: `msg-${Date.now()}`,
       idx: 0,
@@ -574,6 +1161,77 @@ async function sendMessageToAvatarWithLLM(
 }
 ```
 
+```ts LiveKit
+async function sendMessageToAvatarWithLLM(
+  room: Room, 
+  question: string
+) {
+  try {
+    // Process the question with your LLM service
+    const llmResponse = await processWithLLM(question);
+
+    // Prepare the message with LLM response
+    const message = {
+      v: 2,
+      type: "chat",
+      mid: `msg-${Date.now()}`,
+      idx: 0,
+      fin: true,
+      pld: {
+        text: llmResponse.answer // Use the LLM-processed response
+      }
+    };
+
+    // Send the processed message to the avatar
+    const encoder = new TextEncoder();
+    const data = encoder.encode(JSON.stringify(message));
+    await room.localParticipant.publishData(data, { reliable: true });
+
+  } catch (error) {
+    console.error('Error in LLM-enhanced message sending:', error);
+    throw error;
+  }
+}
+```
+
+```ts TRTC
+async function sendMessageToAvatarWithLLM(
+  client: TRTC, 
+  question: string
+) {
+  try {
+    // Process the question with your LLM service
+    const llmResponse = await processWithLLM(question);
+
+    // Prepare the message with LLM response
+    const message = {
+      v: 2,
+      type: "chat",
+      mid: `msg-${Date.now()}`,
+      idx: 0,
+      fin: true,
+      pld: {
+        text: llmResponse.answer // Use the LLM-processed response
+      }
+    };
+
+    // Send the processed message to the avatar
+    const encoder = new TextEncoder();
+    const data = encoder.encode(JSON.stringify(message));
+    await client.sendCustomMessage({
+      cmdId: 1,
+      data: data.buffer
+    });
+
+  } catch (error) {
+    console.error('Error in LLM-enhanced message sending:', error);
+    throw error;
+  }
+}
+```
+
+</CodeGroup>
+
 <Info>
 *Remember to*:
 1. Implement proper rate limiting for your LLM service
@@ -587,7 +1245,9 @@ async function sendMessageToAvatarWithLLM(
 
 Cleanup can also be performed either directly or through your backend:
 
-```ts
+<CodeGroup tabs-group="provider">
+
+```ts Agora
 // Browser Implementation
 async function cleanupInBrowser(client: IAgoraRTCClient, sessionId: string) {
   await fetch('https://openapi.akool.com/api/open/v4/liveAvatar/session/close', {
@@ -635,6 +1295,114 @@ async function performClientCleanup(client: IAgoraRTCClient) {
 }
 ```
 
+```ts LiveKit
+// Browser Implementation
+async function cleanupInBrowser(room: Room, sessionId: string) {
+  await fetch('https://openapi.akool.com/api/open/v4/liveAvatar/session/close', {
+    method: 'POST',
+    headers: {
+      'x-api-key':'{{API Key}}'
+    },
+    body: JSON.stringify({
+      id: sessionId
+    })
+  });
+
+  await performClientCleanup(room);
+}
+
+// Backend Implementation
+async function cleanupFromBackend(room: Room, sessionId: string) {
+  await fetch('https://your-backend.com/api/avatar/close-session', {
+    method: 'POST',
+    body: JSON.stringify({
+      sessionId
+    })
+  });
+
+  await performClientCleanup(room);
+}
+
+// Shared cleanup logic
+async function performClientCleanup(room: Room) {
+  // Remove event listeners
+  room.removeAllListeners();
+
+  // Stop and unpublish all local tracks
+  room.localParticipant.audioTracks.forEach((publication) => {
+    const track = publication.track;
+    if (track) {
+      track.stop();
+      room.localParticipant.unpublishTrack(track);
+    }
+  });
+  
+  room.localParticipant.videoTracks.forEach((publication) => {
+    const track = publication.track;
+    if (track) {
+      track.stop();
+      room.localParticipant.unpublishTrack(track);
+    }
+  });
+  
+  // Disconnect from the LiveKit room
+  await room.disconnect();
+}
+```
+
+```ts TRTC
+// Browser Implementation
+async function cleanupInBrowser(client: TRTC, sessionId: string) {
+  await fetch('https://openapi.akool.com/api/open/v4/liveAvatar/session/close', {
+    method: 'POST',
+    headers: {
+      'x-api-key':'{{API Key}}'
+    },
+    body: JSON.stringify({
+      id: sessionId
+    })
+  });
+
+  await performClientCleanup(client);
+}
+
+// Backend Implementation
+async function cleanupFromBackend(client: TRTC, sessionId: string) {
+  await fetch('https://your-backend.com/api/avatar/close-session', {
+    method: 'POST',
+    body: JSON.stringify({
+      sessionId
+    })
+  });
+
+  await performClientCleanup(client);
+}
+
+// Shared cleanup logic
+async function performClientCleanup(client: TRTC) {
+  // Remove event listeners
+  client.removeAllListeners();
+
+  // Stop local audio and video
+  try {
+    await client.stopLocalAudio();
+  } catch (error) {
+    console.warn('Error stopping local audio:', error);
+  }
+
+  try {
+    await client.stopLocalVideo();
+  } catch (error) {
+    console.warn('Error stopping local video:', error);
+  }
+
+  // Exit the room
+  await client.exitRoom();
+}
+```
+
+</CodeGroup>
+
 <Info>
 When implementing through your backend, make sure to:
 - Securely store your AKool API token
@@ -647,12 +1415,15 @@ When implementing through your backend, make sure to:
 
 Here's how to use all the components together:
 
-```ts
+<CodeGroup tabs-group="provider">
+
+```ts Agora
 async function initializeStreamingAvatar() {
   let client;
+  let session;
   try {
     // Create session and get credentials
-    const session = await createSession();
+    session = await createSession();
     const { credentials } = session;
     
     // Initialize Agora client
@@ -685,7 +1456,7 @@ async function initializeStreamingAvatar() {
     return client;
   } catch (error) {
     console.error('Error initializing streaming avatar:', error);
-    if (client) {
+    if (client && session) {
       await cleanup(client, session._id);
     }
     throw error;
@@ -693,8 +1464,118 @@ async function initializeStreamingAvatar() {
 }
 ```
 
+```ts LiveKit
+async function initializeStreamingAvatar() {
+  let room;
+  let session;
+  try {
+    // Create session and get credentials
+    session = await createSession();
+    const { credentials } = session;
+    
+    // Initialize LiveKit room
+    room = await initializeLiveKitRoom(credentials);
+
+    // Subscribe to the audio and video stream of the avatar
+    await subscribeToAvatarStream(room);
+    
+    // Set up message handlers
+    setupMessageHandlers(room);
+    
+    // Example usage
+    await sendMessageToAvatar(room, "Hello!");
+
+    // Or use your own LLM service
+    await sendMessageToAvatarWithLLM(room, "Hello!");
+
+    // Example of voice interaction
+    await interruptAvatar(room);
+
+    // Example of Audio Interaction With The Avatar
+    await setupAudioInteraction(room);
+
+    // Example of changing avatar parameters
+    await setAvatarParams(room, {
+      lang: "en",
+      vid: "new_voice_id"
+    });
+    
+    return room;
+  } catch (error) {
+    console.error('Error initializing streaming avatar:', error);
+    if (room && session) {
+      await cleanup(room, session._id);
+    }
+    throw error;
+  }
+}
+```
+
+```ts TRTC
+async function initializeStreamingAvatar() {
+  let client;
+  let session;
+  try {
+    // Create session and get credentials
+    session = await createSession();
+    const { credentials } = session;
+    
+    // Initialize TRTC client
+    client = await initializeTRTCClient(credentials);
+
+    // Subscribe to the audio and video stream of the avatar
+    await subscribeToAvatarStream(client);
+    
+    // Set up message handlers
+    setupMessageHandlers(client);
+    
+    // Example usage
+    await sendMessageToAvatar(client, "Hello!");
+
+    // Or use your own LLM service
+    await sendMessageToAvatarWithLLM(client, "Hello!");
+
+    // Example of voice interaction
+    await interruptAvatar(client);
+
+    // Example of Audio Interaction With The Avatar
+    await setupAudioInteraction(client);
+
+    // Example of changing avatar parameters
+    await setAvatarParams(client, {
+      lang: "en",
+      vid: "new_voice_id"
+    });
+    
+    return client;
+  } catch (error) {
+    console.error('Error initializing streaming avatar:', error);
+    if (client && session) {
+      await cleanup(client, session._id);
+    }
+    throw error;
+  }
+}
+```
+
+</CodeGroup>
+
 ## Additional Resources
 
+### Agora SDK Resources
 - [Agora Web SDK Documentation](https://docs.agora.io/en/sdks?platform=web)
 - [Agora Web SDK API Reference](https://api-ref.agora.io/en/video-sdk/web/4.x/index.html)
+- [Agora Data Stream Error Codes](https://docs.agora.io/en/voice-calling/troubleshooting/error-codes?platform=android#data-stream-related-error-codes)
+
+### LiveKit SDK Resources
+- [LiveKit Web SDK Documentation](https://docs.livekit.io/client-sdk-js/)
+- [LiveKit Web SDK API Reference](https://docs.livekit.io/client-sdk-js/classes/Room.html)
+- [LiveKit Data Channel Documentation](https://docs.livekit.io/home/client/data/packets/)
+
+### TRTC SDK Resources
+- [TRTC Web SDK Documentation](https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/index.html)
+- [TRTC Web SDK API Reference](https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/TRTC.html)
+- [TRTC Custom Message Documentation](https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/TRTC.html#sendCustomMessage)
+
+### AKool API Resources
 - [AKool OpenAPI Error Codes](/ai-tools-suite/live-avatar#response-code-description)
