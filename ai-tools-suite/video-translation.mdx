@@ -335,6 +335,7 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
 | -style    | String  |   false |  professional          | Translation style, available values: 'affectionate', 'angry', 'calm', 'cheerful', 'depressed', 'disgruntled', 'embarrassed', 'empathetic', 'excited', 'fearful', 'friendly', 'unfriendly', 'sad', 'serious', 'relaxed', 'professional'               |
 | -fixed_words    | Object  |   false |  `{"hi": "hello", "bad": "good"}`          |    Translation word mapping table for corrections                                                  |
 | -pronounced_words    | Object  |   false |  `{"lel": "lele", "gga": "gaga"}`          |      Pronunciation correction word mapping table                                                |
+| dynamic_duration | Boolean | false | false | Control the dynamic duration of the video. The default value is false. |
 
 
 **Response Attributes**
@@ -376,7 +377,8 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
       "fixed_words": {"hi": "hello", "bad": "good"},
       "pronounced_words": {"lel": "lele", "gga": "gaga"},
       "style": "professional"
-   }
+   },
+   "dynamic_duration": false,
 }
 ```
 
@@ -414,7 +416,8 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytra
       "fixed_words": {"hi": "hello", "bad": "good"},
       "pronounced_words": {"lel": "lele", "gga": "gaga"},
       "style": "professional"
-   }
+   },
+   "dynamic_duration": false,
 }'
 ```
 
@@ -448,7 +451,8 @@ RequestBody body = RequestBody.create(mediaType, "{\n" +
     "        \"fixed_words\": {\"hi\": \"hello\", \"bad\": \"good\"},\n" +
     "        \"pronounced_words\": {\"lel\": \"lele\", \"gga\": \"gaga\"},\n" +
     "        \"style\": \"professional\"\n" +
-    "    }\n" +
+    "    },\n" +
+    "    \"dynamic_duration\": false, \n" +
     "}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/content/video/createbytranslate")
@@ -490,7 +494,8 @@ const raw = JSON.stringify({
     fixed_words: {"hi": "hello", "bad": "good"},
     pronounced_words: {"lel": "lele", "gga": "gaga"},
     style: "professional"
-  }
+  },
+  dynamic_duration: false,
 });
 
 const requestOptions = {
@@ -542,7 +547,8 @@ $body = '{
     "fixed_words": {"hi": "hello", "bad": "good"},
     "pronounced_words": {"lel": "lele", "gga": "gaga"},
     "style": "professional"
-  }
+  },
+  "dynamic_duration": false,
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/video/createbytranslate', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -581,7 +587,8 @@ payload = json.dumps({
     "fixed_words": {"hi": "hello", "bad": "good"},
     "pronounced_words": {"lel": "lele", "gga": "gaga"},
     "style": "professional"
-  }
+  },
+  "dynamic_duration": false,
 })
 headers = {
   'x-api-key':'{{API Key}}',
