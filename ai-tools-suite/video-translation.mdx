@@ -724,7 +724,18 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid
 | ------------- | -------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | code          | int      | 1000                                   | Interface returns business status code(1000:success)                                                                                                    |
 | msg           | String   | OK                                     | Interface returns status information                                                                                                                    |
-| data          | Object   | `{ video_status:1, _id:"", video:"" }` | video_status: the status of video: [1:queueing, 2:processing, 3:completed, 4:failed] video: Generated video resource url \_id: Interface returns data |
+| data          | Object   | `{ video_status:1, _id:"", video:"" }` | Interface returns data |
+| - _id         | String   | 68da023f776f4277705a7890 | Unique identifier |
+| - create_time         | Integer   | 1759117887643 | Timestamp |
+| - uid         | Integer   | 101400 | User ID |
+| - team_id         | String   | 6805fb69e92d9edc7ca0b409 | Team ID |
+| - video_id         | String   | 68da023f6ae5f91ba94f6f8e | Video Translation Unique ID |
+| - video_status         | Integer   | 3 | The status of video: [1:queueing, 2:processing, 3:completed, 4:failed] |
+| - video         | String   | https://d2qf6ukcym4kn9.cloudfront.net/1761015360290-1617.mp4 | Generated video resource url  |
+| - progress         | Integer   | 100 | Video translation processing progress |
+| - deduction_duration        | Integer   | 4 | Credits consumed for this video translation |
+| - error_code        | Integer   | 1000 | Error code indicating the specific reason for task failure, only available when video_status is 4 |
+| - error_reason        | String   | "" | Detailed error reason description, only available when video_status is 4 |
 
 **Example**
 
@@ -800,25 +811,55 @@ print(response.text)
 **Response**
 
 ```json
+// Task Processing Details
 {
-  "code": 1000,
-  "msg": "OK",
-  "data": {
-    "faceswap_quality": 2,
-    "storage_loc": 1,
-    "_id": "64dd92c1f0b6684651e90e09",
-    "create_time": 1692242625334,
-    "uid": 378337,
-    "type": 2,
-    "from": 1,
-    "video_id": "0acfed62e24f4cfd8801c9e846347b1d",
-    "video_lock_duration": 7.91,
-    "deduction_lock_duration": 10,
-    "video_status": 2,
-    "external_video": "",
-    "lipsync_video_url": "",
-    "video": ""
-  }
+    "code": 1000,
+    "msg": "OK",
+    "data": {
+        "_id": "68f704e35dafcfa697b5c938",
+        "create_time": 1761019107873,
+        "uid": 101400,
+        "team_id": "6805fb69e92d9edc7ca0b409",
+        "video_id": "68f704e33a70d14c0e6e1035",
+        "video_status": 2,
+        "video": "",
+        "progress": 5
+    }
+}
+
+// Task Processing Failed Details
+{
+    "code": 1000,
+    "msg": "OK",
+    "data": {
+        "_id": "68da023f776f4277705a7890",
+        "create_time": 1759117887643,
+        "uid": 101400,
+        "team_id": "6805fb69e92d9edc7ca0b409",
+        "video_id": "68da023f6ae5f91ba94f6f8e",
+        "video_status": 4,
+        "video": "",
+        "progress": 15,
+        "error_code": 501312,
+        "error_reason": "Oops! Something went a bit wonky. Please try again."
+    }
+}
+
+// Task Processing Success
+{
+    "code": 1000,
+    "msg": "OK",
+    "data": {
+        "_id": "68f6f593569f662dbad4e49e",
+        "create_time": 1761015187235,
+        "uid": 101400,
+        "team_id": "6805fb69e92d9edc7ca0b409",
+        "video_id": "68f6f59234a68e7b8a942836",
+        "video_status": 3,
+        "video": "https://d2qf6ukcym4kn9.cloudfront.net/1761015360290-1617.mp4",
+        "progress": 100,
+        "deduction_duration": 4
+    }
 }
 ```
 
