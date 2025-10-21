@@ -241,6 +241,7 @@ POST https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage
 | sourceImage   | Array    | `[{path:""}]` | Replacement target image information (Each array element is an object containing path: Links to replacement faces)          |
 | model_name    | String   | "akool_faceswap_image_hq" | The model name used for face swap processing. Enum: ["akool_faceswap_image_hq"]. The 'akool_faceswap_image_hq' model only supports high-quality face swapping for a single face in an image. |
 | webhookUrl    | String   |                       | Callback url address based on HTTP request                                                                                                                                                  |
+| face_enhance  | Boolean  | false                 | Face enhance must be a boolean, default is false |
 
 **Response Attributes**
 
@@ -267,7 +268,8 @@ POST https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage
         }
     ],
     "model_name": "akool_faceswap_image_hq",    // Model name for face swap processing
-    "webhookUrl":"https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage" // Callback url address based on HTTP request
+    "webhookUrl":"" // Callback url address based on HTTP request,
+    "face_enhance": true
 }
 ```
 
@@ -291,7 +293,8 @@ curl -X POST --location "https://openapi.akool.com/api/open/v4/faceswap/faceswap
             }
           ],
           "model_name": "akool_faceswap_image_hq",
-          "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
+          "webhookUrl": "",
+          "face_enhance": true,
         }'
 ```
 
@@ -299,7 +302,7 @@ curl -X POST --location "https://openapi.akool.com/api/open/v4/faceswap/faceswap
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"targetImage\": [\n        {\n            \"path\": \"https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png\"\n        }\n    ],\n    \"sourceImage\": [\n        {\n            \"path\": \"https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg\"\n        }\n    ],\n    \"model_name\": \"akool_faceswap_image_hq\",\n    \"webhookUrl\": \"https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"targetImage\": [\n        {\n            \"path\": \"https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png\"\n        }\n    ],\n    \"sourceImage\": [\n        {\n            \"path\": \"https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg\"\n        }\n    ],\n    \"model_name\": \"akool_faceswap_image_hq\",\n    \"webhookUrl\": \"\"\n,\n  \"face_enhance\": \"true\"}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage")
   .method("POST", body)
@@ -326,7 +329,8 @@ const raw = JSON.stringify({
     }
   ],
   "model_name": "akool_faceswap_image_hq",
-  "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
+  "webhookUrl": "",
+  "face_enhance": true
 });
 
 const requestOptions = {
@@ -361,7 +365,8 @@ $body = '{
     }
   ],
   "model_name": "akool_faceswap_image_hq",
-  "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
+  "webhookUrl": "",
+  "face_enhance": true
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v4/faceswap/faceswapByImage', $headers, $body);
 $res = $client->sendAsync($request)->wait();
@@ -386,7 +391,8 @@ payload = json.dumps({
     }
   ],
   "model_name": "akool_faceswap_image_hq",
-  "webhookUrl": "https://landing-test.akool.io/interface/stats-api/api/open/v5/faceswap/faceswapByImage"
+  "webhookUrl": "",
+  "face_enhance": true
 })
 headers = {
   'x-api-key':'{{API Key}}',
