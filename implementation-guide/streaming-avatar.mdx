@@ -100,17 +100,16 @@ For more details, refer to [LiveKit's Data Channel Documentation](https://docs.l
 
 <Accordion title="TRTC SDK - Data Channel Limitations">
 
-TRTC uses custom messages and SEI messages for communication with specific limitations:
+TRTC uses custom messages for communication with specific limitations:
 
 <Info>
 **Important**: TRTC data channel has the following limitations:
 - **Custom messages**: Maximum message size of **1 KB (1,024 bytes)** per message
-- **SEI messages**: Maximum message size of **1 KB (1,024 bytes)** per message
-- **Rate limit**: 8 KB/s for custom messages
+- **Rate limit**: 30 calls per second, 8 KB/s for custom messages
 - Messages are sent reliably and in order by default
 </Info>
 
-For more details, refer to [TRTC's Custom Message Documentation](https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/TRTC.html#sendCustomMessage).
+For more details, refer to [TRTC's Custom Message Documentation](https://web.sdk.qcloud.com/trtc/webrtc/v5/doc/en/TRTC.html#sendCustomMessage).
 
 </Accordion>
 
@@ -591,7 +590,7 @@ async function sendMessageToAvatar(client: TRTC, question: string) {
     const data = encoder.encode(JSON.stringify(message));
     await client.sendCustomMessage({
       cmdId: 1,
-      data: data.buffer
+      data: data
     });
   } catch (error) {
     console.error('Error sending message:', error);
@@ -1220,7 +1219,7 @@ async function sendMessageToAvatarWithLLM(
     const data = encoder.encode(JSON.stringify(message));
     await client.sendCustomMessage({
       cmdId: 1,
-      data: data.buffer
+      data: data
     });
 
   } catch (error) {
@@ -1573,9 +1572,9 @@ async function initializeStreamingAvatar() {
 - [LiveKit Data Channel Documentation](https://docs.livekit.io/home/client/data/packets/)
 
 ### TRTC SDK Resources
-- [TRTC Web SDK Documentation](https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/index.html)
-- [TRTC Web SDK API Reference](https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/TRTC.html)
-- [TRTC Custom Message Documentation](https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/TRTC.html#sendCustomMessage)
+- [TRTC Web SDK Documentation](https://web.sdk.qcloud.com/trtc/webrtc/v5/doc/en/index.html)
+- [TRTC Web SDK API Reference](https://web.sdk.qcloud.com/trtc/webrtc/v5/doc/en/TRTC.html)
+- [TRTC Custom Message Documentation](https://web.sdk.qcloud.com/trtc/webrtc/v5/doc/en/TRTC.html#sendCustomMessage)
 
 ### AKool API Resources
 - [AKool OpenAPI Error Codes](/ai-tools-suite/live-avatar#response-code-description)
