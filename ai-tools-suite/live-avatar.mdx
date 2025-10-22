@@ -497,6 +497,17 @@ POST https://openapi.akool.com/api/open/v4/liveAvatar/session/create
 | ------------- | -------- | ------------ | --------------- |
 | speed         | double   | No | Controls the speed of the generated speech. Values range from 0.8 to 1.2, with 1.0 being the default speed. |
 | pron_map      | Object   | No | Pronunciation mapping for custom words. Example: "pron_map": \{ "akool" : "ai ku er" \} |
+| stt_type      | String   | No | Speech-to-text type. `"openai_realtime"` = OpenAI Realtime |
+| turn_detection | Object   | No | Turn detection configuration. |
+
+**Voice Parameters - Turn Detection Configuration**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+| ------------- | -------- | ------------ | --------------- |
+| type | String   | No | Turn detection type. `"server_vad"` = Server VAD, `"semantic_vad"` = Semantic VAD |
+| threshold | Number   | No | Activation threshold (0 to 1). A higher threshold will require louder audio to activate the model, and thus might perform better in noisy environments. Available when type is `"server_vad"`. |
+| prefix_padding_ms | Number   | No | Amount of audio (in milliseconds) to include before the VAD detected speech. Available when type is `"server_vad"`. |
+| silence_duration_ms | Number   | No | Duration of silence (in milliseconds) to detect speech stop. With shorter values turns will be detected more quickly. Available when type is `"server_vad"`. |
 
 **Credentials**
 
@@ -1056,6 +1067,8 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 | pld.data.vparams.vurl | String | No | | Custom voice model URL. Only used with **"set-params"**. Get valid URLs from [Voice List API](/ai-tools-suite/voiceLab#get-voice-list) |
 | pld.data.vparams.speed | double | No | 1 | Controls the speed of the generated speech. Values range from 0.8 to 1.2, with 1.0 being the default speed. |
 | pld.data.vparams.pron_map | Object | No |  | Pronunciation mapping for custom words. Example: "pron_map": \{ "akool" : "ai ku er" \} |
+| pld.data.vparams.stt_type | String | No | | Speech-to-text type. `"openai_realtime"` = OpenAI Realtime |
+| pld.data.vparams.turn_detection | Object | No | | Turn detection configuration. Same as the voice parameters - Turn Detection Configuration. |
 
 
 **JSON Example**
