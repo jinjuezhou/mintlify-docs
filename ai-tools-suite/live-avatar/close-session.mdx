@@ -1,0 +1,105 @@
+---
+title: "Close Session"
+description: "Close an active streaming avatar session"
+openapi: "POST /api/open/v4/liveAvatar/session/close"
+---
+
+<Note>
+Both the avatar_id and voice_id can be easily obtained by copying them directly from the web interface. You can also create and manage your streaming avatars using our intuitive web platform.
+
+Create and manage your avatars at: https://akool.com/apps/upload/avatar?from=%2Fapps%2Fstreaming-avatar%2Fedit
+</Note>
+
+## Code Examples
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST --location "https://openapi.akool.com/api/open/v4/liveAvatar/session/close" \
+    -H "Authorization: Bearer your_token_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+          "session_id": "session_123456789"
+        }'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"session_id\": \"session_123456789\"\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/liveAvatar/session/close")
+  .method("POST", body)
+  .addHeader("Authorization", "Bearer your_token_here")
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer your_token_here");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "session_id": "session_123456789"
+});
+
+fetch("https://openapi.akool.com/api/open/v4/liveAvatar/session/close", {
+  method: "POST",
+  headers: myHeaders,
+  body: raw
+})
+.then(response => response.text())
+.then(result => console.log(result));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'Authorization' => 'Bearer your_token_here',
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "session_id": "session_123456789"
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/liveAvatar/session/close', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v4/liveAvatar/session/close"
+payload = json.dumps({
+  "session_id": "session_123456789"
+})
+headers = {
+  'Authorization': 'Bearer your_token_here',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+print(response.text)
+```
+
+</CodeGroup>
+
+## Response Example
+
+```json
+{
+  "code": 1000,
+  "msg": "ok",
+  "data": {
+    "session_id": "session_123456789",
+    "status": "closed",
+    "closed_at": 1700788730000
+  }
+}
+```
