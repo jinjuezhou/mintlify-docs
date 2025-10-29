@@ -6,6 +6,13 @@
     "dark": "/logo/akool-dark.svg"
   },
   "favicon": "/favicon.svg",
+  "openapi": "/openapi/live-avatar.yaml",
+  "api": {
+    "baseUrl": "https://openapi.akool.com",
+    "playground": {
+      "mode": "simple"
+    }
+  },
   "colors": {
     "primary": "#8458cc",
     "light": "#8458cc",
@@ -85,6 +92,18 @@
       "group": "Streaming Avatar",
       "pages": [
         "ai-tools-suite/live-avatar",
+        {
+          "group": "API Endpoints",
+          "pages": [
+            "ai-tools-suite/live-avatar/upload",
+            "ai-tools-suite/live-avatar/list",
+            "ai-tools-suite/live-avatar/detail",
+            "ai-tools-suite/live-avatar/create-session",
+            "ai-tools-suite/live-avatar/session-detail",
+            "ai-tools-suite/live-avatar/close-session",
+            "ai-tools-suite/live-avatar/list-sessions"
+          ]
+        },
         "implementation-guide/streaming-avatar",
         "sdk/jssdk-start",
         "sdk/jssdk-best-practice",
