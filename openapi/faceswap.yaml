@@ -1,0 +1,485 @@
+openapi: 3.0.3
+info:
+  title: Face Swap API
+  description: API for face swapping in images and videos
+  version: 1.0.0
+servers:
+  - url: https://openapi.akool.com
+    description: Production server
+  - url: https://sg3.akool.com
+    description: Face detection server
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+
+paths:
+  /api/open/v3/faceswap/highquality/specifyimage:
+    post:
+      summary: Image Faceswap
+      description: Swap faces in images with high quality
+      tags:
+        - Face Swap
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageFaceswapRequest'
+            example:
+              targetImage:
+                - path: "https://d21ksh0k4smeql.cloudfront.net/crop_1694593694387-4562-0-1694593694575-0526.png"
+                  opts: "262,175:363,175:313,215:272,279"
+              sourceImage:
+                - path: "https://d21ksh0k4smeql.cloudfront.net/crop_1705462509874-9254-0-1705462510015-9261.png"
+                  opts: "239,364:386,366:317,472:266,539"
+              face_enhance: 0
+              modifyImage: "https://d21ksh0k4smeql.cloudfront.net/bdd1c994c4cd7a58926088ae8a479168-1705462506461-1966.jpeg"
+              webhookUrl: ""
+      responses:
+        '200':
+          description: Faceswap request submitted successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/FaceswapResult'
+              example:
+                code: 1000
+                msg: "Please be patient! If your results are not generated in three hours, please check your input image."
+                data:
+                  _id: "6593c94c0ef703e8c055e3c8"
+                  url: "https://***.cloudfront.net/final_71688047459_.pic-1704184129269-4947-f8abc658-fa82-420f-b1b3-c747d7f18e14-8535.jpg"
+                  job_id: "20240102082900592-5653"
+
+  /api/open/v4/faceswap/faceswapByImage:
+    post:
+      summary: V4 Image Faceswap (Simplified)
+      description: Simplified face swap API for single face in images
+      tags:
+        - Face Swap
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageFaceswapV4Request'
+            example:
+              targetImage:
+                - path: "https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png"
+              sourceImage:
+                - path: "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"
+              model_name: "akool_faceswap_image_hq"
+              webhookUrl: ""
+              face_enhance: false
+      responses:
+        '200':
+          description: Faceswap request submitted successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/FaceswapResult'
+
+  /api/open/v3/faceswap/highquality/specifyvideo:
+    post:
+      summary: Video Faceswap
+      description: Swap faces in videos with high quality
+      tags:
+        - Face Swap
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoFaceswapRequest'
+            example:
+              sourceImage:
+                - path: "https://d21ksh0k4smeql.cloudfront.net/crop_1705475757658-3362-0-1705475757797-3713.png"
+                  opts: "239,364:386,366:317,472:266,539"
+              targetImage:
+                - path: "https://d21ksh0k4smeql.cloudfront.net/crop_1705479323786-0321-0-1705479323896-7695.png"
+                  opts: "176,259:243,259:209,303:183,328"
+              face_enhance: 0
+              modifyVideo: "https://d21ksh0k4smeql.cloudfront.net/avatar_01-1705479314627-0092.mp4"
+              webhookUrl: ""
+      responses:
+        '200':
+          description: Video faceswap request submitted successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/FaceswapResult'
+
+  /api/open/v3/faceswap/result/listbyids:
+    get:
+      summary: Get Faceswap Result List
+      description: Get faceswap results by IDs
+      tags:
+        - Face Swap
+      parameters:
+        - name: _ids
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Result IDs are strings separated by commas
+      responses:
+        '200':
+          description: List of faceswap results
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/FaceswapResultList'
+
+  /api/open/v3/faceswap/quota/info:
+    get:
+      summary: Get User Credit Info
+      description: Get faceswap user credit information
+      tags:
+        - Face Swap
+      responses:
+        '200':
+          description: User credit information
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/CreditInfo'
+
+  /api/open/v3/faceswap/result/delbyids:
+    post:
+      summary: Delete Faceswap Results
+      description: Delete faceswap results by IDs
+      tags:
+        - Face Swap
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - _ids
+              properties:
+                _ids:
+                  type: string
+                  description: Result IDs are strings separated by commas
+            example:
+              _ids: "64ef2f27b33f466877701c6a,64ef2f27b33f466877701c6b"
+      responses:
+        '200':
+          description: Results deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
+  /detect:
+    post:
+      summary: Face Detect
+      description: Detect faces in images and get landmark information
+      tags:
+        - Face Detection
+      servers:
+        - url: https://sg3.akool.com
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FaceDetectRequest'
+            example:
+              single_face: false
+              image_url: "https://d21ksh0k4smeql.cloudfront.net/IMG_6150-1696984459910-0610.jpeg"
+              img: ""
+      responses:
+        '200':
+          description: Face detection completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaceDetectResponse'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded.
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Your API Key used for request authorization. Get Token from authentication/usage#get-the-token
+
+  schemas:
+    ApiResponse:
+      type: object
+      required:
+        - code
+        - msg
+      properties:
+        code:
+          type: integer
+          description: "Interface returns business status code (1000: success)"
+          example: 1000
+        msg:
+          type: string
+          description: Interface returns status information
+          example: "OK"
+
+    FaceImageWithOpts:
+      type: object
+      required:
+        - path
+      properties:
+        path:
+          type: string
+          description: Links to face image
+        opts:
+          type: string
+          description: Key information of faces detected in image. You can get it through the Face Detect API, use the landmarks_str value returned by the API
+
+    FaceImageSimple:
+      type: object
+      required:
+        - path
+      properties:
+        path:
+          type: string
+          description: Links to face image
+
+    ImageFaceswapRequest:
+      type: object
+      required:
+        - targetImage
+        - sourceImage
+        - modifyImage
+      properties:
+        targetImage:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaceImageWithOpts'
+          description: A collection of faces in the original image
+        sourceImage:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaceImageWithOpts'
+          description: Replacement target image information
+        face_enhance:
+          type: integer
+          enum: [0, 1]
+          default: 0
+          description: Whether facial enhancement (1 means open, 0 means close)
+        modifyImage:
+          type: string
+          description: Modify the link address of the image
+        webhookUrl:
+          type: string
+          description: Callback url address based on HTTP request
+
+    ImageFaceswapV4Request:
+      type: object
+      required:
+        - targetImage
+        - sourceImage
+        - model_name
+      properties:
+        targetImage:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaceImageSimple'
+          description: A collection of faces in the original image
+        sourceImage:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaceImageSimple'
+          description: Replacement target image information
+        model_name:
+          type: string
+          enum: ["akool_faceswap_image_hq"]
+          description: The model name used for face swap processing. The 'akool_faceswap_image_hq' model only supports high-quality face swapping for a single face in an image.
+        webhookUrl:
+          type: string
+          description: Callback url address based on HTTP request
+        face_enhance:
+          type: boolean
+          default: false
+          description: Face enhance must be a boolean, default is false
+
+    VideoFaceswapRequest:
+      type: object
+      required:
+        - targetImage
+        - sourceImage
+        - modifyVideo
+      properties:
+        sourceImage:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaceImageWithOpts'
+          description: Replacement target image information. You need to change it to the link collection of the face you need.
+        targetImage:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaceImageWithOpts'
+          description: A collection of faces in the original video. Represents the collection of faces after face detection using modifyVideo.
+        face_enhance:
+          type: integer
+          enum: [0, 1]
+          default: 0
+          description: Whether facial enhancement (1 means open, 0 means close)
+        modifyVideo:
+          type: string
+          description: The original video you need to change the face
+        webhookUrl:
+          type: string
+          description: Callback url address based on HTTP request
+
+    FaceswapResult:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Interface returns data ID
+        url:
+          type: string
+          description: Faceswap result URL
+        job_id:
+          type: string
+          description: Task processing unique ID
+
+    FaceswapResultDetail:
+      type: object
+      properties:
+        faceswap_type:
+          type: integer
+          description: Faceswap type
+        faceswap_quality:
+          type: integer
+          description: Faceswap quality level
+        faceswap_status:
+          type: integer
+          enum: [1, 2, 3, 4]
+          description: "Faceswap result status: 1 In Queue, 2 Processing, 3 Success, 4 Failed"
+        deduction_status:
+          type: integer
+          description: Deduction status
+        image:
+          type: integer
+          description: Image indicator
+        video_duration:
+          type: number
+          description: Video duration in seconds
+        deduction_duration:
+          type: number
+          description: Deduction duration
+        update_time:
+          type: number
+          description: Update timestamp
+        _id:
+          type: string
+          description: Result ID
+        userId:
+          type: string
+          description: User ID
+        uid:
+          type: integer
+          description: User unique ID
+        url:
+          type: string
+          description: Faceswap result URL
+        createdAt:
+          type: string
+          format: date-time
+          description: Current faceswap action created time
+
+    FaceswapResultList:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaceswapResultDetail'
+
+    CreditInfo:
+      type: object
+      properties:
+        credit:
+          type: number
+          description: Account balance
+
+    FaceDetectRequest:
+      type: object
+      required:
+        - single_face
+      properties:
+        single_face:
+          type: boolean
+          description: Is it a single face picture. This should be true when the incoming picture has only one face, and false when the incoming picture has multiple faces.
+        image_url:
+          type: string
+          description: Image link. You can choose to enter this parameter or the img parameter.
+        img:
+          type: string
+          description: Image base64 information. You can choose to enter this parameter or the image_url parameter.
+
+    FaceDetectResponse:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: "Interface returns business status code (0: success)"
+        error_msg:
+          type: string
+          description: Error message of this API
+        landmarks:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+          description: Key point data of face
+        landmarks_str:
+          type: array
+          items:
+            type: string
+          description: Landmark string representation
+        region:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+          description: Face region coordinates
+        seconds:
+          type: number
+          description: API time-consuming
+        trx_id:
+          type: string
+          description: Transaction ID
+

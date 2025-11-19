@@ -1,0 +1,31 @@
+---
+title: "Face Detect"
+description: "Detect faces in images and get landmark information"
+openapi: "POST /detect"
+---
+
+<Info>
+This API is hosted on a different server (sg3.akool.com) than the main Face Swap APIs.
+</Info>
+
+## Important Notes
+
+- **single_face**: Set to `true` when the incoming picture has only one face, and `false` when it has multiple faces
+- **image_url** or **img**: You can choose to enter either the image URL or the base64 encoded image data
+- The `landmarks_str` value from the response should be used as the `opts` parameter in Face Swap APIs
+
+## Response Fields
+
+- **landmarks**: Array of face landmark coordinates
+- **landmarks_str**: String representation of landmarks (use this for `opts` parameter)
+- **region**: Face region bounding box coordinates
+- **seconds**: API processing time
+- **trx_id**: Transaction ID for tracking
+
+## Face Detect Response Code
+
+| Error Code | Description |
+|------------|-------------|
+| 0 | Success |
+| Other | Check error_msg for details |
+

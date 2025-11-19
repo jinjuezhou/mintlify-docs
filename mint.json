@@ -6,7 +6,7 @@
     "dark": "/logo/akool-dark.svg"
   },
   "favicon": "/favicon.svg",
-  "openapi": "/openapi/live-avatar.yaml",
+  "openapi": ["/openapi/live-avatar.yaml", "/openapi/faceswap.yaml"],
   "api": {
     "baseUrl": "https://openapi.akool.com",
     "playground": {
@@ -72,7 +72,6 @@
     {
       "group": "AI Tools Suite",
       "pages": [
-        "ai-tools-suite/faceswap",
         "ai-tools-suite/live-faceswap",
         "ai-tools-suite/reage",
         "ai-tools-suite/voiceLab",
@@ -86,6 +85,24 @@
         "ai-tools-suite/image2video",
         "ai-tools-suite/webhook",
         "ai-tools-suite/error-code"
+      ]
+    },
+    {
+      "group": "Face Swap",
+      "pages": [
+        "ai-tools-suite/faceswap",
+        {
+          "group": "API Endpoints",
+          "pages": [
+            "ai-tools-suite/faceswap/image-faceswap",
+            "ai-tools-suite/faceswap/image-faceswap-v4",
+            "ai-tools-suite/faceswap/video-faceswap",
+            "ai-tools-suite/faceswap/get-result",
+            "ai-tools-suite/faceswap/delete-result",
+            "ai-tools-suite/faceswap/get-credit",
+            "ai-tools-suite/faceswap/face-detect"
+          ]
+        }
       ]
     },
     {
