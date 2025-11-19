@@ -10,7 +10,7 @@ This API is hosted on a different server (sg3.akool.com) than the main Face Swap
 
 ## Important Notes
 
-- **single_face**: Set to `true` when the incoming picture has only one face, and `false` when it has multiple faces
+- **single_face**: Set to `true` to return only the largest face data, or `false` to return all detected faces. This parameter controls whether the API returns data for multiple faces or just the most prominent one.
 - **image_url** or **img**: You can choose to enter either the image URL or the base64 encoded image data
 - The `landmarks_str` value from the response should be used as the `opts` parameter in Face Swap APIs
 

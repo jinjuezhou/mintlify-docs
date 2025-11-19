@@ -438,7 +438,7 @@ components:
       properties:
         single_face:
           type: boolean
-          description: Is it a single face picture. This should be true when the incoming picture has only one face, and false when the incoming picture has multiple faces.
+          description: Set to true to return only the largest face data, or false to return all detected faces. When true, the API will detect all faces but only return data for the most prominent (largest) face.
         image_url:
           type: string
           description: Image link. You can choose to enter this parameter or the img parameter.
