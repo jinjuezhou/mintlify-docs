@@ -16,8 +16,8 @@ Experience our face swap technology in action by exploring our interactive demo 
 
 ### Face Swap Operations
 
-- [Image Faceswap](/ai-tools-suite/faceswap/image-faceswap) - Swap faces in images with high quality
-- [V4 Image Faceswap (Simplified)](/ai-tools-suite/faceswap/image-faceswap-v4) - Simplified face swap API for single face in images
+- [Image Faceswap](/ai-tools-suite/faceswap/image-faceswap) - Swap faces in images with high quality (supports multiple faces)
+- [Face Swap Pro](/ai-tools-suite/faceswap/image-faceswap-v4) - **⭐ NEW** More realistic, more similar - Single face only (V4)
 - [Video Faceswap](/ai-tools-suite/faceswap/video-faceswap) - Swap faces in videos with high quality
 
 ### Result Management
@@ -42,9 +42,10 @@ Experience our face swap technology in action by exploring our interactive demo 
    - Use the `landmarks_str` value from the response as the `opts` parameter
    - Call the [Image Faceswap](/ai-tools-suite/faceswap/image-faceswap) or [Video Faceswap](/ai-tools-suite/faceswap/video-faceswap) API
 
-2. **For V4 API (Simplified)**:
-   - Directly call the [V4 Image Faceswap API](/ai-tools-suite/faceswap/image-faceswap-v4) without face detection
-   - Currently supports single face swapping only
+2. **For Face Swap Pro (V4 API)** - More Realistic, More Similar:
+   - Directly call the [Face Swap Pro API](/ai-tools-suite/faceswap/image-faceswap-v4) without face detection
+   - Delivers more realistic and more similar face swap results
+   - **Only supports single face swapping**
 
 3. **Check Results**:
    - Use the [Get Result API](/ai-tools-suite/faceswap/get-result) to check the status of your face swap job
@@ -104,9 +105,9 @@ When checking results, the `faceswap_status` field indicates the current state:
 
 ## Common Use Cases
 
-### Single Face Swap (Recommended for Beginners)
+### Face Swap Pro - More Realistic, More Similar (Single Face Only)
 
-Use the [V4 Image Faceswap API](/ai-tools-suite/faceswap/image-faceswap-v4) for the simplest implementation:
+Use the [Face Swap Pro API](/ai-tools-suite/faceswap/image-faceswap-v4) for the most realistic and similar results with the simplest implementation:
 
 ```json
 {
@@ -125,9 +126,9 @@ Use the [V4 Image Faceswap API](/ai-tools-suite/faceswap/image-faceswap-v4) for 
 }
 ```
 
-### Multiple Face Swap
+### Multiple Face Swap (V3 Required)
 
-Use the [V3 Image Faceswap API](/ai-tools-suite/faceswap/image-faceswap) for multiple faces:
+Use the [V3 Image Faceswap API](/ai-tools-suite/faceswap/image-faceswap) when you need to swap multiple faces in one image:
 
 1. Detect all faces using [Face Detect API](/ai-tools-suite/faceswap/face-detect)
 2. Provide the `opts` parameter for each face

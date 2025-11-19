@@ -57,8 +57,8 @@ paths:
 
   /api/open/v4/faceswap/faceswapByImage:
     post:
-      summary: V4 Image Faceswap (Simplified)
-      description: Simplified face swap API for single face in images
+      summary: Face Swap Pro - More Realistic, More Similar
+      description: Advanced face swap API for single face in images. Delivers more realistic and more similar results compared to V3. IMPORTANT - Only supports single face swapping. For multiple faces, use V3 API.
       tags:
         - Face Swap
       requestBody:
@@ -320,7 +320,7 @@ components:
         model_name:
           type: string
           enum: ["akool_faceswap_image_hq"]
-          description: The model name used for face swap processing. The 'akool_faceswap_image_hq' model only supports high-quality face swapping for a single face in an image.
+          description: "The model name for Face Swap Pro. The 'akool_faceswap_image_hq' model delivers more realistic and more similar results. IMPORTANT - Only supports single face in an image. For multiple faces, use V3 Image Faceswap API."
         webhookUrl:
           type: string
           description: Callback url address based on HTTP request
