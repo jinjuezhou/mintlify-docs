@@ -157,6 +157,7 @@ paths:
                 agora_token: "your-token"
               voice_params:
                 speed: 1.0
+                stt_language: "en"
                 pron_map:
                   akool: "ai ku er"
                 stt_type: "openai_realtime"
@@ -471,6 +472,9 @@ components:
           additionalProperties:
             type: string
           description: "Pronunciation mapping for custom words. Example: pron_map with akool mapped to ai ku er"
+        stt_language:
+          type: string
+          description: Language code for speech-to-text recognition to improve accuracy by using language-specific models. If not specified, default language or auto-detection will be used.
         stt_type:
           type: string
           enum: [openai_realtime]
