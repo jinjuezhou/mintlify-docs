@@ -177,7 +177,7 @@ print(response.text)
         "talking_photo": "https://***.cloudfront.net/1692242161763-4fb8c3c2-018b-4b84-82e9-413c81f26b3a-6613.jpeg",
         "video": "",    // the url of Generated video
         "__v": 0,
-        "video_status": 1   // current status of video： 【1：queueing（The requested operation is being processed），2：processing（The requested operation is being processing），3：completed（The request operation has been processed successfully），4：failed（The request operation processing failed, the reason for the failure can be viewed in the talkingphoto details.）】
+        "video_status": 1,   // current status of video： 【1：queueing（The requested operation is being processed），2：processing（The requested operation is being processing），3：completed（The request operation has been processed successfully），4：failed（The request operation processing failed, the reason for the failure can be viewed in the talkingphoto details.）】
         "prompt": "Left hand makes circles, right hand makes crosses",
         "resolution": "720"
     }
@@ -300,9 +300,7 @@ print(response.text)
         "deduction_lock_duration": 10,
         "video_status": 2,  // current status of video： 【1：queueing（The requested operation is being processed），2：processing（The requested operation is being processing），3：completed（The request operation has been processed successfully），4：failed（The request operation processing failed, the reason for the failure can be viewed in the talkingphoto details.）】
         "external_video": "",
-        "video": "",  //  Generated video resource url
-        "prompt": "Left hand makes circles, right hand makes crosses",
-        "resolution": "720"
+        "video": ""  //  Generated video resource url
     }
 }
 ```
