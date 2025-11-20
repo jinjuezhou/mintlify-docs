@@ -28,6 +28,8 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto
 | talking_photo_url | String |       | resource address of the talking picture    |
 | audio_url         | String |       | resource address of the talking audio      |
 | webhookUrl        | String |       | Callback url address based on HTTP request |
+| prompt        | String |       | Gesture control prompt words |
+| resolution        | String |       | Output video resolution. Currently supported formats: 720, 1080 |
 
 **Response Attributes**
 
@@ -45,6 +47,8 @@ POST https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto
 {
     "talking_photo_url":"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
     "audio_url":"https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
+    "prompt": "Left hand makes circles, right hand makes crosses",
+    "resolution": "720",
     "webhookUrl":""  
 }
 ```
@@ -60,6 +64,8 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytal
 --data '{
     "talking_photo_url":"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
      "audio_url":"https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
+     "prompt": "Left hand makes circles, right hand makes crosses",
+     "resolution": "720",
      "webhookUrl":""  
 }'
 ```
@@ -68,7 +74,7 @@ curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytal
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n    \"talking_photo_url\":\"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg\",\n     \"audio_url\":\"https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3\",\n     \"webhookUrl\":\"\"  \n}");
+RequestBody body = RequestBody.create(mediaType, "{\n    \"talking_photo_url\":\"https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg\",\n     \"audio_url\":\"https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3\",\n    \"prompt\": \"Left hand makes circles, right hand makes crosses\",\n    \"resolution\": \"720\",\n     \"webhookUrl\":\"\"  \n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto")
   .method("POST", body)
@@ -87,6 +93,8 @@ myHeaders.append("Content-Type", "application/json");
 const raw = JSON.stringify({
   "talking_photo_url": "https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
   "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
+  "prompt": "Left hand makes circles, right hand makes crosses",
+  "resolution": "720",
   "webhookUrl": ""
 });
 
@@ -113,6 +121,8 @@ $headers = [
 $body = '{
   "talking_photo_url": "https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
   "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
+  "prompt": "Left hand makes circles, right hand makes crosses",
+  "resolution": "720",
   "webhookUrl": ""
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto', $headers, $body);
@@ -130,6 +140,8 @@ url = "https://openapi.akool.com/api/open/v3/content/video/createbytalkingphoto"
 payload = json.dumps({
   "talking_photo_url": "https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg",
   "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3",
+  "prompt": "Left hand makes circles, right hand makes crosses",
+  "resolution": "720",
   "webhookUrl": ""
 })
 headers = {
@@ -166,6 +178,8 @@ print(response.text)
         "video": "",    // the url of Generated video
         "__v": 0,
         "video_status": 1   // current status of video： 【1：queueing（The requested operation is being processed），2：processing（The requested operation is being processing），3：completed（The request operation has been processed successfully），4：failed（The request operation processing failed, the reason for the failure can be viewed in the talkingphoto details.）】
+        "prompt": "Left hand makes circles, right hand makes crosses",
+        "resolution": "720"
     }
 }
 ```
@@ -286,7 +300,9 @@ print(response.text)
         "deduction_lock_duration": 10,
         "video_status": 2,  // current status of video： 【1：queueing（The requested operation is being processed），2：processing（The requested operation is being processing），3：completed（The request operation has been processed successfully），4：failed（The request operation processing failed, the reason for the failure can be viewed in the talkingphoto details.）】
         "external_video": "",
-        "video": ""  //  Generated video resource url
+        "video": "",  //  Generated video resource url
+        "prompt": "Left hand makes circles, right hand makes crosses",
+        "resolution": "720"
     }
 }
 ```
