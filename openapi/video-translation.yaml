@@ -1,0 +1,398 @@
+openapi: 3.0.3
+info:
+  title: Video Translation API
+  description: API for translating videos into multiple languages with AI voices and lip-sync
+  version: 1.0.0
+servers:
+  - url: https://openapi.akool.com
+    description: Production server
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+
+paths:
+  /api/open/v3/content/video/createbytranslate:
+    post:
+      summary: Create Video Translation
+      description: Translate videos into multiple languages with AI voices and lip-sync
+      tags:
+        - Video Translation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoTranslationRequest'
+            example:
+              url: "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4"
+              language: "ja,zh-CN-shandong,zh-CN-sichuan"
+              source_language: "en"
+              lipsync: false
+              speaker_num: 1
+              webhookUrl: ""
+              remove_bgm: true
+              caption_type: 2
+              caption_url: "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt"
+              voices_map:
+                ja:
+                  voice_id: ""
+                "zh-CN-shandong":
+                  voice_id: "6889b755662160e2caad5fdf"
+                "zh-CN-sichuan":
+                  voice_id: "6889b74e662160e2caad5fd5"
+              studio_voice:
+                no_translate_words: ["kaka", "lal"]
+                fixed_words:
+                  hi: "hello"
+                  bad: "good"
+                pronounced_words:
+                  lel: "lele"
+                  gga: "gaga"
+                style: "professional"
+              dynamic_duration: false
+      responses:
+        '200':
+          description: Video translation request submitted successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/VideoTranslationResult'
+
+  /api/open/v3/content/video/infobymodelid:
+    get:
+      summary: Get Video Translation Result
+      description: Check the status and retrieve results of video translation jobs
+      tags:
+        - Video Translation
+      parameters:
+        - name: video_model_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Video database ID returned by the Create Video Translation API (_id field)
+      responses:
+        '200':
+          description: Video translation status retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/VideoTranslationStatus'
+
+  /api/open/v4/voice/videoTranslation:
+    get:
+      summary: Get AI Voices List
+      description: Retrieve available AI voices for video translation
+      tags:
+        - Video Translation
+      parameters:
+        - name: language_code
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Language code to filter voice list for specific language (e.g., "zh-CN-shandong")
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 100
+          description: Number of items per page
+      responses:
+        '200':
+          description: AI voices list retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/VoicesListResponse'
+
+  /api/open/v3/language/list:
+    get:
+      summary: Get Language List
+      description: Retrieve supported languages for video translation
+      tags:
+        - Video Translation
+      responses:
+        '200':
+          description: Language list retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/LanguageListResponse'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Business status code (1000 = success)
+        msg:
+          type: string
+          description: Status message
+
+    VideoTranslationRequest:
+      type: object
+      required:
+        - url
+        - language
+      properties:
+        url:
+          type: string
+          description: The video URL address you want to translate
+        source_language:
+          type: string
+          default: "DEFAULT"
+          description: The original language of the video. Use "DEFAULT" for automatic language detection, or specify a language code (e.g., "en" for English, "zh" for Chinese, "es" for Spanish)
+        language:
+          type: string
+          description: Target language(s) for translation. For multiple languages, separate with commas (e.g., "ja,zh-CN-shandong,zh-CN-sichuan")
+        lipsync:
+          type: boolean
+          default: false
+          description: Enable synchronized mouth movements with the audio track in translated video
+        webhookUrl:
+          type: string
+          description: Callback URL address for HTTP notifications when processing completes
+        speaker_num:
+          type: integer
+          default: 0
+          description: Number of speakers in the video (0 = Auto Detect)
+        remove_bgm:
+          type: boolean
+          default: false
+          description: Whether to remove background music from the video
+        caption_type:
+          type: integer
+          default: 0
+          enum: [0, 1, 2, 3, 4]
+          description: "Caption handling: 0=none, 1=add original subtitle, 2=add target subtitle, 3=translate and replace original subtitle, 4=add translated subtitle"
+        caption_url:
+          type: string
+          description: Subtitle file URL (supports SRT or ASS files)
+        voices_map:
+          type: object
+          description: Voice language mapping configuration
+          additionalProperties:
+            type: object
+            properties:
+              voice_id:
+                type: string
+                description: Voice ID for the target language. Use empty string for default voice
+        studio_voice:
+          type: object
+          description: Advanced voice and translation settings
+          properties:
+            no_translate_words:
+              type: array
+              items:
+                type: string
+              description: List of words that should not be translated
+            style:
+              type: string
+              default: "professional"
+              enum: ["affectionate", "angry", "calm", "cheerful", "depressed", "disgruntled", "embarrassed", "empathetic", "excited", "fearful", "friendly", "unfriendly", "sad", "serious", "relaxed", "professional"]
+              description: Translation style
+            fixed_words:
+              type: object
+              additionalProperties:
+                type: string
+              description: Translation word mapping table for corrections
+            pronounced_words:
+              type: object
+              additionalProperties:
+                type: string
+              description: Pronunciation correction word mapping table
+        dynamic_duration:
+          type: boolean
+          default: false
+          description: Control the dynamic duration of the video
+
+    VideoTranslationResult:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique task identifier
+        video_status:
+          type: integer
+          description: "Video processing status: 1=queueing, 2=processing, 3=completed, 4=failed"
+        video:
+          type: string
+          description: Generated video URL (available when status = 3)
+
+    VideoTranslationStatus:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier
+        create_time:
+          type: integer
+          description: Creation timestamp
+        uid:
+          type: integer
+          description: User ID
+        team_id:
+          type: string
+          description: Team ID
+        video_id:
+          type: string
+          description: Video translation unique ID
+        video_status:
+          type: integer
+          description: "Processing status: 1=queueing, 2=processing, 3=completed, 4=failed"
+        video:
+          type: string
+          description: Generated video resource URL (available when status = 3)
+        progress:
+          type: integer
+          description: Processing progress percentage (0-100)
+        deduction_duration:
+          type: integer
+          description: Credits consumed for this video translation
+        error_code:
+          type: integer
+          description: Error code (only when video_status = 4)
+        error_reason:
+          type: string
+          description: Detailed error description (only when video_status = 4)
+
+    VoicesListResponse:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        size:
+          type: integer
+          description: Items per page
+        count:
+          type: integer
+          description: Total number of items
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoiceItem'
+          description: Array of voice items
+
+    VoiceItem:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the voice
+        voice_id:
+          type: string
+          description: Voice ID used for API calls
+        gender:
+          type: string
+          description: Voice gender (Male/Female)
+        language:
+          type: string
+          description: Voice language name
+        name:
+          type: string
+          description: Voice name
+        preview:
+          type: string
+          description: Preview audio URL
+        thumbnailUrl:
+          type: string
+          description: Voice avatar image URL
+        create_time:
+          type: integer
+          description: Voice creation timestamp
+        flag_url:
+          type: string
+          description: Language flag image URL
+        useCase:
+          type: string
+          description: Voice use case category
+        category:
+          type: string
+          description: Voice category
+        age:
+          type: array
+          items:
+            type: string
+          description: Age range tags
+        style:
+          type: array
+          items:
+            type: string
+          description: Voice style tags
+        duration:
+          type: integer
+          description: Preview audio duration in milliseconds
+        scenario:
+          type: array
+          items:
+            type: string
+          description: Recommended usage scenarios
+        language_code:
+          type: string
+          description: Language code identifier
+
+    LanguageListResponse:
+      type: object
+      properties:
+        lang_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/LanguageItem'
+          description: Array of supported languages
+
+    LanguageItem:
+      type: object
+      properties:
+        lang_name:
+          type: string
+          description: Language display name (e.g., "Afrikaans (South Africa)")
+        lang_code:
+          type: string
+          description: Language code identifier (e.g., "af-ZA")
+        url:
+          type: string
+          description: Language flag icon URL
+        need_voice_id:
+          type: boolean
+          description: Whether this language requires selecting an AI voice ID
