@@ -1,6 +1,6 @@
 ---
-title: "Video Translation"
-description: "API documentation for video translation service, including voice list, language list, and video translation operations."
+title: "Video Translation API Overview"
+description: "Comprehensive guide to the Video Translation API for multilingual video content"
 ---
 
 <Warning>
@@ -12,888 +12,181 @@ description: "API documentation for video translation service, including voice l
 Experience our video translation technology in action by exploring our interactive demo on GitHub: [AKool Video Translation Demo](https://github.com/AKOOL-Official/akool-video-translation-demo).
 </Info>
 
-## Get AI Voices List
+## API Endpoints
 
-```
-GET https://openapi.akool.com/api/open/v4/voice/videoTranslation
-```
+### Translation Operations
 
-**Request Headers**
+- [Create Video Translation](/ai-tools-suite/video-translation/create-translation) - Translate videos into multiple languages with AI voices and lip-sync
+- [Get Translation Result](/ai-tools-suite/video-translation/get-result) - Check processing status and retrieve translated video URLs
 
-| **Parameter** | **Value**    | **Description**                                                                                                   |
-|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
+### Resource Management
 
-**Query Parameters**
+- [Get AI Voices List](/ai-tools-suite/video-translation/get-voices) - Retrieve available AI voices for video translation
+- [Get Language List](/ai-tools-suite/video-translation/get-languages) - Get supported languages for translation
 
-| **Parameter** | **Type** | **Required** | **Value** | **Description**                                                                                                                                        |
-|---------------|----------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| language_code | String   | false        | zh-CN-shandong | Language code, used to filter voice list for specific language |
-| page          | Integer  | false        | 1         | Page number, default is 1 |
-| size          | Integer  | false        | 100       | Items per page, default is 100 |
+## Getting Started
 
-**Response Attributes**
+### Basic Workflow
 
-| **Parameter** | **Type** | **Description**                                      |
-| ------------- | -------- | ---------------------------------------------------- |
-| code          | Integer  | Interface returns business status code(1000:success) |
-| msg           | String   | Interface returns status information                 |
-| data          | Object   | Response data object                                |
-| - page        | Integer  | Current page number                                 |
-| - size        | Integer  | Items per page                                     |
-| - count       | Integer  | Total number of items                              |
-| - result      | Array    | Array of voice items                               |
-| -- _id        | String   | Unique identifier for the voice                    |
-| -- voice_id   | String   | Voice ID used for API calls                        |
-| -- gender     | String   | Voice gender (Male/Female)                         |
-| -- language   | String   | Voice language name                                |
-| -- name       | String   | Voice name                                         |
-| -- preview    | String   | Preview audio URL                                  |
-| -- thumbnailUrl| String  | Voice avatar image URL                             |
-| -- create_time| Integer  | Voice creation timestamp                           |
-| -- flag_url   | String   | Language flag image URL                            |
-| -- useCase    | String   | Voice use case category                            |
-| -- category   | String   | Voice category                                     |
-| -- age        | Array    | Age range tags                                     |
-| -- style      | Array    | Voice style tags                                   |
-| -- duration   | Integer  | Preview audio duration in milliseconds             |
-| -- scenario   | Array    | Recommended usage scenarios                        |
-| -- language_code| String | Language code identifier                           |
+1. **Get Available Languages**:
+   - Use the [Get Language List API](/ai-tools-suite/video-translation/get-languages) to see all supported target languages
+   - Note which languages require specific voice IDs
 
-**Example**
+2. **Choose AI Voices (Optional)**:
+   - Use the [Get AI Voices List API](/ai-tools-suite/video-translation/get-voices) to browse available voices
+   - Filter by language code to find voices for your target language
+   - Use voice previews to select the best voice for your content
 
-**Request**
+3. **Create Translation**:
+   - Call the [Create Video Translation API](/ai-tools-suite/video-translation/create-translation) with your video URL
+   - Set `source_language` to "DEFAULT" for automatic language detection
+   - Specify target languages and optional voice mappings
+   - Configure additional options like lip-sync, captions, and background music removal
 
-<CodeGroup>
+4. **Monitor Progress**:
+   - Use the [Get Translation Result API](/ai-tools-suite/video-translation/get-result) to check processing status
+   - Download the translated video URL when status reaches "Completed" (status = 3)
 
-```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v4/voice/videoTranslation?language_code=zh-CN-shandong&page=1&size=100' \
---header 'x-api-key: {{API Key}}'
-```
+### Key Features
 
-```java Java
-OkHttpClient client = new OkHttpClient().newBuilder()
-  .build();
-Request request = new Request.Builder()
-  .url("https://openapi.akool.com/api/open/v4/voice/videoTranslation?language_code=zh-CN-shandong&page=1&size=100")
-  .method("GET", null)
-  .addHeader("x-api-key", "{{API Key}}")
-  .build();
-Response response = client.newCall(request).execute();
-```
+#### Automatic Language Detection
+Set `source_language` to "DEFAULT" to automatically detect the original language of your video content.
 
-```js Javascript
-const myHeaders = new Headers();
-myHeaders.append("x-api-key", "{{API Key}}");
+#### Multiple Language Translation
+Translate to multiple languages simultaneously by providing comma-separated language codes in the `language` parameter.
 
-const requestOptions = {
-  method: "GET",
-  headers: myHeaders,
-  redirect: "follow",
-};
+#### AI Voice Selection
+Choose from a variety of AI voices for each target language to match your content's tone and style.
 
-fetch("https://openapi.akool.com/api/open/v4/voice/videoTranslation?language_code=zh-CN-shandong&page=1&size=100", requestOptions)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.error(error));
-```
+#### Lip-Sync Technology
+Enable `lipsync` to synchronize mouth movements with the translated audio for more natural-looking results.
 
-```php PHP
-<?php
-$client = new Client();
-$headers = [
-  'x-api-key' => '{{API Key}}'
-];
-$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/voice/videoTranslation?language_code=zh-CN-shandong&page=1&size=100', $headers);
-$res = $client->sendAsync($request)->wait();
-echo $res->getBody();
-```
+#### Caption Support
+Add, translate, or replace subtitles with various caption handling options.
 
-```python Python
-import requests
+#### Advanced Translation Controls
+Fine-tune translations with custom word mappings, pronunciation corrections, and translation styles.
 
-url = "https://openapi.akool.com/api/open/v4/voice/videoTranslation"
-
-params = {
-    "language_code": "zh-CN-shandong",
-    "page": 1,
-    "size": 100
-}
-headers = {
-    'x-api-key': '{{API Key}}'
-}
-
-response = requests.request("GET", url, headers=headers, params=params)
-
-print(response.text)
-```
-
-</CodeGroup>
-
-**Response**
-
-```json
-{
-    "code": 1000,
-    "msg": "OK",
-    "data": {
-        "page": 1,
-        "size": 100,
-        "count": 1,
-        "result": [
-            {
-                "_id": "671777eadefc20dd56512948",
-                "voice_id": "6889b755662160e2caad5fdf",
-                "gender": "Male",
-                "language": "Chinese (Jilu Mandarin, Simplified)",
-                "name": "Honest Big Brother",
-                "preview": "https://d3c24lvfmudc1v.cloudfront.net/agicontent/voices/1749809765037-audio.mp3",
-                "thumbnailUrl": "https://static.website-files.org/assets/voiceover_face/compressed_image_1742893228182.jpg",
-                "create_time": 1729353600000,
-                "flag_url": "https://static.website-files.org/assets/national_flag/China.png",
-                "useCase": "Conversational",
-                "category": "conversational",
-                "age": [
-                    "Middle aged"
-                ],
-                "style": [
-                    "casual",
-                    "animated",
-                    "strong"
-                ],
-                "duration": 10116,
-                "scenario": [
-                    "chat",
-                    "podcast"
-                ],
-                "language_code": "zh-CN-shandong"
-            }
-        ]
-    }
-}
-```
-
-## Get Language List Result
-
-```
-GET https://openapi.akool.com/api/open/v3/language/list
-```
-
-**Request Headers**
-
-| **Parameter** | **Value**    | **Description**                                                                                                   |
-|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
-
-**Response Attributes**
-
-| **Parameter** | **Type** | **Description**                                      |
-| ------------- | -------- | ---------------------------------------------------- |
-| code          | Integer  | Interface returns business status code(1000:success) |
-| msg           | String   | Interface returns status information                 |
-| data          | Object   | Response data object                                |
-| - lang_list   | Array    | Array of supported languages                        |
-| -- lang_name  | String   | Language name (e.g., "Afrikaans (South Africa)")    |
-| -- lang_code  | String   | Language code (e.g., "af-ZA")                      |
-| -- url        | String   | Language flag icon URL                              |
-| -- need_voice_id | Boolean| Whether this language requires selecting an AI voice ID |
-
-**Example**
-
-**Request**
-
-<CodeGroup>
-
-```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v3/language/list' \
---header 'x-api-key: {{API Key}}'
-```
-
-```java Java
-OkHttpClient client = new OkHttpClient().newBuilder()
-  .build();
-MediaType mediaType = MediaType.parse("text/plain");
-RequestBody body = RequestBody.create(mediaType, "");
-Request request = new Request.Builder()
-  .url("https://openapi.akool.com/api/open/v3/language/list")
-  .method("GET", body)
-  .addHeader("x-api-key", "{{API Key}}")
-  .build();
-Response response = client.newCall(request).execute();
-```
-
-```js Javascript
-const myHeaders = new Headers();
-myHeaders.append("x-api-key", "{{API Key}}");
-
-const requestOptions = {
-  method: "GET",
-  headers: myHeaders,
-  redirect: "follow",
-};
-
-fetch("https://openapi.akool.com/api/open/v3/language/list", requestOptions)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.error(error));
-```
-
-```php PHP
-<?php
-$client = new Client();
-$headers = [
-  'x-api-key' => '{{API Key}}'
-];
-$request = new Request('GET', 'https://openapi.akool.com/api/open/v3/language/list', $headers);
-$res = $client->sendAsync($request)->wait();
-echo $res->getBody();
-```
-
-```python Python
-import requests
-
-url = "https://openapi.akool.com/api/open/v3/language/list"
-
-payload = {}
-headers = {
-  'x-api-key': '{{API Key}}'
-}
-
-response = requests.request("GET", url, headers=headers, data=payload)
-
-print(response.text)
-```
-
-</CodeGroup>
-
-**Response**
-
-```json
-{
-    "code": 1000,
-    "msg": "OK",
-    "data": {
-        "lang_list": [
-            {
-                "lang_name": "Afrikaans (South Africa)",
-                "lang_code": "af-ZA",
-                "url": "https://d11fbe263bhqij.cloudfront.net/public/landing/icons/nf/af-ZA.png",
-                "need_voice_id": true
-            },
-            {
-                "lang_name": "Albanian (Albania)",
-                "lang_code": "sq-AL",
-                "url": "https://d11fbe263bhqij.cloudfront.net/public/landing/icons/nf/sq-AL.png",
-                "need_voice_id": true
-            },
-            {
-                "lang_name": "Amharic (Ethiopia)",
-                "lang_code": "am-ET",
-                "url": "https://d11fbe263bhqij.cloudfront.net/public/landing/icons/nf/am-ET.png",
-                "need_voice_id": true
-            }
-      ]
-    }
-}
-```
-
-## Create video translation
-
-```
-POST https://openapi.akool.com/api/open/v3/content/video/createbytranslate
-```
-
-**Request Headers**
-
-| **Parameter** | **Value**    | **Description**                                                                                                   |
-|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
-
-**Body Attributes**
-
-| **Parameter**   | **Type** | **Required**| **Value**  | **Description**                                                                                 |
-| --------------- | -------- | ----------| ---------- | ----------------------------------------------------------------------------------------------- |
-| url             | String   |   true    |            | The video url address you want to translate.                                                    |
-| source_language | String   |   true    |            | The original language of the video.                                                             |
-| language        | String   |   true    |            | The language you want to translate into. If you want to translate into multiple languages at once, separate them with commas in English format.         |
-| lipsync         | Boolean  |   false   | true/false | Get synchronized mouth movements with the audio track in a translated video.                    |
-| ~~merge_interval~~  | Number |  false  | 1          | The segmentation interval of video translation, the default is 1 second. ***This field is deprecated***                       |
-| ~~face_enhance~~    | Boolean | false  | true/false | Whether to facial process the translated video, this parameter only works when lipsync is true. ***This field is deprecated*** |
-| webhookUrl      | String  |    false |            | Callback url address based on HTTP request.                                                     |
-| speaker_num      | Number |   false |      0      | Number of speakers in the video, the default is 0 (Auto Detect).                                                     |
-| remove_bgm      | Boolean |   false |      false      |   Whether to remove background music (default: false)                                                   |
-| caption_type    | Number  |   false |      0      |  Caption type (default: 0, 0 none；1 add original subtitle；2 add target subtitle；3 translate and replace original subtitle；4 add translated subtitle；)       |
-| caption_url     | String  |   false |            |   Caption URL (default: ""), subtitle file address, support SRT or ASS files.                                                   |
-| voices_map      | Object  |   false |            |   Voice Language maps                                                   |
-| -[language_code]      | Object  |   true |  `{"voice_id": "6889b755662160e2caad5fdf"}`          |      Target language code map                                                |
-| --voice_id      | String  |   true |    "" or  "6889b755662160e2caad5fdf"  |      Voice ID corresponding to the target language code, [getVoiceId](/ai-tools-suite/video-translation#get-ai-voices-list)                                                |
-| studio_voice    | Object  |   false |            |    Studio voice settings                                                  |
-| -no_translate_words    | Array  |   false |  ["kaka","lal"]          |   List of words that do not need to be translated                                                   |
-| -style    | String  |   false |  professional          | Translation style, available values: 'affectionate', 'angry', 'calm', 'cheerful', 'depressed', 'disgruntled', 'embarrassed', 'empathetic', 'excited', 'fearful', 'friendly', 'unfriendly', 'sad', 'serious', 'relaxed', 'professional'               |
-| -fixed_words    | Object  |   false |  `{"hi": "hello", "bad": "good"}`          |    Translation word mapping table for corrections                                                  |
-| -pronounced_words    | Object  |   false |  `{"lel": "lele", "gga": "gaga"}`          |      Pronunciation correction word mapping table                                                |
-| dynamic_duration | Boolean | false | false | Control the dynamic duration of the video. The default value is false. |
-
-
-**Response Attributes**
-
-| **Parameter** | **Type** | **Value**                                       | **Description**                                                                                                                                        |
-| ------------- | -------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| code          | int      | 1000                                            | Interface returns business status code(1000:success)                                                                                                   |
-| msg           | String   |                                                 | Interface returns status information                                                                                                                   |
-| data          | Object   | `{ "_id": "", "video_status": 1, "video": "" }` | _id: Interface returns data, video_status: the status of video: [1:queueing, 2:processing, 3:completed, 4:failed], video: the url of Generated video |
-
-**Example**
-
-**Body**
-
-```json
-{
-    "url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-    "language": "ja,zh-CN-shandong,zh-CN-sichuan",
-    "source_language": "en",
-    "lipsync": false,
-    "speaker_num": 1,
-    "webhookUrl": "",
-    "remove_bgm": true,
-    "caption_type": 2,
-    "caption_url": "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt",
-    "voices_map": {
-        "ja": {
-            "voice_id": ""
-        },
-        "zh-CN-shandong": {
-            "voice_id": "6889b755662160e2caad5fdf"
-        },
-        "zh-CN-sichuan": {
-            "voice_id": "6889b74e662160e2caad5fd5"
-        }
-    },
-    "studio_voice": {
-      "no_translate_words": ["kaka","lal"],
-      "fixed_words": {"hi": "hello", "bad": "good"},
-      "pronounced_words": {"lel": "lele", "gga": "gaga"},
-      "style": "professional"
-   },
-   "dynamic_duration": false,
-}
-```
-
-**Request**
-
-<CodeGroup>
-
-```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v3/content/video/createbytranslate' \
---header "x-api-key: {{API Key}}" \
---header 'Content-Type: application/json' \
---data '{
-    "url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-    "language": "ja,zh-CN-shandong,zh-CN-sichuan",
-    "source_language": "en",
-    "lipsync": false,
-    "speaker_num": 1,
-    "webhookUrl": "",
-    "remove_bgm": true,
-    "caption_type": 2,
-    "caption_url": "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt",
-    "voices_map": {
-        "ja": {
-            "voice_id": ""
-        },
-        "zh-CN-shandong": {
-            "voice_id": "6889b755662160e2caad5fdf"
-        },
-        "zh-CN-sichuan": {
-            "voice_id": "6889b74e662160e2caad5fd5"
-        }
-    },
-    "studio_voice": {
-      "no_translate_words": ["kaka","lal"],
-      "fixed_words": {"hi": "hello", "bad": "good"},
-      "pronounced_words": {"lel": "lele", "gga": "gaga"},
-      "style": "professional"
-   },
-   "dynamic_duration": false,
-}'
-```
-
-```java Java
-OkHttpClient client = new OkHttpClient().newBuilder()
-  .build();
-MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n" +
-    "    \"url\": \"https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4\",\n" +
-    "    \"language\": \"ja,zh-CN-shandong,zh-CN-sichuan\",\n" +
-    "    \"source_language\": \"en\",\n" +
-    "    \"lipsync\": false,\n" +
-    "    \"speaker_num\": 1,\n" +
-    "    \"webhookUrl\": \"\",\n" +
-    "    \"remove_bgm\": true,\n" +
-    "    \"caption_type\": 2,\n" +
-    "    \"caption_url\": \"https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt\",\n" +
-    "    \"voices_map\": {\n" +
-    "        \"ja\": {\n" +
-    "            \"voice_id\": \"\"\n" +
-    "        },\n" +
-    "        \"zh-CN-shandong\": {\n" +
-    "            \"voice_id\": \"6889b755662160e2caad5fdf\"\n" +
-    "        },\n" +
-    "        \"zh-CN-sichuan\": {\n" +
-    "            \"voice_id\": \"6889b74e662160e2caad5fd5\"\n" +
-    "        }\n" +
-    "    },\n" +
-    "    \"studio_voice\": {\n" +
-    "        \"no_translate_words\": [\"kaka\",\"lal\"],\n" +
-    "        \"fixed_words\": {\"hi\": \"hello\", \"bad\": \"good\"},\n" +
-    "        \"pronounced_words\": {\"lel\": \"lele\", \"gga\": \"gaga\"},\n" +
-    "        \"style\": \"professional\"\n" +
-    "    },\n" +
-    "    \"dynamic_duration\": false, \n" +
-    "}");
-Request request = new Request.Builder()
-  .url("https://openapi.akool.com/api/open/v3/content/video/createbytranslate")
-  .method("POST", body)
-  .addHeader("x-api-key", "{{API Key}}")
-  .addHeader("Content-Type", "application/json")
-  .build();
-Response response = client.newCall(request).execute();
-```
-
-```js Javascript
-const myHeaders = new Headers();
-myHeaders.append("x-api-key", "{{API Key}}");
-myHeaders.append("Content-Type", "application/json");
-
-const raw = JSON.stringify({
-  url: "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-  language: "ja,zh-CN-shandong,zh-CN-sichuan",
-  source_language: "en",
-  lipsync: false,
-  speaker_num: 1,
-  webhookUrl: "",
-  remove_bgm: true,
-  caption_type: 2,
-  caption_url: "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt",
-  voices_map: {
-    ja: {
-      voice_id: ""
-    },
-    "zh-CN-shandong": {
-      voice_id: "6889b755662160e2caad5fdf"
-    },
-    "zh-CN-sichuan": {
-      voice_id: "6889b74e662160e2caad5fd5"
-    }
-  },
-  studio_voice: {
-    no_translate_words: ["kaka","lal"],
-    fixed_words: {"hi": "hello", "bad": "good"},
-    pronounced_words: {"lel": "lele", "gga": "gaga"},
-    style: "professional"
-  },
-  dynamic_duration: false,
-});
-
-const requestOptions = {
-  method: "POST",
-  headers: myHeaders,
-  body: raw,
-  redirect: "follow",
-};
-
-fetch(
-  "https://openapi.akool.com/api/open/v3/content/video/createbytranslate",
-  requestOptions
-)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.error(error));
-```
-
-```php PHP
-<?php
-$client = new Client();
-$headers = [
-  'x-api-key' =>'{{API Key}}',
-  'Content-Type' => 'application/json'
-];
-$body = '{
-  "url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-  "language": "ja,zh-CN-shandong,zh-CN-sichuan",
-  "source_language": "en",
-  "lipsync": false,
-  "speaker_num": 1,
-  "webhookUrl": "",
-  "remove_bgm": true,
-  "caption_type": 2,
-  "caption_url": "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt",
-  "voices_map": {
-    "ja": {
-      "voice_id": ""
-    },
-    "zh-CN-shandong": {
-      "voice_id": "6889b755662160e2caad5fdf"
-    },
-    "zh-CN-sichuan": {
-      "voice_id": "6889b74e662160e2caad5fd5"
-    }
-  },
-  "studio_voice": {
-    "no_translate_words": ["kaka","lal"],
-    "fixed_words": {"hi": "hello", "bad": "good"},
-    "pronounced_words": {"lel": "lele", "gga": "gaga"},
-    "style": "professional"
-  },
-  "dynamic_duration": false,
-}';
-$request = new Request('POST', 'https://openapi.akool.com/api/open/v3/content/video/createbytranslate', $headers, $body);
-$res = $client->sendAsync($request)->wait();
-echo $res->getBody();
-```
-
-```python Python
-import requests
-import json
-
-url = "https://openapi.akool.com/api/open/v3/content/video/createbytranslate"
-
-payload = json.dumps({
-  "url": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-  "language": "ja,zh-CN-shandong,zh-CN-sichuan",
-  "source_language": "en",
-  "lipsync": False,
-  "speaker_num": 1,
-  "webhookUrl": "",
-  "remove_bgm": True,
-  "caption_type": 2,
-  "caption_url": "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt",
-  "voices_map": {
-    "ja": {
-      "voice_id": ""
-    },
-    "zh-CN-shandong": {
-      "voice_id": "6889b755662160e2caad5fdf"
-    },
-    "zh-CN-sichuan": {
-      "voice_id": "6889b74e662160e2caad5fd5"
-    }
-  },
-  "studio_voice": {
-    "no_translate_words": ["kaka","lal"],
-    "fixed_words": {"hi": "hello", "bad": "good"},
-    "pronounced_words": {"lel": "lele", "gga": "gaga"},
-    "style": "professional"
-  },
-  "dynamic_duration": false,
-})
-headers = {
-  'x-api-key':'{{API Key}}',
-  'Content-Type': 'application/json'
-}
-
-response = requests.request("POST", url, headers=headers, data=payload)
-
-print(response.text)
-```
-
-</CodeGroup>
-
-**Response**
-
-```json
-{
-  "code": 1000,
-  "msg": "OK",
-  "data": {
-    "_id": "68ccee42e267570255824ab5",
-    "create_time": 1758260802773,
-    "uid": 101400,
-    "team_id": "6805fb69e92d9edc7ca0b409",
-    "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-    "language": "ja",
-    "source_language": "en",
-    "video_id": "68ccee42f392598dae31999b",
-    "video_status": 1,
-    "video_lock_duration": 16.44,
-    "deduction_lock_duration": 4,
-    "video": "",
-    "credentialId": "6823024be0c8e98471611c72",
-    "task_id": "68ccee42f392598dae31999b",
-    "target_video_md5": "md5_1758260802301",
-    "lipsync": false,
-    "lipSyncType": 0,
-    "speaker_num": 1,
-    "webhookUrl": ""
-  },
-  "all_results": [
-    {
-      "code": 1000,
-      "msg": "OK",
-      "data": {
-        "_id": "68da023e776f4277705a7887",
-        "create_time": 1759117886720,
-        "uid": 101400,
-        "team_id": "6805fb69e92d9edc7ca0b409",
-        "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-        "language": "hi",
-        "source_language": "en",
-        "video_id": "68da023ef392598dae319ada",
-        "video_status": 1,
-        "video_lock_duration": 16.44,
-        "deduction_lock_duration": 4,
-        "video": "",
-        "credentialId": "6823024be0c8e98471611c72",
-        "task_id": "68da023ef392598dae319ada",
-        "target_video_md5": "md5_1759117886236",
-        "lipsync": false,
-        "lipSyncType": 0,
-        "speaker_num": 1
-      }
-    },
-    {
-      "code": 1000,
-      "msg": "OK",
-      "data": {
-        "_id": "68da023f776f4277705a788b",
-        "create_time": 1759117887169,
-        "uid": 101400,
-        "team_id": "6805fb69e92d9edc7ca0b409",
-        "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-        "language": "fr",
-        "source_language": "en",
-        "video_id": "68da023ff392598dae319adb",
-        "video_status": 1,
-        "video_lock_duration": 16.44,
-        "deduction_lock_duration": 4,
-        "video": "",
-        "credentialId": "6823024be0c8e98471611c72",
-        "task_id": "68da023ff392598dae319adb",
-        "target_video_md5": "md5_1759117886236",
-        "lipsync": false,
-        "lipSyncType": 0,
-        "speaker_num": 1
-      }
-    },
-    {
-      "code": 1000,
-      "msg": "OK",
-      "data": {
-        "_id": "68da023f776f4277705a7890",
-        "create_time": 1759117887643,
-        "uid": 101400,
-        "team_id": "6805fb69e92d9edc7ca0b409",
-        "target_video": "https://d11fbe263bhqij.cloudfront.net/agicontent/video/translate/cut3_content_create_EN_01.mp4",
-        "language": "ja",
-        "source_language": "en",
-        "video_id": "68da023f6ae5f91ba94f6f8e",
-        "video_status": 1,
-        "video_lock_duration": 16.44,
-        "deduction_lock_duration": 4,
-        "video": "",
-        "credentialId": "6823024be0c8e98471611c72",
-        "task_id": "68da023f6ae5f91ba94f6f8e",
-        "target_video_md5": "md5_1759117886236",
-        "lipsync": false,
-        "lipSyncType": 0,
-        "speaker_num": 1
-      }
-    }
-  ]
-}
-```
-
-## Get Video Info Result
-
-```
-GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid
-```
-
-**Request Headers**
-
-| **Parameter** | **Value**    | **Description**                                                                                                   |
-|---------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
-| Authorization | Bearer `{token}` | Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token). |
-
-**Query Attributes**
-
-| **Parameter**  | **Type** | **Value** | **Description**                                                                                                                          |
-| -------------- | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| video_model_id | String   | NULL      | video db id: You can get it based on the `_id` field returned by [Create By Translate API](/ai-tools-suite/video-translation#create-video-translation) . |
-
-**Response Attributes**
-
-| **Parameter** | **Type** | **Value**                              | **Description**                                                                                                                                         |
-| ------------- | -------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| code          | int      | 1000                                   | Interface returns business status code(1000:success)                                                                                                    |
-| msg           | String   | OK                                     | Interface returns status information                                                                                                                    |
-| data          | Object   | `{ video_status:1, _id:"", video:"" }` | Interface returns data |
-| - _id         | String   | 68da023f776f4277705a7890 | Unique identifier |
-| - create_time         | Integer   | 1759117887643 | Timestamp |
-| - uid         | Integer   | 101400 | User ID |
-| - team_id         | String   | 6805fb69e92d9edc7ca0b409 | Team ID |
-| - video_id         | String   | 68da023f6ae5f91ba94f6f8e | Video Translation Unique ID |
-| - video_status         | Integer   | 3 | The status of video: [1:queueing, 2:processing, 3:completed, 4:failed] |
-| - video         | String   | https://d2qf6ukcym4kn9.cloudfront.net/1761015360290-1617.mp4 | Generated video resource url  |
-| - progress         | Integer   | 100 | Video translation processing progress |
-| - deduction_duration        | Integer   | 4 | Credits consumed for this video translation |
-| - error_code        | Integer   | 1000 | Error code indicating the specific reason for task failure, only available when video_status is 4 |
-| - error_reason        | String   | "" | Detailed error reason description, only available when video_status is 4 |
-
-**Example**
-
-**Request**
-
-<CodeGroup>
-
-```bash cURL
-curl --location 'http://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64b126c4a680e8edea44f02b' \
---header "x-api-key: {{API Key}}"
-```
-
-```java Java
-OkHttpClient client = new OkHttpClient().newBuilder()
-  .build();
-MediaType mediaType = MediaType.parse("text/plain");
-RequestBody body = RequestBody.create(mediaType, "");
-Request request = new Request.Builder()
-  .url("http://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64b126c4a680e8edea44f02b")
-  .method("GET", body)
-  .addHeader("x-api-key", "{{API Key}}")
-  .build();
-Response response = client.newCall(request).execute();
-```
-
-```js Javascript
-const myHeaders = new Headers();
-myHeaders.append("x-api-key", "{{API Key}}");
-
-const requestOptions = {
-  method: "GET",
-  headers: myHeaders,
-  redirect: "follow",
-};
-
-fetch(
-  "http://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64b126c4a680e8edea44f02b",
-  requestOptions
-)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.error(error));
-```
-
-```php PHP
-<?php
-$client = new Client();
-$headers = [
-  'x-api-key' =>'{{API Key}}'
-];
-$request = new Request('GET', 'http://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64b126c4a680e8edea44f02b', $headers);
-$res = $client->sendAsync($request)->wait();
-echo $res->getBody();
-```
-
-```python Python
-import requests
-
-url = "http://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=64b126c4a680e8edea44f02b"
-
-payload = {}
-headers = {
-  'x-api-key':'{{API Key}}'
-}
-
-response = requests.request("GET", url, headers=headers, data=payload)
-
-print(response.text)
-```
-
-</CodeGroup>
-
-**Response**
-
-```json
-// Task Processing Details
-{
-    "code": 1000,
-    "msg": "OK",
-    "data": {
-        "_id": "68f704e35dafcfa697b5c938",
-        "create_time": 1761019107873,
-        "uid": 101400,
-        "team_id": "6805fb69e92d9edc7ca0b409",
-        "video_id": "68f704e33a70d14c0e6e1035",
-        "video_status": 2,
-        "video": "",
-        "progress": 5
-    }
-}
-
-// Task Processing Failed Details
-{
-    "code": 1000,
-    "msg": "OK",
-    "data": {
-        "_id": "68da023f776f4277705a7890",
-        "create_time": 1759117887643,
-        "uid": 101400,
-        "team_id": "6805fb69e92d9edc7ca0b409",
-        "video_id": "68da023f6ae5f91ba94f6f8e",
-        "video_status": 4,
-        "video": "",
-        "progress": 15,
-        "error_code": 501312,
-        "error_reason": "Oops! Something went a bit wonky. Please try again."
-    }
-}
-
-// Task Processing Success
-{
-    "code": 1000,
-    "msg": "OK",
-    "data": {
-        "_id": "68f6f593569f662dbad4e49e",
-        "create_time": 1761015187235,
-        "uid": 101400,
-        "team_id": "6805fb69e92d9edc7ca0b409",
-        "video_id": "68f6f59234a68e7b8a942836",
-        "video_status": 3,
-        "video": "https://d2qf6ukcym4kn9.cloudfront.net/1761015360290-1617.mp4",
-        "progress": 100,
-        "deduction_duration": 4
-    }
-}
-```
-
-**Response Code Description**
+## Response Code Description
 
 <Note>
-  {" "}
   Please note that if the value of the response code is not equal to 1000, the request
-  is failed or wrong
+  has failed or encountered an error.
 </Note>
 
-| **Parameter** | **Value** | **Description**                                                                    |
-| ------------- | --------- | ---------------------------------------------------------------------------------- |
-| code          | 1000      | Success                                                                            |
-| code          | 1003      | Parameter error or Parameter can not be empty                                      |
-| code          | 1008      | The content you get does not exist                                                 |
-| code          | 1009      | You do not have permission to operate                                              |
-| code          | 1101      | Invalid authorization or The request token has expired                             |
-| code          | 1102      | Authorization cannot be empty                                                      |
-| code          | 1200      | The account has been banned                                                        |
-| code          | 1201      | create audio error, please try again later                                         |
-| code          | 1202      | The same video cannot be translated lipSync in the same language more than 1 times |
-| code          | 1203      | video should be with audio                                                         |
-| code          | 1204      | Your video duration is exceed 60s!                                                 |
-| code          | 1205      | Create video error, please try again later                                         |
-| code          | 1207      | The video you are using exceeds the size limit allowed by the system by 300M       |
-| code          | 1209      | Please upload a video in another encoding format                                   |
-| code          | 1210      | The video you are using exceeds the value allowed by the system by 30fp            |
+| **Code** | **Description** |
+|----------|-----------------|
+| 1000 | Success |
+| 1003 | Parameter error or Parameter cannot be empty |
+| 1008 | The content you requested does not exist |
+| 1009 | You do not have permission to perform this operation |
+| 1101 | Invalid authorization or The request token has expired |
+| 1102 | Authorization cannot be empty |
+| 1200 | The account has been banned |
+| 1201 | Create audio error, please try again later |
+| 1202 | The same video cannot be translated with lip-sync in the same language more than once |
+| 1203 | Video should contain audio |
+| 1204 | Your video duration exceeds 60 seconds |
+| 1205 | Create video error, please try again later |
+| 1207 | The video you are using exceeds the size limit of 300MB |
+| 1209 | Please upload a video in another encoding format |
+| 1210 | The video you are using exceeds the frame rate limit of 30fps |
 
+## Video Translation Status Codes
 
+When checking results, the `video_status` field indicates the current processing state:
+
+| **Status** | **Description** |
+|------------|-----------------|
+| 1 | Queueing - Your request is waiting to be processed |
+| 2 | Processing - Video translation is currently being generated |
+| 3 | Completed - Translation finished successfully, video URL is available |
+| 4 | Failed - Translation failed, check error details for more information |
+
+## Best Practices
+
+### Video Requirements
+
+- **Duration**: Keep videos under 60 seconds for optimal processing time
+- **Size**: Maximum file size is 300MB
+- **Frame Rate**: Maximum 30fps supported
+- **Audio**: Ensure your video contains clear audio for accurate translation
+- **Encoding**: Use standard encoding formats (H.264 recommended)
+
+### Translation Quality Tips
+
+- **Clear Speech**: Videos with clear, well-articulated speech produce better translations
+- **Background Noise**: Consider using `remove_bgm: true` to remove background music for clearer voice translation
+- **Speaker Count**: Specify the correct number of speakers for better voice separation
+- **Custom Voices**: Select appropriate AI voices that match your content's tone and target audience
+
+### API Usage Tips
+
+- **Webhook**: Use the `webhookUrl` parameter to receive notifications when processing is complete
+- **Batch Processing**: For multiple videos, process them in parallel but monitor your quota usage
+- **Error Handling**: Implement proper retry logic for failed translations
+- **Result Management**: Download and save translated videos promptly as they expire after 7 days
+
+## Common Use Cases
+
+### Single Language Translation with Auto-Detection
+
+```json
+{
+  "url": "https://example.com/my-video.mp4",
+  "source_language": "DEFAULT",
+  "language": "es",
+  "lipsync": true,
+  "voices_map": {
+    "es": {
+      "voice_id": "spanish_voice_id"
+    }
+  }
+}
+```
+
+### Multi-Language Translation with Custom Voices
+
+```json
+{
+  "url": "https://example.com/my-video.mp4",
+  "source_language": "DEFAULT",
+  "language": "es,fr,de",
+  "lipsync": false,
+  "voices_map": {
+    "es": {"voice_id": "spanish_voice_id"},
+    "fr": {"voice_id": "french_voice_id"},
+    "de": {"voice_id": "german_voice_id"}
+  },
+  "caption_type": 2,
+  "remove_bgm": true
+}
+```
+
+### Professional Translation with Advanced Controls
+
+```json
+{
+  "url": "https://example.com/business-video.mp4",
+  "source_language": "DEFAULT",
+  "language": "zh-CN",
+  "lipsync": true,
+  "voices_map": {
+    "zh-CN": {"voice_id": "professional_chinese_voice"}
+  },
+  "studio_voice": {
+    "style": "professional",
+    "no_translate_words": ["AKool", "API"],
+    "fixed_words": {"hello": "您好"}
+  },
+  "caption_type": 3,
+  "webhookUrl": "https://your-server.com/webhook"
+}
+```
+
+## Support
+
+For additional help and examples, check out our:
+- [GitHub Demo](https://github.com/AKOOL-Official/akool-video-translation-demo)
+- [Authentication Guide](/authentication/usage)
+- [Webhook Documentation](/ai-tools-suite/webhook)
