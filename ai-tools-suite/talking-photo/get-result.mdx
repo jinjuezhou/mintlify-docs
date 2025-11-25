@@ -1,0 +1,21 @@
+---
+title: "Get Video Info Result"
+description: "Retrieve talking photo video results by ID"
+openapi: "GET /api/open/v3/content/video/infobymodelid"
+---
+
+## Important Notes
+
+- Use the `_id` field from the [Create By Talking Photo API](/ai-tools-suite/talking-photo/create-video) response as the `video_model_id` parameter
+- Poll this endpoint periodically to check the video generation status
+- When `video_status` is 3 (Success), the `video` field will contain the URL of the generated video
+- Generated videos are valid for 7 days, download and save them promptly
+
+## Video Status
+
+| Status | Description |
+|--------|-------------|
+| 1 | In Queue - Your request is waiting to be processed |
+| 2 | Processing - Video is currently being generated |
+| 3 | Success - Video completed, result URL is available |
+| 4 | Failed - Video generation failed |

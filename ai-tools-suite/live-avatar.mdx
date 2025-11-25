@@ -80,6 +80,7 @@ IAgoraRTCClient.sendStreamMessage(msg: Uint8Array | string, flag: boolean): Prom
 | vid | String | No | | Voice ID to change avatar's voice. Only used with **"set-params"**. Get valid IDs from [Voice List API](/ai-tools-suite/voiceLab#get-voice-list) |
 | vurl | String | No | | Custom voice model URL. Only used with **"set-params"**. Get valid URLs from [Voice List API](/ai-tools-suite/voiceLab#get-voice-list) |
 | speed | double | No | 1 | Controls the speed of the generated speech. Values range from 0.8 to 1.2, with 1.0 being the default speed. |
+| stt_language | String | No | | Language code for speech-to-text recognition to improve accuracy by using language-specific models |
 | pron_map | Object | No |  | Pronunciation mapping for custom words. Example: "pron_map": \{ "akool" : "ai ku er" \} |
 | stt_type | String | No | | Speech-to-text type. `"openai_realtime"` = OpenAI Realtime |
 | turn_detection | Object | No | | Turn detection configuration. |
