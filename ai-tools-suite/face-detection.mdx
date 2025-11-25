@@ -19,12 +19,13 @@ Detect faces in images and videos with high accuracy. Get bounding boxes, 5-poin
 
 1. **For Image Face Detection**:
    - Call the [Detect Faces API](/ai-tools-suite/face-detection/detect-faces) with an image URL
+   - Only the `url` parameter is required (no need for `num_frames`)
    - Receive bounding boxes and 5-point landmarks for all detected faces
    - Use the landmark data for downstream tasks (e.g., face swap, face recognition)
 
 2. **For Video Face Detection**:
    - Call the [Detect Faces API](/ai-tools-suite/face-detection/detect-faces) with a video URL
-   - Specify the number of frames to analyze (default: 5)
+   - Specify the `num_frames` parameter to control how many frames to analyze (default: 5)
    - Get face tracking data across frames with removed face positions
 
 ### Response Code Description
@@ -87,7 +88,10 @@ The API automatically detects whether the input is an image or video based on:
 
 ### API Usage Tips
 
-- **Frame Selection**: For videos, choose `num_frames` based on video duration and required precision
+- **Parameter Usage**:
+  - **For Images**: Only `url` parameter is required. The `num_frames` parameter is NOT needed.
+  - **For Videos**: Both `url` and `num_frames` parameters are recommended.
+- **Frame Selection** (for videos only):
   - Short videos (< 10s): 5-10 frames
   - Medium videos (10-30s): 10-20 frames
   - Long videos (> 30s): 20-50 frames
@@ -135,12 +139,15 @@ The API automatically detects whether the input is an image or video based on:
 
 ```json
 {
-  "url": "https://example.com/portrait.jpg",
-  "num_frames": 5
+  "url": "https://example.com/portrait.jpg"
 }
 ```
 
-Use case: Detect faces in a portrait photo for face alignment, face recognition, or face swap preprocessing.
+**Use case**: Detect faces in a portrait photo for face alignment, face recognition, or face swap preprocessing.
+
+<Note>
+For images, the `num_frames` parameter is not needed and will be ignored.
+</Note>
 
 ### Face Tracking in Video Content
 
@@ -179,11 +186,20 @@ The API automatically detects all faces in an image or video frame. No special c
 
 ```python
 # Example error handling in Python
+
+# For image detection (no num_frames needed)
 response = requests.post(
     "https://face_detect.akool.io/detect_faces",
-    json={"url": image_url, "num_frames": 5},
+    json={"url": "https://example.com/image.jpg"},
     headers={"x-api-key": "YOUR_API_KEY"}
 )
+
+# For video detection (num_frames required)
+# response = requests.post(
+#     "https://face_detect.akool.io/detect_faces",
+#     json={"url": "https://example.com/video.mp4", "num_frames": 10},
+#     headers={"x-api-key": "YOUR_API_KEY"}
+# )
 
 result = response.json()
 if result["error_code"] != 0:

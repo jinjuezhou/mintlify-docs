@@ -38,12 +38,15 @@ The URL of the media file to process. Must be publicly accessible.
 ### num_frames (optional)
 Number of frames to extract and analyze from videos. Default: 5
 
-**Recommendations**:
+<Warning>
+**For Images**: This parameter is NOT required and will be ignored.  
+**For Videos**: This parameter is recommended to control the number of frames analyzed.
+</Warning>
+
+**Recommendations for videos**:
 - Short videos (< 10s): 5-10 frames
 - Medium videos (10-30s): 10-20 frames
 - Long videos (> 30s): 20-50 frames
-
-**Note**: This parameter is ignored for image inputs.
 
 ## Response Format
 
@@ -116,10 +119,13 @@ Each frame object contains:
 **Request**:
 ```json
 {
-  "url": "https://example.com/portrait.jpg",
-  "num_frames": 5
+  "url": "https://example.com/portrait.jpg"
 }
 ```
+
+<Note>
+For image detection, the `num_frames` parameter is not required and will be ignored if provided.
+</Note>
 
 **Response**:
 ```json

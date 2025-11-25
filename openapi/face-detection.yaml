@@ -41,12 +41,11 @@ paths:
               $ref: '#/components/schemas/UnifiedFaceDetectionRequest'
             examples:
               image_detection:
-                summary: Image Face Detection
+                summary: Image Face Detection (num_frames not required)
                 value:
                   url: "https://example.com/image.jpg"
-                  num_frames: 5
               video_detection:
-                summary: Video Face Detection
+                summary: Video Face Detection (num_frames required)
                 value:
                   url: "https://example.com/video.mp4"
                   num_frames: 10
