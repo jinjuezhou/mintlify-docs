@@ -1,0 +1,266 @@
+---
+title: "Detect Faces"
+description: "Unified endpoint to detect faces in either video or image from URL"
+openapi: "POST /detect_faces"
+---
+
+<Info>
+This is the main endpoint for face detection. It automatically detects whether the input is an image or video and processes accordingly.
+</Info>
+
+## Key Features
+
+- **Auto Media Type Detection**: Automatically determines if the input is an image or video
+- **5-Point Landmarks**: Detects 5 key facial landmarks for each face
+- **Bounding Boxes**: Provides precise face region coordinates
+- **Video Face Tracking**: Tracks faces across frames and identifies removed faces
+- **Async Processing**: Downloads and processes media asynchronously for better performance
+
+## How It Works
+
+1. **Media Type Detection**: The API analyzes the URL to determine if it's an image or video
+2. **Media Download**: Downloads the media from the provided URL asynchronously
+3. **Processing**:
+   - For images: Loads and analyzes the single image
+   - For videos: Extracts frames at regular intervals and analyzes each frame
+4. **Face Detection**: Uses InsightFace model to detect faces and landmarks
+5. **Face Tracking** (videos only): Tracks faces across frames and marks previous positions as removed
+
+## Request Parameters
+
+### url (required)
+The URL of the media file to process. Must be publicly accessible.
+
+**Supported formats**:
+- Images: `.jpg`, `.jpeg`, `.png`, `.bmp`, `.webp`
+- Videos: `.mp4`, `.mov`, `.avi`, `.webm`
+
+### num_frames (optional)
+Number of frames to extract and analyze from videos. Default: 5
+
+**Recommendations**:
+- Short videos (< 10s): 5-10 frames
+- Medium videos (10-30s): 10-20 frames
+- Long videos (> 30s): 20-50 frames
+
+**Note**: This parameter is ignored for image inputs.
+
+## Response Format
+
+### Success Response
+
+```json
+{
+  "error_code": 0,
+  "error_msg": "SUCCESS",
+  "faces_obj": {
+    "0": {
+      "landmarks": [
+        [[100, 120], [150, 120], [125, 150], [110, 180], [140, 180]]
+      ],
+      "region": [[80, 100, 100, 120]],
+      "removed": [],
+      "frame_time": null
+    }
+  }
+}
+```
+
+### Response Fields
+
+#### error_code
+- Type: `integer`
+- `0`: Success
+- `1`: Error occurred (check `error_msg`)
+
+#### error_msg
+- Type: `string`
+- Success: `"SUCCESS"`
+- Error: Detailed error message
+
+#### faces_obj
+- Type: `object`
+- Dictionary keyed by frame index (as string)
+- For images: Only `"0"` key is present
+- For videos: Multiple keys like `"0"`, `"5"`, `"10"`, etc.
+
+Each frame object contains:
+
+##### landmarks
+- Type: `array`
+- Array of 5-point landmarks for each detected face
+- Format: `[[[x1, y1], [x2, y2], [x3, y3], [x4, y4], [x5, y5]], ...]`
+- Order: Left Eye, Right Eye, Nose, Left Mouth Corner, Right Mouth Corner
+
+##### region
+- Type: `array`
+- Bounding boxes for each detected face
+- Format: `[[x, y, width, height], ...]`
+- `(x, y)` is the top-left corner of the bounding box
+
+##### removed
+- Type: `array`
+- Bounding boxes of faces that were present in previous frames but are no longer visible
+- Only applicable for video processing
+- Format: `[[x, y, width, height], ...]`
+
+##### frame_time
+- Type: `number` or `null`
+- Time in seconds for this frame in the video
+- `null` for images
+
+## Examples
+
+### Example 1: Image Face Detection
+
+**Request**:
+```json
+{
+  "url": "https://example.com/portrait.jpg",
+  "num_frames": 5
+}
+```
+
+**Response**:
+```json
+{
+  "error_code": 0,
+  "error_msg": "SUCCESS",
+  "faces_obj": {
+    "0": {
+      "landmarks": [
+        [[320, 240], [420, 240], [370, 300], [340, 350], [400, 350]],
+        [[650, 220], [720, 220], [685, 270], [660, 310], [710, 310]]
+      ],
+      "region": [
+        [300, 200, 150, 180],
+        [630, 180, 120, 160]
+      ],
+      "removed": [],
+      "frame_time": null
+    }
+  }
+}
+```
+
+### Example 2: Video Face Detection
+
+**Request**:
+```json
+{
+  "url": "https://example.com/video.mp4",
+  "num_frames": 10
+}
+```
+
+**Response**:
+```json
+{
+  "error_code": 0,
+  "error_msg": "SUCCESS",
+  "faces_obj": {
+    "0": {
+      "landmarks": [
+        [[320, 240], [420, 240], [370, 300], [340, 350], [400, 350]]
+      ],
+      "region": [[300, 200, 150, 180]],
+      "removed": [],
+      "frame_time": 0.0
+    },
+    "10": {
+      "landmarks": [
+        [[325, 245], [425, 245], [375, 305], [345, 355], [405, 355]]
+      ],
+      "region": [[305, 205, 150, 180]],
+      "removed": [[300, 200, 150, 180]],
+      "frame_time": 0.333
+    }
+  }
+}
+```
+
+## Error Responses
+
+### Invalid URL
+```json
+{
+  "error_code": 1,
+  "error_msg": "Invalid URL format",
+  "faces_obj": {}
+}
+```
+
+### No Faces Detected
+```json
+{
+  "error_code": 0,
+  "error_msg": "SUCCESS",
+  "faces_obj": {
+    "0": {
+      "landmarks": [],
+      "region": [],
+      "removed": [],
+      "frame_time": null
+    }
+  }
+}
+```
+
+### Processing Error
+```json
+{
+  "error_code": 1,
+  "error_msg": "Failed to download media from URL",
+  "faces_obj": {}
+}
+```
+
+## Use Cases
+
+### 1. Face Swap Preprocessing
+Detect face landmarks to prepare images for face swapping operations.
+
+### 2. Face Recognition
+Extract face regions and landmarks for face recognition systems.
+
+### 3. Video Analysis
+Track faces across video frames for content analysis or editing.
+
+### 4. Face Alignment
+Use landmarks to align faces for consistent processing.
+
+### 5. Facial Animation
+Use landmarks as control points for facial animation.
+
+## Best Practices
+
+### URL Requirements
+- Use HTTPS URLs for better security
+- Ensure URLs are publicly accessible (no authentication required)
+- Use direct links to media files (avoid redirects)
+
+### Performance Optimization
+- For videos, use an appropriate `num_frames` value
+  - More frames = higher accuracy but longer processing time
+  - Fewer frames = faster processing but may miss faces
+- Cache results if processing the same media multiple times
+
+### Error Handling
+Always check the `error_code` before processing results:
+
+```python
+if response["error_code"] != 0:
+    print(f"Error: {response['error_msg']}")
+    return
+
+faces = response["faces_obj"]
+# Process faces...
+```
+
+## Rate Limits
+
+<Warning>
+Rate limits apply to this endpoint. Excessive requests may be throttled.
+Please implement appropriate retry logic with exponential backoff.
+</Warning>
+

@@ -1,0 +1,226 @@
+---
+title: "Face Detection API Overview"
+description: "Comprehensive guide to the Face Detection API"
+---
+
+<Info>
+Detect faces in images and videos with high accuracy. Get bounding boxes, 5-point landmarks, and face tracking for video content.
+</Info>
+
+## API Endpoints
+
+### Face Detection Operations
+
+- [Detect Faces](/ai-tools-suite/face-detection/detect-faces) - Unified endpoint for face detection in images and videos (auto-detects media type)
+
+## Getting Started
+
+### Basic Workflow
+
+1. **For Image Face Detection**:
+   - Call the [Detect Faces API](/ai-tools-suite/face-detection/detect-faces) with an image URL
+   - Receive bounding boxes and 5-point landmarks for all detected faces
+   - Use the landmark data for downstream tasks (e.g., face swap, face recognition)
+
+2. **For Video Face Detection**:
+   - Call the [Detect Faces API](/ai-tools-suite/face-detection/detect-faces) with a video URL
+   - Specify the number of frames to analyze (default: 5)
+   - Get face tracking data across frames with removed face positions
+
+### Response Code Description
+
+<Note>
+  Error code 0 indicates success. Any non-zero error code indicates a failure.
+  Check the error_msg field for detailed error information.
+</Note>
+
+| Code | Description |
+|------|-------------|
+| 0 | Success |
+| 1 | Error - Check error_msg for details |
+
+## Features
+
+### 5-Point Facial Landmarks
+
+The API detects 5 key facial landmarks for each face:
+
+1. **Left Eye** - Center point of the left eye
+2. **Right Eye** - Center point of the right eye
+3. **Nose Tip** - Tip of the nose
+4. **Left Mouth Corner** - Left corner of the mouth
+5. **Right Mouth Corner** - Right corner of the mouth
+
+### Face Tracking for Videos
+
+For video content, the API provides advanced face tracking:
+
+- **Persistent Face IDs** - Tracks the same face across multiple frames
+- **Removed Faces** - Identifies faces that were present in previous frames but are no longer visible
+- **Frame Timing** - Provides timestamp information for each frame
+
+### Auto Media Type Detection
+
+The API automatically detects whether the input is an image or video based on:
+
+- File extension (`.jpg`, `.png`, `.mp4`, `.mov`, etc.)
+- Content-Type header from the URL
+- Fallback to content analysis if needed
+
+## Best Practices
+
+### Image Requirements
+
+- **Quality**: Use high-resolution images for better detection accuracy
+- **Face Visibility**: Ensure faces are clearly visible and not obscured
+- **Lighting**: Well-lit images produce better detection results
+- **Angle**: Frontal or slight angle faces work best (±45 degrees)
+- **Size**: Face size should be at least 80x80 pixels
+
+### Video Requirements
+
+- **Duration**: Shorter videos process faster
+- **Frame Rate**: Standard frame rates (24-30 fps) are optimal
+- **Resolution**: 720p or higher recommended for best results
+- **Face Count**: API can detect multiple faces per frame
+- **Encoding**: Use standard encoding formats (H.264 recommended)
+
+### API Usage Tips
+
+- **Frame Selection**: For videos, choose `num_frames` based on video duration and required precision
+  - Short videos (< 10s): 5-10 frames
+  - Medium videos (10-30s): 10-20 frames
+  - Long videos (> 30s): 20-50 frames
+- **URL Accessibility**: Ensure the media URL is publicly accessible
+- **Supported Formats**:
+  - Images: JPG, JPEG, PNG, BMP, WEBP
+  - Videos: MP4, MOV, AVI, WEBM
+
+## Understanding the Response
+
+### Response Structure
+
+```json
+{
+  "error_code": 0,
+  "error_msg": "SUCCESS",
+  "faces_obj": {
+    "0": {
+      "landmarks": [
+        [[100, 120], [150, 120], [125, 150], [110, 180], [140, 180]]
+      ],
+      "region": [[80, 100, 100, 120]],
+      "removed": [],
+      "frame_time": null
+    }
+  }
+}
+```
+
+### Field Descriptions
+
+- **error_code**: Status code (0 = success)
+- **error_msg**: Status message or error description
+- **faces_obj**: Dictionary keyed by frame index (as string)
+  - **landmarks**: Array of 5-point landmarks for each detected face
+    - Format: `[[x1, y1], [x2, y2], [x3, y3], [x4, y4], [x5, y5]]`
+  - **region**: Bounding boxes for each detected face
+    - Format: `[x, y, width, height]` where (x, y) is the top-left corner
+  - **removed**: Bounding boxes of faces no longer visible (video only)
+  - **frame_time**: Timestamp in seconds for this frame (video only, null for images)
+
+## Common Use Cases
+
+### Face Detection for Image Processing
+
+```json
+{
+  "url": "https://example.com/portrait.jpg",
+  "num_frames": 5
+}
+```
+
+Use case: Detect faces in a portrait photo for face alignment, face recognition, or face swap preprocessing.
+
+### Face Tracking in Video Content
+
+```json
+{
+  "url": "https://example.com/video.mp4",
+  "num_frames": 15
+}
+```
+
+Use case: Track faces across video frames for video editing, face swap in videos, or facial animation.
+
+### Multiple Face Detection
+
+The API automatically detects all faces in an image or video frame. No special configuration needed.
+
+### Integration with Face Swap
+
+1. Use Face Detection API to get face landmarks
+2. Pass the landmark coordinates to Face Swap API
+3. The landmarks help ensure accurate face alignment and swapping
+
+## Error Handling
+
+### Common Errors
+
+| Error Message | Cause | Solution |
+|---------------|-------|----------|
+| "Invalid URL format" | Malformed URL provided | Ensure URL is properly formatted with protocol (http/https) |
+| "Failed to download media" | URL inaccessible or invalid | Verify URL is publicly accessible |
+| "No faces detected" | No faces found in media | Check image quality and face visibility |
+| "Failed to process media" | Media format not supported | Use supported formats (JPG, PNG, MP4, etc.) |
+| "Media type detection failed" | Unable to determine media type | Ensure file has proper extension or content-type |
+
+### Handling Failed Requests
+
+```python
+# Example error handling in Python
+response = requests.post(
+    "https://face_detect.akool.io/detect_faces",
+    json={"url": image_url, "num_frames": 5},
+    headers={"x-api-key": "YOUR_API_KEY"}
+)
+
+result = response.json()
+if result["error_code"] != 0:
+    print(f"Error: {result['error_msg']}")
+else:
+    faces = result["faces_obj"]
+    print(f"Detected {len(faces['0']['landmarks'])} faces")
+```
+
+## Performance Considerations
+
+### Processing Time
+
+- **Images**: Typically < 1 second
+- **Videos**: Varies based on:
+  - Number of frames requested
+  - Video resolution
+  - Number of faces per frame
+
+### Rate Limits
+
+<Warning>
+  Rate limits apply to all API endpoints. Please refer to your account settings for specific limits.
+</Warning>
+
+### Optimization Tips
+
+- Use appropriate `num_frames` value - more frames = longer processing time
+- Cache results when processing the same media multiple times
+- Process videos in batches if analyzing many videos
+
+## Support
+
+For additional help and examples, check out:
+- [Authentication Guide](/authentication/usage)
+- [API Error Codes](/ai-tools-suite/error-code)
+- [Face Swap Integration](/ai-tools-suite/faceswap)
+
+Need help? Contact us at info@akool.com
+
