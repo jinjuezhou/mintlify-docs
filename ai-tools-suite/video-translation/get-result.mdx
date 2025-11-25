@@ -1,0 +1,18 @@
+---
+title: "Get Video Translation Result"
+description: "Check the status and retrieve results of video translation jobs"
+openapi: "GET /api/open/v3/content/video/infobymodelid"
+---
+
+Check the processing status of your video translation job and retrieve the translated video URL when completed. Use the `_id` returned from the [Create Video Translation](/ai-tools-suite/video-translation/create-translation) API.
+
+## Status Codes
+
+| **Status** | **Description** |
+|------------|-----------------|
+| 1 | Queueing - Your request is waiting to be processed |
+| 2 | Processing - Video translation is currently being generated |
+| 3 | Completed - Translation finished successfully, video URL is available |
+| 4 | Failed - Translation failed, check error_code and error_reason for details |
+
+
