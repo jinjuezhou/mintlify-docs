@@ -1,0 +1,216 @@
+openapi: 3.0.3
+info:
+  title: Face Detection API
+  description: |
+    API for detecting faces in images and videos with bounding boxes and 5-point landmarks.
+    
+    This API provides:
+    - Unified face detection for both images and videos
+    - Face tracking across video frames
+    - 5-point facial landmarks detection
+    - Bounding box coordinates for each detected face
+  version: 1.0.0
+servers:
+  - url: https://openapi.akool.com/interface/detect-api
+    description: Face detection server
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+
+paths:
+  /detect_faces:
+    post:
+      summary: Detect Faces in Video or Image
+      description: |
+        Unified endpoint to detect faces in either video or image from URL asynchronously.
+        
+        This endpoint:
+        1. Auto-detects media type (video/image) based on URL
+        2. Downloads media from the provided URL asynchronously
+        3. Processes media (extracts frames for video, loads image for image)
+        4. Detects faces using InsightFace with face tracking for videos
+        5. Returns bounding boxes and 5-point landmarks for each detected face
+        6. For videos, tracks faces across frames and marks previous positions as removed
+      tags:
+        - Face Detection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnifiedFaceDetectionRequest'
+            examples:
+              image_detection:
+                summary: Image Face Detection (num_frames not required)
+                value:
+                  url: "https://example.com/image.jpg"
+              video_detection:
+                summary: Video Face Detection (num_frames required)
+                value:
+                  url: "https://example.com/video.mp4"
+                  num_frames: 10
+      responses:
+        '200':
+          description: Face detection completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaceDetectionResponse'
+              examples:
+                image_success:
+                  summary: Successful Image Detection
+                  value:
+                    error_code: 0
+                    error_msg: "SUCCESS"
+                    faces_obj:
+                      "0":
+                        landmarks: [[[100, 120], [150, 120], [125, 150], [110, 180], [140, 180]]]
+                        region: [[80, 100, 100, 120]]
+                        removed: []
+                        frame_time: null
+                video_success:
+                  summary: Successful Video Detection
+                  value:
+                    error_code: 0
+                    error_msg: "SUCCESS"
+                    faces_obj:
+                      "0":
+                        landmarks: [[[100, 120], [150, 120], [125, 150], [110, 180], [140, 180]]]
+                        region: [[80, 100, 100, 120]]
+                        removed: []
+                        frame_time: 0.0
+                      "5":
+                        landmarks: [[[105, 125], [155, 125], [130, 155], [115, 185], [145, 185]]]
+                        region: [[85, 105, 100, 120]]
+                        removed: [[80, 100, 100, 120]]
+                        frame_time: 0.2
+        '400':
+          description: Bad request - Invalid input parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaceDetectionResponse'
+              example:
+                error_code: 1
+                error_msg: "Invalid URL format"
+                faces_obj: {}
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaceDetectionResponse'
+              example:
+                error_code: 1
+                error_msg: "Failed to process media"
+                faces_obj: {}
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded.
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Your API Key used for request authorization. Get Token from authentication/usage#get-the-token
+
+  schemas:
+    UnifiedFaceDetectionRequest:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          format: uri
+          description: URL of the video or image to process. The media type will be auto-detected based on the file extension.
+          example: "https://example.com/media.mp4"
+        num_frames:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 5
+          description: Number of frames to extract and analyze (only used for videos, ignored for images)
+          example: 5
+
+    FaceFrameData:
+      type: object
+      required:
+        - landmarks
+        - region
+        - removed
+      properties:
+        landmarks:
+          type: array
+          description: |
+            List of 5-point facial landmarks for each detected face.
+            Each face has 5 landmark points: left eye, right eye, nose tip, left mouth corner, right mouth corner.
+            Format: [[[x1, y1], [x2, y2], [x3, y3], [x4, y4], [x5, y5]], ...]
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                type: integer
+          example: [[[100, 120], [150, 120], [125, 150], [110, 180], [140, 180]]]
+        region:
+          type: array
+          description: |
+            List of bounding boxes for each detected face.
+            Format: [[x, y, width, height], ...]
+            Where (x, y) is the top-left corner of the bounding box
+          items:
+            type: array
+            items:
+              type: integer
+          example: [[80, 100, 100, 120]]
+        removed:
+          type: array
+          description: |
+            List of face regions that were detected in previous frames but are no longer present (for video tracking).
+            Format: [[x, y, width, height], ...]
+            Empty array for images or first frame of videos
+          items:
+            type: array
+            items:
+              type: integer
+          example: [[75, 95, 95, 115]]
+        frame_time:
+          type: number
+          format: float
+          nullable: true
+          description: Time in seconds for this frame in the video. Null for images.
+          example: 0.2
+
+    FaceDetectionResponse:
+      type: object
+      required:
+        - error_code
+        - error_msg
+        - faces_obj
+      properties:
+        error_code:
+          type: integer
+          description: "Error code (0: success, 1: error)"
+          example: 0
+        error_msg:
+          type: string
+          description: Error message or success message
+          example: "SUCCESS"
+        faces_obj:
+          type: object
+          description: |
+            Dictionary of face detection results keyed by frame index (as string).
+            For images, only frame "0" will be present.
+            For videos, multiple frames will be present (e.g., "0", "5", "10", etc.)
+          additionalProperties:
+            $ref: '#/components/schemas/FaceFrameData'
+          example:
+            "0":
+              landmarks: [[[100, 120], [150, 120], [125, 150], [110, 180], [140, 180]]]
+              region: [[80, 100, 100, 120]]
+              removed: []
+              frame_time: null
