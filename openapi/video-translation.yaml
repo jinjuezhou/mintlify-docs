@@ -33,13 +33,6 @@ paths:
               remove_bgm: true
               caption_type: 2
               caption_url: "https://drz0f01yeq1cx.cloudfront.net/1759979948074-b14aeb874a4547ca81373d140edd02d2-1758273867083fa8fa1ca7cfe409ab7fb07abdb931660translatedsubtitles.srt"
-              voices_map:
-                ja:
-                  voice_id: ""
-                "zh-CN-shandong":
-                  voice_id: "6889b755662160e2caad5fdf"
-                "zh-CN-sichuan":
-                  voice_id: "6889b74e662160e2caad5fd5"
               studio_voice:
                 no_translate_words: ["kaka", "lal"]
                 fixed_words:
@@ -88,46 +81,6 @@ paths:
                     properties:
                       data:
                         $ref: '#/components/schemas/VideoTranslationStatus'
-
-  /api/open/v4/voice/videoTranslation:
-    get:
-      summary: Get AI Voices List
-      description: Retrieve available AI voices for video translation
-      tags:
-        - Video Translation
-      parameters:
-        - name: language_code
-          in: query
-          required: false
-          schema:
-            type: string
-          description: Language code to filter voice list for specific language (e.g., "zh-CN-shandong")
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            default: 1
-          description: Page number for pagination
-        - name: size
-          in: query
-          required: false
-          schema:
-            type: integer
-            default: 100
-          description: Number of items per page
-      responses:
-        '200':
-          description: AI voices list retrieved successfully
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/VoicesListResponse'
 
   /api/open/v3/language/list:
     get:
@@ -208,15 +161,6 @@ components:
         caption_url:
           type: string
           description: Subtitle file URL (supports SRT or ASS files)
-        voices_map:
-          type: object
-          description: Voice language mapping configuration
-          additionalProperties:
-            type: object
-            properties:
-              voice_id:
-                type: string
-                description: Voice ID for the target language. Use empty string for default voice
         studio_voice:
           type: object
           description: Advanced voice and translation settings
@@ -296,82 +240,6 @@ components:
           type: string
           description: Detailed error description (only when video_status = 4)
 
-    VoicesListResponse:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number
-        size:
-          type: integer
-          description: Items per page
-        count:
-          type: integer
-          description: Total number of items
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/VoiceItem'
-          description: Array of voice items
-
-    VoiceItem:
-      type: object
-      properties:
-        _id:
-          type: string
-          description: Unique identifier for the voice
-        voice_id:
-          type: string
-          description: Voice ID used for API calls
-        gender:
-          type: string
-          description: Voice gender (Male/Female)
-        language:
-          type: string
-          description: Voice language name
-        name:
-          type: string
-          description: Voice name
-        preview:
-          type: string
-          description: Preview audio URL
-        thumbnailUrl:
-          type: string
-          description: Voice avatar image URL
-        create_time:
-          type: integer
-          description: Voice creation timestamp
-        flag_url:
-          type: string
-          description: Language flag image URL
-        useCase:
-          type: string
-          description: Voice use case category
-        category:
-          type: string
-          description: Voice category
-        age:
-          type: array
-          items:
-            type: string
-          description: Age range tags
-        style:
-          type: array
-          items:
-            type: string
-          description: Voice style tags
-        duration:
-          type: integer
-          description: Preview audio duration in milliseconds
-        scenario:
-          type: array
-          items:
-            type: string
-          description: Recommended usage scenarios
-        language_code:
-          type: string
-          description: Language code identifier
-
     LanguageListResponse:
       type: object
       properties:
@@ -393,6 +261,3 @@ components:
         url:
           type: string
           description: Language flag icon URL
-        need_voice_id:
-          type: boolean
-          description: Whether this language requires selecting an AI voice ID

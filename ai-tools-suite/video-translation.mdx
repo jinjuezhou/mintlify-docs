@@ -16,12 +16,10 @@ Experience our video translation technology in action by exploring our interacti
 
 ### Translation Operations
 
-- [Create Video Translation](/ai-tools-suite/video-translation/create-translation) - Translate videos into multiple languages with AI voices and lip-sync
+- [Create Video Translation](/ai-tools-suite/video-translation/create-translation) - Translate videos into multiple languages and lip-sync
 - [Get Translation Result](/ai-tools-suite/video-translation/get-result) - Check processing status and retrieve translated video URLs
 
 ### Resource Management
-
-- [Get AI Voices List](/ai-tools-suite/video-translation/get-voices) - Retrieve available AI voices for video translation
 - [Get Language List](/ai-tools-suite/video-translation/get-languages) - Get supported languages for translation
 
 ## Getting Started
@@ -32,18 +30,13 @@ Experience our video translation technology in action by exploring our interacti
    - Use the [Get Language List API](/ai-tools-suite/video-translation/get-languages) to see all supported target languages
    - Note which languages require specific voice IDs
 
-2. **Choose AI Voices (Optional)**:
-   - Use the [Get AI Voices List API](/ai-tools-suite/video-translation/get-voices) to browse available voices
-   - Filter by language code to find voices for your target language
-   - Use voice previews to select the best voice for your content
-
-3. **Create Translation**:
+2. **Create Translation**:
    - Call the [Create Video Translation API](/ai-tools-suite/video-translation/create-translation) with your video URL
    - Set `source_language` to "DEFAULT" for automatic language detection
    - Specify target languages and optional voice mappings
    - Configure additional options like lip-sync, captions, and background music removal
 
-4. **Monitor Progress**:
+3. **Monitor Progress**:
    - Use the [Get Translation Result API](/ai-tools-suite/video-translation/get-result) to check processing status
    - Download the translated video URL when status reaches "Completed" (status = 3)
 
@@ -54,9 +47,6 @@ Set `source_language` to "DEFAULT" to automatically detect the original language
 
 #### Multiple Language Translation
 Translate to multiple languages simultaneously by providing comma-separated language codes in the `language` parameter.
-
-#### AI Voice Selection
-Choose from a variety of AI voices for each target language to match your content's tone and style.
 
 #### Lip-Sync Technology
 Enable `lipsync` to synchronize mouth movements with the translated audio for more natural-looking results.
@@ -118,7 +108,6 @@ When checking results, the `video_status` field indicates the current processing
 - **Clear Speech**: Videos with clear, well-articulated speech produce better translations
 - **Background Noise**: Consider using `remove_bgm: true` to remove background music for clearer voice translation
 - **Speaker Count**: Specify the correct number of speakers for better voice separation
-- **Custom Voices**: Select appropriate AI voices that match your content's tone and target audience
 
 ### API Usage Tips
 
@@ -129,7 +118,7 @@ When checking results, the `video_status` field indicates the current processing
 
 ## Common Use Cases
 
-### Single Language Translation with Auto-Detection
+### Single Language Translation
 
 ```json
 {
@@ -137,15 +126,10 @@ When checking results, the `video_status` field indicates the current processing
   "source_language": "DEFAULT",
   "language": "es",
   "lipsync": true,
-  "voices_map": {
-    "es": {
-      "voice_id": "spanish_voice_id"
-    }
-  }
 }
 ```
 
-### Multi-Language Translation with Custom Voices
+### Multi-Language Translation
 
 ```json
 {
@@ -153,11 +137,6 @@ When checking results, the `video_status` field indicates the current processing
   "source_language": "DEFAULT",
   "language": "es,fr,de",
   "lipsync": false,
-  "voices_map": {
-    "es": {"voice_id": "spanish_voice_id"},
-    "fr": {"voice_id": "french_voice_id"},
-    "de": {"voice_id": "german_voice_id"}
-  },
   "caption_type": 2,
   "remove_bgm": true
 }
@@ -171,9 +150,6 @@ When checking results, the `video_status` field indicates the current processing
   "source_language": "DEFAULT",
   "language": "zh-CN",
   "lipsync": true,
-  "voices_map": {
-    "zh-CN": {"voice_id": "professional_chinese_voice"}
-  },
   "studio_voice": {
     "style": "professional",
     "no_translate_words": ["AKool", "API"],
