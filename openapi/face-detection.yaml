@@ -11,7 +11,7 @@ info:
     - Bounding box coordinates for each detected face
   version: 1.0.0
 servers:
-  - url: https://face_detect.akool.io
+  - url: https://openapi.akool.com/interface/detect-api
     description: Face detection server
 security:
   - ApiKeyAuth: []

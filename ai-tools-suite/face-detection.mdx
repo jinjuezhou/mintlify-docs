@@ -189,14 +189,14 @@ The API automatically detects all faces in an image or video frame. No special c
 
 # For image detection (no num_frames needed)
 response = requests.post(
-    "https://face_detect.akool.io/detect_faces",
+    "https://openapi.akool.com/interface/detect-api/detect_faces",
     json={"url": "https://example.com/image.jpg"},
     headers={"x-api-key": "YOUR_API_KEY"}
 )
 
 # For video detection (num_frames required)
 # response = requests.post(
-#     "https://face_detect.akool.io/detect_faces",
+#     "https://openapi.akool.com/interface/detect-api/detect_faces",
 #     json={"url": "https://example.com/video.mp4", "num_frames": 10},
 #     headers={"x-api-key": "YOUR_API_KEY"}
 # )
