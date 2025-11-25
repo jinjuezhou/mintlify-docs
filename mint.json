@@ -133,7 +133,6 @@
           "pages": [
             "ai-tools-suite/video-translation/create-translation",
             "ai-tools-suite/video-translation/get-result",
-            "ai-tools-suite/video-translation/get-voices",
             "ai-tools-suite/video-translation/get-languages"
           ]
         }
