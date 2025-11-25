@@ -6,7 +6,7 @@
     "dark": "/logo/akool-dark.svg"
   },
   "favicon": "/favicon.svg",
-  "openapi": ["/openapi/live-avatar.yaml", "/openapi/faceswap.yaml"],
+  "openapi": ["/openapi/live-avatar.yaml", "/openapi/faceswap.yaml", "/openapi/talking-photo.yaml"],
   "api": {
     "baseUrl": "https://openapi.akool.com",
     "playground": {
@@ -112,13 +112,25 @@
       ]
     },
     {
+      "group": "Talking Photo",
+      "pages": [
+        "ai-tools-suite/talking-photo",
+        {
+          "group": "API Endpoints",
+          "pages": [
+            "ai-tools-suite/talking-photo/create-video",
+            "ai-tools-suite/talking-photo/get-result"
+          ]
+        }
+      ]
+    },
+    {
       "group": "AI Tools Suite",
       "pages": [
         "ai-tools-suite/live-faceswap",
         "ai-tools-suite/reage",
         "ai-tools-suite/voiceLab",
         "ai-tools-suite/video-translation",
-        "ai-tools-suite/talking-photo",
         "ai-tools-suite/talking-avatar",
         "ai-tools-suite/background-change",
         "ai-tools-suite/lip-sync",
