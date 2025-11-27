@@ -86,7 +86,13 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '#/components/schemas/FaceswapResult'
+                        $ref: '#/components/schemas/FaceswapV4Result'
+              example:
+                code: 1000
+                msg: "OK"
+                data:
+                  _id: "6593c94c0ef703e8c055e3c8"
+                  job_id: "20240102082900592-5653"
 
   /api/open/v3/faceswap/highquality/specifyvideo:
     post:
@@ -367,6 +373,16 @@ components:
         url:
           type: string
           description: Faceswap result URL
+        job_id:
+          type: string
+          description: Task processing unique ID
+
+    FaceswapV4Result:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Interface returns data ID
         job_id:
           type: string
           description: Task processing unique ID
