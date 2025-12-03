@@ -159,6 +159,7 @@
         "ai-tools-suite/image-generate",
         "ai-tools-suite/jarvis-moderator",
         "ai-tools-suite/image2video",
+        "ai-tools-suite/aimodel",
         "ai-tools-suite/webhook",
         "ai-tools-suite/error-code"
       ]
