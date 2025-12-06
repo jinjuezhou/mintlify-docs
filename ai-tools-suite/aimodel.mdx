@@ -23,7 +23,6 @@ GET https://openapi.akool.com/api/open/v4/aigModel/list
 | **Parameter** | **Type** | **Required** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | types         | Array    | true         | Array of model types to retrieve. At least one type is required |
-| supportedReference | Boolean | false    | Filter to only return models that support reference images. Default: false |
 
 **Supported Model Types**
 
@@ -61,7 +60,6 @@ GET https://openapi.akool.com/api/open/v4/aigModel/list
 | requiresPay   | Boolean  | Whether a paid account is required |
 | supportedLastFrame | Boolean | Whether the model supports last frame specification |
 | supportedExtendPrompt | Boolean | Whether the model supports prompt extension |
-| supportedReference | Boolean | Whether the model supports reference images |
 | maxImageCount | Integer  | Maximum number of reference images supported |
 | batchQuantity | Array    | Supported batch quantities |
 | maxCount      | Integer  | Maximum number of items per batch |
@@ -190,7 +188,6 @@ print(response.text)
       "requiresPay": false,
       "supportedLastFrame": false,
       "supportedExtendPrompt": false,
-      "supportedReference": false,
       "maxImageCount": 1,
       "batchQuantity": [1],
       "maxCount": 10
@@ -235,7 +232,6 @@ print(response.text)
       "requiresPay": false,
       "supportedLastFrame": true,
       "supportedExtendPrompt": false,
-      "supportedReference": false,
       "maxImageCount": 1,
       "batchQuantity": [1],
       "maxCount": 10
@@ -278,7 +274,6 @@ print(response.text)
       // Features
       supportedLastFrame: false,
       supportedExtendPrompt: false,
-      supportedReference: false,
       maxImageCount: 1,
       batchQuantity: [1]
     }

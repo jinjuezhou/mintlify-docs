@@ -276,10 +276,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
 | negative_prompt | String | false        | Prompt text describing what to avoid in the animation |
 | extend_prompt | Boolean | false        | Whether to use algorithm default extended prompts |
 | resolution    | String   | true         | Resolution value (e.g., 720p, 1080p, 4k). Available options are retrieved from the resolutionList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
-| audio_url     | String   | false        | Audio URL, required when audio_type = 2 |
-| audio_type    | Integer  | true         | Audio type: 1 = AI generate, 2 = user custom upload, 3 = none (no audio) |
 | video_length  | Integer  | true         | Video duration in seconds. Available durations are retrieved from the durationList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
-| effect_code   | String   | false        | Effect code: if specified, prompt content will be ignored.[Get Effect Code](/ai-tools-suite/image2video#get-available-effects) |
 | count         | Integer  | false        | Number of videos to create simultaneously (1-10), default: 1 |
 | webhookurl    | String   | false        | Callback URL for POST requests |
 
@@ -310,10 +307,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
 | prompt        | String   | Animation prompt |
 | negative_prompt | String | Negative prompt |
 | extend_prompt | Boolean  | Whether extended prompts were used |
-| audio_type    | Integer  | Audio type used |
-| audio_url     | String   | Audio URL used |
 | deduction_credit | Integer | Credits deducted |
-| effect_code   | String   | Effect code used |
 | model_name    | String   | AI model name used |
 | batch_id      | String   | Batch ID for grouping videos created in the same request |
 | batch_count   | Integer  | Total number of videos in this batch |
@@ -330,7 +324,6 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
   "negative_prompt": "blurry, distorted, low quality",
   "extend_prompt": true,
   "resolution": "720p",
-  "audio_type": 3,
   "video_length": 5,
   "count": 3
 }
@@ -351,7 +344,6 @@ curl --location 'https://openapi.akool.com/api/open/v4/image2Video/createBySourc
   "negative_prompt": "blurry, distorted, low quality",
   "extend_prompt": true,
   "resolution": "720p",
-  "audio_type": 3,
   "video_length": 5,
   "count": 3
 }'
@@ -361,7 +353,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/image2Video/createBySourc
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n  \"image_url\": \"https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png\",\n  \"prompt\": \"Animate this image with smooth camera movement and subtle object motion.\",\n  \"model_name\": \"seedance-1-0-lite-i2v-250428\",\n  \"negative_prompt\": \"blurry, distorted, low quality\",\n  \"extend_prompt\": true,\n  \"resolution\": \"720p\",\n  \"audio_type\": 3,\n  \"video_length\": 5,\n  \"count\": 3\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"image_url\": \"https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png\",\n  \"prompt\": \"Animate this image with smooth camera movement and subtle object motion.\",\n  \"model_name\": \"seedance-1-0-lite-i2v-250428\",\n  \"negative_prompt\": \"blurry, distorted, low quality\",\n  \"extend_prompt\": true,\n  \"resolution\": \"720p\",\n  \"video_length\": 5,\n  \"count\": 3\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batch")
   .method("POST", body)
@@ -383,7 +375,6 @@ const raw = JSON.stringify({
   "negative_prompt": "blurry, distorted, low quality",
   "extend_prompt": true,
   "resolution": "720p",
-  "audio_type": 3,
   "video_length": 5,
   "count": 3
 });
@@ -415,7 +406,6 @@ $body = '{
   "negative_prompt": "blurry, distorted, low quality",
   "extend_prompt": true,
   "resolution": "720p",
-  "audio_type": 3,
   "video_length": 5,
   "count": 3
 }';
@@ -438,7 +428,6 @@ payload = json.dumps({
   "negative_prompt": "blurry, distorted, low quality",
   "extend_prompt": True,
   "resolution": "720p",
-  "audio_type": 3,
   "video_length": 5,
   "count": 3
 })
@@ -474,7 +463,6 @@ print(response.text)
         "prompt": "Animate this image with smooth camera movement and subtle object motion.",
         "negative_prompt": "blurry, distorted, low quality",
         "extend_prompt": true,
-        "audio_type": 3,
         "deduction_credit": 5,
         "model_name": "seedance-1-0-lite-i2v-250428",
         "batch_id": "1754362985482_101400",
@@ -493,7 +481,6 @@ print(response.text)
         "prompt": "Animate this image with smooth camera movement and subtle object motion.",
         "negative_prompt": "blurry, distorted, low quality",
         "extend_prompt": true,
-        "audio_type": 3,
         "deduction_credit": 5,
         "model_name": "seedance-1-0-lite-i2v-250428",
         "batch_id": "1754362985482_101400",
@@ -512,7 +499,6 @@ print(response.text)
         "prompt": "Animate this image with smooth camera movement and subtle object motion.",
         "negative_prompt": "blurry, distorted, low quality",
         "extend_prompt": true,
-        "audio_type": 3,
         "deduction_credit": 5,
         "model_name": "seedance-1-0-lite-i2v-250428",
         "batch_id": "1754362985482_101400",
