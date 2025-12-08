@@ -50,10 +50,8 @@ GET https://openapi.akool.com/api/open/v4/aigModel/list
 | label         | String   | Display name of the model |
 | value         | String   | Model identifier to use in API calls |
 | description   | String   | Model description |
-| tags          | Array    | Model tags (e.g., ["fast", "recommended", "new"]) |
 | resolutionList | Array   | Supported resolutions with pricing details |
 | isPro         | Boolean  | Whether this is a premium model |
-| unit_credit   | Integer  | Base credit cost per unit |
 | generate_audio | Boolean/null | Whether the model supports audio generation |
 | durationList  | Array    | Supported video durations in seconds |
 | requiresPay   | Boolean  | Whether a paid account is required |
@@ -70,7 +68,6 @@ GET https://openapi.akool.com/api/open/v4/aigModel/list
 | value         | String   | Resolution value (e.g., "720p", "1080p") |
 | width         | Integer  | Video width in pixels |
 | height        | Integer  | Video height in pixels |
-| unit_credit   | Integer  | Credit cost for this resolution |
 
 ## Examples
 
@@ -154,7 +151,6 @@ print(response.text)
       "label": "Akool Image2Video Fast V1",
       "value": "AkoolImage2VideoFastV1",
       "description": "Fast image to video generation with Akool's AI",
-      "tags": ["fast", "recommended"],
       "resolutionList": [
         {
           "label": "720p",
@@ -179,7 +175,6 @@ print(response.text)
         }
       ],
       "isPro": false,
-      "unit_credit": 5,
       "generate_audio": null,
       "durationList": [5, 10],
       "requiresPay": false,
@@ -196,7 +191,6 @@ print(response.text)
       "label": "Seedance Lite Image2Video",
       "value": "seedance-1-0-lite-i2v-250428",
       "description": "Seedance Lite model for image to video generation",
-      "tags": ["lite", "cost-effective"],
       "resolutionList": [
         {
           "label": "480p",
@@ -221,7 +215,6 @@ print(response.text)
         }
       ],
       "isPro": false,
-      "unit_credit": 5,
       "generate_audio": null,
       "durationList": [5, 10],
       "requiresPay": false,
@@ -252,10 +245,8 @@ print(response.text)
       label: "Model Name",
       value: "model_identifier",
       description: "Description",
-      tags: ["tag1", "tag2"],
       
       // Pricing & limits
-      unit_credit: 5,
       requiresPay: false,
       isPro: false,
       maxCount: 10,
