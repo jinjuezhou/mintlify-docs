@@ -51,7 +51,6 @@ GET https://openapi.akool.com/api/open/v4/aigModel/list
 | value         | String   | Model identifier to use in API calls |
 | description   | String   | Model description |
 | tags          | Array    | Model tags (e.g., ["fast", "recommended", "new"]) |
-| ratioList     | Array    | Supported aspect ratios |
 | resolutionList | Array   | Supported resolutions with pricing details |
 | isPro         | Boolean  | Whether this is a premium model |
 | unit_credit   | Integer  | Base credit cost per unit |
@@ -156,7 +155,6 @@ print(response.text)
       "value": "AkoolImage2VideoFastV1",
       "description": "Fast image to video generation with Akool's AI",
       "tags": ["fast", "recommended"],
-      "ratioList": [],
       "resolutionList": [
         {
           "label": "720p",
@@ -199,7 +197,6 @@ print(response.text)
       "value": "seedance-1-0-lite-i2v-250428",
       "description": "Seedance Lite model for image to video generation",
       "tags": ["lite", "cost-effective"],
-      "ratioList": [],
       "resolutionList": [
         {
           "label": "480p",
@@ -266,7 +263,6 @@ print(response.text)
       // Supported parameters
       resolutionList: [...],
       durationList: [5, 10],
-      ratioList: [],
       
       // Features
       supportedLastFrame: false,
