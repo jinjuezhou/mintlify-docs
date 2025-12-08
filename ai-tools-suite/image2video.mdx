@@ -277,6 +277,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
 | extend_prompt | Boolean | false        | Whether to use algorithm default extended prompts |
 | resolution    | String   | true         | Resolution value (e.g., 720p, 1080p, 4k). Available options are retrieved from the resolutionList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
 | video_length  | Integer  | true         | Video duration in seconds. Available durations are retrieved from the durationList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
+| last_image_url | String  | false        | URL of the image to use as the last frame of the video |
 | count         | Integer  | false        | Number of videos to create simultaneously (1-10), default: 1 |
 | webhookurl    | String   | false        | Callback URL for POST requests |
 
@@ -307,6 +308,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
 | prompt        | String   | Animation prompt |
 | negative_prompt | String | Negative prompt |
 | extend_prompt | Boolean  | Whether extended prompts were used |
+| last_image_url | String  | Last frame image URL |
 | deduction_credit | Integer | Credits deducted |
 | model_name    | String   | AI model name used |
 | batch_id      | String   | Batch ID for grouping videos created in the same request |
@@ -325,6 +327,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
   "extend_prompt": true,
   "resolution": "720p",
   "video_length": 5,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
   "count": 3
 }
 ```
@@ -345,6 +348,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/image2Video/createBySourc
   "extend_prompt": true,
   "resolution": "720p",
   "video_length": 5,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
   "count": 3
 }'
 ```
@@ -353,7 +357,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/image2Video/createBySourc
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n  \"image_url\": \"https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png\",\n  \"prompt\": \"Animate this image with smooth camera movement and subtle object motion.\",\n  \"model_name\": \"seedance-1-0-lite-i2v-250428\",\n  \"negative_prompt\": \"blurry, distorted, low quality\",\n  \"extend_prompt\": true,\n  \"resolution\": \"720p\",\n  \"video_length\": 5,\n  \"count\": 3\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"image_url\": \"https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png\",\n  \"prompt\": \"Animate this image with smooth camera movement and subtle object motion.\",\n  \"model_name\": \"seedance-1-0-lite-i2v-250428\",\n  \"negative_prompt\": \"blurry, distorted, low quality\",\n  \"extend_prompt\": true,\n  \"resolution\": \"720p\",\n  \"video_length\": 5,\n  \"last_image_url\": \"https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png\",\n  \"count\": 3\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batch")
   .method("POST", body)
@@ -376,6 +380,7 @@ const raw = JSON.stringify({
   "extend_prompt": true,
   "resolution": "720p",
   "video_length": 5,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
   "count": 3
 });
 
@@ -407,6 +412,7 @@ $body = '{
   "extend_prompt": true,
   "resolution": "720p",
   "video_length": 5,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
   "count": 3
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batch', $headers, $body);
@@ -429,6 +435,7 @@ payload = json.dumps({
   "extend_prompt": True,
   "resolution": "720p",
   "video_length": 5,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
   "count": 3
 })
 headers = {
