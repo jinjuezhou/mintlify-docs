@@ -61,7 +61,6 @@ GET https://openapi.akool.com/api/open/v4/aigModel/list
 | supportedLastFrame | Boolean | Whether the model supports last frame specification |
 | supportedExtendPrompt | Boolean | Whether the model supports prompt extension |
 | maxImageCount | Integer  | Maximum number of reference images supported |
-| batchQuantity | Array    | Supported batch quantities |
 | maxCount      | Integer  | Maximum number of items per batch |
 
 **resolutionList Item Attributes**
@@ -189,7 +188,6 @@ print(response.text)
       "supportedLastFrame": false,
       "supportedExtendPrompt": false,
       "maxImageCount": 1,
-      "batchQuantity": [1],
       "maxCount": 10
     },
     {
@@ -233,7 +231,6 @@ print(response.text)
       "supportedLastFrame": true,
       "supportedExtendPrompt": false,
       "maxImageCount": 1,
-      "batchQuantity": [1],
       "maxCount": 10
     }
   ]
@@ -275,7 +272,6 @@ print(response.text)
       supportedLastFrame: false,
       supportedExtendPrompt: false,
       maxImageCount: 1,
-      batchQuantity: [1]
     }
   ]
 }
