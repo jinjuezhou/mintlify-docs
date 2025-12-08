@@ -103,6 +103,7 @@ Each frame object contains:
 - Type: `array`
 - String representation of the landmarks
 - Format: `["x1,y1:x2,y2:x3,y3:x4,y4:x5,y5:x6,y6"]`
+- **For Face Swap API**: When using this for the `opts` parameter in Face Swap, only use the first 4 coordinate pairs (Left Eye, Right Eye, Nose, Mouth Center). Truncate the string after the 4th point (e.g., `x1,y1:x2,y2:x3,y3:x4,y4`).
 
 ##### region
 - Type: `array`
@@ -245,6 +246,7 @@ For image detection, the `num_frames` parameter is not required and will be igno
 
 ### 1. Face Swap Preprocessing
 Detect face landmarks to prepare images for face swapping operations.
+- **Note**: When using the landmarks for the Face Swap API (`opts` parameter), extract only the first 4 groups of coordinates from `landmarks_str` (Left Eye, Right Eye, Nose, Mouth Center).
 
 ### 2. Face Recognition
 Extract face regions and landmarks for face recognition systems.

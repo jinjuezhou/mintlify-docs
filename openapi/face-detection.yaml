@@ -164,6 +164,7 @@ components:
           description: |
             String representation of the landmarks.
             Format: ["x1,y1:x2,y2:x3,y3:x4,y4:x5,y5:x6,y6"]
+            Note: For Face Swap API `opts` parameter, only use the first 4 points (x1,y1:x2,y2:x3,y3:x4,y4).
           items:
             type: string
           example: ["294,65:316,64:304,76:305,86:296,86:314,85"]
