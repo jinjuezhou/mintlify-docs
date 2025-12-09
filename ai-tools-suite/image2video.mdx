@@ -252,6 +252,305 @@ print(response.text)
 }
 ```
 
+
+## Create Batch Image to Video
+
+```
+POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batch
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                               |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Required** | **Description**                                                                                                                                        |
+|---------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| image_url     | String   | true         | Image URL to be animated |
+| prompt        | String   | true         | Prompt text describing how to animate the image |
+| model_name    | String   | false        | AI model name (get available models from [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list)) |
+| negative_prompt | String | false        | Prompt text describing what to avoid in the animation |
+| extend_prompt | Boolean | false        | Whether to use algorithm default extended prompts |
+| resolution    | String   | true         | Resolution value (e.g., 720p, 1080p, 4k). Available options are retrieved from the resolutionList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
+| video_length  | Integer  | true         | Video duration in seconds. Available durations are retrieved from the durationList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
+| last_image_url | String  | false        | URL of the image to use as the last frame of the video |
+| count         | Integer  | false        | Number of videos to create simultaneously (1-10), default: 1 |
+| webhookurl    | String   | false        | Callback URL for POST requests |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| code          | Integer  | Interface returns business status code (1000:success)                                                                                                                                                                   |
+| msg           | String   | Interface returns status information                                                                                                                                                                                   |
+| data          | Object   | Response data object |
+| - successList | Array    | Array of successfully created video tasks |
+| - errorList   | Array    | Array of failed tasks with error information |
+
+**successList Item Attributes**
+
+| **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| _id           | String   | Document ID |
+| create_time   | Long     | Creation timestamp |
+| uid           | Integer  | User ID |
+| team_id       | String   | Team ID |
+| status        | Integer  | Task status: 1=queueing, 2=processing, 3=completed, 4=failed |
+| webhookUrl    | String   | Callback URL |
+| resolution    | String   | Video resolution |
+| file_name     | String   | Output file name |
+| effect_name   | String   | Effect name |
+| image_url     | String   | Input image URL |
+| prompt        | String   | Animation prompt |
+| negative_prompt | String | Negative prompt |
+| extend_prompt | Boolean  | Whether extended prompts were used |
+| last_image_url | String  | Last frame image URL |
+| deduction_credit | Integer | Credits deducted |
+| model_name    | String   | AI model name used |
+| batch_id      | String   | Batch ID for grouping videos created in the same request |
+| batch_count   | Integer  | Total number of videos in this batch |
+
+**Example**
+
+**Body**
+
+```json
+{
+  "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+  "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+  "model_name": "seedance-1-0-lite-i2v-250428",
+  "negative_prompt": "blurry, distorted, low quality",
+  "extend_prompt": true,
+  "resolution": "720p",
+  "video_length": 5,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
+  "count": 3
+}
+```
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batch' \
+--header 'x-api-key: {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+  "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+  "model_name": "seedance-1-0-lite-i2v-250428",
+  "negative_prompt": "blurry, distorted, low quality",
+  "extend_prompt": true,
+  "resolution": "720p",
+  "video_length": 5,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
+  "count": 3
+}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"image_url\": \"https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png\",\n  \"prompt\": \"Animate this image with smooth camera movement and subtle object motion.\",\n  \"model_name\": \"seedance-1-0-lite-i2v-250428\",\n  \"negative_prompt\": \"blurry, distorted, low quality\",\n  \"extend_prompt\": true,\n  \"resolution\": \"720p\",\n  \"video_length\": 5,\n  \"last_image_url\": \"https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png\",\n  \"count\": 3\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batch")
+  .method("POST", body)
+  .addHeader("x-api-key", "{{API Key}}")
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("x-api-key", "{{API Key}}");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+  "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+  "model_name": "seedance-1-0-lite-i2v-250428",
+  "negative_prompt": "blurry, distorted, low quality",
+  "extend_prompt": true,
+  "resolution": "720p",
+  "video_length": 5,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
+  "count": 3
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batch", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'x-api-key' =>'{{API Key}}',
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+  "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+  "model_name": "seedance-1-0-lite-i2v-250428",
+  "negative_prompt": "blurry, distorted, low quality",
+  "extend_prompt": true,
+  "resolution": "720p",
+  "video_length": 5,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
+  "count": 3
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batch', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batch"
+
+payload = json.dumps({
+  "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+  "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+  "model_name": "seedance-1-0-lite-i2v-250428",
+  "negative_prompt": "blurry, distorted, low quality",
+  "extend_prompt": True,
+  "resolution": "720p",
+  "video_length": 5,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
+  "count": 3
+})
+headers = {
+  'x-api-key':'{{API Key}}',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "successList": [
+      {
+        "_id": "689174694b4dbdd4ab3d28c9",
+        "create_time": 1754362985482,
+        "uid": 101400,
+        "team_id": "6805fb69e92d9edc7ca0b409",
+        "status": 1,
+        "webhookUrl": "",
+        "resolution": "720p",
+        "file_name": "Image2Video_Animate this image with .mp4",
+        "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+        "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+        "negative_prompt": "blurry, distorted, low quality",
+        "extend_prompt": true,
+        "deduction_credit": 5,
+        "model_name": "seedance-1-0-lite-i2v-250428",
+        "batch_id": "1754362985482_101400",
+        "batch_count": 3
+      },
+      {
+        "_id": "689174694b4dbdd4ab3d28ca",
+        "create_time": 1754362985483,
+        "uid": 101400,
+        "team_id": "6805fb69e92d9edc7ca0b409",
+        "status": 1,
+        "webhookUrl": "",
+        "resolution": "720p",
+        "file_name": "Image2Video_Animate this image with .mp4",
+        "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+        "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+        "negative_prompt": "blurry, distorted, low quality",
+        "extend_prompt": true,
+        "deduction_credit": 5,
+        "model_name": "seedance-1-0-lite-i2v-250428",
+        "batch_id": "1754362985482_101400",
+        "batch_count": 3
+      },
+      {
+        "_id": "689174694b4dbdd4ab3d28cb",
+        "create_time": 1754362985484,
+        "uid": 101400,
+        "team_id": "6805fb69e92d9edc7ca0b409",
+        "status": 1,
+        "webhookUrl": "",
+        "resolution": "720p",
+        "file_name": "Image2Video_Animate this image with .mp4",
+        "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+        "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+        "negative_prompt": "blurry, distorted, low quality",
+        "extend_prompt": true,
+        "deduction_credit": 5,
+        "model_name": "seedance-1-0-lite-i2v-250428",
+        "batch_id": "1754362985482_101400",
+        "batch_count": 3
+      }
+    ],
+    "errorList": []
+  }
+}
+```
+
+**Integration Workflow**
+
+1. **Get Available Models**
+   ```
+   GET /api/open/v4/aigModel/list?types[]=1501
+   ```
+
+2. **User Selects Model and Parameters**
+   - Display models from step 1
+   - Show supported resolutions and durations
+   - Calculate and display credit cost
+
+3. **Create Video(s)**
+   ```
+   POST /api/open/v4/image2Video/createBySourcePrompt/batch
+   ```
+   With selected `model_name` and parameters
+
+4. **Check Results**
+   ```
+   POST /api/open/v4/image2Video/resultsByIds
+   ```
+   Using the `_id` values from creation response
+
+**Notes**
+
+- Models are sorted by `sort` field in descending order (higher values first)
+- The `value` field should be used as the `model_name` parameter in creation APIs
+- Resolution pricing may vary by model; check `resolutionList` for accurate costs
+- Some advanced models may require paid accounts (`requiresPay: true`)
+- The API returns an empty array for model types that are not yet implemented
+
+
+
 ## Get  Image to Video Results
 
 ```

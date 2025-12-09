@@ -1,0 +1,265 @@
+---
+title: "AI Model"
+description: "Get available AI models for different generation tasks including text-to-image, image-to-video, and more."
+---
+
+<Note>Use this API to dynamically retrieve available AI models and their configurations for your application.</Note>
+
+## Get AI Model List
+
+```
+GET https://openapi.akool.com/api/open/v4/aigModel/list
+```
+
+**Request Headers**
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                               |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+
+**Query Parameters**
+
+| **Parameter** | **Type** | **Required** | **Description**                                                                                                                                        |
+|---------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| types         | Array    | true         | Array of model types to retrieve. At least one type is required |
+
+**Supported Model Types**
+
+| **Type Value** | **Description**                                                                                                                                        |
+|----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1501           | Image to Video - Animate static images into videos |
+| 1502           | Text to Video - Generate videos from text descriptions |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| code          | Integer  | Interface returns business status code (1000:success)                                                                                                                                                                   |
+| msg           | String   | Interface returns status information                                                                                                                                                                                   |
+| data          | Array    | Array of model configuration objects |
+
+**Model Configuration Object**
+
+| **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| sort          | Integer  | Sort order (higher values appear first) |
+| group         | String   | Model group/category |
+| provider      | String   | Model provider (akool, seedance, minimax, vidu, etc.) |
+| type          | Integer  | Model type (matches request types) |
+| label         | String   | Display name of the model |
+| value         | String   | Model identifier to use in API calls |
+| description   | String   | Model description |
+| resolutionList | Array   | Supported resolutions with pricing details |
+| isPro         | Boolean  | Whether this is a premium model |
+| generate_audio | Boolean/null | Whether the model supports audio generation |
+| durationList  | Array    | Supported video durations in seconds |
+| requiresPay   | Boolean  | Whether a paid account is required |
+| supportedLastFrame | Boolean | Whether the model supports last frame specification |
+| supportedExtendPrompt | Boolean | Whether the model supports prompt extension |
+| maxImageCount | Integer  | Maximum number of reference images supported |
+| maxCount      | Integer  | Maximum number of items per batch |
+
+**resolutionList Item Attributes**
+
+| **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| label         | String   | Display label for the resolution |
+| value         | String   | Resolution value (e.g., "720p", "1080p") |
+| width         | Integer  | Video width in pixels |
+| height        | Integer  | Video height in pixels |
+
+## Examples
+
+### Example 1: Get Image to Video Models
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/aigModel/list?types[]=1501' \
+--header 'x-api-key: {{API Key}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/aigModel/list?types[]=1501")
+  .method("GET", null)
+  .addHeader("x-api-key", "{{API Key}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("x-api-key", "{{API Key}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/aigModel/list?types[]=1501", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'x-api-key' =>'{{API Key}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/aigModel/list?types[]=1501', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v4/aigModel/list?types[]=1501"
+
+headers = {
+  'x-api-key':'{{API Key}}'
+}
+
+response = requests.request("GET", url, headers=headers)
+print(response.text)
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": [
+    {
+      "sort": 100,
+      "group": "akool",
+      "provider": "akool",
+      "type": 1501,
+      "label": "Akool Image2Video Fast V1",
+      "value": "AkoolImage2VideoFastV1",
+      "description": "Fast image to video generation with Akool's AI",
+      "resolutionList": [
+        {
+          "label": "720p",
+          "value": "720p",
+          "width": 1280,
+          "height": 720,
+          "unit_credit": 5
+        },
+        {
+          "label": "1080p",
+          "value": "1080p",
+          "width": 1920,
+          "height": 1080,
+          "unit_credit": 10
+        },
+        {
+          "label": "4k",
+          "value": "4k",
+          "width": 3840,
+          "height": 2160,
+          "unit_credit": 20
+        }
+      ],
+      "isPro": false,
+      "generate_audio": null,
+      "durationList": [5, 10],
+      "requiresPay": false,
+      "supportedLastFrame": false,
+      "supportedExtendPrompt": false,
+      "maxImageCount": 1,
+      "maxCount": 10
+    },
+    {
+      "sort": 95,
+      "group": "seedance",
+      "provider": "seedance",
+      "type": 1501,
+      "label": "Seedance Lite Image2Video",
+      "value": "seedance-1-0-lite-i2v-250428",
+      "description": "Seedance Lite model for image to video generation",
+      "resolutionList": [
+        {
+          "label": "480p",
+          "value": "480p",
+          "width": 854,
+          "height": 480,
+          "unit_credit": 3
+        },
+        {
+          "label": "720p",
+          "value": "720p",
+          "width": 1280,
+          "height": 720,
+          "unit_credit": 5
+        },
+        {
+          "label": "1080p",
+          "value": "1080p",
+          "width": 1920,
+          "height": 1080,
+          "unit_credit": 10
+        }
+      ],
+      "isPro": false,
+      "generate_audio": null,
+      "durationList": [5, 10],
+      "requiresPay": false,
+      "supportedLastFrame": true,
+      "supportedExtendPrompt": false,
+      "maxImageCount": 1,
+      "maxCount": 10
+    }
+  ]
+}
+```
+
+## Response Data Structure
+
+```javascript
+{
+  code: 1000,
+  msg: "OK",
+  data: [
+    {
+      // Model metadata
+      sort: 100,              // Higher = appears first
+      group: "akool",         // Model group
+      provider: "akool",      // Provider name
+      type: 1501,             // Model type
+      
+      // Display information
+      label: "Model Name",
+      value: "model_identifier",
+      description: "Description",
+      
+      // Pricing & limits
+      requiresPay: false,
+      isPro: false,
+      maxCount: 10,
+      
+      // Supported parameters
+      resolutionList: [...],
+      durationList: [5, 10],
+      
+      // Features
+      supportedLastFrame: false,
+      supportedExtendPrompt: false,
+      maxImageCount: 1,
+    }
+  ]
+}
+```
