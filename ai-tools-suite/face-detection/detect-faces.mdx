@@ -11,7 +11,7 @@ This is the main endpoint for face detection. It automatically detects whether t
 ## Key Features
 
 - **Auto Media Type Detection**: Automatically determines if the input is an image or video
-- **5-Point Landmarks**: Detects 5 key facial landmarks for each face
+- **6-Point Landmarks**: Detects 6 key facial landmarks for each face
 - **Bounding Boxes**: Provides precise face region coordinates
 - **Video Face Tracking**: Tracks faces across frames and identifies removed faces
 - **Async Processing**: Downloads and processes media asynchronously for better performance
@@ -59,9 +59,12 @@ Number of frames to extract and analyze from videos. Default: 5
   "faces_obj": {
     "0": {
       "landmarks": [
-        [[100, 120], [150, 120], [125, 150], [110, 180], [140, 180]]
+        [[294, 65], [316, 64], [304, 76], [305, 86], [296, 86], [314, 85]]
       ],
-      "region": [[80, 100, 100, 120]],
+      "landmarks_str": [
+        "294,65:316,64:304,76:305,86:296,86:314,85"
+      ],
+      "region": [[284, 38, 43, 63]],
       "removed": [],
       "frame_time": null
     }
@@ -91,9 +94,16 @@ Each frame object contains:
 
 ##### landmarks
 - Type: `array`
-- Array of 5-point landmarks for each detected face
-- Format: `[[[x1, y1], [x2, y2], [x3, y3], [x4, y4], [x5, y5]], ...]`
-- Order: Left Eye, Right Eye, Nose, Left Mouth Corner, Right Mouth Corner
+- Array of 6-point landmarks for each detected face
+- Format: `[[[x1, y1], [x2, y2], [x3, y3], [x4, y4], [x5, y5], [x6, y6]], ...]`
+- Order: Left Eye, Right Eye, Nose, Mouth Center, Left Mouth Corner, Right Mouth Corner
+- Note: The Mouth Center (4th point) is calculated as the midpoint of the X-axis between the mouth corners, while the Y-axis remains unchanged (aligned with the corners).
+
+##### landmarks_str
+- Type: `array`
+- String representation of the landmarks
+- Format: `["x1,y1:x2,y2:x3,y3:x4,y4:x5,y5:x6,y6"]`
+- **For Face Swap API**: When using this for the `opts` parameter in Face Swap, only use the first 4 coordinate pairs (Left Eye, Right Eye, Nose, Mouth Center). Truncate the string after the 4th point (e.g., `x1,y1:x2,y2:x3,y3:x4,y4`).
 
 ##### region
 - Type: `array`
@@ -135,8 +145,12 @@ For image detection, the `num_frames` parameter is not required and will be igno
   "faces_obj": {
     "0": {
       "landmarks": [
-        [[320, 240], [420, 240], [370, 300], [340, 350], [400, 350]],
-        [[650, 220], [720, 220], [685, 270], [660, 310], [710, 310]]
+        [[320, 240], [420, 240], [370, 300], [370, 350], [340, 350], [400, 350]],
+        [[650, 220], [720, 220], [685, 270], [685, 310], [660, 310], [710, 310]]
+      ],
+      "landmarks_str": [
+        "320,240:420,240:370,300:370,350:340,350:400,350",
+        "650,220:720,220:685,270:685,310:660,310:710,310"
       ],
       "region": [
         [300, 200, 150, 180],
@@ -167,7 +181,10 @@ For image detection, the `num_frames` parameter is not required and will be igno
   "faces_obj": {
     "0": {
       "landmarks": [
-        [[320, 240], [420, 240], [370, 300], [340, 350], [400, 350]]
+        [[320, 240], [420, 240], [370, 300], [370, 350], [340, 350], [400, 350]]
+      ],
+      "landmarks_str": [
+        "320,240:420,240:370,300:370,350:340,350:400,350"
       ],
       "region": [[300, 200, 150, 180]],
       "removed": [],
@@ -175,7 +192,10 @@ For image detection, the `num_frames` parameter is not required and will be igno
     },
     "10": {
       "landmarks": [
-        [[325, 245], [425, 245], [375, 305], [345, 355], [405, 355]]
+        [[325, 245], [425, 245], [375, 305], [375, 355], [345, 355], [405, 355]]
+      ],
+      "landmarks_str": [
+        "325,245:425,245:375,305:375,355:345,355:405,355"
       ],
       "region": [[305, 205, 150, 180]],
       "removed": [[300, 200, 150, 180]],
@@ -204,6 +224,7 @@ For image detection, the `num_frames` parameter is not required and will be igno
   "faces_obj": {
     "0": {
       "landmarks": [],
+      "landmarks_str": [],
       "region": [],
       "removed": [],
       "frame_time": null
@@ -225,6 +246,7 @@ For image detection, the `num_frames` parameter is not required and will be igno
 
 ### 1. Face Swap Preprocessing
 Detect face landmarks to prepare images for face swapping operations.
+- **Note**: When using the landmarks for the Face Swap API (`opts` parameter), extract only the first 4 groups of coordinates from `landmarks_str` (Left Eye, Right Eye, Nose, Mouth Center).
 
 ### 2. Face Recognition
 Extract face regions and landmarks for face recognition systems.
@@ -269,4 +291,3 @@ faces = response["faces_obj"]
 Rate limits apply to this endpoint. Excessive requests may be throttled.
 Please implement appropriate retry logic with exponential backoff.
 </Warning>
-
