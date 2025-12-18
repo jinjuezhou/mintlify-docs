@@ -443,8 +443,13 @@ components:
           description: Language code to use for the session. Get valid codes from Language List API
         mode_type:
           type: integer
-          enum: [1, 2]
-          description: Avatar interaction style. "1" = Retelling (avatar repeats content), "2" = Dialogue (avatar engages in conversation)
+          enum: [1, 2, 3, 4]
+          description: |
+            Avatar interaction mode that determines how the avatar responds to input:
+            - `1`: Retelling mode - Avatar repeats the provided content verbatim
+            - `2`: Dialogue mode - Avatar engages in conversational interaction
+            - `3`: Lip-sync only - Avatar provides visual lip synchronization without audio processing
+            - `4`: Fast dialogue - Optimized dialogue mode with reduced latency
         background_url:
           type: string
           description: URL of background image/video for avatar scene
