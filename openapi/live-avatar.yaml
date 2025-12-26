@@ -460,7 +460,9 @@ components:
           type: string
           description: URL of background image/video for avatar scene
         voice_params:
-          $ref: '#/components/schemas/VoiceParams'
+          oneOf:
+            - $ref: '#/components/schemas/VoiceParams'
+            - $ref: '#/components/schemas/FastDialogueVoiceParams'
         stream_type:
           type: string
           enum: [agora, livekit, trtc]
@@ -469,8 +471,23 @@ components:
         credentials:
           $ref: '#/components/schemas/Credentials'
 
+    FastDialogueVoiceParams:
+      type: object
+      description: Voice parameters for fast dialogue mode
+      properties:
+        voice_id:
+          type: string
+          enum: [alloy, ash, ballad, coral, echo, sage, shimmer, verse, marin, cedar]
+          description: Voice ID to change avatar's voice. Voice ID from api is not available for fast dialogue mode.
+        stt_language:
+          type: string
+          description: Language code for speech-to-text recognition to improve accuracy by using language-specific models. If not specified, default language or auto-detection will be used.
+        turn_detection:
+          $ref: '#/components/schemas/TurnDetection'
+
     VoiceParams:
       type: object
+      description: Voice parameters for normal mode
       properties:
         speed:
           type: number
