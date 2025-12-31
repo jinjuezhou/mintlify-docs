@@ -444,12 +444,35 @@ components:
         mode_type:
           type: integer
           enum: [1, 2]
-          description: Avatar interaction style. "1" = Retelling (avatar repeats content), "2" = Dialogue (avatar engages in conversation)
+          description: |
+            Avatar interaction mode that determines how the avatar responds to input:
+            - `1`: Retelling mode - Avatar repeats the provided content verbatim
+            - `2`: Dialogue mode - Avatar engages in conversational interaction
+        scene_mode:
+          type: string
+          enum: [fast_dialogue]
+          description: |
+            Scene mode for the session.
+
+            - `fast_dialogue`: Low-latency dialogue mode. Optimized for realtime voice interaction and **voice input only**.
+        e2e_type:
+          type: string
+          enum: [openai]
+          description: |
+            End-to-end (E2E) pipeline provider. Only applicable when `scene_mode` is `fast_dialogue`.
+
+            - `openai`: OpenAI
         background_url:
           type: string
           description: URL of background image/video for avatar scene
         voice_params:
-          $ref: '#/components/schemas/VoiceParams'
+          description: |
+            Voice configuration for the session.
+
+            Use `Option 2` when `scene_mode` is `fast_dialogue`. Otherwise use `Option 1`.
+          anyOf:
+            - $ref: '#/components/schemas/VoiceParams'
+            - $ref: '#/components/schemas/FastDialogueVoiceParams'
         stream_type:
           type: string
           enum: [agora, livekit, trtc]
@@ -458,8 +481,28 @@ components:
         credentials:
           $ref: '#/components/schemas/Credentials'
 
+    FastDialogueVoiceParams:
+      type: object
+      additionalProperties: false
+      description: Voice parameters for `scene_mode=fast_dialogue`
+      properties:
+        voice_id:
+          type: string
+          enum: [alloy, ash, ballad, coral, echo, sage, shimmer, verse, marin, cedar]
+          description: |
+            Preset voice ID used in fast dialogue mode.
+
+            Notes:
+            - Voices returned by the Voice List API are **not** available in this mode.
+        stt_language:
+          type: string
+          description: Language code for speech-to-text recognition to improve accuracy by using language-specific models. If not specified, default language or auto-detection will be used.
+        turn_detection:
+          $ref: '#/components/schemas/TurnDetection'
+
     VoiceParams:
       type: object
+      description: Voice parameters for normal mode
       properties:
         speed:
           type: number
