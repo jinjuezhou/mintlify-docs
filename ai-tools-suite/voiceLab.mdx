@@ -1465,7 +1465,7 @@ POST https://openapi.akool.com/api/open/v4/voice/del
 <CodeGroup>
 
 ```bash cURL
-curl --location --request DELETE 'https://openapi.akool.com/api/open/v4/voice/del' \
+curl --location --request POST 'https://openapi.akool.com/api/open/v4/voice/del' \
 --header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -1483,7 +1483,7 @@ MediaType mediaType = MediaType.parse("application/json");
 RequestBody body = RequestBody.create(mediaType, "{\n    \"_ids\": [\n        \"6836b8183a59f36196bb9c52\",\n        \"6836ba935026505ab7a529ce\"\n    ]\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/voice/del")
-  .method("DELETE", body)
+  .method("POST", body)
   .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
   .build();
@@ -1503,7 +1503,7 @@ const raw = JSON.stringify({
 });
 
 const requestOptions = {
-  method: "DELETE",
+  method: "POST",
   headers: myHeaders,
   body: raw,
   redirect: "follow"
@@ -1528,7 +1528,7 @@ $body = '{
     "6836ba935026505ab7a529ce"
   ]
 }';
-$request = new Request('DELETE', 'https://openapi.akool.com/api/open/v4/voice/del', $headers, $body);
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/voice/del', $headers, $body);
 $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ?>
@@ -1551,7 +1551,7 @@ headers = {
   'Content-Type': 'application/json'
 }
 
-response = requests.request("DELETE", url, headers=headers, data=payload)
+response = requests.request("POST", url, headers=headers, data=payload)
 print(response.text)
 ```
 
