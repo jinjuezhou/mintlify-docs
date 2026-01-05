@@ -152,6 +152,19 @@
       ]
     },
     {
+      "group": "Character Faceswap",
+      "pages": [
+        "ai-tools-suite/character-faceswap/character-faceswap",
+        {
+          "group": "API Endpoints",
+          "pages": [
+            "ai-tools-suite/character-faceswap/create",
+            "ai-tools-suite/character-faceswap/get-result"
+          ]
+        }
+      ]
+    },
+    {
       "group": "AI Tools Suite",
       "pages": [
         "ai-tools-suite/live-faceswap",
