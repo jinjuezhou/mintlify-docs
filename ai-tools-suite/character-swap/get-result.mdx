@@ -1,6 +1,6 @@
 ---
 title: "Get Video Info Result"
-description: "Retrieve character faceswap video results by ID"
+description: "Retrieve character swap video results by ID"
 ---
 
 ## Endpoint
@@ -20,7 +20,7 @@ GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_mode
 
 | **Parameter** | **Type** | **Required** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| video_model_id | String   | true         | The `_id` returned from the [Create Character Faceswap API](/ai-tools-suite/character-faceswap/create) |
+| video_model_id | String   | true         | The `_id` returned from the [Create Character Swap API](/ai-tools-suite/character-swap/create) |
 
 ## Response Attributes
 
@@ -126,7 +126,7 @@ print(response.text)
     "team_id": "6805fb69e92d9edc7ca0b409",
     "video_duration": 10,
     "webhookUrl": "https://your-callback-url.com/webhook",
-    "file_name": "CharacterFaceswap_1754362985482.mp4",
+    "file_name": "CharacterSwap_1754362985482.mp4",
     "image_url": "https://drz0f01yeq1cx.cloudfront.net/character-image.png",
     "video_url": "https://drz0f01yeq1cx.cloudfront.net/source-video.mp4",
     "prompt": "Smooth character animation with natural movement",
@@ -151,7 +151,7 @@ print(response.text)
     "update_time": 1754363095482,
     "video_duration": 10.5,
     "webhookUrl": "https://your-callback-url.com/webhook",
-    "file_name": "CharacterFaceswap_1754362985482.mp4",
+    "file_name": "CharacterSwap_1754362985482.mp4",
     "image_url": "https://drz0f01yeq1cx.cloudfront.net/character-image.png",
     "video": "https://d2qf6ukcym4kn9.cloudfront.net/1754363091791-1423.mp4",
     "video_url": "https://drz0f01yeq1cx.cloudfront.net/source-video.mp4",
@@ -177,7 +177,7 @@ print(response.text)
     "update_time": 1754363095482,
     "video_duration": 10,
     "webhookUrl": "https://your-callback-url.com/webhook",
-    "file_name": "CharacterFaceswap_1754362985482.mp4",
+    "file_name": "CharacterSwap_1754362985482.mp4",
     "image_url": "https://drz0f01yeq1cx.cloudfront.net/character-image.png",
     "video_url": "https://drz0f01yeq1cx.cloudfront.net/source-video.mp4",
     "prompt": "Smooth character animation with natural movement",
@@ -200,7 +200,7 @@ print(response.text)
 
 ## Important Notes
 
-- Use the `_id` field from the [Create Character Faceswap API](/ai-tools-suite/character-faceswap/create) response as the `video_model_id` parameter
+- Use the `_id` field from the [Create Character Swap API](/ai-tools-suite/character-swap/create) response as the `video_model_id` parameter
 - Poll this endpoint periodically to check the video generation status
 - When `video_status` is 3 (Success), the `video` field will contain the URL of the generated video
 - Generated videos are valid for 7 days, download and save them promptly

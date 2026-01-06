@@ -1,5 +1,5 @@
 ---
-title: "Create Character Faceswap"
+title: "Create Character Swap"
 description: "Create animated video from character image and source video using WaveSpeed AI's advanced animation models"
 ---
 
@@ -11,7 +11,7 @@ description: "Create animated video from character image and source video using 
 ## Endpoint
 
 ```
-POST https://openapi.akool.com/api/open/v4/characterFaceswap/create
+POST https://openapi.akool.com/api/open/v4/characterSwap/create
 ```
 
 ## Request Headers
@@ -28,7 +28,7 @@ POST https://openapi.akool.com/api/open/v4/characterFaceswap/create
 | image         | String   | true         | Character image URL (PNG or JPEG) to be animated |
 | video         | String   | true         | Source video URL (MP4) with motion to apply |
 | duration      | Number   | false        | Video duration in seconds (1-120). If not provided, will be automatically detected from the video |
-| resolution    | String   | false        | Output resolution: 480p, 720p (default: 720p) |
+| resolution    | String   | false        | Output resolution: 480p, 720p, 1080p (default: 720p) |
 | mode          | String   | false        | Animation mode: "animate" (character animation) or "replace" (face replacement) (default: "animate") |
 | prompt        | String   | false        | Optional prompt text for generation guidance (max 500 characters) |
 | model_name    | String   | true         | Model name: "wavespeed-ai/wan-2.2/animate" |
@@ -79,7 +79,7 @@ POST https://openapi.akool.com/api/open/v4/characterFaceswap/create
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v4/characterFaceswap/create' \
+curl --location 'https://openapi.akool.com/api/open/v4/characterSwap/create' \
 --header 'x-api-key: {{API Key}}' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -100,7 +100,7 @@ OkHttpClient client = new OkHttpClient().newBuilder()
 MediaType mediaType = MediaType.parse("application/json");
 RequestBody body = RequestBody.create(mediaType, "{\n  \"image\": \"https://drz0f01yeq1cx.cloudfront.net/character-image.png\",\n  \"video\": \"https://drz0f01yeq1cx.cloudfront.net/source-video.mp4\",\n  \"duration\": 10,\n  \"resolution\": \"720p\",\n  \"mode\": \"animate\",\n  \"prompt\": \"Smooth character animation with natural movement\",\n  \"model_name\": \"wavespeed-ai/wan-2.2/animate\",\n  \"webhookurl\": \"https://your-callback-url.com/webhook\"\n}");
 Request request = new Request.Builder()
-  .url("https://openapi.akool.com/api/open/v4/characterFaceswap/create")
+  .url("https://openapi.akool.com/api/open/v4/characterSwap/create")
   .method("POST", body)
   .addHeader("x-api-key", "{{API Key}}")
   .addHeader("Content-Type", "application/json")
@@ -131,7 +131,7 @@ const requestOptions = {
   redirect: "follow"
 };
 
-fetch("https://openapi.akool.com/api/open/v4/characterFaceswap/create", requestOptions)
+fetch("https://openapi.akool.com/api/open/v4/characterSwap/create", requestOptions)
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.error(error));
@@ -154,7 +154,7 @@ $body = '{
   "model_name": "wavespeed-ai/wan-2.2/animate",
   "webhookurl": "https://your-callback-url.com/webhook"
 }';
-$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/characterFaceswap/create', $headers, $body);
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/characterSwap/create', $headers, $body);
 $res = $client->sendAsync($request)->wait();
 echo $res->getBody();
 ?>
@@ -164,7 +164,7 @@ echo $res->getBody();
 import requests
 import json
 
-url = "https://openapi.akool.com/api/open/v4/characterFaceswap/create"
+url = "https://openapi.akool.com/api/open/v4/characterSwap/create"
 
 payload = json.dumps({
   "image": "https://drz0f01yeq1cx.cloudfront.net/character-image.png",
@@ -202,7 +202,7 @@ print(response.text)
     "video_duration": 10,
     "deduction_credit": 20,
     "resolution": "720p",
-    "file_name": "CharacterFaceswap_1754362985482.mp4",
+    "file_name": "CharacterSwap_1754362985482.mp4",
     "image_url": "https://drz0f01yeq1cx.cloudfront.net/character-image.png",
     "video_url": "https://drz0f01yeq1cx.cloudfront.net/source-video.mp4",
     "prompt": "Smooth character animation with natural movement",
@@ -225,5 +225,5 @@ print(response.text)
 - **Resolution**: Choose between 480p or 720p based on your needs - higher resolution may take longer to process
 - **Resource Expiration**: Generated videos are valid for 7 days, save them promptly
 - **Webhook**: Use `webhookUrl` to receive notifications when video generation is complete
-- Save the `_id` from the response to check video status using the [Get Video Info Result](/ai-tools-suite/character-faceswap/get-result) API
+- Save the `_id` from the response to check video status using the [Get Video Info Result](/ai-tools-suite/character-swap/get-result) API
 

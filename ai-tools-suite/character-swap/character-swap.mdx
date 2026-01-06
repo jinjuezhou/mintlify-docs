@@ -1,6 +1,6 @@
 ---
-title: "Character Faceswap API Overview"
-description: "Comprehensive guide to the Character Faceswap API"
+title: "Character Swap API Overview"
+description: "Comprehensive guide to the Character Swap API"
 ---
 
 <Warning>
@@ -10,23 +10,23 @@ description: "Comprehensive guide to the Character Faceswap API"
 
 ## API Endpoints
 
-### Character Faceswap Operations
+### Character Swap Operations
 
-- [Create Character Faceswap](/ai-tools-suite/character-faceswap/create) - Create animated video from character image and source video
-- [Get Video Info Result](/ai-tools-suite/character-faceswap/get-result) - Retrieve character faceswap video results by ID
+- [Create Character Swap](/ai-tools-suite/character-swap/create) - Create animated video from character image and source video
+- [Get Video Info Result](/ai-tools-suite/character-swap/get-result) - Retrieve character swap video results by ID
 
 ## Getting Started
 
 ### Basic Workflow
 
-1. **Create Character Faceswap Video**:
+1. **Create Character Swap Video**:
    - Prepare your character image URL (PNG or JPEG)
    - Prepare your source video URL (MP4) with the motion to apply
    - Optionally provide duration, resolution, mode, and prompt
-   - Call the [Create Character Faceswap API](/ai-tools-suite/character-faceswap/create) with your resources
+   - Call the [Create Character Swap API](/ai-tools-suite/character-swap/create) with your resources
 
 2. **Check Results**:
-   - Use the [Get Video Info Result API](/ai-tools-suite/character-faceswap/get-result) to check the status of your video
+   - Use the [Get Video Info Result API](/ai-tools-suite/character-swap/get-result) to check the status of your video
    - Download the result URL when the status is "Success" (video_status = 3)
 
 ### Response Code Description
@@ -49,7 +49,7 @@ description: "Comprehensive guide to the Character Faceswap API"
 
 ## Pricing
 
-### Character Faceswap
+### Character Swap
 
 | Resolution | Unit Credit (per 5 seconds) |
 |------------|----------------------------|
@@ -66,7 +66,7 @@ When checking results, the `video_status` field indicates the current state:
 | Status | Description |
 |--------|-------------|
 | 1 | In Queue - Your request is waiting to be processed |
-| 2 | Processing - Character faceswap video is currently being generated |
+| 2 | Processing - Character swap video is currently being generated |
 | 3 | Success - Video completed, result URL is available |
 | 4 | Failed - Video generation failed, please check your input resources |
 
@@ -76,7 +76,7 @@ When checking results, the `video_status` field indicates the current state:
 
 - **Quality**: Use high-resolution images for better results
 - **Face Visibility**: Ensure the character face is clearly visible and not obscured
-- **Lighting**: Well-lit images produce better character faceswap results
+- **Lighting**: Well-lit images produce better character swap results
 - **Angle**: Frontal or slight angle faces work best
 
 ### Video Requirements
@@ -146,7 +146,7 @@ Replace faces in a video with a character face:
 
 ## Notes
 
-- **Pro Plan Required**: Character Faceswap feature requires Pro plan or higher subscription
+- **Pro Plan Required**: Character Swap feature requires Pro plan or higher subscription
 - **Video Duration**: If not specified, the duration will be automatically detected from the source video. Maximum duration is 120 seconds
 - **Mode Options**:
   - `animate`: Applies character animation to the image using the video's motion
