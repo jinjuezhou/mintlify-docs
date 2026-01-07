@@ -204,10 +204,22 @@ paths:
 
   /detect:
     post:
-      summary: Face Detect
-      description: Detect faces in images and get landmark information
+      summary: Face Detect (Legacy)
+      description: |
+        **Note**: This endpoint will be deprecated in a future release. We recommend using the new [Detect Faces API](https://openapi.akool.com/interface/detect-api/detect_faces) for all new integrations.
+        
+        The new endpoint provides:
+        - Support for both images and videos
+        - Base64 image input support
+        - Cropped face image URLs
+        - Single face mode
+        - Better face tracking for videos
+        
+        ---
+        
+        Legacy endpoint to detect faces in images and get landmark information.
       tags:
-        - Face Detection
+        - Face Detection (Legacy)
       servers:
         - url: https://sg3.akool.com
       requestBody:

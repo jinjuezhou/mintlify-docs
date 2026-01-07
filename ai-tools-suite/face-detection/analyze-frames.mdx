@@ -1,0 +1,198 @@
+---
+title: "Analyze Frames"
+description: "Face analysis for single or multiple images with automatic person deduplication"
+openapi: "POST /faceswap/analyze_frames"
+---
+
+<Info>
+Analyze faces in one or more images, returning a `persons` format optimized for face swap. Automatically deduplicates faces across multiple frames.
+</Info>
+
+## Request Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `frame_urls` | array | Yes | - | List of image URLs to analyze |
+| `timestamps` | array | No | [0.0, 1.0, ...] | Timestamps for each frame (seconds) |
+| `expand_ratio` | number | No | 0.3 | Face crop expansion ratio (0-1) |
+
+<Note>
+**Single Image**: Each face becomes a separate person (no deduplication).
+**Multiple Images**: Same person across frames is merged into one entry.
+</Note>
+
+## Response Format
+
+```json
+{
+  "success": true,
+  "frame_count": 3,
+  "persons": [
+    {
+      "person_id": "person_0",
+      "index": 0,
+      "face_url": "https://s3.example.com/faces/face_abc123.jpg",
+      "bbox": [100, 50, 200, 180],
+      "confidence": 0.95,
+      "appearances": [
+        {"timestamp": 0.0, "frame_idx": 0, "bbox": [100, 50, 200, 180]},
+        {"timestamp": 1.0, "frame_idx": 1, "bbox": [105, 52, 205, 182]}
+      ],
+      "first_seen": 0.0,
+      "last_seen": 1.0
+    }
+  ]
+}
+```
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `success` | boolean | Whether analysis succeeded |
+| `frame_count` | integer | Number of frames analyzed |
+| `persons` | array | List of detected persons |
+
+### Person Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `person_id` | string | Unique identifier (e.g., "person_0") |
+| `index` | integer | Sort index (left to right by x-coordinate) |
+| `face_url` | string | Cropped face image URL |
+| `bbox` | array | Bounding box `[x1, y1, x2, y2]` from first appearance |
+| `confidence` | number | Detection confidence (0-1) |
+| `appearances` | array | List of frame appearances with timestamp, frame_idx, bbox |
+| `first_seen` | number | First appearance timestamp |
+| `last_seen` | number | Last appearance timestamp |
+
+## Examples
+
+### Example 1: Single Image Analysis
+
+**Request:**
+```json
+{
+  "frame_urls": ["https://example.com/group_photo.jpg"]
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "frame_count": 1,
+  "persons": [
+    {
+      "person_id": "person_0",
+      "index": 0,
+      "face_url": "https://s3.example.com/faces/face_a1b2c3.jpg",
+      "bbox": [100, 50, 200, 180],
+      "confidence": 0.96,
+      "appearances": [
+        {"timestamp": 0.0, "frame_idx": 0, "bbox": [100, 50, 200, 180]}
+      ],
+      "first_seen": 0.0,
+      "last_seen": 0.0
+    },
+    {
+      "person_id": "person_1",
+      "index": 1,
+      "face_url": "https://s3.example.com/faces/face_d4e5f6.jpg",
+      "bbox": [300, 60, 400, 190],
+      "confidence": 0.94,
+      "appearances": [
+        {"timestamp": 0.0, "frame_idx": 0, "bbox": [300, 60, 400, 190]}
+      ],
+      "first_seen": 0.0,
+      "last_seen": 0.0
+    }
+  ]
+}
+```
+
+### Example 2: Multi-Frame Analysis (Video Frames)
+
+**Request:**
+```json
+{
+  "frame_urls": [
+    "https://example.com/frame_0.jpg",
+    "https://example.com/frame_1.jpg",
+    "https://example.com/frame_2.jpg"
+  ],
+  "timestamps": [0.0, 1.0, 2.0]
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "frame_count": 3,
+  "persons": [
+    {
+      "person_id": "person_0",
+      "index": 0,
+      "face_url": "https://s3.example.com/faces/face_abc123.jpg",
+      "bbox": [100, 50, 200, 180],
+      "confidence": 0.95,
+      "appearances": [
+        {"timestamp": 0.0, "frame_idx": 0, "bbox": [100, 50, 200, 180]},
+        {"timestamp": 1.0, "frame_idx": 1, "bbox": [105, 52, 205, 182]},
+        {"timestamp": 2.0, "frame_idx": 2, "bbox": [110, 55, 210, 185]}
+      ],
+      "first_seen": 0.0,
+      "last_seen": 2.0
+    }
+  ]
+}
+```
+
+<Note>
+The same person appearing in all 3 frames is merged into a single person entry with multiple appearances.
+</Note>
+
+### Example 3: Custom Expand Ratio
+
+**Request:**
+```json
+{
+  "frame_urls": ["https://example.com/photo.jpg"],
+  "expand_ratio": 0.5
+}
+```
+
+## Error Responses
+
+| success | error | Description |
+|---------|-------|-------------|
+| false | frame_urls is required and must not be empty | Missing frame_urls |
+| false | Failed to download image from URL | Download failed |
+| true | (empty persons array) | No faces detected |
+
+## Integration with Face Swap
+
+```python
+import requests
+
+# Analyze frames
+response = requests.post(
+    "https://openapi.akool.com/interface/detect-api/faceswap/analyze_frames",
+    json={"frame_urls": ["https://example.com/target.jpg"]},
+    headers={"x-api-key": "YOUR_API_KEY"}
+)
+
+result = response.json()
+if result["success"]:
+    for person in result["persons"]:
+        face_url = person["face_url"]
+        print(f"Person {person['person_id']}: {face_url}")
+        # Use face_url directly in Face Swap API
+```
+
+## Best Practices
+
+- **URL Requirements**: Use HTTPS, ensure publicly accessible
+- **Multi-Frame**: Use 3-10 frames for typical video clips
+- **Expand Ratio**: Use 0.5 for more facial context in face swap

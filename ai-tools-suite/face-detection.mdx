@@ -4,7 +4,7 @@ description: "Comprehensive guide to the Face Detection API"
 ---
 
 <Info>
-Detect faces in images and videos with high accuracy. Get bounding boxes, 5-point landmarks, and face tracking for video content.
+Detect faces in images and videos with high accuracy. Get bounding boxes, 6-point landmarks, cropped face images, and face tracking for video content.
 </Info>
 
 ## API Endpoints
@@ -12,15 +12,17 @@ Detect faces in images and videos with high accuracy. Get bounding boxes, 5-poin
 ### Face Detection Operations
 
 - [Detect Faces](/ai-tools-suite/face-detection/detect-faces) - Unified endpoint for face detection in images and videos (auto-detects media type)
+- [Analyze Frames](/ai-tools-suite/face-detection/analyze-frames) - Multi-frame face analysis with person deduplication for face swap preparation
 
 ## Getting Started
 
 ### Basic Workflow
 
 1. **For Image Face Detection**:
-   - Call the [Detect Faces API](/ai-tools-suite/face-detection/detect-faces) with an image URL
-   - Only the `url` parameter is required (no need for `num_frames`)
-   - Receive bounding boxes and 5-point landmarks for all detected faces
+   - Call the [Detect Faces API](/ai-tools-suite/face-detection/detect-faces) with an image URL or base64-encoded image
+   - Only the `url` or `img` parameter is required (no need for `num_frames`)
+   - Receive bounding boxes and 6-point landmarks for all detected faces
+   - Optionally get cropped face image URLs with `return_face_url=true`
    - Use the landmark data for downstream tasks (e.g., face swap, face recognition)
 
 2. **For Video Face Detection**:
@@ -42,15 +44,49 @@ Detect faces in images and videos with high accuracy. Get bounding boxes, 5-poin
 
 ## Features
 
-### 5-Point Facial Landmarks
+### Dual Input Modes
 
-The API detects 5 key facial landmarks for each face:
+The API supports two ways to provide image input:
+
+1. **URL Mode**: Provide a publicly accessible URL to an image or video
+2. **Base64 Mode**: Provide base64-encoded image data (with or without data URI prefix)
+
+```json
+// URL mode
+{ "url": "https://example.com/image.jpg" }
+
+// Base64 mode
+{ "img": "data:image/jpeg;base64,/9j/4AAQSkZJRg..." }
+```
+
+### 6-Point Facial Landmarks
+
+The API detects 6 key facial landmarks for each face:
 
 1. **Left Eye** - Center point of the left eye
 2. **Right Eye** - Center point of the right eye
 3. **Nose Tip** - Tip of the nose
-4. **Left Mouth Corner** - Left corner of the mouth
-5. **Right Mouth Corner** - Right corner of the mouth
+4. **Mouth Center** - Center point of the mouth (X-axis midpoint between mouth corners)
+5. **Left Mouth Corner** - Left corner of the mouth
+6. **Right Mouth Corner** - Right corner of the mouth
+
+### Cropped Face Images
+
+When `return_face_url=true`, the API returns:
+
+- **face_urls**: URLs to cropped face images stored in cloud storage
+- **crop_region**: The region coordinates used for cropping
+- **crop_landmarks**: Landmarks relative to the cropped image
+
+This is particularly useful for face swap operations where you need both the face image and its landmarks.
+
+### Single Face Mode
+
+When `single_face=true`, the API returns only the largest face (by area) in each frame. This is useful for:
+
+- Portrait photos where you only care about the main subject
+- ID photos with a single person
+- Reducing response size when multiple faces are detected
 
 ### Face Tracking for Videos
 
@@ -89,7 +125,7 @@ The API automatically detects whether the input is an image or video based on:
 ### API Usage Tips
 
 - **Parameter Usage**:
-  - **For Images**: Only `url` parameter is required. The `num_frames` parameter is NOT needed.
+  - **For Images**: Only `url` or `img` parameter is required. The `num_frames` parameter is NOT needed.
   - **For Videos**: Both `url` and `num_frames` parameters are recommended.
 - **Frame Selection** (for videos only):
   - Short videos (< 10s): 5-10 frames
@@ -111,11 +147,17 @@ The API automatically detects whether the input is an image or video based on:
   "faces_obj": {
     "0": {
       "landmarks": [
-        [[100, 120], [150, 120], [125, 150], [110, 180], [140, 180]]
+        [[100, 120], [150, 120], [125, 150], [125, 180], [110, 180], [140, 180]]
+      ],
+      "landmarks_str": [
+        "100,120:150,120:125,150:125,180"
       ],
       "region": [[80, 100, 100, 120]],
       "removed": [],
-      "frame_time": null
+      "frame_time": null,
+      "face_urls": null,
+      "crop_region": null,
+      "crop_landmarks": null
     }
   }
 }
@@ -126,12 +168,17 @@ The API automatically detects whether the input is an image or video based on:
 - **error_code**: Status code (0 = success)
 - **error_msg**: Status message or error description
 - **faces_obj**: Dictionary keyed by frame index (as string)
-  - **landmarks**: Array of 5-point landmarks for each detected face
-    - Format: `[[x1, y1], [x2, y2], [x3, y3], [x4, y4], [x5, y5]]`
+  - **landmarks**: Array of 6-point landmarks for each detected face
+    - Format: `[[x1, y1], [x2, y2], [x3, y3], [x4, y4], [x5, y5], [x6, y6]]`
+  - **landmarks_str**: String format of first 4 landmarks for Face Swap API compatibility
+    - Format: `"x1,y1:x2,y2:x3,y3:x4,y4"`
   - **region**: Bounding boxes for each detected face
     - Format: `[x, y, width, height]` where (x, y) is the top-left corner
   - **removed**: Bounding boxes of faces no longer visible (video only)
   - **frame_time**: Timestamp in seconds for this frame (video only, null for images)
+  - **face_urls**: Cropped face image URLs (only when `return_face_url=true`)
+  - **crop_region**: Cropping region in original image (only when `return_face_url=true`)
+  - **crop_landmarks**: Landmarks relative to cropped image (only when `return_face_url=true`)
 
 ## Common Use Cases
 
@@ -149,6 +196,17 @@ The API automatically detects whether the input is an image or video based on:
 For images, the `num_frames` parameter is not needed and will be ignored.
 </Note>
 
+### Get Cropped Face Images for Face Swap
+
+```json
+{
+  "url": "https://example.com/photo.jpg",
+  "return_face_url": true
+}
+```
+
+**Use case**: Get cropped face images with their landmarks for direct use in Face Swap API.
+
 ### Face Tracking in Video Content
 
 ```json
@@ -160,15 +218,26 @@ For images, the `num_frames` parameter is not needed and will be ignored.
 
 Use case: Track faces across video frames for video editing, face swap in videos, or facial animation.
 
+### Single Face Detection
+
+```json
+{
+  "url": "https://example.com/group_photo.jpg",
+  "single_face": true
+}
+```
+
+Use case: Get only the main/largest face from a group photo.
+
 ### Multiple Face Detection
 
 The API automatically detects all faces in an image or video frame. No special configuration needed.
 
 ### Integration with Face Swap
 
-1. Use Face Detection API to get face landmarks
-2. Pass the landmark coordinates to Face Swap API
-3. The landmarks help ensure accurate face alignment and swapping
+1. Use Face Detection API to get face landmarks and optionally cropped face URLs
+2. Pass the `landmarks_str` value to Face Swap API as the `opts` parameter
+3. When using `return_face_url=true`, use `crop_landmarks` for the cropped face image
 
 ## Error Handling
 
@@ -176,6 +245,7 @@ The API automatically detects all faces in an image or video frame. No special c
 
 | Error Message | Cause | Solution |
 |---------------|-------|----------|
+| "Either 'url' or 'img' parameter must be provided" | Missing input | Provide either `url` or `img` parameter |
 | "Invalid URL format" | Malformed URL provided | Ensure URL is properly formatted with protocol (http/https) |
 | "Failed to download media" | URL inaccessible or invalid | Verify URL is publicly accessible |
 | "No faces detected" | No faces found in media | Check image quality and face visibility |
@@ -194,7 +264,7 @@ response = requests.post(
     headers={"x-api-key": "YOUR_API_KEY"}
 )
 
-# For video detection (num_frames required)
+# For video detection (num_frames recommended)
 # response = requests.post(
 #     "https://openapi.akool.com/interface/detect-api/detect_faces",
 #     json={"url": "https://example.com/video.mp4", "num_frames": 10},
@@ -228,6 +298,7 @@ else:
 ### Optimization Tips
 
 - Use appropriate `num_frames` value - more frames = longer processing time
+- Use `single_face=true` when you only need one face
 - Cache results when processing the same media multiple times
 - Process videos in batches if analyzing many videos
 
@@ -239,4 +310,3 @@ For additional help and examples, check out:
 - [Face Swap Integration](/ai-tools-suite/faceswap)
 
 Need help? Contact us at info@akool.com
-

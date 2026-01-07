@@ -1,8 +1,103 @@
 ---
-title: "Face Detect"
+title: "Face Detect (Legacy)"
 description: "Detect faces in images and get landmark information"
 openapi: "POST /detect"
 ---
+
+<Warning>
+**This endpoint will be deprecated in a future release.** We recommend using the new [Detect Faces API](/ai-tools-suite/face-detection/detect-faces) for all new integrations.
+
+The new endpoint provides:
+- Support for both images and videos
+- Base64 image input support
+- Cropped face image URLs (`return_face_url` option)
+- Single face mode (`single_face` option)
+- Better face tracking for videos
+- Improved performance and accuracy
+
+**Recommended Migration**: Replace `https://sg3.akool.com/detect` with `https://openapi.akool.com/interface/detect-api/detect_faces`
+</Warning>
+
+## Migration Guide
+
+### Old Request (Legacy)
+
+```json
+POST https://sg3.akool.com/detect
+{
+  "single_face": false,
+  "image_url": "https://example.com/image.jpg"
+}
+```
+
+### New Request (Recommended)
+
+```json
+POST https://openapi.akool.com/interface/detect-api/detect_faces
+{
+  "url": "https://example.com/image.jpg",
+  "single_face": false
+}
+```
+
+### Parameter Mapping
+
+| Legacy Parameter | New Parameter | Notes |
+|-----------------|---------------|-------|
+| `image_url` | `url` | Renamed |
+| `img` | `img` | Same |
+| `single_face` | `single_face` | Same |
+| - | `num_frames` | New: for video support |
+| - | `return_face_url` | New: get cropped face URLs |
+
+### Response Changes
+
+The new API returns a slightly different response format:
+
+**Legacy Response**:
+```json
+{
+  "error_code": 0,
+  "error_msg": "",
+  "landmarks": [...],
+  "landmarks_str": [...],
+  "region": [...],
+  "seconds": 0.123,
+  "trx_id": "xxx"
+}
+```
+
+**New Response**:
+```json
+{
+  "error_code": 0,
+  "error_msg": "SUCCESS",
+  "faces_obj": {
+    "0": {
+      "landmarks": [...],
+      "landmarks_str": [...],
+      "region": [...],
+      "removed": [],
+      "frame_time": null,
+      "face_urls": null,
+      "crop_region": null,
+      "crop_landmarks": null
+    }
+  }
+}
+```
+
+<Note>
+The new API wraps face data in a `faces_obj` object keyed by frame index. For images, use `faces_obj["0"]` to access the face data.
+</Note>
+
+---
+
+## Legacy API Documentation
+
+<Info>
+The following documentation is for the legacy endpoint. For new integrations, we recommend using the [new Detect Faces API](/ai-tools-suite/face-detection/detect-faces).
+</Info>
 
 ## Important Notes
 
@@ -24,4 +119,3 @@ openapi: "POST /detect"
 |------------|-------------|
 | 0 | Success |
 | Other | Check error_msg for details |
-
