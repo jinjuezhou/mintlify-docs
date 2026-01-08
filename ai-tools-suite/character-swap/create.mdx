@@ -31,7 +31,6 @@ POST https://openapi.akool.com/api/open/v4/characterSwap/create
 | resolution    | String   | false        | Output resolution: 480p, 720p, 1080p (default: 720p) |
 | mode          | String   | false        | Animation mode: "animate" (character animation) or "replace" (face replacement) (default: "animate") |
 | prompt        | String   | false        | Optional prompt text for generation guidance (max 500 characters) |
-| model_name    | String   | true         | Model name |
 | webhookurl    | String   | false        | Callback URL for POST requests |
 
 ## Response Attributes
@@ -69,7 +68,6 @@ POST https://openapi.akool.com/api/open/v4/characterSwap/create
   "resolution": "720p",
   "mode": "animate",
   "prompt": "Smooth character animation with natural movement",
-  "model_name": "wavespeed-ai/wan-2.2/animate",
   "webhookurl": "https://your-callback-url.com/webhook"
 }
 ```
@@ -89,7 +87,6 @@ curl --location 'https://openapi.akool.com/api/open/v4/characterSwap/create' \
   "resolution": "720p",
   "mode": "animate",
   "prompt": "Smooth character animation with natural movement",
-  "model_name": "wavespeed-ai/wan-2.2/animate",
   "webhookurl": "https://your-callback-url.com/webhook"
 }'
 ```
@@ -98,7 +95,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/characterSwap/create' \
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n  \"image\": \"https://drz0f01yeq1cx.cloudfront.net/character-image.png\",\n  \"video\": \"https://drz0f01yeq1cx.cloudfront.net/source-video.mp4\",\n  \"duration\": 10,\n  \"resolution\": \"720p\",\n  \"mode\": \"animate\",\n  \"prompt\": \"Smooth character animation with natural movement\",\n  \"model_name\": \"wavespeed-ai/wan-2.2/animate\",\n  \"webhookurl\": \"https://your-callback-url.com/webhook\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"image\": \"https://drz0f01yeq1cx.cloudfront.net/character-image.png\",\n  \"video\": \"https://drz0f01yeq1cx.cloudfront.net/source-video.mp4\",\n  \"duration\": 10,\n  \"resolution\": \"720p\",\n  \"mode\": \"animate\",\n  \"prompt\": \"Smooth character animation with natural movement\",\n  \"webhookurl\": \"https://your-callback-url.com/webhook\"\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/characterSwap/create")
   .method("POST", body)
@@ -120,7 +117,6 @@ const raw = JSON.stringify({
   "resolution": "720p",
   "mode": "animate",
   "prompt": "Smooth character animation with natural movement",
-  "model_name": "wavespeed-ai/wan-2.2/animate",
   "webhookurl": "https://your-callback-url.com/webhook"
 });
 
@@ -151,7 +147,6 @@ $body = '{
   "resolution": "720p",
   "mode": "animate",
   "prompt": "Smooth character animation with natural movement",
-  "model_name": "wavespeed-ai/wan-2.2/animate",
   "webhookurl": "https://your-callback-url.com/webhook"
 }';
 $request = new Request('POST', 'https://openapi.akool.com/api/open/v4/characterSwap/create', $headers, $body);
@@ -173,7 +168,6 @@ payload = json.dumps({
   "resolution": "720p",
   "mode": "animate",
   "prompt": "Smooth character animation with natural movement",
-  "model_name": "wavespeed-ai/wan-2.2/animate",
   "webhookurl": "https://your-callback-url.com/webhook"
 })
 headers = {
