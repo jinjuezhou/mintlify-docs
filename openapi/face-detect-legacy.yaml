@@ -1,0 +1,114 @@
+openapi: 3.0.3
+info:
+  title: Face Detect API (Legacy)
+  description: Legacy API for detecting faces in images
+  version: 1.0.0
+servers:
+  - url: https://sg3.akool.com
+    description: Face detection server
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+
+paths:
+  /detect:
+    post:
+      summary: Face Detect (Legacy)
+      description: |
+        **Note**: This endpoint will be deprecated in a future release. We recommend using the new [Detect Faces API](https://openapi.akool.com/interface/detect-api/detect_faces) for all new integrations.
+        
+        The new endpoint provides:
+        - Support for both images and videos
+        - Base64 image input support
+        - Cropped face image URLs
+        - Single face mode
+        - Better face tracking for videos
+        
+        ---
+        
+        Legacy endpoint to detect faces in images and get landmark information.
+      tags:
+        - Face Detection (Legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FaceDetectRequest'
+            example:
+              single_face: false
+              image_url: "https://d21ksh0k4smeql.cloudfront.net/IMG_6150-1696984459910-0610.jpeg"
+              img: ""
+      responses:
+        '200':
+          description: Face detection completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaceDetectResponse'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your API Key used for request authorization.
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Your API Key used for request authorization.
+
+  schemas:
+    FaceDetectRequest:
+      type: object
+      required:
+        - single_face
+      properties:
+        single_face:
+          type: boolean
+          description: Set to true to return only the largest face data, or false to return all detected faces.
+        image_url:
+          type: string
+          description: Image link. You can choose to enter this parameter or the img parameter.
+        img:
+          type: string
+          description: Image base64 information. You can choose to enter this parameter or the image_url parameter.
+
+    FaceDetectResponse:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: "Interface returns business status code (0: success)"
+        error_msg:
+          type: string
+          description: Error message of this API
+        landmarks:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+          description: Key point data of face
+        landmarks_str:
+          type: array
+          items:
+            type: string
+          description: Landmark string representation
+        region:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+          description: Face region coordinates
+        seconds:
+          type: number
+          description: API time-consuming
+        trx_id:
+          type: string
+          description: Transaction ID
+
