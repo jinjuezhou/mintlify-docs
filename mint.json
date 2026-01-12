@@ -6,7 +6,7 @@
     "dark": "/logo/akool-dark.svg"
   },
   "favicon": "/favicon.svg",
-  "openapi": ["/openapi/live-avatar.yaml", "/openapi/faceswap.yaml", "/openapi/video-translation.yaml","/openapi/talking-photo.yaml", "/openapi/face-detection.yaml"],
+  "openapi": ["/openapi/live-avatar.yaml", "/openapi/faceswap.yaml", "/openapi/video-translation.yaml","/openapi/talking-photo.yaml", "/openapi/face-detection.yaml", "/openapi/face-detect-legacy.yaml"],
   "api": {
     "baseUrl": "https://openapi.akool.com",
     "playground": {
@@ -148,7 +148,8 @@
       "group": "Face Detection",
       "pages": [
         "ai-tools-suite/face-detection",
-        "ai-tools-suite/face-detection/detect-faces"
+        "ai-tools-suite/face-detection/detect-faces",
+        "ai-tools-suite/face-detection/analyze-frames"
       ]
     },
     {

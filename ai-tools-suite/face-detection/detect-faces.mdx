@@ -1,56 +1,28 @@
 ---
 title: "Detect Faces"
-description: "Unified endpoint to detect faces in either video or image from URL"
+description: "Unified endpoint to detect faces in either video or image from URL or base64-encoded image"
 openapi: "POST /detect_faces"
 ---
 
 <Info>
-This is the main endpoint for face detection. It automatically detects whether the input is an image or video and processes accordingly.
+Detect faces in images and videos with 6-point landmarks. Supports URL and base64 input, with optional cropped face URLs.
 </Info>
-
-## Key Features
-
-- **Auto Media Type Detection**: Automatically determines if the input is an image or video
-- **6-Point Landmarks**: Detects 6 key facial landmarks for each face
-- **Bounding Boxes**: Provides precise face region coordinates
-- **Video Face Tracking**: Tracks faces across frames and identifies removed faces
-- **Async Processing**: Downloads and processes media asynchronously for better performance
-
-## How It Works
-
-1. **Media Type Detection**: The API analyzes the URL to determine if it's an image or video
-2. **Media Download**: Downloads the media from the provided URL asynchronously
-3. **Processing**:
-   - For images: Loads and analyzes the single image
-   - For videos: Extracts frames at regular intervals and analyzes each frame
-4. **Face Detection**: Uses InsightFace model to detect faces and landmarks
-5. **Face Tracking** (videos only): Tracks faces across frames and marks previous positions as removed
 
 ## Request Parameters
 
-### url (required)
-The URL of the media file to process. Must be publicly accessible.
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `url` | string | Yes* | - | Image or video URL (publicly accessible) |
+| `img` | string | Yes* | - | Base64-encoded image data |
+| `num_frames` | integer | No | 5 | Number of frames for video analysis |
+| `return_face_url` | boolean | No | false | Return cropped face image URLs |
+| `single_face` | boolean | No | false | Return only the largest face |
 
-**Supported formats**:
-- Images: `.jpg`, `.jpeg`, `.png`, `.bmp`, `.webp`
-- Videos: `.mp4`, `.mov`, `.avi`, `.webm`
-
-### num_frames (optional)
-Number of frames to extract and analyze from videos. Default: 5
-
-<Warning>
-**For Images**: This parameter is NOT required and will be ignored.  
-**For Videos**: This parameter is recommended to control the number of frames analyzed.
-</Warning>
-
-**Recommendations for videos**:
-- Short videos (< 10s): 5-10 frames
-- Medium videos (10-30s): 10-20 frames
-- Long videos (> 30s): 20-50 frames
+<Note>
+Either `url` or `img` must be provided. If both are provided, `url` takes priority.
+</Note>
 
 ## Response Format
-
-### Success Response
 
 ```json
 {
@@ -58,15 +30,14 @@ Number of frames to extract and analyze from videos. Default: 5
   "error_msg": "SUCCESS",
   "faces_obj": {
     "0": {
-      "landmarks": [
-        [[294, 65], [316, 64], [304, 76], [305, 86], [296, 86], [314, 85]]
-      ],
-      "landmarks_str": [
-        "294,65:316,64:304,76:305,86:296,86:314,85"
-      ],
-      "region": [[284, 38, 43, 63]],
+      "landmarks": [[[120, 85], [180, 88], [150, 130], [150, 165], [125, 165], [175, 168]]],
+      "landmarks_str": ["120,85:180,88:150,130:150,165"],
+      "region": [[80, 50, 150, 180]],
       "removed": [],
-      "frame_time": null
+      "frame_time": null,
+      "face_urls": null,
+      "crop_region": null,
+      "crop_landmarks": null
     }
   }
 }
@@ -74,88 +45,46 @@ Number of frames to extract and analyze from videos. Default: 5
 
 ### Response Fields
 
-#### error_code
-- Type: `integer`
-- `0`: Success
-- `1`: Error occurred (check `error_msg`)
+| Field | Type | Description |
+|-------|------|-------------|
+| `error_code` | integer | 0 = success, 1 = error |
+| `error_msg` | string | Status message |
+| `faces_obj` | object | Face data keyed by frame index ("0", "1", etc.) |
 
-#### error_msg
-- Type: `string`
-- Success: `"SUCCESS"`
-- Error: Detailed error message
+### Face Frame Data
 
-#### faces_obj
-- Type: `object`
-- Dictionary keyed by frame index (as string)
-- For images: Only `"0"` key is present
-- For videos: Multiple keys like `"0"`, `"5"`, `"10"`, etc.
-
-Each frame object contains:
-
-##### landmarks
-- Type: `array`
-- Array of 6-point landmarks for each detected face
-- Format: `[[[x1, y1], [x2, y2], [x3, y3], [x4, y4], [x5, y5], [x6, y6]], ...]`
-- Order: Left Eye, Right Eye, Nose, Mouth Center, Left Mouth Corner, Right Mouth Corner
-- Note: The Mouth Center (4th point) is calculated as the midpoint of the X-axis between the mouth corners, while the Y-axis remains unchanged (aligned with the corners).
-
-##### landmarks_str
-- Type: `array`
-- String representation of the landmarks
-- Format: `["x1,y1:x2,y2:x3,y3:x4,y4:x5,y5:x6,y6"]`
-- **For Face Swap API**: When using this for the `opts` parameter in Face Swap, only use the first 4 coordinate pairs (Left Eye, Right Eye, Nose, Mouth Center). Truncate the string after the 4th point (e.g., `x1,y1:x2,y2:x3,y3:x4,y4`).
-
-##### region
-- Type: `array`
-- Bounding boxes for each detected face
-- Format: `[[x, y, width, height], ...]`
-- `(x, y)` is the top-left corner of the bounding box
-
-##### removed
-- Type: `array`
-- Bounding boxes of faces that were present in previous frames but are no longer visible
-- Only applicable for video processing
-- Format: `[[x, y, width, height], ...]`
-
-##### frame_time
-- Type: `number` or `null`
-- Time in seconds for this frame in the video
-- `null` for images
+| Field | Type | Description |
+|-------|------|-------------|
+| `landmarks` | array | 6-point landmarks for each face: Left Eye, Right Eye, Nose, Mouth Center, Left Mouth Corner, Right Mouth Corner |
+| `landmarks_str` | array | First 4 landmarks as string format `"x1,y1:x2,y2:x3,y3:x4,y4"` - use this for Face Swap `opts` parameter |
+| `region` | array | Bounding boxes `[x, y, width, height]` |
+| `removed` | array | Faces no longer visible (video only) |
+| `frame_time` | number/null | Timestamp in seconds (video only, null for images) |
+| `face_urls` | array/null | Cropped face URLs (when `return_face_url=true`) |
+| `crop_region` | array/null | Crop region in original image coordinates |
+| `crop_landmarks` | array/null | Landmarks relative to cropped image |
 
 ## Examples
 
-### Example 1: Image Face Detection
+### Example 1: Basic Image Detection
 
-**Request**:
+**Request:**
 ```json
 {
-  "url": "https://example.com/portrait.jpg"
+  "url": "https://example.com/photo.jpg"
 }
 ```
 
-<Note>
-For image detection, the `num_frames` parameter is not required and will be ignored if provided.
-</Note>
-
-**Response**:
+**Response:**
 ```json
 {
   "error_code": 0,
   "error_msg": "SUCCESS",
   "faces_obj": {
     "0": {
-      "landmarks": [
-        [[320, 240], [420, 240], [370, 300], [370, 350], [340, 350], [400, 350]],
-        [[650, 220], [720, 220], [685, 270], [685, 310], [660, 310], [710, 310]]
-      ],
-      "landmarks_str": [
-        "320,240:420,240:370,300:370,350:340,350:400,350",
-        "650,220:720,220:685,270:685,310:660,310:710,310"
-      ],
-      "region": [
-        [300, 200, 150, 180],
-        [630, 180, 120, 160]
-      ],
+      "landmarks": [[[320, 240], [420, 240], [370, 300], [370, 350], [340, 350], [400, 350]]],
+      "landmarks_str": ["320,240:420,240:370,300:370,350"],
+      "region": [[300, 200, 150, 180]],
       "removed": [],
       "frame_time": null
     }
@@ -163,9 +92,9 @@ For image detection, the `num_frames` parameter is not required and will be igno
 }
 ```
 
-### Example 2: Video Face Detection
+### Example 2: Video Detection
 
-**Request**:
+**Request:**
 ```json
 {
   "url": "https://example.com/video.mp4",
@@ -173,121 +102,81 @@ For image detection, the `num_frames` parameter is not required and will be igno
 }
 ```
 
-**Response**:
+### Example 3: Get Cropped Face URLs
+
+**Request:**
+```json
+{
+  "url": "https://example.com/photo.jpg",
+  "return_face_url": true
+}
+```
+
+**Response:**
 ```json
 {
   "error_code": 0,
   "error_msg": "SUCCESS",
   "faces_obj": {
     "0": {
-      "landmarks": [
-        [[320, 240], [420, 240], [370, 300], [370, 350], [340, 350], [400, 350]]
-      ],
-      "landmarks_str": [
-        "320,240:420,240:370,300:370,350:340,350:400,350"
-      ],
-      "region": [[300, 200, 150, 180]],
+      "landmarks": [[[120, 85], [180, 88], [150, 130], [150, 165], [125, 165], [175, 168]]],
+      "landmarks_str": ["120,85:180,88:150,130:150,165"],
+      "region": [[80, 50, 150, 180]],
       "removed": [],
-      "frame_time": 0.0
-    },
-    "10": {
-      "landmarks": [
-        [[325, 245], [425, 245], [375, 305], [375, 355], [345, 355], [405, 355]]
-      ],
-      "landmarks_str": [
-        "325,245:425,245:375,305:375,355:345,355:405,355"
-      ],
-      "region": [[305, 205, 150, 180]],
-      "removed": [[300, 200, 150, 180]],
-      "frame_time": 0.333
+      "frame_time": null,
+      "face_urls": ["https://s3.example.com/faces/face_detect_0.jpg"],
+      "crop_region": [[30, 0, 250, 280]],
+      "crop_landmarks": ["90,85:150,88:120,130:120,165"]
     }
   }
+}
+```
+
+### Example 4: Single Face Mode
+
+**Request:**
+```json
+{
+  "url": "https://example.com/group_photo.jpg",
+  "single_face": true
 }
 ```
 
 ## Error Responses
 
-### Invalid URL
-```json
-{
-  "error_code": 1,
-  "error_msg": "Invalid URL format",
-  "faces_obj": {}
-}
-```
+| error_code | error_msg | Description |
+|------------|-----------|-------------|
+| 0 | SUCCESS | Success |
+| 1 | Either 'url' or 'img' parameter must be provided | Missing input |
+| 1 | Invalid URL format | Bad URL |
+| 1 | Failed to download media from URL | Download failed |
 
-### No Faces Detected
-```json
-{
-  "error_code": 0,
-  "error_msg": "SUCCESS",
-  "faces_obj": {
-    "0": {
-      "landmarks": [],
-      "landmarks_str": [],
-      "region": [],
-      "removed": [],
-      "frame_time": null
+## Integration with Face Swap
+
+Use `landmarks_str` directly as the `opts` parameter in Face Swap API:
+
+```python
+import requests
+
+# Detect faces
+response = requests.post(
+    "https://openapi.akool.com/interface/detect-api/detect_faces",
+    json={"url": "https://example.com/target.jpg", "return_face_url": True},
+    headers={"x-api-key": "YOUR_API_KEY"}
+)
+
+result = response.json()
+if result["error_code"] == 0:
+    frame_data = result["faces_obj"]["0"]
+    # Use for Face Swap API
+    target_image = {
+        "path": frame_data["face_urls"][0],
+        "opts": frame_data["crop_landmarks"][0]
     }
-  }
-}
 ```
-
-### Processing Error
-```json
-{
-  "error_code": 1,
-  "error_msg": "Failed to download media from URL",
-  "faces_obj": {}
-}
-```
-
-## Use Cases
-
-### 1. Face Swap Preprocessing
-Detect face landmarks to prepare images for face swapping operations.
-- **Note**: When using the landmarks for the Face Swap API (`opts` parameter), extract only the first 4 groups of coordinates from `landmarks_str` (Left Eye, Right Eye, Nose, Mouth Center).
-
-### 2. Face Recognition
-Extract face regions and landmarks for face recognition systems.
-
-### 3. Video Analysis
-Track faces across video frames for content analysis or editing.
-
-### 4. Face Alignment
-Use landmarks to align faces for consistent processing.
-
-### 5. Facial Animation
-Use landmarks as control points for facial animation.
 
 ## Best Practices
 
-### URL Requirements
-- Use HTTPS URLs for better security
-- Ensure URLs are publicly accessible (no authentication required)
-- Use direct links to media files (avoid redirects)
-
-### Performance Optimization
-- For videos, use an appropriate `num_frames` value
-  - More frames = higher accuracy but longer processing time
-  - Fewer frames = faster processing but may miss faces
-- Cache results if processing the same media multiple times
-
-### Error Handling
-Always check the `error_code` before processing results:
-
-```python
-if response["error_code"] != 0:
-    print(f"Error: {response['error_msg']}")
-    return
-
-faces = response["faces_obj"]
-# Process faces...
-```
-
-## Rate Limits
-
-<Warning>
-Rate limits apply to this endpoint. Excessive requests may be throttled.
-Please implement appropriate retry logic with exponential backoff.
-</Warning>
+- **URL Requirements**: Use HTTPS, ensure publicly accessible
+- **Video num_frames**: Short videos (5-10), Medium (10-20), Long (20-50)
+- **Performance**: Use `single_face=true` when only one face needed
