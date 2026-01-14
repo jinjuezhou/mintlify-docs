@@ -32,7 +32,7 @@ GET https://openapi.akool.com/api/open/v3/avatar/list
 
 | **Parameter** | **Type** | **Value** | **Description**                                                                                                                               |
 | ------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| from          | Number   | 2、3      | 2 represents the official avatar of Akool, 3 represents the avatar uploaded by the user themselves，If empty, returns all avatars by default. |
+| from          | Number   | 2、3、7      | 2 represents the official avatar of Akool, 3 represents the avatar uploaded by the user themselves, 7 represents the AI-generated avatar. If empty, returns all avatars by default. |
 | type          | Number   | 1、2      | 1 represents the talking avatar of Akool, 2 represents the streaming avatar of Akool，If empty, returns all avatars by default. |
 | page          | Number   | 1         | Current number of pages，Default is 1.                                                                                                        |
 | size          | Number   | 10        | Current number of returns per page，Default is 100.                                                                                           |
@@ -154,7 +154,7 @@ POST https://openapi.akool.com/api/open/v3/talkingavatar/create
 | ------------------------------ | -------- | ----- | ------------------------------------------------------------------------------------------------------------ |
 | width                          | Number   | 3840  | Set the output video width,must be 3840                                                                                   |
 | height                         | Number   | 2160  | Set the output video height,must be 2160                                                                                 |
-| avatar_from                    | Number   |   2 or 3    | You use the avatar from of the avatar model, and you can get from [Get TalkingAvatar List](/ai-tools-suite/talking-avatar#get-avatar-list) api, you will obtain the field 【from】 and pass it here. If you provide an avatar URL yourself, avatar_from must be 3.                                                      |
+| avatar_from                    | Number   |   2, 3 or 7    | You use the avatar from of the avatar model, and you can get from [Get TalkingAvatar List](/ai-tools-suite/talking-avatar#get-avatar-list) api, you will obtain the field 【from】 and pass it here. If you provide an avatar URL yourself, avatar_from must be 3. If you use an AI-generated avatar, avatar_from must be 7.                                                      |
 | webhookUrl                     | String   |       | Callback url address based on HTTP request.                                                                  |
 | elements                       | [Object] |       | Collection of elements passed in in the video                                                                |
 | [elements].url                 | String |         | Link to element(When type is equal to image, url can be either a link or a Hexadecimal Color Code). When avatar_from =2, you don't need to pass this parameter. The image formats currently only support ".png", ".jpg", ".jpeg", ".webp", and the video formats currently only support ".mp4", ".mov", ".avi"          |
