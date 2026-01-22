@@ -141,50 +141,38 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateSessionRequest'
-            examples:
-              basic:
-                summary: Basic session creation
-                value:
-                  avatar_id: "dvp_Tristan_cloth2_1080P"
-                  knowledge_id: "64f8a1b2c3d4e5f6a7b8c9d0"
-                  duration: 3600
-                  voice_id: "iP95p4xoKVk53GoZ742B"
-                  language: "en"
-                  mode_type: 2
-                  background_url: "https://example.com/background.jpg"
-                  stream_type: "agora"
-                  credentials:
-                    agora_uid: 100000
-                    agora_app_id: "your-app-id"
-                    agora_channel: "your-channel"
-                    agora_token: "your-token"
-                  voice_params:
-                    speed: 1.0
-                    stt_language: "en"
-                    pron_map:
-                      akool: "ai ku er"
-                    stt_type: "openai_realtime"
-                    turn_detection:
-                      type: "server_vad"
-                      threshold: 0.5
-                      prefix_padding_ms: 300
-                      silence_duration_ms: 500
-              with_elevenlabs:
-                summary: With ElevenLabs custom settings
-                value:
-                  avatar_id: "dvp_Alina_cloth1_1080P"
-                  duration: 600
-                  voice_id: "Xb7hH8MSUJpSbSDYk0k2"
-                  language: "en"
-                  mode_type: 2
-                  voice_params:
-                    elevenlabs_settings:
-                      api_key: "sk_your_elevenlabs_api_key"
-                      model_id: "eleven_flash_v2_5"
-                      stability: 0.5
-                      similarity_boost: 0.75
-                      style: 0
-                      use_speaker_boost: true
+            example:
+              avatar_id: "dvp_Tristan_cloth2_1080P"
+              duration: 3600
+              voice_id: "iP95p4xoKVk53GoZ742B"
+              language: "en"
+              mode_type: 2
+              knowledge_id: "64f8a1b2c3d4e5f6a7b8c9d0"
+              background_url: "https://example.com/background.jpg"
+              stream_type: "agora"
+              credentials:
+                agora_uid: 100000
+                agora_app_id: "your-app-id"
+                agora_channel: "your-channel"
+                agora_token: "your-token"
+              voice_params:
+                speed: 1.0
+                stt_language: "en"
+                pron_map:
+                  akool: "ai ku er"
+                stt_type: "openai_realtime"
+                turn_detection:
+                  type: "server_vad"
+                  threshold: 0.5
+                  prefix_padding_ms: 300
+                  silence_duration_ms: 500
+                elevenlabs_settings:
+                  api_key: "sk_your_elevenlabs_api_key"
+                  model_id: "eleven_flash_v2_5"
+                  stability: 0.5
+                  similarity_boost: 0.75
+                  style: 0
+                  use_speaker_boost: true
       responses:
         '200':
           description: Session created successfully
