@@ -24,7 +24,7 @@ The Knowledge Base API is specifically designed to enhance Streaming Avatar inte
 - `user_type`: User type (number, 1=internal user, 2=external user)
 - `from`: Source type (number, 1=system, 2=user)
 - `name`: Knowledge base name (string, optional, max 100 characters)
-- `prologue`: Opening message/greeting text (string, optional, max 100 characters) - can be used with TTS repeat mode for personalized AI assistant introductions
+- `prologue`: Opening message/greeting text (string, optional, max 2000 characters) - can be used with TTS repeat mode for personalized AI assistant introductions. Set to empty string to clear the prologue
 - `prompt`: AI prompt instructions (string, optional, max 10,000 characters)
 - `docs`: Array of document objects (array, optional)
 - `urls`: Array of URL strings (array, optional)
@@ -49,7 +49,7 @@ The Knowledge Base API is specifically designed to enhance Streaming Avatar inte
 
 **Field Limitations:**
 - **name:** Maximum 100 characters
-- **prologue:** Maximum 100 characters (recommended for TTS voice synthesis)
+- **prologue:** Maximum 2000 characters (recommended for TTS voice synthesis)
 - **prompt:** Maximum 10,000 characters
 
 ## API Endpoints
@@ -200,7 +200,7 @@ POST https://openapi.akool.com/api/open/v4/knowledge/create
 | **Parameter** | **Type** | **Required** | **Description** |
 |-----------|------|----------|-------------|
 | name | String | No | Knowledge base name, max 100 characters |
-| prologue | String | No | Opening message/greeting text, max 100 characters (recommended for TTS playback) |
+| prologue | String | No | Opening message/greeting text, max 2000 characters (recommended for TTS playback). Set to empty string to clear the prologue |
 | prompt | String | No | AI instructions, max 10,000 characters |
 | docs | Array | No | Array of document objects |
 | urls | Array | No | Array of URL strings |
@@ -546,7 +546,7 @@ POST https://openapi.akool.com/api/open/v4/knowledge/update
 |-----------|------|----------|-------------|
 | id | String | Yes | Knowledge base ID to update |
 | name | String | No | Updated name, max 100 characters |
-| prologue | String | No | Updated opening message/greeting text, max 100 characters |
+| prologue | String | No | Updated opening message/greeting text, max 2000 characters. Set to empty string to clear the prologue |
 | prompt | String | No | Updated AI instructions, max 10,000 characters |
 | docs | Array | No | Updated document array |
 | urls | Array | No | Updated URL array |
