@@ -441,7 +441,7 @@ components:
           description: Knowledge base ID to provide context for AI responses. Create and manage knowledge bases using the Knowledge Base API. When provided, the AI will use documents and URLs from the knowledge base to enhance response accuracy.
         voice_id:
           type: string
-          description: Voice ID to change avatar's voice. Get valid IDs from Voice List API
+          description: Voice ID to change avatar's voice. Get valid IDs from Voice List API. Note that voice IDs from Akool Multilingual 2 cannot be used with Streaming Avatar.
         voice_url:
           type: string
           description: Custom voice model URL. Get valid URLs from Voice List API
