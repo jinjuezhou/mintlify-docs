@@ -194,6 +194,387 @@ After following the setup, you'll have a working streaming avatar with real-time
   - [Best practices for security and production usage](/sdk/jssdk-best-practice)
 </Tip>
 
+## Complete Working Example
+
+This section provides a fully runnable demo you can copy and run in under 5 minutes. It includes a **Node.js backend** that securely proxies Akool API calls (keeping your API key server-side) and a **browser frontend** using the SDK via CDN.
+
+### Project Structure
+
+```
+sa-demo/
+  server.js    # Backend proxy (Node.js, zero dependencies)
+  index.html   # Frontend page
+  main.js      # Frontend logic
+```
+
+### Backend: server.js
+
+This minimal Node.js server does two things:
+- Proxies session create/close requests to the Akool API (so your API key never reaches the browser)
+- Serves the static frontend files
+
+<Warning>
+**Always close sessions when done.** Unclosed sessions continue consuming credits until they time out. The backend below handles both creation and cleanup.
+</Warning>
+
+```javascript
+const http = require("http");
+const fs = require("fs");
+const path = require("path");
+
+const API_KEY = process.env.AKOOL_API_KEY || "";
+const AKOOL_BASE = "https://openapi.akool.com";
+const AVATAR_ID = process.env.AVATAR_ID || "dvp_Tristan_cloth2_1080P";
+const PORT = Number(process.env.PORT) || 3100;
+
+if (!API_KEY) {
+  console.error("Set AKOOL_API_KEY environment variable before starting.");
+  process.exit(1);
+}
+
+const MIME = {
+  ".html": "text/html",
+  ".css": "text/css",
+  ".js": "application/javascript",
+};
+
+function akoolFetch(urlPath, method, body) {
+  const url = new URL(urlPath, AKOOL_BASE);
+  const headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json",
+  };
+  const payload = body ? JSON.stringify(body) : undefined;
+
+  return new Promise((resolve, reject) => {
+    const lib = require("https");
+    const req = lib.request(url, { method, headers }, (res) => {
+      let data = "";
+      res.on("data", (chunk) => (data += chunk));
+      res.on("end", () => {
+        try {
+          resolve(JSON.parse(data));
+        } catch {
+          reject(new Error("Invalid JSON from Akool API"));
+        }
+      });
+    });
+    req.on("error", reject);
+    if (payload) req.write(payload);
+    req.end();
+  });
+}
+
+function readBody(req) {
+  return new Promise((resolve) => {
+    let data = "";
+    req.on("data", (chunk) => (data += chunk));
+    req.on("end", () => resolve(data));
+  });
+}
+
+function sendJson(res, status, obj) {
+  res.writeHead(status, {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  });
+  res.end(JSON.stringify(obj));
+}
+
+function serveStatic(res, filePath) {
+  const ext = path.extname(filePath);
+  const mime = MIME[ext] || "application/octet-stream";
+  fs.readFile(filePath, (err, content) => {
+    if (err) {
+      res.writeHead(404);
+      res.end("Not found");
+      return;
+    }
+    res.writeHead(200, { "Content-Type": mime });
+    res.end(content);
+  });
+}
+
+const server = http.createServer(async (req, res) => {
+  if (req.method === "OPTIONS") {
+    res.writeHead(204, {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    });
+    res.end();
+    return;
+  }
+
+  // Create a new avatar session
+  if (req.method === "POST" && req.url === "/session/create") {
+    try {
+      const result = await akoolFetch(
+        "/api/open/v4/liveAvatar/session/create",
+        "POST",
+        { avatar_id: AVATAR_ID, duration: 600 }
+      );
+      sendJson(res, 200, result);
+    } catch (err) {
+      sendJson(res, 500, { error: err.message });
+    }
+    return;
+  }
+
+  // Close an active session (stops billing)
+  if (req.method === "POST" && req.url === "/session/close") {
+    try {
+      const raw = await readBody(req);
+      const body = JSON.parse(raw);
+      const result = await akoolFetch(
+        "/api/open/v4/liveAvatar/session/close",
+        "POST",
+        { id: body.id }
+      );
+      sendJson(res, 200, result);
+    } catch (err) {
+      sendJson(res, 500, { error: err.message });
+    }
+    return;
+  }
+
+  // Serve static files
+  const safePath = req.url === "/" ? "/index.html" : req.url;
+  const filePath = path.join(__dirname, safePath);
+  if (!filePath.startsWith(__dirname)) {
+    res.writeHead(403);
+    res.end("Forbidden");
+    return;
+  }
+  serveStatic(res, filePath);
+});
+
+server.listen(PORT, () => {
+  console.log("SA Demo running at http://localhost:" + PORT);
+});
+```
+
+### Frontend: index.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streaming Avatar Demo</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
+    #remote-video { width: 100%; max-width: 640px; height: 480px; background: #111; border-radius: 8px; }
+    .controls { margin: 12px 0; display: flex; gap: 8px; }
+    button { padding: 8px 16px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary { background: #6366f1; color: #fff; border-color: #6366f1; }
+    .btn-danger { background: #dc2626; color: #fff; border-color: #dc2626; }
+    #messages { border: 1px solid #e5e5e5; border-radius: 8px; min-height: 120px; max-height: 240px; overflow-y: auto; padding: 8px; margin: 12px 0; }
+    .msg { padding: 6px 10px; margin: 4px 0; border-radius: 6px; max-width: 80%; }
+    .msg.user { background: #6366f1; color: #fff; margin-left: auto; }
+    .msg.bot { background: #f3f4f6; }
+    .input-row { display: flex; gap: 8px; }
+    .input-row input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 6px; }
+    #status { color: #888; font-size: 0.85rem; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Streaming Avatar Demo</h1>
+  <div id="remote-video"></div>
+  <div class="controls">
+    <button id="btn-session" class="btn-primary">Start Session</button>
+    <button id="btn-mic" disabled>Mic Off</button>
+    <button id="btn-interrupt" disabled>Interrupt</button>
+  </div>
+  <div id="messages"></div>
+  <div class="input-row">
+    <input id="msg-input" type="text" placeholder="Type a message..." disabled />
+    <button id="btn-send" class="btn-primary" disabled>Send</button>
+  </div>
+  <div id="status">Ready</div>
+
+  <script src="https://unpkg.com/akool-streaming-avatar-sdk"></script>
+  <script src="main.js"></script>
+</body>
+</html>
+```
+
+### Frontend: main.js
+
+```javascript
+(function () {
+  var BACKEND = "http://localhost:3100";
+  var btnSession = document.getElementById("btn-session");
+  var btnMic = document.getElementById("btn-mic");
+  var btnInterrupt = document.getElementById("btn-interrupt");
+  var btnSend = document.getElementById("btn-send");
+  var msgInput = document.getElementById("msg-input");
+  var messagesEl = document.getElementById("messages");
+  var statusEl = document.getElementById("status");
+
+  var sdk = null;
+  var sessionId = null;
+  var running = false;
+
+  function setStatus(text) { statusEl.textContent = text; }
+
+  function addMessage(text, role) {
+    var div = document.createElement("div");
+    div.className = "msg " + role;
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function setControls(enabled) {
+    btnMic.disabled = !enabled;
+    btnInterrupt.disabled = !enabled;
+    btnSend.disabled = !enabled;
+    msgInput.disabled = !enabled;
+  }
+
+  async function startSession() {
+    btnSession.disabled = true;
+    setStatus("Creating session...");
+
+    // 1. Create session via backend proxy
+    var res = await fetch(BACKEND + "/session/create", { method: "POST" });
+    if (!res.ok) throw new Error("Backend returned " + res.status);
+    var body = await res.json();
+    sessionId = body.data._id;
+    var creds = body.data.credentials;
+
+    // 2. Initialize SDK
+    sdk = new AkoolStreamingAvatar.GenericAgoraSDK({ mode: "rtc", codec: "vp8" });
+
+    sdk.on({
+      onMessageReceived: function (msg) {
+        if (!msg.isSentByMe) addMessage(msg.text, "bot");
+      },
+      onMessageUpdated: function (msg) {
+        if (!msg.isSentByMe) {
+          var last = messagesEl.querySelector(".msg.bot:last-child");
+          if (last) last.textContent = msg.text;
+        }
+      },
+      onUserPublished: async function (user, mediaType) {
+        var track = await sdk.getClient().subscribe(user, mediaType);
+        if (mediaType === "video") track?.play("remote-video");
+        else if (mediaType === "audio") track?.play();
+      },
+      onException: function (err) { setStatus("Error: " + (err.msg || "unknown")); },
+      onTokenDidExpire: function () { setStatus("Token expired"); stopSession(); }
+    });
+
+    // 3. Join Agora channel with credentials from Akool
+    setStatus("Connecting...");
+    await sdk.joinChannel({
+      agora_app_id: creds.agora_app_id,
+      agora_channel: creds.agora_channel,
+      agora_token: creds.agora_token,
+      agora_uid: creds.agora_uid
+    });
+
+    // 4. Start avatar chat in dialog mode
+    await sdk.joinChat({ lang: "en", mode: 2 });
+
+    running = true;
+    btnSession.disabled = false;
+    btnSession.textContent = "End Session";
+    btnSession.className = "btn-danger";
+    setControls(true);
+    setStatus("Connected - avatar is ready");
+  }
+
+  async function stopSession() {
+    setControls(false);
+    btnSession.disabled = true;
+
+    // 1. Disconnect SDK
+    if (sdk) { await sdk.closeStreaming(); sdk = null; }
+
+    // 2. Close session on Akool side (stops billing)
+    if (sessionId) {
+      await fetch(BACKEND + "/session/close", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: sessionId })
+      });
+      sessionId = null;
+    }
+
+    running = false;
+    btnSession.textContent = "Start Session";
+    btnSession.className = "btn-primary";
+    btnSession.disabled = false;
+    btnMic.textContent = "Mic Off";
+    messagesEl.innerHTML = "";
+    setStatus("Session ended");
+  }
+
+  btnSession.addEventListener("click", function () {
+    (running ? stopSession() : startSession()).catch(function (err) {
+      setStatus("Failed: " + err.message);
+      btnSession.disabled = false;
+    });
+  });
+
+  btnSend.addEventListener("click", async function () {
+    var text = msgInput.value.trim();
+    if (!text || !sdk) return;
+    addMessage(text, "user");
+    msgInput.value = "";
+    await sdk.sendMessage(text);
+  });
+
+  msgInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") btnSend.click();
+  });
+
+  btnMic.addEventListener("click", async function () {
+    if (!sdk) return;
+    await sdk.toggleMic();
+    btnMic.textContent = sdk.isMicEnabled() ? "Mic On" : "Mic Off";
+  });
+
+  btnInterrupt.addEventListener("click", async function () {
+    if (sdk) await sdk.interrupt();
+  });
+})();
+```
+
+### Run the Demo
+
+<Steps>
+  <Step title="Create the project folder">
+    Create a folder (e.g. `sa-demo/`) and place the three files above inside it: `server.js`, `index.html`, and `main.js`.
+  </Step>
+  <Step title="Set your API key and start the server">
+    ```bash
+    # macOS / Linux
+    export AKOOL_API_KEY="your-api-key-here"
+    node server.js
+
+    # Windows PowerShell
+    $env:AKOOL_API_KEY="your-api-key-here"
+    node server.js
+    ```
+
+    You can also set `AVATAR_ID` to use a different avatar (default: `dvp_Tristan_cloth2_1080P`).
+  </Step>
+  <Step title="Open in browser">
+    Visit [http://localhost:3100](http://localhost:3100) and click **Start Session**. The avatar video will appear, and you can type messages or use the microphone to talk.
+  </Step>
+</Steps>
+
+<Info>
+This demo requires **no npm install** - the backend uses only Node.js built-in modules, and the frontend loads the SDK from CDN.
+</Info>
+
 ## Next Steps
 
 - [Complete API Reference](/sdk/jssdk-api) - Explore all available methods and events

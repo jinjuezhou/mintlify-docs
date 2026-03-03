@@ -1,0 +1,68 @@
+---
+title: "LiveKit Agent Integration"
+description: "Set up and run a LiveKit Agent server for Streaming Avatar integration"
+---
+
+## Overview
+
+[LiveKit Agents](https://docs.livekit.io/agents/) is a framework for building server-side AI agents that interact with users in real time. By integrating with AKOOL's Streaming Avatar, you can build AI-powered avatar experiences using LiveKit's agent infrastructure.
+
+This guide walks you through setting up the AKOOL LiveKit Agent server locally and testing it with the LiveKit Playground.
+
+**Repository:** [AKOOL LiveKit Agents](https://github.com/AKOOL-Official/livekit_agents)
+
+## Prerequisites
+
+- Python (LTS version)
+- [uv](https://docs.astral.sh/uv/) package manager
+- A [LiveKit Cloud](https://cloud.livekit.io/) account (for API key, secret, and server URL)
+- An [OpenAI](https://platform.openai.com/) API key
+- AKOOL Client ID and Client Secret (available from your [AKOOL dashboard](https://akool.com))
+
+## Setup
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/AKOOL-Official/livekit_agents.git
+    cd livekit_agents
+    ```
+  </Step>
+  <Step title="Switch to the feature branch">
+    ```bash
+    git checkout feature/livekit-plugins-akool
+    ```
+  </Step>
+  <Step title="Install dependencies">
+    Run the following command in the project root directory:
+    ```bash
+    uv sync
+    ```
+  </Step>
+  <Step title="Configure environment variables">
+    Navigate to the `examples` folder and create a `.env` file from the template:
+    ```bash
+    cd examples
+    cp env.example .env
+    ```
+
+    Fill in the following credentials in the `.env` file:
+
+    ```
+    LIVEKIT_API_KEY=""
+    LIVEKIT_API_SECRET=""
+    LIVEKIT_URL=""
+    OPENAI_API_KEY=""
+    AKOOL_CLIENT_ID=""
+    AKOOL_CLIENT_SECRET=""
+    ```
+  </Step>
+  <Step title="Start the agent server">
+    ```bash
+    uv run examples/avatar_agents/akool/agent_worker.py dev
+    ```
+  </Step>
+  <Step title="Test in the playground">
+    Open the [LiveKit Agents Playground](https://agents-playground.livekit.io/) and sign in with your LiveKit account to interact with the agent.
+  </Step>
+</Steps>

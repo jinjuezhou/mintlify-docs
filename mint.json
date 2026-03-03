@@ -109,10 +109,21 @@
             "ai-tools-suite/live-avatar/list-sessions"
           ]
         },
-        "implementation-guide/streaming-avatar",
-        "sdk/jssdk-start",
-        "sdk/jssdk-best-practice",
-        "sdk/jssdk-api",
+        {
+          "group": "Implementation Guides",
+          "pages": [
+            "implementation-guide/streaming-avatar",
+            "implementation-guide/livekit-agent"
+          ]
+        },
+        {
+          "group": "Integrate with AKOOL SA SDK",
+          "pages": [
+            "sdk/jssdk-start",
+            "sdk/jssdk-best-practice",
+            "sdk/jssdk-api"
+          ]
+        },
         "ai-tools-suite/knowledge-base",
         "ai-tools-suite/live-camera"
       ]
