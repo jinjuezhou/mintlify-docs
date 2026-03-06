@@ -55,8 +55,13 @@ paths:
 
   /api/open/v4/faceswap/faceswapByImage:
     post:
-      summary: Face Swap Pro - More Realistic, More Similar
-      description: Advanced face swap API for single face in images. Delivers more realistic and more similar results compared to V3. IMPORTANT - Only supports single face swapping. For multiple faces, use V3 API.
+      summary: Face Swap Pro
+      description: |
+        Face Swap Pro API (`akool_faceswap_image_hq`) - Highest quality face swap for images.
+
+        - More realistic, more similar results
+        - Simplified integration: no `opts` parameter or face detection step needed
+        - Supports up to 50 sourceImage / targetImage pairs
       tags:
         - Face Swap
       requestBody:
@@ -64,15 +69,79 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ImageFaceswapV4Request'
+              $ref: '#/components/schemas/ImageFaceswapProRequest'
             example:
-              targetImage:
-                - path: "https://drz0f01yeq1cx.cloudfront.net/1756283639652-91bbc793c9a44830ba3dc5f4ae9d9793-12.png"
               sourceImage:
-                - path: "https://d3fulx9g4ogwhk.cloudfront.net/canva_backend/255b106e-6629-4d64-a2ac-e54d905959ca.jpeg"
+                - path: "https://example.com/new-face.jpg"
+              targetImage:
+                - path: "https://example.com/original.jpg"
               model_name: "akool_faceswap_image_hq"
-              webhookUrl: ""
               face_enhance: false
+      responses:
+        '200':
+          description: Faceswap request submitted successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/FaceswapV4Result'
+              example:
+                code: 1000
+                msg: "OK"
+                data:
+                  _id: "6593c94c0ef703e8c055e3c8"
+                  job_id: "20240102082900592-5653"
+
+  /api/open/v4/faceswap/faceswapPlusByImage:
+    post:
+      summary: Face Swap Plus
+      description: |
+        Face Swap Plus API (`akool_faceswap_classic_plus`) - Multi-face swap for images and videos.
+
+        - Supports **multiple faces** via `face_mapping`
+        - Supports both **images and videos** (`source_url` / `target_url`)
+        - Supports `single_face_mode` with `time_range` for video segment face swap
+        - Supports `model_style` (realistic / beautify)
+      tags:
+        - Face Swap
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageFaceswapPlusRequest'
+            examples:
+              multi_face:
+                summary: "Multi-Face Swap"
+                value:
+                  source_url: "https://example.com/new-face.jpg"
+                  target_url: "https://example.com/group-photo.jpg"
+                  face_enhance: false
+                  model_style: "realistic"
+                  single_face_mode: false
+                  face_mapping:
+                    - source_face_info:
+                        face_url: "https://example.com/source-face-1.jpg"
+                      target_face_info:
+                        face_url: "https://example.com/target-face-1.jpg"
+                    - source_face_info:
+                        face_url: "https://example.com/source-face-2.jpg"
+                      target_face_info:
+                        face_url: "https://example.com/target-face-2.jpg"
+              video_segment:
+                summary: "Video Segment Face Swap"
+                value:
+                  source_url: "https://example.com/new-face.jpg"
+                  target_url: "https://example.com/video.mp4"
+                  single_face_mode: true
+                  time_range:
+                    start: 0
+                    end: 30
+                  face_enhance: false
       responses:
         '200':
           description: Faceswap request submitted successfully
@@ -235,10 +304,13 @@ components:
       properties:
         path:
           type: string
-          description: Links to face image
+          description: URL of the face image
         opts:
           type: string
-          description: Key information of faces detected in image. You can get it through the Face Detect API, use the landmarks_str value returned by the API
+          description: |
+            Face landmark coordinates string (optional). You can get this value from the `crop_landmarks` field
+            returned by the [Face Detection API](/ai-tools-suite/face-detection/detect-faces).
+            When provided, improves face alignment accuracy. Format: colon-separated coordinate pairs, e.g. "262,175:363,175:313,215:272,279"
 
     FaceImageSimple:
       type: object
@@ -278,34 +350,158 @@ components:
           type: string
           description: Callback url address based on HTTP request
 
-    ImageFaceswapV4Request:
+    FaceMappingItem:
       type: object
       required:
-        - targetImage
-        - sourceImage
-        - model_name
+        - source_face_info
+        - target_face_info
       properties:
-        targetImage:
-          type: array
-          items:
-            $ref: '#/components/schemas/FaceImageSimple'
-          description: A collection of faces in the original image
+        source_face_info:
+          type: object
+          required:
+            - face_url
+          properties:
+            face_url:
+              type: string
+              description: |
+                URL of the source (new) face image.
+                Can be a `face_urls` value from the Face Detection API (bbox not needed),
+                or a user-uploaded original image URL (bbox required).
+            bbox:
+              type: array
+              items:
+                type: number
+              minItems: 4
+              maxItems: 4
+              description: |
+                Bounding box `[x1, y1, x2, y2]` for the source face (optional).
+                Required when `face_url` is a user-uploaded original image URL.
+                Get this value from the `crop_region` field of the Face Detection API response.
+                Not needed when `face_url` comes from `face_urls` in the Face Detection API response.
+        target_face_info:
+          type: object
+          properties:
+            face_url:
+              type: string
+              description: |
+                URL of the target (original) face image.
+                Can be a `face_urls` value from the Face Detection API (bbox not needed),
+                or a user-uploaded original image URL (bbox required).
+            bbox:
+              type: array
+              items:
+                type: number
+              minItems: 4
+              maxItems: 4
+              description: |
+                Bounding box `[x1, y1, x2, y2]` for the target face (optional).
+                Required when `face_url` is a user-uploaded original image URL.
+                Get this value from the `crop_region` field of the Face Detection API response.
+                Not needed when `face_url` comes from `face_urls` in the Face Detection API response.
+
+    TimeRange:
+      type: object
+      required:
+        - start
+        - end
+      properties:
+        start:
+          type: number
+          minimum: 0
+          description: Start time in seconds
+        end:
+          type: number
+          minimum: 0
+          description: End time in seconds (must be greater than start)
+
+    ImageFaceswapProRequest:
+      type: object
+      required:
+        - sourceImage
+        - targetImage
+      properties:
         sourceImage:
           type: array
           items:
-            $ref: '#/components/schemas/FaceImageSimple'
-          description: Replacement target image information
+            $ref: '#/components/schemas/FaceImageWithOpts'
+          minItems: 1
+          maxItems: 50
+          description: |
+            Source (new) face image URL array. Each item contains `path` (required) and `opts` (optional).
+            The `opts` value comes from the `crop_landmarks` field returned by the [Face Detection API](/ai-tools-suite/face-detection/detect-faces).
+        targetImage:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaceImageWithOpts'
+          minItems: 1
+          maxItems: 50
+          description: |
+            Target face image URL array. Each item contains `path` (required) and `opts` (optional).
+            The `opts` value comes from the `crop_landmarks` field returned by the [Face Detection API](/ai-tools-suite/face-detection/detect-faces).
         model_name:
           type: string
-          enum: ["akool_faceswap_image_hq"]
-          description: "The model name for Face Swap Pro. The 'akool_faceswap_image_hq' model delivers more realistic and more similar results. IMPORTANT - Only supports single face in an image. For multiple faces, use V3 Image Faceswap API."
+          enum:
+            - akool_faceswap_image_hq
+          default: akool_faceswap_image_hq
+          description: "Model name (default: `akool_faceswap_image_hq`)"
         webhookUrl:
           type: string
-          description: Callback url address based on HTTP request
+          description: Callback URL for result notification
         face_enhance:
           type: boolean
           default: false
-          description: Face enhance must be a boolean, default is false
+          description: Whether to enable face enhancement (default false)
+        single_face_mode:
+          type: boolean
+          default: false
+          description: |
+            When `true`, enables single face mode for simplified single-face swap.
+            When `false` (default), standard mode.
+
+    ImageFaceswapPlusRequest:
+      type: object
+      required:
+        - source_url
+        - target_url
+      properties:
+        source_url:
+          type: string
+          description: Source (new) face image URL
+        target_url:
+          type: string
+          description: Target material URL (image or video)
+        webhookUrl:
+          type: string
+          description: Callback URL for result notification
+        face_enhance:
+          type: boolean
+          default: false
+          description: Whether to enable face enhancement (default false)
+        model_style:
+          type: string
+          enum:
+            - realistic
+            - beautify
+          default: realistic
+          description: "Model style: `realistic` (default) or `beautify`"
+        face_mapping:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaceMappingItem'
+          description: |
+            Face mapping array for multi-face swap (required when `single_face_mode` is false).
+            Each item maps one source face to one target face.
+        single_face_mode:
+          type: boolean
+          default: false
+          description: |
+            When `true`, uses `time_range` for single-face video segment swap.
+            When `false` (default), uses `face_mapping` for multi-face swap.
+        time_range:
+          $ref: '#/components/schemas/TimeRange'
+          description: |
+            Video time range in seconds. Only supported when `single_face_mode` is `true`.
+            Specifies which segment of the video to apply face swap to.
 
     VideoFaceswapRequest:
       type: object
