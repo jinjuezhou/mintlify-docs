@@ -23,12 +23,12 @@ Face Swap Pro delivers the highest quality face swap results for images:
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `sourceImage` | array | Yes | Source (new) face image URLs. Each item: `{ "path": "url", "opts": "landmarks" }`. Max 50 items. |
-| `sourceImage[].path` | string | Yes | URL of the source face image |
-| `sourceImage[].opts` | string | No | Face landmark string from `crop_landmarks` of [Face Detection API](/ai-tools-suite/face-detection/detect-faces) |
-| `targetImage` | array | Yes | Target face image URLs. Each item: `{ "path": "url", "opts": "landmarks" }`. Max 50 items. |
-| `targetImage[].path` | string | Yes | URL of the target face image |
-| `targetImage[].opts` | string | No | Face landmark string from `crop_landmarks` of [Face Detection API](/ai-tools-suite/face-detection/detect-faces) |
+| `sourceImage` | array | Yes | Source (new) face image URLs. Each item: `{ "path": "url", "opts": "landmarks" }`. Min 1, Max 50 items. |
+| `sourceImage[].path` | string | Yes | Valid URL of the source face image. Must be a valid HTTP/HTTPS URL. |
+| `sourceImage[].opts` | string | Conditional | Face landmark string from `crop_landmarks` of [Face Detection API](/ai-tools-suite/face-detection/detect-faces). **Required** when `sourceImage` or `targetImage` array length > 1. **Optional** when both arrays have exactly 1 element. |
+| `targetImage` | array | Yes | Target face image URLs. Each item: `{ "path": "url", "opts": "landmarks" }`. Min 1, Max 50 items. |
+| `targetImage[].path` | string | Yes | Valid URL of the target face image. Must be a valid HTTP/HTTPS URL. |
+| `targetImage[].opts` | string | Conditional | Face landmark string from `crop_landmarks` of [Face Detection API](/ai-tools-suite/face-detection/detect-faces). **Required** when `sourceImage` or `targetImage` array length > 1. **Optional** when both arrays have exactly 1 element. |
 | `model_name` | string | No | Default: `akool_faceswap_image_hq` |
 | `webhookUrl` | string | No | Callback URL for result notification |
 | `face_enhance` | boolean | No | Enable face enhancement (default: false) |
@@ -36,7 +36,7 @@ Face Swap Pro delivers the highest quality face swap results for images:
 
 ## Getting opts Value
 
-The `opts` parameter is optional but recommended for improved face alignment accuracy. To get the `opts` value:
+The `opts` parameter provides face landmark coordinates for improved face alignment accuracy. To get the `opts` value:
 
 1. Call the [Face Detection API](/ai-tools-suite/face-detection/detect-faces) with your image URL
 2. Use the `crop_landmarks` value from the response as the `opts` parameter
@@ -44,23 +44,34 @@ The `opts` parameter is optional but recommended for improved face alignment acc
 
 ## Important Notes
 
-- `opts` is **optional** - the API works without it, but providing it improves face alignment
+### Parameter Validation Rules
+
+- **`path` validation**: Each `path` must be a valid HTTP/HTTPS URL. Invalid URLs will be rejected.
+- **`opts` conditional requirement**:
+  - When both `sourceImage` and `targetImage` arrays have exactly **1 element each**: `opts` is **optional** for all elements
+  - When either `sourceImage` or `targetImage` array has **more than 1 element**: `opts` is **required** for **every element** in both arrays
+  - If any element is missing `opts` when required, the request will be rejected with a validation error
+
+### Usage Guidelines
+
+- For single face swap (1 source + 1 target): `opts` is optional but recommended for better accuracy
+- For batch face swap (multiple faces): `opts` is required for all elements to ensure proper face mapping
 - For multi-face swap, image + video support, or video segment swap, use [Face Swap Plus](/ai-tools-suite/faceswap/image-faceswap-plus)
 
-## Example: Without opts (Simplified)
+## Example: Single Face Swap (opts Optional)
+
+When both arrays have exactly 1 element, `opts` is optional:
 
 ```json
 {
   "sourceImage": [
     { 
-      "path": "https://example.com/new-face.jpg", 
-      "opts": "239,364:386,366:317,472:266,539"
+      "path": "https://example.com/new-face.jpg"
     }
   ],
   "targetImage": [
     { 
-      "path": "https://example.com/original.jpg", 
-      "opts": "262,175:363,175:313,215:272,279" 
+      "path": "https://example.com/original.jpg"
     }
   ],
   "model_name": "akool_faceswap_image_hq",
@@ -69,7 +80,7 @@ The `opts` parameter is optional but recommended for improved face alignment acc
 }
 ```
 
-## Example: With opts (Higher Accuracy)
+## Example: Single Face Swap with opts (Recommended)
 
 ```json
 {
@@ -83,6 +94,38 @@ The `opts` parameter is optional but recommended for improved face alignment acc
     {
       "path": "https://example.com/original.jpg",
       "opts": "262,175:363,175:313,215:272,279"
+    }
+  ],
+  "model_name": "akool_faceswap_image_hq",
+  "face_enhance": false,
+  "single_face_mode": false
+}
+```
+
+## Example: Batch Face Swap (opts Required)
+
+When either array has more than 1 element, `opts` is **required** for **all elements**:
+
+```json
+{
+  "sourceImage": [
+    {
+      "path": "https://example.com/new-face-1.jpg",
+      "opts": "239,364:386,366:317,472:266,539"
+    },
+    {
+      "path": "https://example.com/new-face-2.jpg",
+      "opts": "150,200:250,200:200,250:180,300"
+    }
+  ],
+  "targetImage": [
+    {
+      "path": "https://example.com/original.jpg",
+      "opts": "262,175:363,175:313,215:272,279"
+    },
+    {
+      "path": "https://example.com/original-2.jpg",
+      "opts": "100,150:200,150:150,200:120,250"
     }
   ],
   "model_name": "akool_faceswap_image_hq",
