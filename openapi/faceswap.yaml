@@ -109,7 +109,7 @@ paths:
         - Supports **multiple faces** via `face_mapping`
         - Supports both **images and videos** (`source_url` / `target_url`)
         - Supports `single_face_mode` with `time_range` for video segment face swap
-        - Supports `model_style` (realistic / beautify)
+        - Supports `model_style` (realistic / beautify / lossless)
       tags:
         - Face Swap
       requestBody:
@@ -504,8 +504,9 @@ components:
           enum:
             - realistic
             - beautify
+            - lossless
           default: realistic
-          description: "Model style: `realistic` (default) or `beautify`"
+          description: "Model style: `realistic` (default), `beautify`, or `lossless`"
         face_mapping:
           type: array
           items:
