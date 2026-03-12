@@ -16,7 +16,7 @@ Face Swap Plus supports advanced face swapping scenarios:
 - **Multi-Face**: Swap multiple faces at once via `face_mapping`
 - **Image and Video**: Supports both image and video materials
 - **Video Segment**: Use `single_face_mode` + `time_range` to swap faces in a specific video segment
-- **Style Options**: Choose between `realistic` and `beautify` styles
+- **Style Options**: Choose between `realistic`, `beautify`, or `lossless` styles
 
 ## Parameters
 
@@ -28,7 +28,7 @@ Face Swap Plus supports advanced face swapping scenarios:
 | `target_url` | string | Yes | Target material URL (image or video) |
 | `webhookUrl` | string | No | Callback URL for result notification |
 | `face_enhance` | boolean | No | Enable face enhancement (default: false) |
-| `model_style` | string | No | `realistic` (default) or `beautify` |
+| `model_style` | string | No | `realistic` (default), `beautify`, or `lossless` |
 | `single_face_mode` | boolean | No | `false` (default) for multi-face mode, `true` for single-face + time_range mode |
 
 ### Multi-Face Mode (default)
