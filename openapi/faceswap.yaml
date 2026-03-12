@@ -108,7 +108,7 @@ paths:
 
         - Supports **multiple faces** via `face_mapping`
         - Supports both **images and videos** (`source_url` / `target_url`)
-        - Supports `single_face_mode` with `time_range` for video segment face swap
+        - Supports `single_face_mode` for single-face swap
         - Supports `model_style` (realistic / beautify / lossless)
       tags:
         - Face Swap
@@ -137,14 +137,11 @@ paths:
                       target_face_info:
                         face_url: "https://example.com/target-face-2.jpg"
               video_segment:
-                summary: "Video Segment Face Swap"
+                summary: "Video Single Face Swap"
                 value:
                   source_url: "https://example.com/new-face.jpg"
                   target_url: "https://example.com/video.mp4"
                   single_face_mode: true
-                  time_range:
-                    start: 0
-                    end: 30
                   face_enhance: false
       responses:
         '200':
@@ -518,13 +515,8 @@ components:
           type: boolean
           default: false
           description: |
-            When `true`, uses `time_range` for single-face video segment swap.
+            When `true`, enables single-face mode for simplified single-face swap.
             When `false` (default), uses `face_mapping` for multi-face swap.
-        time_range:
-          $ref: '#/components/schemas/TimeRange'
-          description: |
-            Video time range in seconds. Only supported when `single_face_mode` is `true`.
-            Specifies which segment of the video to apply face swap to.
 
     VideoFaceswapRequest:
       type: object

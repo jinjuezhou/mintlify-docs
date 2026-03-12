@@ -15,7 +15,7 @@ Face Swap Plus supports advanced face swapping scenarios:
 
 - **Multi-Face**: Swap multiple faces at once via `face_mapping`
 - **Image and Video**: Supports both image and video materials
-- **Video Segment**: Use `single_face_mode` + `time_range` to swap faces in a specific video segment
+- **Single Face Mode**: Use `single_face_mode` for simplified single-face swap
 - **Style Options**: Choose between `realistic`, `beautify`, or `lossless` styles
 
 ## Parameters
@@ -29,7 +29,7 @@ Face Swap Plus supports advanced face swapping scenarios:
 | `webhookUrl` | string | No | Callback URL for result notification |
 | `face_enhance` | boolean | No | Enable face enhancement (default: false) |
 | `model_style` | string | No | `realistic` (default), `beautify`, or `lossless` |
-| `single_face_mode` | boolean | No | `false` (default) for multi-face mode, `true` for single-face + time_range mode |
+| `single_face_mode` | boolean | No | `false` (default) for multi-face mode, `true` for single-face mode |
 
 ### Multi-Face Mode (default)
 
@@ -47,14 +47,11 @@ When `single_face_mode` is `false` (default), use `face_mapping` to define multi
 
 ### Single Face Mode
 
-When `single_face_mode` is `true`, use `time_range` to specify a video segment for single-face swap:
+When `single_face_mode` is `true`, enables simplified single-face swap mode:
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `single_face_mode` | boolean | Yes | Set to `true` |
-| `time_range` | object | Yes | `{ "start": seconds, "end": seconds }` |
-| `time_range.start` | number | Yes | Start time in seconds (>= 0) |
-| `time_range.end` | number | Yes | End time in seconds (must be > start) |
+| `single_face_mode` | boolean | Yes | Set to `true` for single-face mode |
 
 ### When is bbox required?
 
@@ -118,18 +115,15 @@ When using user-uploaded original image URLs, provide bbox from `crop_region`:
 }
 ```
 
-## Example: Video Segment Face Swap (single_face_mode)
+## Example: Video Single Face Swap (single_face_mode)
 
 ```json
 {
   "source_url": "https://example.com/new-face.jpg",
   "target_url": "https://example.com/video.mp4",
   "single_face_mode": true,
-  "time_range": {
-    "start": 0,
-    "end": 30
-  },
-  "face_enhance": false
+  "face_enhance": false,
+  "model_style": "realistic"
 }
 ```
 
