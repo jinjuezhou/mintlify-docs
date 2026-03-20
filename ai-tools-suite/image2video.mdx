@@ -282,6 +282,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
 | resolution    | String   | true         | Resolution value (e.g., 720p, 1080p, 4k). Available options are retrieved from the resolutionList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
 | video_length  | Integer  | true         | Video duration in seconds. Available durations are retrieved from the durationList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
 | last_image_url | String  | false        | URL of the image to use as the last frame of the video |
+| generate_audio | Boolean | false        | Whether to generate audio for the video. When enabled, additional credits will be charged (+20% for most models, +50% for Kling models). Only supported by specific models. |
 | count         | Integer  | false        | Number of videos to create simultaneously (1-10), default: 1 |
 | webhookurl    | String   | false        | Callback URL for POST requests |
 
@@ -313,6 +314,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
 | negative_prompt | String | Negative prompt |
 | extend_prompt | Boolean  | Whether extended prompts were used |
 | last_image_url | String  | Last frame image URL |
+| generate_audio | Boolean | Whether audio generation was enabled |
 | deduction_credit | Integer | Credits deducted |
 | model_name    | String   | AI model name used |
 | batch_id      | String   | Batch ID for grouping videos created in the same request |
