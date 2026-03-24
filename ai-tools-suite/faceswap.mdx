@@ -17,7 +17,8 @@ Experience our face swap technology in action by exploring our interactive demo 
 ### Face Swap Operations
 
 - [Image Faceswap](/ai-tools-suite/faceswap/image-faceswap) - Swap faces in images with high quality (supports multiple faces)
-- [Face Swap Pro](/ai-tools-suite/faceswap/image-faceswap-v4) - **⭐ NEW** More realistic, more similar - Single face only (V4)
+- [Face Swap Pro](/ai-tools-suite/faceswap/image-faceswap-v4) - **⭐** Highest quality face swap for images (V4)
+- [Face Swap Plus](/ai-tools-suite/faceswap/image-faceswap-plus) - **⭐ NEW** Multi-face swap for images and videos, supports face_mapping (V4)
 - [Video Faceswap](/ai-tools-suite/faceswap/video-faceswap) - Swap faces in videos with high quality
 
 ### Result Management
@@ -47,7 +48,13 @@ Experience our face swap technology in action by exploring our interactive demo 
    - Delivers more realistic and more similar face swap results
    - **Only supports single face swapping**
 
-3. **Check Results**:
+3. **For Face Swap Plus (V4 API)** - Multi-Face, Image + Video:
+   - Call the [Face Swap Plus API](/ai-tools-suite/faceswap/image-faceswap-plus) with `model_name` = `akool_faceswap_classic_plus`
+   - Supports multiple faces via `face_mapping`
+   - Supports images and videos
+   - Supports single-face mode via `single_face_mode`
+
+4. **Check Results**:
    - Use the [Get Result API](/ai-tools-suite/faceswap/get-result) to check the status of your face swap job
    - Download the result URL when the status is "Success" (status = 3)
 
@@ -105,24 +112,40 @@ When checking results, the `faceswap_status` field indicates the current state:
 
 ## Common Use Cases
 
-### Face Swap Pro - More Realistic, More Similar (Single Face Only)
+### Face Swap Pro - Highest Quality (Image Only)
 
-Use the [Face Swap Pro API](/ai-tools-suite/faceswap/image-faceswap-v4) for the most realistic and similar results with the simplest implementation:
+Use the [Face Swap Pro API](/ai-tools-suite/faceswap/image-faceswap-v4) (`POST /api/open/v4/faceswap/faceswapByImage`) for the highest quality results:
 
 ```json
 {
-  "targetImage": [
-    {
-      "path": "https://example.com/original.jpg"
-    }
-  ],
-  "sourceImage": [
-    {
-      "path": "https://example.com/replacement-face.jpg"
-    }
-  ],
+  "sourceImage": [{ "path": "https://example.com/new-face.jpg" }],
+  "targetImage": [{ "path": "https://example.com/original.jpg" }],
   "model_name": "akool_faceswap_image_hq",
   "face_enhance": false
+}
+```
+
+### Face Swap Plus - Multi-Face, Image + Video
+
+Use the [Face Swap Plus API](/ai-tools-suite/faceswap/image-faceswap-plus) (`POST /api/open/v4/faceswap/faceswapPlusByImage`) for multi-face or video face swap:
+
+```json
+{
+  "source_url": "https://example.com/new-face.jpg",
+  "target_url": "https://example.com/group-photo.jpg",
+  "model_style": "realistic",
+  "face_enhance": false,
+  "single_face_mode": false,
+  "face_mapping": [
+    {
+      "source_face_info": { "face_url": "https://example.com/source-1.jpg" },
+      "target_face_info": { "face_url": "https://example.com/target-1.jpg" }
+    },
+    {
+      "source_face_info": { "face_url": "https://example.com/source-2.jpg" },
+      "target_face_info": { "face_url": "https://example.com/target-2.jpg" }
+    }
+  ]
 }
 ```
 

@@ -1,0 +1,208 @@
+---
+title: "Get Video Info Result"
+description: "Retrieve character swap video results by ID"
+---
+
+## Endpoint
+
+```
+GET https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id={{video_model_id}}
+```
+
+## Request Headers
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                               |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+
+## Query Parameters
+
+| **Parameter** | **Type** | **Required** | **Description**                                                                                                                                        |
+|---------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| video_model_id | String   | true         | The `_id` returned from the [Create Character Swap API](/ai-tools-suite/character-swap/create) |
+
+## Response Attributes
+
+| **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| code          | Integer  | Interface returns business status code (1000:success)                                                                                                                                                                   |
+| msg           | String   | Interface returns status information                                                                                                                                                                                   |
+| data          | Object   | Response data object |
+| - _id         | String   | Document ID |
+| - create_time | Long     | Creation timestamp |
+| - uid         | Integer  | User ID |
+| - team_id     | String   | Team ID |
+| - update_time | Long     | Last update time/completion time |
+| - video_duration | Number | Actual video duration |
+| - webhookUrl  | String   | Callback URL |
+| - file_name   | String   | File name |
+| - image_url   | String   | Input image URL |
+| - video       | String   | Generated video URL (available when video_status is 3) |
+| - video_url   | String   | Input source video URL |
+| - prompt      | String   | Prompt text |
+| - resolution  | String   | Resolution |
+| - deduction_credit | Integer | Actual credits deducted |
+| - video_status | Integer | Status: 1=queueing, 2=processing, 3=completed, 4=failed |
+| - faceswap_fail_reason | String | Error reason (when video_status is 4) |
+
+## Example
+
+### Request
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=689174694b4dbdd4ab3d28c9' \
+--header 'x-api-key: {{API Key}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=689174694b4dbdd4ab3d28c9")
+  .method("GET", null)
+  .addHeader("x-api-key", "{{API Key}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("x-api-key", "{{API Key}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=689174694b4dbdd4ab3d28c9", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'x-api-key' =>'{{API Key}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=689174694b4dbdd4ab3d28c9', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v3/content/video/infobymodelid?video_model_id=689174694b4dbdd4ab3d28c9"
+
+headers = {
+  'x-api-key':'{{API Key}}'
+}
+
+response = requests.request("GET", url, headers=headers)
+print(response.text)
+```
+
+</CodeGroup>
+
+### Response
+
+#### Queueing Status (video_status = 1)
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "689174694b4dbdd4ab3d28c9",
+    "create_time": 1754362985482,
+    "uid": 101400,
+    "team_id": "6805fb69e92d9edc7ca0b409",
+    "video_duration": 10,
+    "webhookUrl": "https://your-callback-url.com/webhook",
+    "file_name": "CharacterSwap_1754362985482.mp4",
+    "image_url": "https://drz0f01yeq1cx.cloudfront.net/character-image.png",
+    "video_url": "https://drz0f01yeq1cx.cloudfront.net/source-video.mp4",
+    "prompt": "Smooth character animation with natural movement",
+    "resolution": "720p",
+    "deduction_credit": 20,
+    "video_status": 1
+  }
+}
+```
+
+#### Completed Status (video_status = 3)
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "689174694b4dbdd4ab3d28c9",
+    "create_time": 1754362985482,
+    "uid": 101400,
+    "team_id": "6805fb69e92d9edc7ca0b409",
+    "update_time": 1754363095482,
+    "video_duration": 10.5,
+    "webhookUrl": "https://your-callback-url.com/webhook",
+    "file_name": "CharacterSwap_1754362985482.mp4",
+    "image_url": "https://drz0f01yeq1cx.cloudfront.net/character-image.png",
+    "video": "https://d2qf6ukcym4kn9.cloudfront.net/1754363091791-1423.mp4",
+    "video_url": "https://drz0f01yeq1cx.cloudfront.net/source-video.mp4",
+    "prompt": "Smooth character animation with natural movement",
+    "resolution": "720p",
+    "deduction_credit": 20,
+    "video_status": 3
+  }
+}
+```
+
+#### Failed Status (video_status = 4)
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "689174694b4dbdd4ab3d28c9",
+    "create_time": 1754362985482,
+    "uid": 101400,
+    "team_id": "6805fb69e92d9edc7ca0b409",
+    "update_time": 1754363095482,
+    "video_duration": 10,
+    "webhookUrl": "https://your-callback-url.com/webhook",
+    "file_name": "CharacterSwap_1754362985482.mp4",
+    "image_url": "https://drz0f01yeq1cx.cloudfront.net/character-image.png",
+    "video_url": "https://drz0f01yeq1cx.cloudfront.net/source-video.mp4",
+    "prompt": "Smooth character animation with natural movement",
+    "resolution": "720p",
+    "deduction_credit": 0,
+    "video_status": 4,
+    "faceswap_fail_reason": "Failed to process the video. Please check your input resources."
+  }
+}
+```
+
+## Video Status
+
+| Status | Description |
+|--------|-------------|
+| 1 | In Queue - Your request is waiting to be processed |
+| 2 | Processing - Video is currently being generated |
+| 3 | Success - Video completed, result URL is available in the `video` field |
+| 4 | Failed - Video generation failed, check `faceswap_fail_reason` for details |
+
+## Important Notes
+
+- Use the `_id` field from the [Create Character Swap API](/ai-tools-suite/character-swap/create) response as the `video_model_id` parameter
+- Poll this endpoint periodically to check the video generation status
+- When `video_status` is 3 (Success), the `video` field will contain the URL of the generated video
+- Generated videos are valid for 7 days, download and save them promptly
+- If a webhook URL was provided during creation, you will receive a callback when the task completes (no need to poll)
+

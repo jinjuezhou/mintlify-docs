@@ -1,0 +1,625 @@
+openapi: 3.0.3
+info:
+  title: Face Detection API
+  description: |
+    API for detecting faces in images and videos with bounding boxes and 6-point landmarks.
+    
+    This API provides:
+    - Unified face detection for both images and videos
+    - Face tracking across video frames
+    - 6-point facial landmarks detection
+    - Bounding box coordinates for each detected face
+    - Cropped face image URLs with landmarks (optional)
+    - Single face mode for returning only the largest face
+    - Multi-frame face analysis with person deduplication
+  version: 1.0.0
+servers:
+  - url: https://openapi.akool.com/interface/detect-api
+    description: Face detection server
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+
+paths:
+  /detect_faces:
+    post:
+      operationId: detectFaces
+      summary: Detect Faces in Video or Image
+      description: |
+        Unified endpoint to detect faces in either video or image from URL or base64-encoded image data.
+        
+        This endpoint:
+        1. Auto-detects media type (video/image) based on URL
+        2. Downloads media from the provided URL asynchronously (or decodes base64 image)
+        3. Processes media (extracts frames for video, loads image for image)
+        4. Detects faces using InsightFace with face tracking for videos
+        5. Returns bounding boxes and 6-point landmarks for each detected face
+        6. For videos, tracks faces across frames and marks previous positions as removed
+        7. Optionally returns cropped face image URLs (when return_face_url=true)
+        8. Optionally returns only the largest face (when single_face=true)
+        
+        **Input Modes**:
+        - URL mode: provide `url` parameter with image/video URL
+        - Base64 mode: provide `img` parameter with base64-encoded image data
+        - If both are provided, `url` takes priority
+      tags:
+        - Face Detection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnifiedFaceDetectionRequest'
+            examples:
+              image_detection:
+                summary: Image Face Detection (num_frames not required)
+                value:
+                  url: "https://example.com/image.jpg"
+              image_base64:
+                summary: Image Face Detection with Base64
+                value:
+                  img: "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+              video_detection:
+                summary: Video Face Detection (num_frames recommended)
+                value:
+                  url: "https://example.com/video.mp4"
+                  num_frames: 10
+              with_face_url:
+                summary: Get Cropped Face Images
+                value:
+                  url: "https://example.com/image.jpg"
+                  return_face_url: true
+              single_face_mode:
+                summary: Return Only Largest Face
+                value:
+                  url: "https://example.com/group_photo.jpg"
+                  single_face: true
+      responses:
+        '200':
+          description: Face detection completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaceDetectionResponse'
+              examples:
+                image_success:
+                  summary: Successful Image Detection
+                  value:
+                    error_code: 0
+                    error_msg: "SUCCESS"
+                    faces_obj:
+                      "0":
+                        landmarks: [[[120, 85], [180, 88], [150, 130], [150, 165], [125, 165], [175, 168]]]
+                        landmarks_str: ["120,85:180,88:150,130:150,165"]
+                        region: [[80, 50, 150, 180]]
+                        removed: []
+                        frame_time: null
+                        face_urls: null
+                        crop_region: null
+                        crop_landmarks: null
+                video_success:
+                  summary: Successful Video Detection
+                  value:
+                    error_code: 0
+                    error_msg: "SUCCESS"
+                    faces_obj:
+                      "0":
+                        landmarks: [[[320, 240], [420, 240], [370, 300], [370, 350], [340, 350], [400, 350]]]
+                        landmarks_str: ["320,240:420,240:370,300:370,350"]
+                        region: [[300, 200, 150, 180]]
+                        removed: []
+                        frame_time: 0.0
+                        face_urls: null
+                        crop_region: null
+                        crop_landmarks: null
+                      "5":
+                        landmarks: [[[325, 245], [425, 245], [375, 305], [375, 355], [345, 355], [405, 355]]]
+                        landmarks_str: ["325,245:425,245:375,305:375,355"]
+                        region: [[305, 205, 150, 180]]
+                        removed: [[300, 200, 150, 180]]
+                        frame_time: 0.2
+                        face_urls: null
+                        crop_region: null
+                        crop_landmarks: null
+                with_face_urls:
+                  summary: Response with Cropped Face URLs
+                  value:
+                    error_code: 0
+                    error_msg: "SUCCESS"
+                    faces_obj:
+                      "0":
+                        landmarks: [[[120, 85], [180, 88], [150, 130], [150, 165], [125, 165], [175, 168]]]
+                        landmarks_str: ["120,85:180,88:150,130:150,165"]
+                        region: [[80, 50, 150, 180]]
+                        removed: []
+                        frame_time: null
+                        face_urls: ["https://s3.example.com/faces/face_detect_0.jpg"]
+                        crop_region: [[30, 0, 250, 280]]
+                        crop_landmarks: ["90,85:150,88:120,130:120,165"]
+        '400':
+          description: Bad request - Invalid input parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaceDetectionResponse'
+              example:
+                error_code: 1
+                error_msg: "Either 'url' or 'img' parameter must be provided"
+                faces_obj: {}
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaceDetectionResponse'
+              example:
+                error_code: 1
+                error_msg: "Failed to process media"
+                faces_obj: {}
+
+  /faceswap/analyze_frames:
+    post:
+      operationId: analyzeFrames
+      summary: Analyze Frames for Face Swap
+      description: |
+        Unified face analysis endpoint for single or multiple frame images. Returns a `persons` format optimized for face swap operations.
+        
+        **Key Features**:
+        - Supports both single image and multiple frame images
+        - Automatic person deduplication across frames (for multi-frame input)
+        - Returns cropped face image URLs ready for face swap
+        - Tracks person appearances across frames with timestamps
+        
+        **Behavior**:
+        - **Single Image**: Each detected face is returned as a separate person (no deduplication)
+        - **Multiple Images**: Faces are matched across frames using embeddings, same person appears once with all appearances listed
+        
+        **Use Cases**:
+        - Prepare faces for Face Swap API
+        - Analyze video frames for person tracking
+        - Extract face thumbnails from images
+      tags:
+        - Face Detection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyzeFramesRequest'
+            examples:
+              single_image:
+                summary: Single Image Analysis
+                value:
+                  frame_urls:
+                    - "https://example.com/image.jpg"
+              multiple_frames:
+                summary: Multiple Frames Analysis
+                value:
+                  frame_urls:
+                    - "https://example.com/frame_0.jpg"
+                    - "https://example.com/frame_1.jpg"
+                    - "https://example.com/frame_2.jpg"
+                  timestamps:
+                    - 0.0
+                    - 1.0
+                    - 2.0
+              with_expand_ratio:
+                summary: Custom Expand Ratio
+                value:
+                  frame_urls:
+                    - "https://example.com/image.jpg"
+                  expand_ratio: 0.5
+      responses:
+        '200':
+          description: Face analysis completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyzeFramesResponse'
+              examples:
+                single_image_success:
+                  summary: Single Image with Two Faces
+                  value:
+                    success: true
+                    frame_count: 1
+                    persons:
+                      - person_id: "person_0"
+                        index: 0
+                        face_url: "https://s3.example.com/faces/face_abc123.jpg"
+                        bbox: [100, 50, 200, 180]
+                        confidence: 0.95
+                        appearances:
+                          - timestamp: 0.0
+                            frame_idx: 0
+                            bbox: [100, 50, 200, 180]
+                        first_seen: 0.0
+                        last_seen: 0.0
+                      - person_id: "person_1"
+                        index: 1
+                        face_url: "https://s3.example.com/faces/face_def456.jpg"
+                        bbox: [300, 60, 400, 190]
+                        confidence: 0.92
+                        appearances:
+                          - timestamp: 0.0
+                            frame_idx: 0
+                            bbox: [300, 60, 400, 190]
+                        first_seen: 0.0
+                        last_seen: 0.0
+                multi_frame_success:
+                  summary: Multiple Frames with Person Tracking
+                  value:
+                    success: true
+                    frame_count: 3
+                    persons:
+                      - person_id: "person_0"
+                        index: 0
+                        face_url: "https://s3.example.com/faces/face_abc123.jpg"
+                        bbox: [100, 50, 200, 180]
+                        confidence: 0.95
+                        appearances:
+                          - timestamp: 0.0
+                            frame_idx: 0
+                            bbox: [100, 50, 200, 180]
+                          - timestamp: 1.0
+                            frame_idx: 1
+                            bbox: [105, 52, 205, 182]
+                          - timestamp: 2.0
+                            frame_idx: 2
+                            bbox: [110, 55, 210, 185]
+                        first_seen: 0.0
+                        last_seen: 2.0
+        '400':
+          description: Bad request - Invalid input parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyzeFramesErrorResponse'
+              example:
+                success: false
+                error: "frame_urls is required and must not be empty"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyzeFramesErrorResponse'
+              example:
+                success: false
+                error: "Failed to process frames"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded.
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Your API Key used for request authorization. Get Token from authentication/usage#get-the-token
+
+  schemas:
+    UnifiedFaceDetectionRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: |
+            URL of the video or image to process. The media type will be auto-detected based on the file extension.
+            Either `url` or `img` must be provided. If both are provided, `url` takes priority.
+          example: "https://example.com/media.mp4"
+        img:
+          type: string
+          description: |
+            Base64-encoded image data. Supports both plain base64 string and data URI format (e.g., "data:image/jpeg;base64,...").
+            Either `url` or `img` must be provided. If both are provided, `url` takes priority.
+          example: "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+        num_frames:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 5
+          description: Number of frames to extract and analyze (only used for videos, ignored for images)
+          example: 5
+        return_face_url:
+          type: boolean
+          default: false
+          description: |
+            Whether to return cropped face image URLs. When set to `true`, the response will include:
+            - `face_urls`: URLs of cropped face images
+            - `crop_region`: The region used for cropping in original image coordinates
+            - `crop_landmarks`: Landmarks relative to the cropped image
+          example: false
+        single_face:
+          type: boolean
+          default: false
+          description: |
+            When set to `true`, only returns the largest face (by area) in each frame.
+            Useful when you only need the main/primary face in the image or video.
+          example: false
+
+    FaceFrameData:
+      type: object
+      required:
+        - landmarks
+        - region
+        - removed
+      properties:
+        landmarks:
+          type: array
+          description: |
+            List of 6-point facial landmarks for each detected face.
+            Each face has 6 landmark points: Left Eye, Right Eye, Nose, Mouth Center, Left Mouth Corner, Right Mouth Corner.
+            Format: [[[x1, y1], [x2, y2], [x3, y3], [x4, y4], [x5, y5], [x6, y6]], ...]
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                type: integer
+          example: [[[120, 85], [180, 88], [150, 130], [150, 165], [125, 165], [175, 168]]]
+        landmarks_str:
+          type: array
+          description: |
+            String representation of the first 4 landmarks (Left Eye, Right Eye, Nose, Left Mouth Corner).
+            Format: ["x1,y1:x2,y2:x3,y3:x4,y4"]
+            This format is directly compatible with the Face Swap API `opts` parameter.
+          items:
+            type: string
+          example: ["120,85:180,88:150,130:125,165"]
+        region:
+          type: array
+          description: |
+            List of bounding boxes for each detected face.
+            Format: [[x, y, width, height], ...]
+            Where (x, y) is the top-left corner of the bounding box
+          items:
+            type: array
+            items:
+              type: integer
+          example: [[80, 50, 150, 180]]
+        removed:
+          type: array
+          description: |
+            List of face regions that were detected in previous frames but are no longer present (for video tracking).
+            Format: [[x, y, width, height], ...]
+            Empty array for images or first frame of videos
+          items:
+            type: array
+            items:
+              type: integer
+          example: []
+        frame_time:
+          type: number
+          format: float
+          nullable: true
+          description: Time in seconds for this frame in the video. Null for images.
+          example: null
+        face_urls:
+          type: array
+          nullable: true
+          description: |
+            URLs of cropped face images. Only returned when `return_face_url=true`.
+            Each URL corresponds to a detected face in the same order as `region` and `landmarks`.
+          items:
+            type: string
+            nullable: true
+          example: ["https://s3.example.com/faces/face_detect_0.jpg"]
+        crop_region:
+          type: array
+          nullable: true
+          description: |
+            The cropped image region in original image coordinates. Only returned when `return_face_url=true`.
+            Format: [[x, y, width, height], ...]
+            This is the expanded region used for cropping (larger than `region` for better context).
+          items:
+            type: array
+            items:
+              type: integer
+            nullable: true
+          example: [[30, 0, 250, 280]]
+        crop_landmarks:
+          type: array
+          nullable: true
+          description: |
+            Landmarks relative to the cropped image. Only returned when `return_face_url=true`.
+            Format: ["x1,y1:x2,y2:x3,y3:x4,y4", ...]
+            Use this when working with the cropped face image.
+          items:
+            type: string
+            nullable: true
+          example: ["90,85:150,88:120,130:95,165"]
+
+    FaceDetectionResponse:
+      type: object
+      required:
+        - error_code
+        - error_msg
+        - faces_obj
+      properties:
+        error_code:
+          type: integer
+          description: "Error code (0: success, 1: error)"
+          example: 0
+        error_msg:
+          type: string
+          description: Error message or success message
+          example: "SUCCESS"
+        faces_obj:
+          type: object
+          description: |
+            Dictionary of face detection results keyed by frame index (as string).
+            For images, only frame "0" will be present.
+            For videos, multiple frames will be present (e.g., "0", "5", "10", etc.)
+          additionalProperties:
+            $ref: '#/components/schemas/FaceFrameData'
+          example:
+            "0":
+              landmarks: [[[120, 85], [180, 88], [150, 130], [150, 165], [125, 165], [175, 168]]]
+              landmarks_str: ["120,85:180,88:150,130:150,165"]
+              region: [[80, 50, 150, 180]]
+              removed: []
+              frame_time: null
+              face_urls: null
+              crop_region: null
+              crop_landmarks: null
+
+    AnalyzeFramesRequest:
+      type: object
+      required:
+        - frame_urls
+      properties:
+        frame_urls:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: |
+            List of image URLs to analyze. Must be publicly accessible.
+            - Single URL: Returns each face as a separate person
+            - Multiple URLs: Automatically deduplicates faces across frames
+          example: ["https://example.com/image.jpg"]
+        timestamps:
+          type: array
+          items:
+            type: number
+            format: float
+          description: |
+            Optional timestamps for each frame (in seconds).
+            If not provided, sequential indices (0.0, 1.0, 2.0, ...) will be used.
+            Length should match `frame_urls` length.
+          example: [0.0, 1.0, 2.0]
+        expand_ratio:
+          type: number
+          format: float
+          default: 0.3
+          minimum: 0
+          maximum: 1
+          description: |
+            Expansion ratio for face cropping. The face bounding box is expanded by this ratio 
+            on all sides before cropping. Higher values include more context around the face.
+          example: 0.3
+
+    PersonAppearance:
+      type: object
+      required:
+        - timestamp
+        - frame_idx
+        - bbox
+      properties:
+        timestamp:
+          type: number
+          format: float
+          description: Timestamp when this appearance was detected (in seconds)
+          example: 0.0
+        frame_idx:
+          type: integer
+          description: Frame index where this appearance was detected
+          example: 0
+        bbox:
+          type: array
+          items:
+            type: integer
+          minItems: 4
+          maxItems: 4
+          description: "Bounding box coordinates [x1, y1, x2, y2]"
+          example: [100, 50, 200, 180]
+
+    PersonInfo:
+      type: object
+      required:
+        - person_id
+        - index
+        - face_url
+        - bbox
+        - confidence
+        - appearances
+        - first_seen
+        - last_seen
+      properties:
+        person_id:
+          type: string
+          description: Unique identifier for this person (e.g., "person_0", "person_1")
+          example: "person_0"
+        index:
+          type: integer
+          description: Sort index based on x-coordinate (left to right ordering)
+          example: 0
+        face_url:
+          type: string
+          format: uri
+          description: URL of the cropped face image stored in cloud storage
+          example: "https://s3.example.com/faces/face_abc123.jpg"
+        bbox:
+          type: array
+          items:
+            type: integer
+          minItems: 4
+          maxItems: 4
+          description: "Face bounding box coordinates [x1, y1, x2, y2] from first appearance"
+          example: [100, 50, 200, 180]
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Detection confidence score (0-1)
+          example: 0.95
+        appearances:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonAppearance'
+          description: List of all appearances of this person across frames
+        first_seen:
+          type: number
+          format: float
+          description: Timestamp of first appearance (in seconds)
+          example: 0.0
+        last_seen:
+          type: number
+          format: float
+          description: Timestamp of last appearance (in seconds)
+          example: 2.0
+
+    AnalyzeFramesResponse:
+      type: object
+      required:
+        - success
+        - frame_count
+        - persons
+      properties:
+        success:
+          type: boolean
+          description: Whether the analysis was successful
+          example: true
+        frame_count:
+          type: integer
+          description: Number of frames that were analyzed
+          example: 3
+        persons:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonInfo'
+          description: |
+            List of detected persons. Each person contains:
+            - Unique ID and index
+            - Cropped face image URL
+            - Bounding box and confidence
+            - All appearances across frames
+            - First and last seen timestamps
+
+    AnalyzeFramesErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          description: Error message describing what went wrong
+          example: "Failed to download image from URL"

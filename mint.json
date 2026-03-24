@@ -6,7 +6,7 @@
     "dark": "/logo/akool-dark.svg"
   },
   "favicon": "/favicon.svg",
-  "openapi": ["/openapi/live-avatar.yaml", "/openapi/faceswap.yaml"],
+  "openapi": ["/openapi/live-avatar.yaml", "/openapi/faceswap.yaml", "/openapi/video-translation.yaml","/openapi/talking-photo.yaml", "/openapi/face-detection.yaml", "/openapi/face-detect-legacy.yaml"],
   "api": {
     "baseUrl": "https://openapi.akool.com",
     "playground": {
@@ -54,13 +54,19 @@
       "name": "Blog",
       "icon": "newspaper",
       "url": "https://akool.com/blog"
+    },
+    {
+      "name": "Change Logs",
+      "icon": "clock-rotate-left",
+      "url": "changelog"
     }
   ],
   "navigation": [
     {
       "group": "Overview",
       "pages": [
-        "index"
+        "index",
+        "changelog"
       ]
     },
     {
@@ -78,6 +84,7 @@
           "pages": [
             "ai-tools-suite/faceswap/image-faceswap",
             "ai-tools-suite/faceswap/image-faceswap-v4",
+            "ai-tools-suite/faceswap/image-faceswap-plus",
             "ai-tools-suite/faceswap/video-faceswap",
             "ai-tools-suite/faceswap/get-result",
             "ai-tools-suite/faceswap/delete-result",
@@ -103,12 +110,71 @@
             "ai-tools-suite/live-avatar/list-sessions"
           ]
         },
-        "implementation-guide/streaming-avatar",
-        "sdk/jssdk-start",
-        "sdk/jssdk-best-practice",
-        "sdk/jssdk-api",
+        {
+          "group": "Implementation Guides",
+          "pages": [
+            "implementation-guide/streaming-avatar",
+            "implementation-guide/livekit-agent"
+          ]
+        },
+        {
+          "group": "Integrate with AKOOL SA SDK",
+          "pages": [
+            "sdk/jssdk-start",
+            "sdk/jssdk-best-practice",
+            "sdk/jssdk-api"
+          ]
+        },
         "ai-tools-suite/knowledge-base",
         "ai-tools-suite/live-camera"
+      ]
+    },
+    {
+      "group": "Talking Photo",
+      "pages": [
+        "ai-tools-suite/talking-photo",
+        {
+          "group": "API Endpoints",
+          "pages": [
+            "ai-tools-suite/talking-photo/create-video",
+            "ai-tools-suite/talking-photo/get-result"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Video Translation",
+      "pages": [
+        "ai-tools-suite/video-translation",
+        {
+          "group": "API Endpoints",
+          "pages": [
+            "ai-tools-suite/video-translation/create-translation",
+            "ai-tools-suite/video-translation/get-result",
+            "ai-tools-suite/video-translation/get-languages"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Face Detection",
+      "pages": [
+        "ai-tools-suite/face-detection",
+        "ai-tools-suite/face-detection/detect-faces",
+        "ai-tools-suite/face-detection/analyze-frames"
+      ]
+    },
+    {
+      "group": "Character Swap",
+      "pages": [
+        "ai-tools-suite/character-swap/character-swap",
+        {
+          "group": "API Endpoints",
+          "pages": [
+            "ai-tools-suite/character-swap/create",
+            "ai-tools-suite/character-swap/get-result"
+          ]
+        }
       ]
     },
     {
@@ -125,6 +191,7 @@
         "ai-tools-suite/image-generate",
         "ai-tools-suite/jarvis-moderator",
         "ai-tools-suite/image2video",
+        "ai-tools-suite/aimodel",
         "ai-tools-suite/webhook",
         "ai-tools-suite/error-code"
       ]

@@ -1,0 +1,182 @@
+---
+title: "Detect Faces"
+description: "Unified endpoint to detect faces in either video or image from URL or base64-encoded image"
+openapi: "POST /detect_faces"
+---
+
+<Info>
+Detect faces in images and videos with 6-point landmarks. Supports URL and base64 input, with optional cropped face URLs.
+</Info>
+
+## Request Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `url` | string | Yes* | - | Image or video URL (publicly accessible) |
+| `img` | string | Yes* | - | Base64-encoded image data |
+| `num_frames` | integer | No | 5 | Number of frames for video analysis |
+| `return_face_url` | boolean | No | false | Return cropped face image URLs |
+| `single_face` | boolean | No | false | Return only the largest face |
+
+<Note>
+Either `url` or `img` must be provided. If both are provided, `url` takes priority.
+</Note>
+
+## Response Format
+
+```json
+{
+  "error_code": 0,
+  "error_msg": "SUCCESS",
+  "faces_obj": {
+    "0": {
+      "landmarks": [[[120, 85], [180, 88], [150, 130], [150, 165], [125, 165], [175, 168]]],
+      "landmarks_str": ["120,85:180,88:150,130:150,165"],
+      "region": [[80, 50, 150, 180]],
+      "removed": [],
+      "frame_time": null,
+      "face_urls": null,
+      "crop_region": null,
+      "crop_landmarks": null
+    }
+  }
+}
+```
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `error_code` | integer | 0 = success, 1 = error |
+| `error_msg` | string | Status message |
+| `faces_obj` | object | Face data keyed by frame index ("0", "1", etc.) |
+
+### Face Frame Data
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `landmarks` | array | 6-point landmarks for each face: Left Eye, Right Eye, Nose, Mouth Center, Left Mouth Corner, Right Mouth Corner |
+| `landmarks_str` | array | First 4 landmarks as string format `"x1,y1:x2,y2:x3,y3:x4,y4"` - use this for Face Swap `opts` parameter |
+| `region` | array | Bounding boxes `[x, y, width, height]` |
+| `removed` | array | Faces no longer visible (video only) |
+| `frame_time` | number/null | Timestamp in seconds (video only, null for images) |
+| `face_urls` | array/null | Cropped face URLs (when `return_face_url=true`) |
+| `crop_region` | array/null | Crop region in original image coordinates |
+| `crop_landmarks` | array/null | Landmarks relative to cropped image |
+
+## Examples
+
+### Example 1: Basic Image Detection
+
+**Request:**
+```json
+{
+  "url": "https://example.com/photo.jpg"
+}
+```
+
+**Response:**
+```json
+{
+  "error_code": 0,
+  "error_msg": "SUCCESS",
+  "faces_obj": {
+    "0": {
+      "landmarks": [[[320, 240], [420, 240], [370, 300], [370, 350], [340, 350], [400, 350]]],
+      "landmarks_str": ["320,240:420,240:370,300:370,350"],
+      "region": [[300, 200, 150, 180]],
+      "removed": [],
+      "frame_time": null
+    }
+  }
+}
+```
+
+### Example 2: Video Detection
+
+**Request:**
+```json
+{
+  "url": "https://example.com/video.mp4",
+  "num_frames": 10
+}
+```
+
+### Example 3: Get Cropped Face URLs
+
+**Request:**
+```json
+{
+  "url": "https://example.com/photo.jpg",
+  "return_face_url": true
+}
+```
+
+**Response:**
+```json
+{
+  "error_code": 0,
+  "error_msg": "SUCCESS",
+  "faces_obj": {
+    "0": {
+      "landmarks": [[[120, 85], [180, 88], [150, 130], [150, 165], [125, 165], [175, 168]]],
+      "landmarks_str": ["120,85:180,88:150,130:150,165"],
+      "region": [[80, 50, 150, 180]],
+      "removed": [],
+      "frame_time": null,
+      "face_urls": ["https://s3.example.com/faces/face_detect_0.jpg"],
+      "crop_region": [[30, 0, 250, 280]],
+      "crop_landmarks": ["90,85:150,88:120,130:120,165"]
+    }
+  }
+}
+```
+
+### Example 4: Single Face Mode
+
+**Request:**
+```json
+{
+  "url": "https://example.com/group_photo.jpg",
+  "single_face": true
+}
+```
+
+## Error Responses
+
+| error_code | error_msg | Description |
+|------------|-----------|-------------|
+| 0 | SUCCESS | Success |
+| 1 | Either 'url' or 'img' parameter must be provided | Missing input |
+| 1 | Invalid URL format | Bad URL |
+| 1 | Failed to download media from URL | Download failed |
+
+## Integration with Face Swap
+
+Use `landmarks_str` directly as the `opts` parameter in Face Swap API:
+
+```python
+import requests
+
+# Detect faces
+response = requests.post(
+    "https://openapi.akool.com/interface/detect-api/detect_faces",
+    json={"url": "https://example.com/target.jpg", "return_face_url": True},
+    headers={"x-api-key": "YOUR_API_KEY"}
+)
+
+result = response.json()
+if result["error_code"] == 0:
+    frame_data = result["faces_obj"]["0"]
+    # Use for Face Swap API
+    target_image = {
+        "path": frame_data["face_urls"][0],
+        "opts": frame_data["crop_landmarks"][0]
+    }
+```
+
+## Best Practices
+
+- **URL Requirements**: Use HTTPS, ensure publicly accessible
+- **Video num_frames**: Short videos (5-10), Medium (10-20), Long (20-50)
+- **Performance**: Use `single_face=true` when only one face needed

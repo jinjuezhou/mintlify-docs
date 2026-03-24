@@ -13,3 +13,13 @@ Create and manage your avatars at: https://akool.com/apps/upload/avatar?from=%2F
 <Note>
 **Knowledge Base Integration:** You can enhance your streaming avatar with contextual AI responses by integrating a [Knowledge Base](/ai-tools-suite/knowledge-base). When creating a session, provide a `knowledge_id` parameter to enable the AI to use documents and URLs from your knowledge base for more accurate and relevant responses.
 </Note>
+
+<Note>
+**ElevenLabs Custom Configuration:** You can use your own ElevenLabs API key and customize voice parameters by providing `elevenlabs_settings` within the `voice_params` object. This allows you to:
+- Use your own ElevenLabs account and billing
+- Choose specific ElevenLabs models (e.g., eleven_flash_v2_5, eleven_turbo_v2_5)
+- Fine-tune voice characteristics such as stability, similarity_boost, and style
+- Enable speaker boost for improved voice cloning quality
+
+When using ElevenLabs custom settings, specify your desired ElevenLabs voice ID in the `voice_id` field, and the backend will pass through all your custom parameters to ElevenLabs.
+</Note>

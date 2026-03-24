@@ -1,0 +1,264 @@
+openapi: 3.0.3
+info:
+  title: Talking Photo API
+  description: API for creating animated videos from photos and audio
+  version: 1.0.0
+servers:
+  - url: https://openapi.akool.com
+    description: Production server
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+
+paths:
+  /api/open/v3/content/video/createbytalkingphoto:
+    post:
+      summary: Create By Talking Photo
+      description: Create animated video from photo and audio
+      tags:
+        - Talking Photo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTalkingPhotoRequest'
+            example:
+              talking_photo_url: "https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg"
+              audio_url: "https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3"
+              prompt: "Throughout the entire video, maintain natural and smooth hand movements. When speaking, use appropriate hand gestures to emphasize key points, such as opening your hands to express welcome or explanation, pointing your fingers forward to emphasize, and placing your hands together to summarize. The gestures should be coherent, not stiff, with moderate amplitude, and the frequency should be coordinated with the speaking speed. During pauses, the gestures naturally return to a relaxed state, presenting a professional and friendly presentation style."
+              resolution: "720"
+              webhookUrl: ""
+      responses:
+        '200':
+          description: Video creation request submitted successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/TalkingPhotoResult'
+              example:
+                code: 1000
+                msg: "OK"
+                data:
+                  faceswap_quality: 2
+                  storage_loc: 1
+                  _id: "64dd90f9f0b6684651e90d60"
+                  create_time: 1692242169057
+                  uid: 378337
+                  type: 5
+                  from: 2
+                  video_lock_duration: 0.8
+                  deduction_lock_duration: 10
+                  external_video: ""
+                  talking_photo: "https://***.cloudfront.net/1692242161763-4fb8c3c2-018b-4b84-82e9-413c81f26b3a-6613.jpeg"
+                  video: ""
+                  __v: 0
+                  video_status: 1
+                  prompt: "Throughout the entire video, maintain natural and smooth hand movements. When speaking, use appropriate hand gestures to emphasize key points, such as opening your hands to express welcome or explanation, pointing your fingers forward to emphasize, and placing your hands together to summarize. The gestures should be coherent, not stiff, with moderate amplitude, and the frequency should be coordinated with the speaking speed. During pauses, the gestures naturally return to a relaxed state, presenting a professional and friendly presentation style."
+                  resolution: "720"
+
+  /api/open/v3/content/video/infobymodelid:
+    get:
+      summary: Get Video Info Result
+      description: Retrieve talking photo video results by ID
+      tags:
+        - Talking Photo
+      parameters:
+        - name: video_model_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Video db id from the _id field returned by Create By Talking Photo API
+      responses:
+        '200':
+          description: Video information retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/VideoInfoResult'
+              example:
+                code: 1000
+                msg: "OK"
+                data:
+                  faceswap_quality: 2
+                  storage_loc: 1
+                  _id: "64dd92c1f0b6684651e90e09"
+                  create_time: 1692242625334
+                  uid: 378337
+                  type: 2
+                  from: 1
+                  video_id: "0acfed62e24f4cfd8801c9e846347b1d"
+                  video_lock_duration: 7.91
+                  deduction_lock_duration: 10
+                  video_status: 2
+                  external_video: ""
+                  video: ""
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded.
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Your API Key used for request authorization. Get Token from authentication/usage#get-the-token
+
+  schemas:
+    ApiResponse:
+      type: object
+      required:
+        - code
+        - msg
+      properties:
+        code:
+          type: integer
+          description: "Interface returns business status code (1000: success)"
+          example: 1000
+        msg:
+          type: string
+          description: Interface returns status information
+          example: "OK"
+
+    CreateTalkingPhotoRequest:
+      type: object
+      required:
+        - talking_photo_url
+        - audio_url
+      properties:
+        talking_photo_url:
+          type: string
+          description: Resource address of the talking picture
+          example: "https://drz0f01yeq1cx.cloudfront.net/1688098804494-e7ca71c3-4266-4ee4-bcbb-ddd1ea490e75-9907.jpg"
+        audio_url:
+          type: string
+          description: Resource address of the talking audio
+          example: "https://drz0f01yeq1cx.cloudfront.net/1710752141387-e7867802-0a92-41d4-b899-9bfb23144929-4946.mp3"
+        prompt:
+          type: string
+          description: Prompt words for controlling gestures and movements
+          example: "Throughout the entire video, maintain natural and smooth hand movements."
+        resolution:
+          type: string
+          description: Output video resolution. Currently supported formats - 720, 1080
+          enum: ["720", "1080"]
+          example: "720"
+        webhookUrl:
+          type: string
+          description: Callback url address based on HTTP request
+          example: ""
+
+    TalkingPhotoResult:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Video model ID for checking status
+          example: "64dd90f9f0b6684651e90d60"
+        video_status:
+          type: integer
+          description: "Current status of video: 1=queueing, 2=processing, 3=completed, 4=failed"
+          enum: [1, 2, 3, 4]
+          example: 1
+        video:
+          type: string
+          description: The URL of generated video (available when video_status = 3)
+          example: ""
+        talking_photo:
+          type: string
+          description: The talking photo image URL
+          example: "https://***.cloudfront.net/1692242161763-4fb8c3c2-018b-4b84-82e9-413c81f26b3a-6613.jpeg"
+        prompt:
+          type: string
+          description: The prompt words used
+        resolution:
+          type: string
+          description: The output video resolution
+        create_time:
+          type: integer
+          description: Creation timestamp
+        uid:
+          type: integer
+          description: User ID
+        type:
+          type: integer
+          description: Type identifier
+        from:
+          type: integer
+          description: Source identifier
+        video_lock_duration:
+          type: number
+          description: Video lock duration
+        deduction_lock_duration:
+          type: integer
+          description: Deduction lock duration
+        external_video:
+          type: string
+          description: External video URL
+        faceswap_quality:
+          type: integer
+          description: Quality setting
+        storage_loc:
+          type: integer
+          description: Storage location
+
+    VideoInfoResult:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Video model ID
+          example: "64dd92c1f0b6684651e90e09"
+        video_status:
+          type: integer
+          description: "Current status of video: 1=queueing, 2=processing, 3=completed, 4=failed"
+          enum: [1, 2, 3, 4]
+          example: 2
+        video:
+          type: string
+          description: Generated video resource URL (available when video_status = 3)
+          example: ""
+        video_id:
+          type: string
+          description: Video identifier
+        create_time:
+          type: integer
+          description: Creation timestamp
+        uid:
+          type: integer
+          description: User ID
+        type:
+          type: integer
+          description: Type identifier
+        from:
+          type: integer
+          description: Source identifier
+        video_lock_duration:
+          type: number
+          description: Video lock duration
+        deduction_lock_duration:
+          type: integer
+          description: Deduction lock duration
+        external_video:
+          type: string
+          description: External video URL
+        faceswap_quality:
+          type: integer
+          description: Quality setting
+        storage_loc:
+          type: integer
+          description: Storage location
+

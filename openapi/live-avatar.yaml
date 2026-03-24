@@ -143,11 +143,11 @@ paths:
               $ref: '#/components/schemas/CreateSessionRequest'
             example:
               avatar_id: "dvp_Tristan_cloth2_1080P"
-              knowledge_id: "64f8a1b2c3d4e5f6a7b8c9d0"
               duration: 3600
               voice_id: "iP95p4xoKVk53GoZ742B"
               language: "en"
               mode_type: 2
+              knowledge_id: "64f8a1b2c3d4e5f6a7b8c9d0"
               background_url: "https://example.com/background.jpg"
               stream_type: "agora"
               credentials:
@@ -166,6 +166,13 @@ paths:
                   threshold: 0.5
                   prefix_padding_ms: 300
                   silence_duration_ms: 500
+                elevenlabs_settings:
+                  api_key: "sk_your_elevenlabs_api_key"
+                  model_id: "eleven_flash_v2_5"
+                  stability: 0.5
+                  similarity_boost: 0.75
+                  style: 0
+                  use_speaker_boost: true
       responses:
         '200':
           description: Session created successfully
@@ -434,7 +441,7 @@ components:
           description: Knowledge base ID to provide context for AI responses. Create and manage knowledge bases using the Knowledge Base API. When provided, the AI will use documents and URLs from the knowledge base to enhance response accuracy.
         voice_id:
           type: string
-          description: Voice ID to change avatar's voice. Get valid IDs from Voice List API
+          description: Voice ID to change avatar's voice. Get valid IDs from Voice List API. Note that voice IDs from Akool Multilingual 2 cannot be used with Streaming Avatar.
         voice_url:
           type: string
           description: Custom voice model URL. Get valid URLs from Voice List API
@@ -444,12 +451,35 @@ components:
         mode_type:
           type: integer
           enum: [1, 2]
-          description: Avatar interaction style. "1" = Retelling (avatar repeats content), "2" = Dialogue (avatar engages in conversation)
+          description: |
+            Avatar interaction mode that determines how the avatar responds to input:
+            - `1`: Retelling mode - Avatar repeats the provided content verbatim
+            - `2`: Dialogue mode - Avatar engages in conversational interaction
+        scene_mode:
+          type: string
+          enum: [fast_dialogue]
+          description: |
+            Scene mode for the session.
+
+            - `fast_dialogue`: Low-latency dialogue mode. Optimized for realtime voice interaction and **voice input only**.
+        e2e_type:
+          type: string
+          enum: [openai]
+          description: |
+            End-to-end (E2E) pipeline provider. Only applicable when `scene_mode` is `fast_dialogue`.
+
+            - `openai`: OpenAI
         background_url:
           type: string
           description: URL of background image/video for avatar scene
         voice_params:
-          $ref: '#/components/schemas/VoiceParams'
+          description: |
+            Voice configuration for the session.
+
+            Use `Option 2` when `scene_mode` is `fast_dialogue`. Otherwise use `Option 1`.
+          anyOf:
+            - $ref: '#/components/schemas/VoiceParams'
+            - $ref: '#/components/schemas/FastDialogueVoiceParams'
         stream_type:
           type: string
           enum: [agora, livekit, trtc]
@@ -458,8 +488,30 @@ components:
         credentials:
           $ref: '#/components/schemas/Credentials'
 
+    FastDialogueVoiceParams:
+      type: object
+      additionalProperties: false
+      description: Voice parameters for `scene_mode=fast_dialogue`
+      properties:
+        voice_id:
+          type: string
+          enum: [alloy, ash, ballad, coral, echo, sage, shimmer, verse, marin, cedar]
+          description: |
+            Preset voice ID used in fast dialogue mode.
+
+            Notes:
+            - Voices returned by the Voice List API are **not** available in this mode.
+        stt_language:
+          type: string
+          description: Language code for speech-to-text recognition to improve accuracy by using language-specific models. If not specified, default language or auto-detection will be used.
+        turn_detection:
+          $ref: '#/components/schemas/TurnDetection'
+        elevenlabs_settings:
+          $ref: '#/components/schemas/ElevenlabsSettings'
+
     VoiceParams:
       type: object
+      description: Voice parameters for normal mode
       properties:
         speed:
           type: number
@@ -481,6 +533,8 @@ components:
           description: Speech-to-text type. "openai_realtime" = OpenAI Realtime
         turn_detection:
           $ref: '#/components/schemas/TurnDetection'
+        elevenlabs_settings:
+          $ref: '#/components/schemas/ElevenlabsSettings'
 
     TurnDetection:
       type: object
@@ -500,6 +554,35 @@ components:
         silence_duration_ms:
           type: integer
           description: Duration of silence (in milliseconds) to detect speech stop. With shorter values turns will be detected more quickly. Available when type is "server_vad".
+
+    ElevenlabsSettings:
+      type: object
+      description: ElevenLabs custom voice configuration. Allows you to use your own ElevenLabs API key and customize voice parameters. The voice_id should be specified in the main voice_id field of the session request.
+      properties:
+        api_key:
+          type: string
+          description: Your ElevenLabs API key for authentication
+        model_id:
+          type: string
+          description: ElevenLabs model ID to use for voice generation (e.g., "eleven_flash_v2_5", "eleven_turbo_v2_5", "eleven_multilingual_v2")
+        stability:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Controls the stability of the voice. Higher values make the voice more consistent, lower values add more variation. Range is 0 to 1.
+        similarity_boost:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Controls how closely the AI should adhere to the original voice. Higher values stick closer to the original voice. Range is 0 to 1.
+        style:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Controls the style exaggeration of the voice. Range is 0 to 1.
+        use_speaker_boost:
+          type: boolean
+          description: Enhances the similarity to the original speaker. Recommended for improved voice cloning quality.
 
     Credentials:
       type: object

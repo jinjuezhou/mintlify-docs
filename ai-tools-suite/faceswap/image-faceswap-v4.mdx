@@ -1,6 +1,6 @@
 ---
 title: "Face Swap Pro"
-description: "Single face swap API - More Realistic, More Similar"
+description: "Highest quality face swap for images"
 openapi: "POST /api/open/v4/faceswap/faceswapByImage"
 ---
 
@@ -9,24 +9,127 @@ openapi: "POST /api/open/v4/faceswap/faceswapByImage"
   Please save the relevant resources as soon as possible to prevent expiration.
 </Warning>
 
-<Note>
-  **Single Face Only**: This API is specifically designed for single face swapping scenarios. For multiple faces, please use the [V3 Image Faceswap API](/ai-tools-suite/faceswap/image-faceswap).
-</Note>
+## Face Swap Pro (akool_faceswap_image_hq)
 
-## Face Swap Pro - More Realistic, More Similar
+Face Swap Pro delivers the highest quality face swap results for images:
 
-Face Swap Pro (V4 API) delivers superior face swap results with exceptional quality:
+- **More Realistic**: Advanced algorithm produces natural and lifelike face swaps
+- **More Similar**: Enhanced matching ensures high similarity to the source face
+- **Simplified Integration**: `opts` parameter is optional, no face detection step required
+- **Batch Support**: Supports up to 50 sourceImage / targetImage pairs per request
+- **Optional Face Landmarks**: Provide `opts` from the [Face Detection API](/ai-tools-suite/face-detection/detect-faces) for improved accuracy
 
-- **🎯 More Realistic**: Advanced algorithm produces incredibly natural and lifelike face swaps
-- **✨ More Similar**: Enhanced matching technology ensures the swapped face closely resembles the target
-- **🚀 Higher Accuracy**: Superior facial feature alignment for better results
-- **⚡ Simplified Integration**: No need for the `opts` parameter or face detection step
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `sourceImage` | array | Yes | Source (new) face image URLs. Each item: `{ "path": "url", "opts": "landmarks" }`. Min 1, Max 50 items. |
+| `sourceImage[].path` | string | Yes | Valid URL of the source face image. Must be a valid HTTP/HTTPS URL. |
+| `sourceImage[].opts` | string | Conditional | Face landmark string from `crop_landmarks` of [Face Detection API](/ai-tools-suite/face-detection/detect-faces). **Required** when `sourceImage` or `targetImage` array length > 1. **Optional** when both arrays have exactly 1 element. |
+| `targetImage` | array | Yes | Target face image URLs. Each item: `{ "path": "url", "opts": "landmarks" }`. Min 1, Max 50 items. |
+| `targetImage[].path` | string | Yes | Valid URL of the target face image. Must be a valid HTTP/HTTPS URL. |
+| `targetImage[].opts` | string | Conditional | Face landmark string from `crop_landmarks` of [Face Detection API](/ai-tools-suite/face-detection/detect-faces). **Required** when `sourceImage` or `targetImage` array length > 1. **Optional** when both arrays have exactly 1 element. |
+| `model_name` | string | No | Default: `akool_faceswap_image_hq` |
+| `webhookUrl` | string | No | Callback URL for result notification |
+| `face_enhance` | boolean | No | Enable face enhancement (default: false) |
+| `single_face_mode` | boolean | No | When `true`, enables single face mode (default: false) |
+
+## Getting opts Value
+
+The `opts` parameter provides face landmark coordinates for improved face alignment accuracy. To get the `opts` value:
+
+1. Call the [Face Detection API](/ai-tools-suite/face-detection/detect-faces) with your image URL
+2. Use the `crop_landmarks` value from the response as the `opts` parameter
+3. Format: colon-separated coordinate pairs, e.g. `"262,175:363,175:313,215:272,279"`
 
 ## Important Notes
 
-- **Single Face Limitation**: The 'akool_faceswap_image_hq' model **only supports single face** swapping in an image
-- For images with **multiple faces**, use the [V3 Image Faceswap API](/ai-tools-suite/faceswap/image-faceswap)
-- This simplified API does not require the `opts` parameter, making it easier to use compared to V3
-- Face enhance must be a boolean value (true/false), default is false
-- Best suited for high-quality portrait images with clear facial features
+### Parameter Validation Rules
 
+- **`path` validation**: Each `path` must be a valid HTTP/HTTPS URL. Invalid URLs will be rejected.
+- **`opts` conditional requirement**:
+  - When both `sourceImage` and `targetImage` arrays have exactly **1 element each**: `opts` is **optional** for all elements
+  - When either `sourceImage` or `targetImage` array has **more than 1 element**: `opts` is **required** for **every element** in both arrays
+  - If any element is missing `opts` when required, the request will be rejected with a validation error
+
+### Usage Guidelines
+
+- For single face swap (1 source + 1 target): `opts` is optional but recommended for better accuracy
+- For batch face swap (multiple faces): `opts` is required for all elements to ensure proper face mapping
+- For multi-face swap, image + video support, or video segment swap, use [Face Swap Plus](/ai-tools-suite/faceswap/image-faceswap-plus)
+
+## Example: Single Face Swap (opts Optional)
+
+When both arrays have exactly 1 element, `opts` is optional:
+
+```json
+{
+  "sourceImage": [
+    { 
+      "path": "https://example.com/new-face.jpg"
+    }
+  ],
+  "targetImage": [
+    { 
+      "path": "https://example.com/original.jpg"
+    }
+  ],
+  "model_name": "akool_faceswap_image_hq",
+  "face_enhance": false,
+  "single_face_mode": false
+}
+```
+
+## Example: Single Face Swap with opts (Recommended)
+
+```json
+{
+  "sourceImage": [
+    {
+      "path": "https://example.com/new-face.jpg",
+      "opts": "239,364:386,366:317,472:266,539"
+    }
+  ],
+  "targetImage": [
+    {
+      "path": "https://example.com/original.jpg",
+      "opts": "262,175:363,175:313,215:272,279"
+    }
+  ],
+  "model_name": "akool_faceswap_image_hq",
+  "face_enhance": false,
+  "single_face_mode": false
+}
+```
+
+## Example: Batch Face Swap (opts Required)
+
+When either array has more than 1 element, `opts` is **required** for **all elements**:
+
+```json
+{
+  "sourceImage": [
+    {
+      "path": "https://example.com/new-face-1.jpg",
+      "opts": "239,364:386,366:317,472:266,539"
+    },
+    {
+      "path": "https://example.com/new-face-2.jpg",
+      "opts": "150,200:250,200:200,250:180,300"
+    }
+  ],
+  "targetImage": [
+    {
+      "path": "https://example.com/original.jpg",
+      "opts": "262,175:363,175:313,215:272,279"
+    },
+    {
+      "path": "https://example.com/original-2.jpg",
+      "opts": "100,150:200,150:150,200:120,250"
+    }
+  ],
+  "model_name": "akool_faceswap_image_hq",
+  "face_enhance": false,
+  "single_face_mode": false
+}
+```
