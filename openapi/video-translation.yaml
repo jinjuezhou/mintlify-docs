@@ -227,6 +227,8 @@ components:
         video:
           type: string
           description: Generated video resource URL (available when status = 3)
+        audio_splits:
+          $ref: '#/components/schemas/AudioSplits'
         progress:
           type: integer
           description: Processing progress percentage (0-100)
@@ -239,6 +241,23 @@ components:
         error_reason:
           type: string
           description: Detailed error description (only when video_status = 4)
+
+    AudioSplits:
+      type: object
+      description: Split output assets generated during video translation
+      properties:
+        original_srt_url:
+          type: string
+          description: Source-language subtitle file URL
+          example: "https://d3323c6w59hl44.cloudfront.net/algorithm/video_translate/260401/default/xd4mtd1sk8h0.srt"
+        translated_srt_url:
+          type: string
+          description: Translated subtitle file URL
+          example: "https://d3323c6w59hl44.cloudfront.net/algorithm/video_translate/260401/default/e893u0r1nim1.srt"
+        no_caption_video_url:
+          type: string
+          description: Video URL without burned-in subtitles
+          example: "https://d3323c6w59hl44.cloudfront.net/algorithm/video_translate/260401/default/zr9eyq8rpla4.mp4"
 
     LanguageListResponse:
       type: object
