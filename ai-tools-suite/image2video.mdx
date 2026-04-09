@@ -395,6 +395,68 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
 }
 ```
 
+**Body - Seedance 2.0 (5s, 720p)**
+
+```json
+{
+  "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+  "prompt": "A woman slowly turns her head and smiles, with cinematic lighting and natural motion.",
+  "model_name": "doubao-seedance-2-0-260128/image-to-video",
+  "negative_prompt": "blurry, distorted, low quality, static",
+  "resolution": "720p",
+  "video_length": 5,
+  "count": 2
+}
+```
+
+**Body - Seedance 2.0 with Last Frame & Audio (10s, 480p)**
+
+```json
+{
+  "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+  "prompt": "A scenic landscape transitions from sunrise to golden hour, with clouds drifting slowly across the sky and birds flying in the distance.",
+  "model_name": "doubao-seedance-2-0-260128/image-to-video",
+  "negative_prompt": "blurry, flickering, artifacts, static, low quality",
+  "resolution": "480p",
+  "video_length": 10,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
+  "generate_audio": true,
+  "count": 1,
+  "webhookurl": "https://your-server.com/webhook/callback"
+}
+```
+
+**Body - Seedance 2.0 Fast (5s, 720p)**
+
+```json
+{
+  "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+  "prompt": "Gentle wind blows through the hair, the character blinks naturally with a soft smile.",
+  "model_name": "doubao-seedance-2-0-fast-260128/image-to-video",
+  "negative_prompt": "blurry, distorted, low quality, artifacts",
+  "resolution": "720p",
+  "video_length": 5,
+  "count": 4
+}
+```
+
+**Body - Seedance 2.0 Fast with Last Frame & Audio (10s, 480p)**
+
+```json
+{
+  "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+  "prompt": "A product rotates smoothly on a turntable with studio lighting, revealing details from all angles.",
+  "model_name": "doubao-seedance-2-0-fast-260128/image-to-video",
+  "negative_prompt": "blurry, shaky, distorted, low quality, flickering",
+  "resolution": "480p",
+  "video_length": 10,
+  "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
+  "generate_audio": true,
+  "count": 1,
+  "webhookurl": "https://your-server.com/webhook/callback"
+}
+```
+
 **Request**
 
 <CodeGroup>
