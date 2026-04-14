@@ -282,7 +282,8 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
 | resolution    | String   | true         | Resolution value (e.g., 720p, 1080p, 4k). Available options are retrieved from the resolutionList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
 | video_length  | Integer  | true         | Video duration in seconds. Available durations are retrieved from the durationList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
 | last_image_url | String  | false        | URL of the image to use as the last frame of the video |
-| generate_audio | Boolean | false        | Whether to generate audio for the video. When enabled, additional credits will be charged (+20% for most models, +50% for Kling models). Only supported by specific models. |
+| generate_audio | Boolean | false        | Whether to generate audio for the video. When enabled, additional credits will be charged (+20% for most models, +25% for Kling O3 Pro model). Only supported by specific models. |
+| multi_prompt  | Array    | false        | Array of multi-shot prompt segments for storyboard mode. Each item contains `duration` (Number, seconds) and `prompt` (String). Maximum 5 segments. Total duration of all segments must match `video_length`. Supported by Kling O3 Pro model. |
 | count         | Integer  | false        | Number of videos to create simultaneously (1-10), default: 1 |
 | webhookurl    | String   | false        | Callback URL for POST requests |
 
@@ -392,6 +393,48 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
   "generate_audio": true,
   "count": 1,
   "webhookurl": "https://your-server.com/webhook/callback"
+}
+```
+
+**Body - Kling O3 Pro Standard Mode (5s)**
+
+```json
+{
+  "image_url": "https://d3323c6w59hl44.cloudfront.net/default/260401/66f14594828f9d3f27974dfc/va2d94r5npce.jpeg",
+  "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+  "model_name": "kwaivgi/kling-video-o3-pro/image-to-video",
+  "negative_prompt": "blurry, distorted hands, missing fingers, unnatural pose, double hands, extra limbs, bad anatomy, low quality, cartoonish, exaggerated features, open mouth, aggressive expression, modern clothing, pixelated, vibrant colors, overexposed, flickering, blurry details, subtitles, logo, style, artwork, painting, picture, static, overall grayish, worst quality, JPEG compression artifacts, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn face, deformed, disfigured, malformed limbs, fused fingers, static characters, messy background, three legs, crowded background, walking backwards",
+  "extend_prompt": true,
+  "audio_type": 1,
+  "video_length": 5,
+  "generate_audio": true,
+  "count": 1
+}
+```
+
+**Body - Kling O3 Pro Storyboard Mode with Multi-Prompt (6s)**
+
+```json
+{
+  "image_url": "https://d3323c6w59hl44.cloudfront.net/default/260401/66f14594828f9d3f27974dfc/va2d94r5npce.jpeg",
+  "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+  "model_name": "kwaivgi/kling-video-o3-pro/image-to-video",
+  "negative_prompt": "blurry, distorted hands, missing fingers, unnatural pose, double hands, extra limbs, bad anatomy, low quality, cartoonish, exaggerated features, open mouth, aggressive expression, modern clothing, pixelated, vibrant colors, overexposed, flickering, blurry details, subtitles, logo, style, artwork, painting, picture, static, overall grayish, worst quality, JPEG compression artifacts, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn face, deformed, disfigured, malformed limbs, fused fingers, static characters, messy background, three legs, crowded background, walking backwards",
+  "extend_prompt": true,
+  "audio_type": 1,
+  "video_length": 6,
+  "multi_prompt": [
+    {
+      "duration": 3,
+      "prompt": "Animate this image with smooth camera movement and subtle object motion."
+    },
+    {
+      "duration": 3,
+      "prompt": "Animate this image with smooth camera movement and subtle object motion."
+    }
+  ],
+  "generate_audio": true,
+  "count": 1
 }
 ```
 
