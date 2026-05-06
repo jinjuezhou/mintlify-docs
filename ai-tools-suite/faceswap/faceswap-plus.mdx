@@ -1,5 +1,5 @@
 ---
-title: "Face Swap Plus"
+title: "Face Swap Plus (Image & Video)"
 description: "Multi-face swap for images and videos"
 openapi: "POST /api/open/v4/faceswap/faceswapPlusByImage"
 ---
@@ -9,14 +9,32 @@ openapi: "POST /api/open/v4/faceswap/faceswapPlusByImage"
   Please save the relevant resources as soon as possible to prevent expiration.
 </Warning>
 
-## Face Swap Plus (akool_faceswap_classic_plus)
+<Tip>
+  Face Swap Plus is a unified API that supports both **image** and **video** face swap.
+  
+  - **Single Face Mode**: No pre-detection required, just provide source and target URLs
+  - **Multi-Face Mode**: Requires [Face Detection API](/ai-tools-suite/face-detection/detect-faces) to get `face_url` and `bbox` for each face
+  - For highest quality image face swap (single face only), use [Face Swap Pro](/ai-tools-suite/faceswap/image-faceswap-v4)
+  - Video Faceswap API is a V3 legacy API. For new projects, we recommend using this API instead
+</Tip>
+
+## Features
 
 Face Swap Plus supports advanced face swapping scenarios:
 
+- **Image and Video**: Unified API for both image and video face swap
 - **Multi-Face**: Swap multiple faces at once via `face_mapping`
-- **Image and Video**: Supports both image and video materials
 - **Single Face Mode**: Use `single_face_mode` for simplified single-face swap
 - **Style Options**: Choose between `realistic`, `beautify`, or `lossless` styles
+
+## Which API Should I Use?
+
+| Scenario | Recommended API |
+|----------|-----------------|
+| Highest quality image face swap (single face) | [Face Swap Pro](/ai-tools-suite/faceswap/image-faceswap-v4) |
+| Multi-face swap (image/video) | Face Swap Plus ✅ |
+| Video face swap | Face Swap Plus ✅ (Recommended) |
+| V3 compatibility required | [Video Faceswap](/ai-tools-suite/faceswap/video-faceswap) |
 
 ## Parameters
 
@@ -65,7 +83,23 @@ The `bbox` parameter in `source_face_info` and `target_face_info` depends on whe
 The `crop_region` from Face Detection API returns `[x, y, width, height]`. Convert it to `bbox` format `[x1, y1, x2, y2]`:
 - `x1 = x`, `y1 = y`, `x2 = x + width`, `y2 = y + height`
 
-## Example: Multi-Face with face_urls (no bbox needed)
+---
+
+## Image Face Swap
+
+### Example: Simple Single Face Image Swap
+
+```json
+{
+  "source_url": "https://example.com/new-face.jpg",
+  "target_url": "https://example.com/original.jpg",
+  "single_face_mode": true,
+  "face_enhance": false,
+  "model_style": "realistic"
+}
+```
+
+### Example: Multi-Face Image Swap with face_urls (no bbox needed)
 
 When using `face_urls` from the Face Detection API response, bbox is not required:
 
@@ -89,7 +123,7 @@ When using `face_urls` from the Face Detection API response, bbox is not require
 }
 ```
 
-## Example: Multi-Face with original URLs (bbox required)
+### Example: Multi-Face Image Swap with original URLs (bbox required)
 
 When using user-uploaded original image URLs, provide bbox from `crop_region`:
 
@@ -115,7 +149,23 @@ When using user-uploaded original image URLs, provide bbox from `crop_region`:
 }
 ```
 
-## Example: Video Single Face Swap (single_face_mode)
+---
+
+## Video Face Swap
+
+<Note>
+  Video face swap is an async operation. Use `webhookUrl` or poll the [Get Result API](/ai-tools-suite/faceswap/get-result) to check processing status.
+</Note>
+
+### Video Requirements
+
+- **Duration**: Keep videos under 60 seconds for optimal processing time
+- **Format**: MP4, MOV, AVI supported
+- **Resolution**: Higher resolution videos may take longer to process
+- **Encoding**: H.264 recommended
+- **Face Count**: For best results, limit to 8 or fewer faces
+
+### Example: Single Face Video Swap
 
 ```json
 {
@@ -127,14 +177,50 @@ When using user-uploaded original image URLs, provide bbox from `crop_region`:
 }
 ```
 
-## Example: Simple Single Face Image Swap
+### Example: Multi-Face Video Swap
+
+```json
+{
+  "source_url": "https://example.com/source-face.jpg",
+  "target_url": "https://example.com/group-video.mp4",
+  "single_face_mode": false,
+  "face_enhance": false,
+  "model_style": "realistic",
+  "face_mapping": [
+    {
+      "source_face_info": { "face_url": "https://example.com/face-1.jpg" },
+      "target_face_info": { "face_url": "https://example.com/target-face-1.jpg" }
+    },
+    {
+      "source_face_info": { "face_url": "https://example.com/face-2.jpg" },
+      "target_face_info": { "face_url": "https://example.com/target-face-2.jpg" }
+    }
+  ]
+}
+```
+
+### Example: Video Swap with Webhook
 
 ```json
 {
   "source_url": "https://example.com/new-face.jpg",
-  "target_url": "https://example.com/original.jpg",
-  "single_face_mode": false,
-  "face_enhance": false,
+  "target_url": "https://example.com/video.mp4",
+  "single_face_mode": true,
+  "webhookUrl": "https://your-server.com/webhook/faceswap-callback",
+  "face_enhance": true,
   "model_style": "realistic"
 }
 ```
+
+---
+
+## Checking Results
+
+After submitting a face swap request, use the [Get Result API](/ai-tools-suite/faceswap/get-result) to check the status:
+
+| Status | Description |
+|--------|-------------|
+| 1 | In Queue - Your request is waiting to be processed |
+| 2 | Processing - Face swap is currently being generated |
+| 3 | Success - Face swap completed, result URL is available |
+| 4 | Failed - Face swap failed, please check your input |
