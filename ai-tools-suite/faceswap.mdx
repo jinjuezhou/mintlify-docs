@@ -16,10 +16,10 @@ Experience our face swap technology in action by exploring our interactive demo 
 
 ### Face Swap Operations
 
-- [Image Faceswap](/ai-tools-suite/faceswap/image-faceswap) - Swap faces in images with high quality (supports multiple faces)
-- [Face Swap Pro](/ai-tools-suite/faceswap/image-faceswap-v4) - **⭐** Highest quality face swap for images (V4)
-- [Face Swap Plus](/ai-tools-suite/faceswap/image-faceswap-plus) - **⭐ NEW** Multi-face swap for images and videos, supports face_mapping (V4)
-- [Video Faceswap](/ai-tools-suite/faceswap/video-faceswap) - Swap faces in videos with high quality
+- [Face Swap Plus](/ai-tools-suite/faceswap/faceswap-plus) - **⭐ Recommended** Unified API for image and video face swap, supports multi-face
+- [Face Swap Pro](/ai-tools-suite/faceswap/image-faceswap-v4) - **⭐** Highest quality image face swap (single face)
+- [Image Faceswap](/ai-tools-suite/faceswap/image-faceswap) - Swap faces in images with high quality (V3)
+- [Video Faceswap](/ai-tools-suite/faceswap/video-faceswap) - Swap faces in videos with high quality (V3)
 
 ### Result Management
 
@@ -48,10 +48,10 @@ Experience our face swap technology in action by exploring our interactive demo 
    - Delivers more realistic and more similar face swap results
    - **Only supports single face swapping**
 
-3. **For Face Swap Plus (V4 API)** - Multi-Face, Image + Video:
-   - Call the [Face Swap Plus API](/ai-tools-suite/faceswap/image-faceswap-plus) with `model_name` = `akool_faceswap_classic_plus`
+3. **For Face Swap Plus (V4 API)** - Recommended, supports image + video, supports multi-face:
+   - Call the [Face Swap Plus API](/ai-tools-suite/faceswap/faceswap-plus)
+   - Supports both images and videos
    - Supports multiple faces via `face_mapping`
-   - Supports images and videos
    - Supports single-face mode via `single_face_mode`
 
 4. **Check Results**:
@@ -127,7 +127,7 @@ Use the [Face Swap Pro API](/ai-tools-suite/faceswap/image-faceswap-v4) (`POST /
 
 ### Face Swap Plus - Multi-Face, Image + Video
 
-Use the [Face Swap Plus API](/ai-tools-suite/faceswap/image-faceswap-plus) (`POST /api/open/v4/faceswap/faceswapPlusByImage`) for multi-face or video face swap:
+Use the [Face Swap Plus API](/ai-tools-suite/faceswap/faceswap-plus) (`POST /api/open/v4/faceswap/faceswapPlusByImage`) for multi-face or video face swap:
 
 ```json
 {
@@ -159,7 +159,9 @@ Use the [V3 Image Faceswap API](/ai-tools-suite/faceswap/image-faceswap) when yo
 
 ### Video Face Swap
 
-Use the [Video Faceswap API](/ai-tools-suite/faceswap/video-faceswap) for video content:
+**We recommend using [Face Swap Plus API](/ai-tools-suite/faceswap/faceswap-plus)** - single face mode requires no pre-detection, multi-face mode uses Face Detection API for face info.
+
+If you need to use the V3 Video Faceswap API:
 
 1. Detect faces in a representative frame
 2. Provide face landmarks for both source and target
