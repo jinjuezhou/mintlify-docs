@@ -170,8 +170,15 @@
       },
       {
         "anchor": "CLI",
-        "href": "/cli",
-        "icon": "terminal"
+        "icon": "terminal",
+        "groups": [
+          {
+            "group": "CLI",
+            "pages": [
+              "cli"
+            ]
+          }
+        ]
       },
       {
         "anchor": "Blog",
