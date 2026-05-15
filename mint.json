@@ -178,6 +178,21 @@
       ]
     },
     {
+      "group": "Head Swap",
+      "pages": [
+        "ai-tools-suite/head-swap/head-swap",
+        {
+          "group": "API Endpoints",
+          "pages": [
+            "ai-tools-suite/head-swap/submit-analysis",
+            "ai-tools-suite/head-swap/get-analysis-detail",
+            "ai-tools-suite/head-swap/create",
+            "ai-tools-suite/head-swap/get-result"
+          ]
+        }
+      ]
+    },
+    {
       "group": "AI Tools Suite",
       "pages": [
         "ai-tools-suite/live-faceswap",

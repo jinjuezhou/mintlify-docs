@@ -1,0 +1,244 @@
+---
+title: "Create Head Swap Task"
+description: "Create a head-swap video generation task using the same video_url as analysis and obj_id to reference-face mappings."
+---
+
+<Warning>
+  `video_url` must match the URL used in [Submit Person Analysis](/ai-tools-suite/head-swap/submit-analysis). Each `obj_id` must exist in `analysis_result.media` for that analysis.
+</Warning>
+
+## Endpoint
+
+```
+POST https://openapi.akool.com/api/open/v4/headswap/task/create
+```
+
+## Request Headers
+
+| **Parameter** | **Value** | **Description** |
+|---------------|-----------|-----------------|
+| x-api-key | API Key | Request authorization. If both `Authorization` and `x-api-key` are set, platform rules determine precedence. |
+| Authorization | Bearer `{token}` | Optional Bearer token. [Get Token](/authentication/usage#get-the-token) |
+| Content-Type | application/json | Required |
+
+## Body Attributes
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|---------------|----------|--------------|-----------------|
+| video_url | String | true | **Identical** source video URL as used in analysis |
+| mappings | Array | true | At least 1 object, **at most 5** |
+| - obj_id | Number | true | Subject id from `analysis_result.media[].obj_id` |
+| - img_url | String | true | Single reference face image URL (`http` / `https`) for that `obj_id` |
+| model_name | String | true | Model id — see **Model names** below |
+| resolution | String | true | Output resolution: `480p` or `720p` |
+| prompt | String | false | Text prompt for style or detail guidance |
+| template_id | String | false | Template id when enabled for your tenant |
+| keep_original_sound | Boolean | false | Keep source audio (default `true`) |
+| webhookUrl | String | false | HTTPS recommended; final-state callback (format per platform / support) |
+
+### Model names
+
+| Value | Description |
+|-------|-------------|
+| akool-premium | Head swap generation model |
+
+If the account does not support the model, you may receive `1003` with a message such as `Your current account does not support this feature.`
+
+## Response Attributes
+
+| **Parameter** | **Type** | **Description** |
+|---------------|----------|-----------------|
+| code | Integer | Business status code (`1000` = success) |
+| msg | String | Status message |
+| data | Object | Created task |
+| - _id | String | Task id — use with [Get Head Swap Task Detail](/ai-tools-suite/head-swap/get-result) |
+| - create_time | Long | Creation time (ms) |
+| - uid | Integer | User id |
+| - team_id | String | Team id |
+| - video_duration | Number | Associated video duration (seconds) |
+| - task_id | String | Internal processing id |
+| - resolution | String | Output resolution |
+| - status | Integer | Usually `1` (queue) when created |
+| - deduction_lock_duration | Number | Pre-hold / lock value (billing semantics per agreement) |
+| - model_name | String | Model used |
+| - file_name | String | Output file name (platform-generated) |
+| - video_url | null | Often `null` at create time; poll [Get Head Swap Task Detail](/ai-tools-suite/head-swap/get-result) for the result URL |
+
+## Example
+
+### Request Body
+
+```json
+{
+  "video_url": "https://example.com/videos/source.mp4",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/faces/reference.jpeg"
+    }
+  ],
+  "prompt": "Replace the person in the video with the given face",
+  "model_name": "akool-premium",
+  "resolution": "720p",
+  "keep_original_sound": true,
+  "webhookUrl": "https://example.com/your-webhook"
+}
+```
+
+### Request
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/headswap/task/create' \
+--header 'x-api-key: {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "video_url": "https://example.com/videos/source.mp4",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/faces/reference.jpeg"
+    }
+  ],
+  "prompt": "Replace the person in the video with the given face",
+  "model_name": "akool-premium",
+  "resolution": "720p",
+  "keep_original_sound": true,
+  "webhookUrl": "https://example.com/your-webhook"
+}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"video_url\": \"https://example.com/videos/source.mp4\",\n  \"mappings\": [\n    {\n      \"obj_id\": 0,\n      \"img_url\": \"https://example.com/faces/reference.jpeg\"\n    }\n  ],\n  \"prompt\": \"Replace the person in the video with the given face\",\n  \"model_name\": \"akool-premium\",\n  \"resolution\": \"720p\",\n  \"keep_original_sound\": true,\n  \"webhookUrl\": \"https://example.com/your-webhook\"\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/headswap/task/create")
+  .method("POST", body)
+  .addHeader("x-api-key", "{{API Key}}")
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("x-api-key", "{{API Key}}");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "video_url": "https://example.com/videos/source.mp4",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/faces/reference.jpeg"
+    }
+  ],
+  "prompt": "Replace the person in the video with the given face",
+  "model_name": "akool-premium",
+  "resolution": "720p",
+  "keep_original_sound": true,
+  "webhookUrl": "https://example.com/your-webhook"
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/headswap/task/create", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'x-api-key' => '{{API Key}}',
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "video_url": "https://example.com/videos/source.mp4",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/faces/reference.jpeg"
+    }
+  ],
+  "prompt": "Replace the person in the video with the given face",
+  "model_name": "akool-premium",
+  "resolution": "720p",
+  "keep_original_sound": true,
+  "webhookUrl": "https://example.com/your-webhook"
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/headswap/task/create', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v4/headswap/task/create"
+
+payload = json.dumps({
+  "video_url": "https://example.com/videos/source.mp4",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/faces/reference.jpeg"
+    }
+  ],
+  "prompt": "Replace the person in the video with the given face",
+  "model_name": "akool-premium",
+  "resolution": "720p",
+  "keep_original_sound": True,
+  "webhookUrl": "https://example.com/your-webhook"
+})
+headers = {
+  'x-api-key': '{{API Key}}',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+print(response.text)
+```
+
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "6a066dc58570ecbf64f761a5",
+    "create_time": 1778806213962,
+    "uid": 101400,
+    "team_id": "6805fb69e92d9edc7ca0b409",
+    "video_duration": 10,
+    "task_id": "6a066dc52872921bde86b745",
+    "resolution": "720p",
+    "status": 1,
+    "deduction_lock_duration": 100,
+    "model_name": "akool-premium",
+    "file_name": "Headswap_1778806213962.mp4",
+    "video_url": null
+  }
+}
+```
+
+## Important Notes
+
+- More than **5** mappings may return an error such as: `Up to 5 characters can be replaced at one time.`
+- Credits are validated on create; insufficient balance often returns **`1104`**.
+- Store `data._id` and poll [Get Head Swap Task Detail](/ai-tools-suite/head-swap/get-result) (or wait for `webhookUrl`) for the output `video_url`.
