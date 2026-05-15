@@ -1,0 +1,228 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Akool open api documents",
+  "colors": {
+    "primary": "#8458cc",
+    "light": "#8458cc",
+    "dark": "#8458cc"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "anchors": [
+      {
+        "anchor": "Documentation",
+        "icon": "book-open",
+        "groups": [
+          {
+            "group": "Authentication",
+            "pages": [
+              "authentication/usage"
+            ]
+          },
+          {
+            "group": "Face Swap",
+            "pages": [
+              "ai-tools-suite/faceswap",
+              {
+                "group": "API Endpoints",
+                "pages": [
+                  "ai-tools-suite/faceswap/faceswap-plus",
+                  "ai-tools-suite/faceswap/image-faceswap-v4",
+                  "ai-tools-suite/faceswap/image-faceswap",
+                  "ai-tools-suite/faceswap/video-faceswap",
+                  "ai-tools-suite/faceswap/get-result",
+                  "ai-tools-suite/faceswap/delete-result",
+                  "ai-tools-suite/faceswap/get-credit",
+                  "ai-tools-suite/faceswap/face-detect"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Streaming Avatar",
+            "pages": [
+              "ai-tools-suite/live-avatar",
+              {
+                "group": "API Endpoints",
+                "pages": [
+                  "ai-tools-suite/live-avatar/upload",
+                  "ai-tools-suite/live-avatar/list",
+                  "ai-tools-suite/live-avatar/detail",
+                  "ai-tools-suite/live-avatar/create-session",
+                  "ai-tools-suite/live-avatar/session-detail",
+                  "ai-tools-suite/live-avatar/close-session",
+                  "ai-tools-suite/live-avatar/list-sessions"
+                ]
+              },
+              {
+                "group": "Implementation Guides",
+                "pages": [
+                  "implementation-guide/streaming-avatar",
+                  "implementation-guide/livekit-agent"
+                ]
+              },
+              {
+                "group": "Integrate with AKOOL SA SDK",
+                "pages": [
+                  "sdk/jssdk-start",
+                  "sdk/jssdk-best-practice",
+                  "sdk/jssdk-api"
+                ]
+              },
+              "ai-tools-suite/knowledge-base",
+              "ai-tools-suite/live-camera"
+            ]
+          },
+          {
+            "group": "Talking Photo",
+            "pages": [
+              "ai-tools-suite/talking-photo",
+              {
+                "group": "API Endpoints",
+                "pages": [
+                  "ai-tools-suite/talking-photo/create-video",
+                  "ai-tools-suite/talking-photo/get-result"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Video Translation",
+            "pages": [
+              "ai-tools-suite/video-translation",
+              {
+                "group": "API Endpoints",
+                "pages": [
+                  "ai-tools-suite/video-translation/create-translation",
+                  "ai-tools-suite/video-translation/get-result",
+                  "ai-tools-suite/video-translation/get-languages"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Face Detection",
+            "pages": [
+              "ai-tools-suite/face-detection",
+              "ai-tools-suite/face-detection/detect-faces",
+              "ai-tools-suite/face-detection/analyze-frames"
+            ]
+          },
+          {
+            "group": "Character Swap",
+            "pages": [
+              "ai-tools-suite/character-swap/character-swap",
+              {
+                "group": "API Endpoints",
+                "pages": [
+                  "ai-tools-suite/character-swap/create",
+                  "ai-tools-suite/character-swap/get-result"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "AI Tools Suite",
+            "pages": [
+              "ai-tools-suite/live-faceswap",
+              "ai-tools-suite/reage",
+              "ai-tools-suite/voiceLab",
+              "ai-tools-suite/video-translation",
+              "ai-tools-suite/talking-photo",
+              "ai-tools-suite/talking-avatar",
+              "ai-tools-suite/lip-sync",
+              "ai-tools-suite/image-generate",
+              "ai-tools-suite/jarvis-moderator",
+              "ai-tools-suite/image2video",
+              "ai-tools-suite/aimodel",
+              "ai-tools-suite/webhook",
+              "ai-tools-suite/error-code"
+            ]
+          }
+        ]
+      },
+      {
+        "anchor": "Overview",
+        "icon": "book-open-cover",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "index"
+            ]
+          }
+        ]
+      },
+      {
+        "anchor": "Github",
+        "href": "https://github.com/AKOOL-Official",
+        "icon": "github"
+      },
+      {
+        "anchor": "Postman",
+        "href": "https://www.postman.com/akoolai/team-workspace/collection/40971792-f9172546-2d7e-4b28-bb20-b86988f3ab1d?action=share&creator=40971792",
+        "icon": "mailbox",
+        "color": {
+          "light": "#FF6C37",
+          "dark": "#FF6C37"
+        }
+      },
+      {
+        "anchor": "CLI",
+        "href": "/cli",
+        "icon": "terminal"
+      },
+      {
+        "anchor": "Blog",
+        "href": "https://akool.com/blog",
+        "icon": "newspaper"
+      },
+      {
+        "anchor": "Change Logs",
+        "icon": "clock-rotate-left",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "changelog"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/logo/akool-light.svg",
+    "dark": "/logo/akool-dark.svg"
+  },
+  "api": {
+    "openapi": [
+      "openapi/live-avatar.yaml",
+      "openapi/faceswap.yaml",
+      "openapi/video-translation.yaml",
+      "openapi/talking-photo.yaml",
+      "openapi/face-detection.yaml",
+      "openapi/face-detect-legacy.yaml"
+    ],
+    "playground": {
+      "display": "simple"
+    },
+    "mdx": {
+      "server": "https://openapi.akool.com"
+    }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:info@akool.com"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Akool",
+      "href": "https://akool.com"
+    }
+  }
+}

@@ -1,0 +1,403 @@
+---
+title: "CLI"
+description: "Create AI-powered media from the terminal. Drive AKOOL with code, not clicks."
+---
+
+## Overview
+
+The AKOOL CLI is agent-first by design, wrapping the full Open API so developers and AI agents can perform face swaps, generate talking photos, translate videos, and more — straight from the terminal.
+
+**Built for:**
+
+- Coding agents — Claude Code, Codex, and others
+- CI/CD pipelines — batch media processing, automated workflows
+- Bulk operations — translate 100 videos in one shell loop
+- Custom integrations — wrap it in your own tool
+
+## Install
+
+```bash
+curl -fsSL https://nexus.akool.io/repository/raw-cli/cli/install.sh | bash
+```
+
+Single static binary, no runtime required. Installs to `~/.local/bin`.
+
+You only need AKOOL API credentials — see [Authenticate](#authenticate) below.
+
+## Updates
+
+```bash
+akool-cli upgrade            # install the latest version
+```
+
+## Authenticate
+
+Choose one of the two options below. The first is agent- and CI-friendly; the second is for humans.
+
+**1. Environment variables** — agents, CI; ephemeral, no file on disk:
+
+```bash
+export AKOOL_CLIENT_ID="your-client-id"
+export AKOOL_CLIENT_SECRET="your-client-secret"
+```
+
+**2. Interactive login** — humans; credentials stored at `~/.akool/config.json`:
+
+```bash
+akool-cli login
+```
+
+Enter your Client ID and Client Secret when prompted.
+
+Get your credentials at [akool.com](https://akool.com/workspace/current/api/credentials) → API Credentials.
+
+Verify your credentials:
+
+```bash
+akool-cli credit
+```
+
+## Global Options
+
+| Flag              | Description                                          |
+| ----------------- | ---------------------------------------------------- |
+| `-e, --env <env>` | Environment: `prod`, `test`, `dev` (default: `prod`) |
+| `--json`          | Output raw JSON instead of formatted tables          |
+
+`--json` works on any command:
+
+```bash
+akool-cli --json credit
+akool-cli --json faceswap image --source "..." --target "..."
+```
+
+Switch to test environment:
+
+```bash
+akool-cli -e test credit
+```
+
+## Quick Start
+
+**1. Face swap an image:**
+
+```bash
+akool-cli faceswap image \
+  --source "https://example.com/face.jpg" \
+  --target "https://example.com/portrait.jpg"
+```
+
+**2. Generate an image:**
+
+```bash
+akool-cli image generate \
+  --prompt "A serene mountain lake at sunset" \
+  --scale 16:9
+```
+
+**3. Synthesize speech:**
+
+```bash
+akool-cli voice tts \
+  --text "Hello, welcome to Akool!" \
+  --voice-id "<voice-id>"
+```
+
+Add `--wait` to block until the job completes. Use `--json` for raw JSON output.
+
+## Commands
+
+Pattern: `akool-cli <command> [subcommand] [options]`.
+
+| Command          | What it does                            |
+| ---------------- | --------------------------------------- |
+| `login`          | Configure API credentials interactively |
+| `credit`         | Get account credit balance              |
+| `faceswap`       | Face swap operations                    |
+| `character-swap` | Character swap operations               |
+| `image`          | Image generation operations             |
+| `voice`          | Voice and TTS operations                |
+| `upgrade`        | Upgrade CLI to the latest version       |
+
+Every command supports `--help`.
+
+```bash
+akool-cli faceswap --help
+akool-cli voice --help
+```
+
+## Command Reference
+
+### login
+
+Configure API credentials interactively. Credentials are stored at `~/.akool/config.json`.
+
+```bash
+akool-cli login
+```
+
+### credit
+
+Check your account credit balance.
+
+```bash
+akool-cli credit
+
+# Raw JSON output
+akool-cli --json credit
+```
+
+### faceswap
+
+#### Image face swap (Pro V4)
+
+```bash
+akool-cli faceswap image \
+  --source "https://example.com/face.jpg" \
+  --target "https://example.com/portrait.jpg"
+```
+
+With face enhancement:
+
+```bash
+akool-cli faceswap image \
+  --source "https://example.com/face.jpg" \
+  --target "https://example.com/portrait.jpg" \
+  --face-enhance
+```
+
+With async webhook callback:
+
+```bash
+akool-cli faceswap image \
+  --source "https://example.com/face.jpg" \
+  --target "https://example.com/portrait.jpg" \
+  --webhook "https://your-server.com/webhook"
+```
+
+#### Face Swap Plus V4 (multi-face, image + video)
+
+```bash
+akool-cli faceswap plus \
+  --source "https://example.com/face.jpg" \
+  --target "https://example.com/group-photo.jpg" \
+  --style realistic
+```
+
+Style options: `realistic`, `beautify`, `lossless`
+
+#### Video face swap
+
+```bash
+akool-cli faceswap video \
+  --source "https://example.com/face.jpg" \
+  --target "https://example.com/video.mp4"
+
+# With face enhancement level (0–100)
+akool-cli faceswap video \
+  --source "https://example.com/face.jpg" \
+  --target "https://example.com/video.mp4" \
+  --face-enhance 80
+```
+
+#### Query & manage results
+
+```bash
+# Query results by ID
+akool-cli faceswap result --ids "abc123,def456"
+
+# Delete results
+akool-cli faceswap delete --ids "abc123"
+```
+
+#### Live / real-time face swap
+
+```bash
+akool-cli faceswap live \
+  --source "https://example.com/face.jpg" \
+  --target "https://example.com/stream-url"
+```
+
+### character-swap
+
+Create an animated video from a character image and source video.
+
+```bash
+akool-cli characterswap create \
+  --image "https://example.com/character.png" \
+  --video "https://example.com/source.mp4"
+```
+
+With options:
+
+```bash
+akool-cli characterswap create \
+  --image "https://example.com/character.png" \
+  --video "https://example.com/source.mp4" \
+  --duration 10 \
+  --resolution 1080p \
+  --mode animate \
+  --prompt "Make the character dance smoothly"
+```
+
+Query result:
+
+```bash
+akool-cli characterswap result --id "<job-id>"
+```
+
+### image
+
+#### Text-to-image
+
+```bash
+akool-cli image generate --prompt "A serene mountain lake at sunset, oil painting style"
+
+# With aspect ratio (options: 1:1, 4:3, 3:4, 16:9, 9:16, 3:2, 2:3)
+akool-cli image generate \
+  --prompt "Futuristic city skyline, cyberpunk aesthetic" \
+  --scale 16:9
+```
+
+#### Image-to-image
+
+```bash
+akool-cli image generate \
+  --prompt "Make it look like a watercolor painting" \
+  --source-image "https://example.com/photo.jpg" \
+  --scale 1:1
+```
+
+#### Query result
+
+```bash
+akool-cli image result --id "<job-id>"
+```
+
+#### Upscale or generate variations
+
+```bash
+# Upscale to 4K (U1–U4)
+akool-cli image upscale --id "<job-id>" --button U1
+
+# Generate a variation (V1–V4)
+akool-cli image upscale --id "<job-id>" --button V2
+```
+
+#### image2video
+
+Create a video from a static image.
+
+```bash
+akool-cli image2video create \
+  --image "https://example.com/photo.jpg" \
+  --prompt "Camera slowly zooms in, water ripples gently"
+```
+
+Premium HD, 10 seconds, 1080p:
+
+```bash
+akool-cli image2video create \
+  --image "https://example.com/landscape.jpg" \
+  --prompt "Clouds drift across the sky, trees sway in wind" \
+  --resolution 1080p \
+  --video-length 10 \
+  --premium
+```
+
+With audio soundtrack:
+
+```bash
+akool-cli image2video create \
+  --image "https://example.com/scene.jpg" \
+  --prompt "Gentle cinematic pan" \
+  --audio-type 2 \
+  --audio-url "https://example.com/music.mp3"
+```
+
+Query & manage:
+
+```bash
+# Query results
+akool-cli image2video results --ids "id1,id2"
+
+# List special effects
+akool-cli image2video effects
+akool-cli image2video effects --provider akool
+
+# Delete records
+akool-cli image2video delete --ids "id1,id2"
+```
+
+### voice
+
+#### List voices
+
+```bash
+# System voices
+akool-cli voice list
+
+# Cloned voices
+akool-cli voice list --type 1
+```
+
+#### Text-to-speech
+
+```bash
+akool-cli voice tts \
+  --text "Hello, welcome to Akool AI tools!" \
+  --voice-id "<voice-id>"
+
+# With speed and emotion
+akool-cli voice tts \
+  --text "This is amazing technology!" \
+  --voice-id "<voice-id>" \
+  --speed 1.2 \
+  --emotion happy
+
+# Wait for completion
+akool-cli voice tts \
+  --text "Wait for this to finish" \
+  --voice-id "<voice-id>" \
+  --wait
+```
+
+#### Query result
+
+```bash
+akool-cli voice result --id "<task-id>"
+```
+
+### upgrade
+
+```bash
+akool-cli upgrade
+```
+
+## Tips
+
+- **JSON output**: Add `--json` anywhere for raw JSON, great for scripting:
+
+  ```bash
+  akool-cli --json credit | jq '.data.credit'
+  ```
+
+- **Switch environments**: Use `-e test` to hit the test API:
+
+  ```bash
+  akool-cli -e test credit
+  ```
+
+- **Custom API host**:
+
+  ```bash
+  export AKOOL_API_HOST="https://custom-api.example.com"
+  ```
+
+- **Custom CDN for upgrades**:
+
+  ```bash
+  export AKOOL_CDN_BASE_URL="https://your-cdn.example.com/cli"
+  ```
+
+- **Async tasks**: Most generation commands return immediately with a job ID. Use `--webhook` for server callbacks, or poll with the `result` subcommand.
