@@ -31,7 +31,6 @@ POST https://openapi.akool.com/api/open/v4/headswap/task/create
 | - img_url | String | true | Single reference face image URL (`http` / `https`) for that `obj_id` |
 | model_name | String | true | Model id — see **Model names** below |
 | resolution | String | true | Output resolution: `480p` or `720p` |
-| prompt | String | false | Text prompt for style or detail guidance |
 | template_id | String | false | Template id when enabled for your tenant |
 | keep_original_sound | Boolean | false | Keep source audio (default `true`) |
 | webhookUrl | String | false | HTTPS recommended; final-state callback (format per platform / support) |
@@ -77,7 +76,6 @@ If the account does not support the model, you may receive `1003` with a message
       "img_url": "https://example.com/faces/reference.jpeg"
     }
   ],
-  "prompt": "Replace the person in the video with the given face",
   "model_name": "akool-premium",
   "resolution": "720p",
   "keep_original_sound": true,
@@ -101,7 +99,6 @@ curl --location 'https://openapi.akool.com/api/open/v4/headswap/task/create' \
       "img_url": "https://example.com/faces/reference.jpeg"
     }
   ],
-  "prompt": "Replace the person in the video with the given face",
   "model_name": "akool-premium",
   "resolution": "720p",
   "keep_original_sound": true,
@@ -113,7 +110,7 @@ curl --location 'https://openapi.akool.com/api/open/v4/headswap/task/create' \
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\n  \"video_url\": \"https://example.com/videos/source.mp4\",\n  \"mappings\": [\n    {\n      \"obj_id\": 0,\n      \"img_url\": \"https://example.com/faces/reference.jpeg\"\n    }\n  ],\n  \"prompt\": \"Replace the person in the video with the given face\",\n  \"model_name\": \"akool-premium\",\n  \"resolution\": \"720p\",\n  \"keep_original_sound\": true,\n  \"webhookUrl\": \"https://example.com/your-webhook\"\n}");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"video_url\": \"https://example.com/videos/source.mp4\",\n  \"mappings\": [\n    {\n      \"obj_id\": 0,\n      \"img_url\": \"https://example.com/faces/reference.jpeg\"\n    }\n  ],\n  \"model_name\": \"akool-premium\",\n  \"resolution\": \"720p\",\n  \"keep_original_sound\": true,\n  \"webhookUrl\": \"https://example.com/your-webhook\"\n}");
 Request request = new Request.Builder()
   .url("https://openapi.akool.com/api/open/v4/headswap/task/create")
   .method("POST", body)
@@ -136,7 +133,6 @@ const raw = JSON.stringify({
       "img_url": "https://example.com/faces/reference.jpeg"
     }
   ],
-  "prompt": "Replace the person in the video with the given face",
   "model_name": "akool-premium",
   "resolution": "720p",
   "keep_original_sound": true,
@@ -171,7 +167,6 @@ $body = '{
       "img_url": "https://example.com/faces/reference.jpeg"
     }
   ],
-  "prompt": "Replace the person in the video with the given face",
   "model_name": "akool-premium",
   "resolution": "720p",
   "keep_original_sound": true,
@@ -197,7 +192,6 @@ payload = json.dumps({
       "img_url": "https://example.com/faces/reference.jpeg"
     }
   ],
-  "prompt": "Replace the person in the video with the given face",
   "model_name": "akool-premium",
   "resolution": "720p",
   "keep_original_sound": True,
