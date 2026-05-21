@@ -1,0 +1,158 @@
+---
+title: "Delete Videos"
+description: "Delete generated Image to Video results by IDs"
+---
+
+## Endpoint
+
+```
+POST https://openapi.akool.com/api/open/v4/image2Video/delbyids
+```
+
+## Request Headers
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                               |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+
+## Body Attributes
+
+| **Parameter** | **Type** | **Required** | **Description**                                                                                                                                        |
+|---------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| _ids          | String   | true         | Multiple IDs separated by commas |
+
+## Response Attributes
+
+| **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| code          | Integer  | Interface returns business status code (1000:success)                                                                                                                                                                   |
+| msg           | String   | Interface returns status information                                                                                                                                                                                   |
+| data          | Object   | Response data object |
+| - successIds  | Array    | Successfully deleted video IDs |
+| - noPermissionItems | Array | Failed deletion information list |
+| -- _id        | String   | Failed deletion video ID |
+| -- msg        | String   | Failure reason |
+
+## Example
+
+### Request Body
+
+```json
+{
+  "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c,6891a2295d612f78c9204f77"
+}
+```
+
+### Request
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/image2Video/delbyids' \
+--header 'x-api-key: {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c,6891a2295d612f78c9204f77"
+}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"_ids\": \"68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c,6891a2295d612f78c9204f77\"\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/image2Video/delbyids")
+  .method("POST", body)
+  .addHeader("x-api-key", "{{API Key}}")
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("x-api-key", "{{API Key}}");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c,6891a2295d612f78c9204f77"
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/image2Video/delbyids", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'x-api-key' =>'{{API Key}}',
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c,6891a2295d612f78c9204f77"
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/image2Video/delbyids', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v4/image2Video/delbyids"
+
+payload = json.dumps({
+  "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c,6891a2295d612f78c9204f77"
+})
+headers = {
+  'x-api-key':'{{API Key}}',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+print(response.text)
+```
+
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "code": 1000,
+  "msg": "Delete successfully",
+  "data": {
+    "successIds": [
+      "6882f4c10529ae771e71531d"
+    ],
+    "noPermissionItems": [
+      {
+        "_id": "6881cd86618fa41c89557b0c",
+        "msg": "video resource is processing, please try again later"
+      }
+    ]
+  }
+}
+```
+
+## Important Notes
+
+- You can delete multiple videos at once by separating IDs with commas
+- Videos that are currently processing (status = 2) cannot be deleted; wait until they complete or fail
+- You can only delete videos that belong to your account
+- The `noPermissionItems` array will contain details about any videos that could not be deleted
+- Deletion is permanent and cannot be undone
