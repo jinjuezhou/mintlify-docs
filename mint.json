@@ -51,6 +51,11 @@
       "url": "https://www.postman.com/akoolai/team-workspace/collection/40971792-f9172546-2d7e-4b28-bb20-b86988f3ab1d?action=share&creator=40971792"
     },
     {
+      "name": "CLI",
+      "icon": "terminal",
+      "url": "cli"
+    },
+    {
       "name": "Blog",
       "icon": "newspaper",
       "url": "https://akool.com/blog"
@@ -70,6 +75,12 @@
       ]
     },
     {
+      "group": "CLI",
+      "pages": [
+        "cli"
+      ]
+    },
+    {
       "group": "Authentication",
       "pages": [
         "authentication/usage"
@@ -82,9 +93,9 @@
         {
           "group": "API Endpoints",
           "pages": [
-            "ai-tools-suite/faceswap/image-faceswap",
+            "ai-tools-suite/faceswap/faceswap-plus",
             "ai-tools-suite/faceswap/image-faceswap-v4",
-            "ai-tools-suite/faceswap/image-faceswap-plus",
+            "ai-tools-suite/faceswap/image-faceswap",
             "ai-tools-suite/faceswap/video-faceswap",
             "ai-tools-suite/faceswap/get-result",
             "ai-tools-suite/faceswap/delete-result",
@@ -204,6 +215,21 @@
             "ai-tools-suite/image2video/get-effects",
             "ai-tools-suite/image2video/update-audio",
             "ai-tools-suite/image2video/delete-videos"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Head Swap",
+      "pages": [
+        "ai-tools-suite/head-swap/head-swap",
+        {
+          "group": "API Endpoints",
+          "pages": [
+            "ai-tools-suite/head-swap/submit-analysis",
+            "ai-tools-suite/head-swap/get-analysis-detail",
+            "ai-tools-suite/head-swap/create",
+            "ai-tools-suite/head-swap/get-result"
           ]
         }
       ]

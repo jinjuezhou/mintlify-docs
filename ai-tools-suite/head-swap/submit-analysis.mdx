@@ -1,0 +1,175 @@
+---
+title: "Submit Person Analysis (Head Swap)"
+description: "Submit a head-swap scene analysis job to detect people in a source video and obtain obj_id values for mapping."
+---
+
+<Warning>
+  Use the same `video_url` later when [creating the head swap task](/ai-tools-suite/head-swap/create). Analysis and task creation must refer to the same source video URL.
+</Warning>
+
+## Endpoint
+
+```
+POST https://openapi.akool.com/api/open/v4/headswap/analyze
+```
+
+## Request Headers
+
+| **Parameter** | **Value** | **Description** |
+|---------------|-----------|-----------------|
+| x-api-key | API Key | Request authorization. If both `Authorization` and `x-api-key` are set, platform rules determine precedence (often `Authorization` first). |
+| Authorization | Bearer `{token}` | Optional Bearer token. [Get Token](/authentication/usage#get-the-token) |
+| Content-Type | application/json | Required for JSON body |
+
+## Body Attributes
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|---------------|----------|--------------|-----------------|
+| video_url | String | true | Publicly accessible source video URL (`http` or `https`) |
+| type | String | true | For head swap, always **`head`** |
+
+## Response Attributes
+
+| **Parameter** | **Type** | **Description** |
+|---------------|----------|-----------------|
+| code | Integer | Business status code (`1000` = success) |
+| msg | String | Status message (often `Analyze success` on success) |
+| data | Object | Analysis record |
+| - _id | String | Analysis record id — use with [Get Analysis Result](/ai-tools-suite/head-swap/get-analysis-detail) |
+| - create_time | Long | Creation time (ms) |
+| - uid | Integer | User id |
+| - team_id | String | Team id |
+| - video_url | String | Source video URL |
+| - type | String | `head` |
+| - status | Integer | `1` queue, `2` processing, `3` completed, `4` failed |
+| - task_id | String | Internal processing id (support / tickets) |
+| - progress | Number | Approximate progress `0`–`100` |
+| - analysis_result | Object \| null | Usually null right after submit; populated when completed |
+| - error_reason | String | Error description if any |
+| - error_code | Number | Error code if any |
+
+## Example
+
+### Request Body
+
+```json
+{
+  "video_url": "https://example.com/videos/source.mp4",
+  "type": "head"
+}
+```
+
+### Request
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/headswap/analyze' \
+--header 'x-api-key: {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "video_url": "https://example.com/videos/source.mp4",
+  "type": "head"
+}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"video_url\": \"https://example.com/videos/source.mp4\",\n  \"type\": \"head\"\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/headswap/analyze")
+  .method("POST", body)
+  .addHeader("x-api-key", "{{API Key}}")
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("x-api-key", "{{API Key}}");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "video_url": "https://example.com/videos/source.mp4",
+  "type": "head"
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/headswap/analyze", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'x-api-key' => '{{API Key}}',
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "video_url": "https://example.com/videos/source.mp4",
+  "type": "head"
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/headswap/analyze', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v4/headswap/analyze"
+
+payload = json.dumps({
+  "video_url": "https://example.com/videos/source.mp4",
+  "type": "head"
+})
+headers = {
+  'x-api-key': '{{API Key}}',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+print(response.text)
+```
+
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "code": 1000,
+  "msg": "Analyze success",
+  "data": {
+    "_id": "6a066d03625746c797390f55",
+    "create_time": 1778806019014,
+    "uid": 101400,
+    "team_id": "6805fb69e92d9edc7ca0b409",
+    "video_url": "https://example.com/videos/source.mp4",
+    "type": "head",
+    "status": 1,
+    "task_id": "6a066d022872921bde86b72f",
+    "progress": 0
+  }
+}
+```
+
+## Important Notes
+
+- Save `data._id` and poll [Get Analysis Result](/ai-tools-suite/head-swap/get-analysis-detail) until `status` is `3` or `4`.
+- Video length must be within the documented duration window (about 3–20 seconds).
+- Invalid `video_url`, wrong `type`, or service issues return non-`1000` `code` / descriptive `msg`.

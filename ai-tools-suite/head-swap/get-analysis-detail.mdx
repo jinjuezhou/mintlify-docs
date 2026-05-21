@@ -1,0 +1,172 @@
+---
+title: "Get Analysis Result (Head Swap)"
+description: "Poll head-swap person analysis status and read detected people (obj_id, preview URLs, optional video_info)."
+---
+
+## Endpoint
+
+```
+GET https://openapi.akool.com/api/open/v4/headswap/analyze/detail?_id={{analysis_id}}
+```
+
+## Request Headers
+
+| **Parameter** | **Value** | **Description** |
+|---------------|-----------|-----------------|
+| x-api-key | API Key | Request authorization. [Get Token](/authentication/usage#get-the-token) for Bearer alternative. |
+| Authorization | Bearer `{token}` | Optional Bearer token |
+
+## Query Parameters
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|---------------|----------|--------------|-----------------|
+| _id | String | true | `_id` returned from [Submit Person Analysis](/ai-tools-suite/head-swap/submit-analysis) |
+
+## Response Attributes
+
+| **Parameter** | **Type** | **Description** |
+|---------------|----------|-----------------|
+| code | Integer | Business status code (`1000` = success) |
+| msg | String | Status message |
+| data | Object | Same shape as analyze submit response when successful |
+| - _id | String | Analysis record id |
+| - status | Integer | `1` queue, `2` processing, `3` completed, `4` failed |
+| - progress | Number | Approximate `0`–`100` |
+| - analysis_result | Object \| null | When `status` is `3`, contains detection output (see below) |
+| - error_reason | String | Failure or status text |
+| - error_code | Number | Error code if any |
+
+### `analysis_result` (when ready)
+
+| **Parameter** | **Type** | **Description** |
+|---------------|----------|-----------------|
+| detected_objects | Number | Detected person count (if returned) |
+| media | Array | List of detected subjects |
+| - obj_id | Number | Zero-based id — use in `mappings[].obj_id` when [creating a task](/ai-tools-suite/head-swap/create) |
+| - img_url | String | Preview image URL for that person in the source video |
+| - media_type | String | Media type label (e.g. images) |
+| video_info | Object | Optional source metadata |
+| - width | Number | Frame width (px) |
+| - height | Number | Frame height (px) |
+| - fps | Number | Frames per second |
+| - frame_count | Number | Total frames |
+
+Extra keys inside `analysis_result` may exist for forward compatibility.
+
+## Example
+
+### Request
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/headswap/analyze/detail?_id=6a066d03625746c797390f55' \
+--header 'x-api-key: {{API Key}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/headswap/analyze/detail?_id=6a066d03625746c797390f55")
+  .method("GET", null)
+  .addHeader("x-api-key", "{{API Key}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("x-api-key", "{{API Key}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/headswap/analyze/detail?_id=6a066d03625746c797390f55", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'x-api-key' => '{{API Key}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/headswap/analyze/detail?_id=6a066d03625746c797390f55', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v4/headswap/analyze/detail?_id=6a066d03625746c797390f55"
+
+headers = {
+  'x-api-key': '{{API Key}}'
+}
+
+response = requests.request("GET", url, headers=headers)
+print(response.text)
+```
+
+</CodeGroup>
+
+### Response (analysis completed)
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "6a066d03625746c797390f55",
+    "create_time": 1778806019014,
+    "uid": 101400,
+    "team_id": "6805fb69e92d9edc7ca0b409",
+    "video_url": "https://example.com/videos/source.mp4",
+    "type": "head",
+    "status": 3,
+    "task_id": "6a066d022872921bde86b72f",
+    "analysis_result": {
+      "detected_objects": 3,
+      "media": [
+        {
+          "media_type": "images",
+          "obj_id": 0,
+          "img_url": "https://example.com/previews/subject_0.png"
+        }
+      ],
+      "video_info": {
+        "width": 1916,
+        "height": 1082,
+        "fps": 30,
+        "frame_count": 450
+      }
+    },
+    "progress": 100,
+    "error_reason": "success",
+    "error_code": 0
+  }
+}
+```
+
+## Analysis Status
+
+| Status | Description |
+|--------|-------------|
+| 1 | In queue — `analysis_result` may be empty |
+| 2 | Processing — keep polling |
+| 3 | Completed — use `analysis_result.media` for `obj_id` |
+| 4 | Failed |
+
+## Important Notes
+
+- Poll until `status` is `3` or `4` before creating a head swap task (unless your product flow allows otherwise).
+- Wrong `_id` or no team access may yield not-found style errors (e.g. `1014` / `Resource not found` depending on environment).
+- `mappings[].img_url` at task creation is your **reference face** image; it does not have to match the analysis preview URL, but each `obj_id` must match an entry from `media`.

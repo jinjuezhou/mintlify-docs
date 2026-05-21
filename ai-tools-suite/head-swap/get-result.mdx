@@ -1,0 +1,160 @@
+---
+title: "Get Head Swap Task Detail"
+description: "Poll head-swap generation task status, progress, and output video URL by task _id."
+---
+
+## Endpoint
+
+```
+GET https://openapi.akool.com/api/open/v4/headswap/task/detail?_id={{task_id}}
+```
+
+## Request Headers
+
+| **Parameter** | **Value** | **Description** |
+|---------------|-----------|-----------------|
+| x-api-key | API Key | Request authorization. [Get Token](/authentication/usage#get-the-token) for Bearer alternative. |
+| Authorization | Bearer `{token}` | Optional Bearer token |
+
+## Query Parameters
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|---------------|----------|--------------|-----------------|
+| _id | String | true | `_id` returned from [Create Head Swap Task](/ai-tools-suite/head-swap/create) |
+
+You can only query tasks that belong to the authenticated team.
+
+## Response Attributes
+
+| **Parameter** | **Type** | **Description** |
+|---------------|----------|-----------------|
+| code | Integer | Business status code (`1000` = success) |
+| msg | String | Status message |
+| data | Object | Task detail |
+| - _id | String | Task id |
+| - uid | Integer | User id |
+| - team_id | String | Team id |
+| - source_video_url | String | Source video URL |
+| - create_time | Long | Creation time (ms) |
+| - status | Integer | `1` queue, `2` processing, `3` completed, `4` failed |
+| - video_duration | Number | Duration in seconds |
+| - resolution | String | Output resolution |
+| - deduction_duration | Number | Billing-related duration metric (meaning per platform agreement) |
+| - video_url | String \| null | Output video URL when completed; may be empty while processing |
+| - progress | Number | Approximate `0`–`100` |
+| - priority | Number | Priority-related value if returned |
+| - task_id | String | Internal processing id |
+| - error_reason | String | Failure reason when failed |
+| - error_code | Number | Failure code when failed |
+| - file_name | String | Output file name |
+| - model_name | String | Model id |
+
+## Example
+
+### Request
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/headswap/task/detail?_id=6a066dc58570ecbf64f761a5' \
+--header 'x-api-key: {{API Key}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/headswap/task/detail?_id=6a066dc58570ecbf64f761a5")
+  .method("GET", null)
+  .addHeader("x-api-key", "{{API Key}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("x-api-key", "{{API Key}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/headswap/task/detail?_id=6a066dc58570ecbf64f761a5", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'x-api-key' => '{{API Key}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/headswap/task/detail?_id=6a066dc58570ecbf64f761a5', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v4/headswap/task/detail?_id=6a066dc58570ecbf64f761a5"
+
+headers = {
+  'x-api-key': '{{API Key}}'
+}
+
+response = requests.request("GET", url, headers=headers)
+print(response.text)
+```
+
+</CodeGroup>
+
+### Response (task completed)
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "6a066dc58570ecbf64f761a5",
+    "uid": 101400,
+    "team_id": "6805fb69e92d9edc7ca0b409",
+    "source_video_url": "https://example.com/videos/source.mp4",
+    "create_time": 1778806213962,
+    "status": 3,
+    "video_duration": 10,
+    "resolution": "720p",
+    "deduction_duration": 15,
+    "video_url": "https://example.com/output/result.mp4",
+    "progress": 100,
+    "priority": 9,
+    "task_id": "6a066dc52872921bde86b745",
+    "file_name": "Headswap_1778806213962.mp4",
+    "model_name": "akool-premium"
+  }
+}
+```
+
+### Response (still processing)
+
+While `status` is `1` or `2`, `video_url` may be empty. Keep polling or rely on `webhookUrl` from [Create Head Swap Task](/ai-tools-suite/head-swap/create).
+
+## Task Status
+
+| Status | Description |
+|--------|-------------|
+| 1 | In queue |
+| 2 | Processing |
+| 3 | Completed — use `video_url` for the rendered file |
+| 4 | Failed — inspect `error_reason` / `error_code` if present |
+
+## Important Notes
+
+- Use the `_id` from the create-task response as the `_id` query parameter here (not the analysis record id).
+- Download the output promptly; hosted URLs may expire per platform policy.
+- Other `status` values may appear as the API evolves — confirm with support if you encounter unexpected codes.

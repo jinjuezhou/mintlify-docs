@@ -1,0 +1,131 @@
+---
+title: "Head Swap API Overview"
+description: "Guide to the Head Swap Open API: detect people in a source video, then create head-swap generation tasks."
+---
+
+<Warning>
+  Download and store generated output URLs promptly. Hosted resources may expire; retention policy follows your platform agreement.
+</Warning>
+
+## API Endpoints
+
+### Head Swap Operations
+
+- [Submit Person Analysis](/ai-tools-suite/head-swap/submit-analysis) — Run person detection on a source video (`type`: `head`)
+- [Get Analysis Result](/ai-tools-suite/head-swap/get-analysis-detail) — Poll analysis status and read `obj_id` / preview URLs
+- [Create Head Swap Task](/ai-tools-suite/head-swap/create) — Create a head-swap job from analysis `mappings` and reference face images
+- [Get Head Swap Task Detail](/ai-tools-suite/head-swap/get-result) — Poll task status and retrieve the output video URL
+
+## Base URL
+
+Use the Open API root host provided by your account or integration guide. All paths below are relative to that root (example: `https://openapi.akool.com`).
+
+## Getting Started
+
+### Basic Workflow
+
+1. **Submit person analysis**  
+   Call [Submit Person Analysis](/ai-tools-suite/head-swap/submit-analysis) with `video_url` and `type: "head"`. Save the returned `_id` (analysis record id).
+
+2. **Poll analysis**  
+   Call [Get Analysis Result](/ai-tools-suite/head-swap/get-analysis-detail) with `_id` until `status` is `3` (completed) or `4` (failed). On success, read `analysis_result.media[]` for `obj_id` and preview `img_url`.
+
+3. **Create head swap task**  
+   Use the **same** `video_url` as in step 1. In `mappings`, pair each `obj_id` with a **reference face** `img_url` (single image per mapping). Call [Create Head Swap Task](/ai-tools-suite/head-swap/create). Save the task `_id`.
+
+4. **Poll task or use webhook**  
+   Call [Get Head Swap Task Detail](/ai-tools-suite/head-swap/get-result) until `status` is `3` and `video_url` is populated, or handle completion via `webhookUrl` if configured.
+
+<Note>
+  Person analysis and task creation must use the **identical** `video_url`. Each `mappings[].obj_id` must come from `analysis_result.media` for that analysis.
+</Note>
+
+### Authentication
+
+Every request must include your API key:
+
+| Header | Example |
+|--------|---------|
+| `x-api-key` | `x-api-key: <your_api_key>` |
+
+You may also use `Authorization: Bearer {token}` per [Get Token](/authentication/usage#get-the-token). If both are sent, behavior follows the platform rule (typically `Authorization` takes precedence).
+
+### Response envelope
+
+Responses are JSON:
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {}
+}
+```
+
+| Field | Description |
+|-------|-------------|
+| `code` | Business status code (integer). Treat `1000` as success. |
+| `msg` | Human-readable message (e.g. `Analyze success` after analyze submit, often `OK` elsewhere). |
+| `data` | Payload when successful; may be empty or omitted on some errors. |
+
+HTTP status is often `200`; **always use `code` in the body** to determine success or failure.
+
+### Response Code Description
+
+<Note>
+  If `code` is not `1000`, the request failed or was rejected. Do not treat the call as successful.
+</Note>
+
+| Code | Description |
+|------|-------------|
+| 1000 | Success |
+| 1003 | Parameter error, validation failed, or unsupported feature for the account |
+| 1014 | Resource not found (invalid analysis or task id, or no access) |
+| 1101 | Invalid authorization |
+| 1102 | Authorization cannot be empty |
+| 1104 | Insufficient credits |
+| 2001 | Server error |
+
+Contact support for the full code list if your integration requires it.
+
+## Limits
+
+| Item | Description |
+|------|-------------|
+| Source video duration | Approximately **3–20 seconds** (exact bounds enforced server-side) |
+| URLs | `video_url` and image URLs must be `http` or `https` and reachable by the API |
+| `mappings` | At least 1 entry, **at most 5** per task |
+| Access scope | Query endpoints only return resources belonging to the authenticated team |
+
+## Status Codes
+
+### Analysis task (`status` on analyze records)
+
+| Status | Description |
+|--------|-------------|
+| 1 | In queue |
+| 2 | Processing |
+| 3 | Completed — `analysis_result` should be ready |
+| 4 | Failed |
+
+### Head swap generation task (`status` on task records)
+
+| Status | Description |
+|--------|-------------|
+| 1 | In queue |
+| 2 | Processing |
+| 3 | Completed — check `video_url` for output |
+| 4 | Failed — check `error_reason` / `error_code` if present |
+
+## Best Practices
+
+- **Stable `video_url`**: Use the same URL string for analyze and create; avoid redirects or URL normalization that changes the string.
+- **Reference images**: Use clear, front-facing reference faces; `mappings[].img_url` is the replacement face, not necessarily the analysis preview URL.
+- **Polling**: Poll analyze detail until terminal state, then create the task; poll task detail until `status` is `3` or `4`.
+- **Webhook**: Prefer HTTPS for `webhookUrl`; payload format and retries are defined by platform documentation or support.
+
+## Support
+
+- [Authentication Guide](/authentication/usage)
+- [Webhook Documentation](/ai-tools-suite/webhook)
+- Unknown fields in `data` may appear for forward compatibility — ignore or confirm with support before depending on them.
