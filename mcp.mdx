@@ -1,0 +1,234 @@
+---
+title: "MCP"
+description: "Connect AKOOL AI capabilities to Claude, Cursor, Codex, and any MCP-compatible client."
+---
+
+## Overview
+
+AKOOL provides a **Model Context Protocol (MCP)** server that lets AI coding assistants and chat clients call AKOOL's APIs as native tools — no manual API integration required.
+
+With the AKOOL MCP server you can ask your AI assistant to:
+
+- Swap faces in images or videos
+- Generate images from text or reference images
+- Convert text to speech with custom voices
+- Swap characters or perform talking-photo operations
+- Check your account credit balance
+
+## Credentials
+
+The MCP server uses the same API credentials as the CLI. Obtain them from your [AKOOL dashboard](https://akool.com/workspace/current/api/credentials):
+
+| Header            | Description                         |
+| ----------------- | ----------------------------------- |
+| `x-client-id`     | Your Client ID (`clientId`)         |
+| `x-client-secret` | Your Client Secret (`clientSecret`) |
+
+## Server Configuration
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+Replace `YOUR_CLIENT_ID` and `YOUR_CLIENT_SECRET` with your actual credentials.
+
+---
+
+## Setup Guides
+
+### Claude Code
+
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) supports MCP servers via project-level or global config.
+
+**Option 1 — Add via CLI:**
+
+```bash
+claude mcp add akool-mcp \
+  --transport http \
+  --url https://openapi.akool.com/mcp/v1 \
+  --header "x-client-id: YOUR_CLIENT_ID" \
+  --header "x-client-secret: YOUR_CLIENT_SECRET"
+```
+
+**Option 2 — Edit config file directly:**
+
+Edit `~/.claude/mcp_servers.json` (global) or `.claude/mcp_servers.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+Then restart Claude Code. You should see `akool-mcp` listed when you run:
+
+```bash
+claude mcp list
+```
+
+---
+
+### Claude Desktop
+
+1. Open **Claude Desktop** → Settings → **Developer** → **Edit Config**.
+2. The config file is located at:
+   - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+3. Add the AKOOL MCP entry:
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+4. Save and **restart Claude Desktop**. A hammer icon will appear in the chat input area when MCP tools are available.
+
+---
+
+### Cursor
+
+1. Open Cursor → **Settings** → **MCP** → **Add new global MCP server**.
+2. Alternatively, create or edit `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` in your project:
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+3. Restart Cursor. In the Agent panel, AKOOL tools will appear under **Available Tools**.
+
+---
+
+### Windsurf
+
+1. Edit `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+2. Restart Windsurf and open the **Cascade** panel. AKOOL tools will be listed.
+
+---
+
+### OpenAI Codex
+
+OpenAI Codex CLI supports MCP servers via its config file. Edit `~/.codex/config.toml`:
+
+```toml
+[[mcp_servers]]
+name = "akool-mcp"
+type = "http"
+url = "https://openapi.akool.com/mcp/v1"
+
+[mcp_servers.headers]
+x-client-id = "YOUR_CLIENT_ID"
+x-client-secret = "YOUR_CLIENT_SECRET"
+```
+
+Or use the JSON format `~/.codex/mcp_servers.json`:
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+---
+
+## Usage Examples
+
+Once configured, you can describe tasks in natural language to your AI assistant:
+
+**Face swap:**
+
+```
+Swap the face in /path/to/source.jpg onto /path/to/target.jpg using AKOOL
+```
+
+**Text to speech:**
+
+```
+Use AKOOL to convert this text to speech with voice ID "en-US-1":
+"Hello, welcome to our product demo."
+```
+
+**Generate image:**
+
+```
+Ask AKOOL to generate an image: a futuristic cityscape at sunset, photorealistic
+```
+
+**Check credits:**
+
+```
+Check my AKOOL account balance
+```
+
+---
+
+## Tips
+
+- Credentials are sent as HTTP headers — never commit them to source control. Use environment variable substitution if your MCP client supports it.
+- If a tool call fails with `401`, double-check that `x-client-id` and `x-client-secret` match exactly what is shown in the [AKOOL dashboard](https://akool.com/workspace/current/api/credentials).
+- Run `akool-cli credit` to verify your credentials work before configuring MCP clients.

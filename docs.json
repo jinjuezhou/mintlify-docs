@@ -181,6 +181,18 @@
         ]
       },
       {
+        "anchor": "MCP",
+        "icon": "plug",
+        "groups": [
+          {
+            "group": "MCP",
+            "pages": [
+              "mcp"
+            ]
+          }
+        ]
+      },
+      {
         "anchor": "Blog",
         "href": "https://akool.com/blog",
         "icon": "newspaper"
