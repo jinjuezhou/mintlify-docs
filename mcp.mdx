@@ -69,6 +69,11 @@ MCP uses the same credentials as the CLI. Get them from your [AKOOL dashboard](h
 
 ## Setup Guides
 
+<Note>
+  **CLI quick-add** is only supported by **Claude Code**. All other clients
+  (Cursor, Windsurf, Codex, Kiro) require editing a JSON config file.
+</Note>
+
 ### Claude Code
 
 **Install**
@@ -231,6 +236,35 @@ Edit `~/.codex/mcp_servers.json`:
 ```
 
 Codex will automatically load MCP servers on startup.
+
+---
+
+### Kiro
+
+**Install**
+
+Download from [kiro.dev](https://kiro.dev), install and open.
+
+**Add AKOOL MCP**
+
+Create or edit `~/.kiro/settings/mcp.json` (global) or `.kiro/settings/mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+Restart Kiro. In the **Agent** panel, AKOOL tools will be listed under **MCP Tools**.
 
 ---
 
