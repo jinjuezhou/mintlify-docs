@@ -5,26 +5,18 @@ description: "Connect AKOOL AI capabilities to Claude, Cursor, Codex, and any MC
 
 ## Overview
 
-AKOOL provides a **Model Context Protocol (MCP)** server that lets AI coding assistants and chat clients call AKOOL's APIs as native tools — no manual API integration required.
-
-With the AKOOL MCP server you can ask your AI assistant to:
-
-- Swap faces in images or videos
-- Generate images from text or reference images
-- Convert text to speech with custom voices
-- Swap characters or perform talking-photo operations
-- Check your account credit balance
+AKOOL provides a **Model Context Protocol (MCP)** server that exposes face swap, image generation, TTS, and more as native tools inside AI assistants — no manual API calls needed.
 
 ## Credentials
 
-The MCP server uses the same API credentials as the CLI. Obtain them from your [AKOOL dashboard](https://akool.com/workspace/current/api/credentials):
+MCP uses the same credentials as the CLI. Get them from your [AKOOL dashboard](https://akool.com/workspace/current/api/credentials):
 
 | Header            | Description                         |
 | ----------------- | ----------------------------------- |
 | `x-client-id`     | Your Client ID (`clientId`)         |
 | `x-client-secret` | Your Client Secret (`clientSecret`) |
 
-## Server Configuration
+## Server Config
 
 ```json
 {
@@ -41,7 +33,25 @@ The MCP server uses the same API credentials as the CLI. Obtain them from your [
 }
 ```
 
-Replace `YOUR_CLIENT_ID` and `YOUR_CLIENT_SECRET` with your actual credentials.
+---
+
+## Available Tools
+
+| Tool                    | Description                                             |
+| ----------------------- | ------------------------------------------------------- |
+| `faceswap_image`        | Swap a face from a source image onto a target image     |
+| `faceswap_video`        | Swap a face from a source image onto a target video     |
+| `faceswap_result`       | Poll the result of an async faceswap job                |
+| `character_swap_create` | Submit a character swap task                            |
+| `character_swap_result` | Poll the result of a character swap job                 |
+| `image_generate`        | Generate an image from a text prompt or reference image |
+| `image_result`          | Poll the result of an async image generation job        |
+| `image_upscale`         | Upscale an image to higher resolution                   |
+| `image_to_video`        | Convert a static image into a short video clip          |
+| `voice_list`            | List all available TTS voices                           |
+| `voice_tts`             | Convert text to speech with a chosen voice              |
+| `voice_result`          | Poll the result of an async TTS job                     |
+| `credit_balance`        | Get your current AKOOL account credit balance           |
 
 ---
 
@@ -49,9 +59,13 @@ Replace `YOUR_CLIENT_ID` and `YOUR_CLIENT_SECRET` with your actual credentials.
 
 ### Claude Code
 
-[Claude Code](https://docs.anthropic.com/en/docs/claude-code) supports MCP servers via project-level or global config.
+**Install**
 
-**Option 1 — Add via CLI:**
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+**Add AKOOL MCP**
 
 ```bash
 claude mcp add akool-mcp \
@@ -61,9 +75,7 @@ claude mcp add akool-mcp \
   --header "x-client-secret: YOUR_CLIENT_SECRET"
 ```
 
-**Option 2 — Edit config file directly:**
-
-Edit `~/.claude/mcp_servers.json` (global) or `.claude/mcp_servers.json` in your project root:
+Or edit `~/.claude/mcp_servers.json` directly:
 
 ```json
 {
@@ -80,21 +92,27 @@ Edit `~/.claude/mcp_servers.json` (global) or `.claude/mcp_servers.json` in your
 }
 ```
 
-Then restart Claude Code. You should see `akool-mcp` listed when you run:
+Verify:
 
 ```bash
 claude mcp list
+# akool-mcp   http   https://openapi.akool.com/mcp/v1
 ```
 
 ---
 
 ### Claude Desktop
 
-1. Open **Claude Desktop** → Settings → **Developer** → **Edit Config**.
-2. The config file is located at:
-   - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-   - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-3. Add the AKOOL MCP entry:
+**Install**
+
+Download and install from [claude.ai/download](https://claude.ai/download).
+
+**Add AKOOL MCP**
+
+Open Claude Desktop → **Settings** → **Developer** → **Edit Config**, then add:
+
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
@@ -111,14 +129,19 @@ claude mcp list
 }
 ```
 
-4. Save and **restart Claude Desktop**. A hammer icon will appear in the chat input area when MCP tools are available.
+Restart Claude Desktop. A **hammer icon** (🔨) will appear in the chat input when MCP tools are ready.
 
 ---
 
 ### Cursor
 
-1. Open Cursor → **Settings** → **MCP** → **Add new global MCP server**.
-2. Alternatively, create or edit `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` in your project:
+**Install**
+
+Download from [cursor.com](https://www.cursor.com/), install and open.
+
+**Add AKOOL MCP**
+
+Go to **Settings** → **MCP** → **Add new global MCP server**, or edit `~/.cursor/mcp.json`:
 
 ```json
 {
@@ -135,13 +158,19 @@ claude mcp list
 }
 ```
 
-3. Restart Cursor. In the Agent panel, AKOOL tools will appear under **Available Tools**.
+Restart Cursor. In the **Agent** panel, AKOOL tools will appear under **Available Tools**.
 
 ---
 
 ### Windsurf
 
-1. Edit `~/.codeium/windsurf/mcp_config.json`:
+**Install**
+
+Download from [codeium.com/windsurf](https://codeium.com/windsurf), install and open.
+
+**Add AKOOL MCP**
+
+Go to **Windsurf Settings** → **MCP** → **Add Server**, or edit `~/.codeium/windsurf/mcp_config.json`:
 
 ```json
 {
@@ -158,26 +187,21 @@ claude mcp list
 }
 ```
 
-2. Restart Windsurf and open the **Cascade** panel. AKOOL tools will be listed.
+Restart Windsurf and open the **Cascade** panel. AKOOL tools will be listed under available tools.
 
 ---
 
 ### OpenAI Codex
 
-OpenAI Codex CLI supports MCP servers via its config file. Edit `~/.codex/config.toml`:
+**Install**
 
-```toml
-[[mcp_servers]]
-name = "akool-mcp"
-type = "http"
-url = "https://openapi.akool.com/mcp/v1"
-
-[mcp_servers.headers]
-x-client-id = "YOUR_CLIENT_ID"
-x-client-secret = "YOUR_CLIENT_SECRET"
+```bash
+npm install -g @openai/codex
 ```
 
-Or use the JSON format `~/.codex/mcp_servers.json`:
+**Add AKOOL MCP**
+
+Edit `~/.codex/mcp_servers.json`:
 
 ```json
 {
@@ -194,41 +218,56 @@ Or use the JSON format `~/.codex/mcp_servers.json`:
 }
 ```
 
+Codex will automatically load MCP servers on startup.
+
 ---
 
 ## Usage Examples
 
-Once configured, you can describe tasks in natural language to your AI assistant:
+Once configured, describe tasks in natural language:
 
-**Face swap:**
-
-```
-Swap the face in /path/to/source.jpg onto /path/to/target.jpg using AKOOL
-```
-
-**Text to speech:**
+**Face swap**
 
 ```
-Use AKOOL to convert this text to speech with voice ID "en-US-1":
-"Hello, welcome to our product demo."
+Swap the face in source.jpg onto target.jpg using AKOOL, save the result URL
 ```
 
-**Generate image:**
+**Character swap**
 
 ```
-Ask AKOOL to generate an image: a futuristic cityscape at sunset, photorealistic
+Use AKOOL to do a character swap: source image is source.png, target is target.png
 ```
 
-**Check credits:**
+**Generate image**
 
 ```
-Check my AKOOL account balance
+Ask AKOOL to generate an image: cinematic portrait of an astronaut on Mars, golden hour
+```
+
+**Image to video**
+
+```
+Use AKOOL to turn hero.jpg into a 5-second animated video clip
+```
+
+**Text to speech**
+
+```
+List available AKOOL voices, then convert this script to speech using a female English voice:
+"Welcome to our annual product showcase."
+```
+
+**Check credits**
+
+```
+Check my AKOOL credit balance
 ```
 
 ---
 
 ## Tips
 
-- Credentials are sent as HTTP headers — never commit them to source control. Use environment variable substitution if your MCP client supports it.
-- If a tool call fails with `401`, double-check that `x-client-id` and `x-client-secret` match exactly what is shown in the [AKOOL dashboard](https://akool.com/workspace/current/api/credentials).
-- Run `akool-cli credit` to verify your credentials work before configuring MCP clients.
+- Never commit `x-client-id` / `x-client-secret` to source control. Store them in environment variables and reference via your MCP client's env substitution (e.g. `$AKOOL_CLIENT_ID`).
+- Run `akool-cli credit` first to confirm your credentials are valid before configuring any MCP client.
+- Most AKOOL tools are **async** — the assistant will call `*_result` tools automatically to poll until the job completes.
+- If a tool call returns `401 Unauthorized`, verify credentials at the [AKOOL dashboard](https://akool.com/workspace/current/api/credentials).

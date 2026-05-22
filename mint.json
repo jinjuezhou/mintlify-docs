@@ -56,6 +56,11 @@
       "url": "cli"
     },
     {
+      "name": "MCP",
+      "icon": "plug",
+      "url": "mcp"
+    },
+    {
       "name": "Blog",
       "icon": "newspaper",
       "url": "https://akool.com/blog"
@@ -78,6 +83,12 @@
       "group": "CLI",
       "pages": [
         "cli"
+      ]
+    },
+    {
+      "group": "MCP",
+      "pages": [
+        "mcp"
       ]
     },
     {
