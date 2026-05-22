@@ -37,21 +37,33 @@ MCP uses the same credentials as the CLI. Get them from your [AKOOL dashboard](h
 
 ## Available Tools
 
-| Tool                    | Description                                             |
-| ----------------------- | ------------------------------------------------------- |
-| `faceswap_image`        | Swap a face from a source image onto a target image     |
-| `faceswap_video`        | Swap a face from a source image onto a target video     |
-| `faceswap_result`       | Poll the result of an async faceswap job                |
-| `character_swap_create` | Submit a character swap task                            |
-| `character_swap_result` | Poll the result of a character swap job                 |
-| `image_generate`        | Generate an image from a text prompt or reference image |
-| `image_result`          | Poll the result of an async image generation job        |
-| `image_upscale`         | Upscale an image to higher resolution                   |
-| `image_to_video`        | Convert a static image into a short video clip          |
-| `voice_list`            | List all available TTS voices                           |
-| `voice_tts`             | Convert text to speech with a chosen voice              |
-| `voice_result`          | Poll the result of an async TTS job                     |
-| `credit_balance`        | Get your current AKOOL account credit balance           |
+| Category           | Description                                 | Tool                             |
+| ------------------ | ------------------------------------------- | -------------------------------- |
+| **Account**        | Get account credit balance                  | `account_credit`                 |
+|                    | List available AI models                    | `account_models`                 |
+| **Image**          | Generate image from text or reference image | `image_create`                   |
+|                    | Get image generation result                 | `image_info`                     |
+|                    | Upscale or create variants of an image      | `image_upscale`                  |
+| **Voice**          | List available TTS voices                   | `voice_list`                     |
+|                    | Convert text to speech                      | `audio_tts`                      |
+|                    | Get TTS result                              | `voice_result`                   |
+| **Face Swap**      | Swap face in an image                       | `faceswap_image`                 |
+|                    | Swap face in a video                        | `faceswap_video`                 |
+|                    | Enhanced face swap (multi-face)             | `faceswap_plus`                  |
+|                    | Get face swap result                        | `faceswap_result`                |
+|                    | Delete a face swap record                   | `faceswap_delete`                |
+|                    | Live streaming face swap                    | `faceswap_live`                  |
+| **Avatar**         | List digital avatars                        | `avatar_list`                    |
+|                    | Get avatar detail                           | `avatar_detail`                  |
+|                    | Submit character swap task                  | `character_swap_create`          |
+|                    | Get character swap result                   | `character_swap_result`          |
+| **Image to Video** | Create a video from an image                | `video_image2video_create`       |
+|                    | Get image-to-video result                   | `video_image2video_results`      |
+|                    | List available video effects                | `video_image2video_effects`      |
+|                    | Update audio on a video                     | `video_image2video_update_audio` |
+|                    | Delete an image-to-video record             | `video_image2video_delete`       |
+| **Face Detection** | Detect faces in an image                    | `facedetect_detect`              |
+|                    | Analyze faces across multiple frames        | `facedetect_analyze`             |
 
 ---
 
@@ -226,10 +238,22 @@ Codex will automatically load MCP servers on startup.
 
 Once configured, describe tasks in natural language:
 
-**Face swap**
+**Face swap (image)**
 
 ```
 Swap the face in source.jpg onto target.jpg using AKOOL, save the result URL
+```
+
+**Face swap (video)**
+
+```
+Use AKOOL to swap the face from face.jpg onto video.mp4, then wait for the result
+```
+
+**Enhanced face swap**
+
+```
+Use AKOOL faceswap_plus to swap multiple faces in group.jpg with the source face
 ```
 
 **Character swap**
@@ -247,7 +271,7 @@ Ask AKOOL to generate an image: cinematic portrait of an astronaut on Mars, gold
 **Image to video**
 
 ```
-Use AKOOL to turn hero.jpg into a 5-second animated video clip
+Use AKOOL to turn hero.jpg into a video clip with the "zoom" effect
 ```
 
 **Text to speech**
@@ -257,10 +281,16 @@ List available AKOOL voices, then convert this script to speech using a female E
 "Welcome to our annual product showcase."
 ```
 
-**Check credits**
+**Face detection**
 
 ```
-Check my AKOOL credit balance
+Use AKOOL to detect all faces in photo.jpg and return their bounding boxes
+```
+
+**Check account**
+
+```
+Check my AKOOL credit balance and list available AI models
 ```
 
 ---
