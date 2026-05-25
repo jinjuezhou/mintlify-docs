@@ -1,0 +1,335 @@
+---
+title: "MCP"
+description: "Connect AKOOL AI capabilities to Claude, Cursor, Codex, and any MCP-compatible client."
+---
+
+## Overview
+
+AKOOL provides a **Model Context Protocol (MCP)** server that exposes face swap, image generation, TTS, and more as native tools inside AI assistants — no manual API calls needed.
+
+## Credentials
+
+MCP uses the same credentials as the CLI. Get them from your [AKOOL dashboard](https://akool.com/workspace/current/api/credentials):
+
+| Header            | Description                         |
+| ----------------- | ----------------------------------- |
+| `x-client-id`     | Your Client ID (`clientId`)         |
+| `x-client-secret` | Your Client Secret (`clientSecret`) |
+
+## Server Config
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+---
+
+## Available Tools
+
+| Category           | Description                                 | Tool                             |
+| ------------------ | ------------------------------------------- | -------------------------------- |
+| **Account**        | Get account credit balance                  | `account_credit`                 |
+|                    | List available AI models                    | `account_models`                 |
+| **Image**          | Generate image from text or reference image | `image_create`                   |
+|                    | Get image generation result                 | `image_info`                     |
+|                    | Upscale or create variants of an image      | `image_upscale`                  |
+| **Voice**          | List available TTS voices                   | `voice_list`                     |
+|                    | Convert text to speech                      | `audio_tts`                      |
+|                    | Get TTS result                              | `voice_result`                   |
+| **Face Swap**      | Swap face in an image                       | `faceswap_image`                 |
+|                    | Swap face in a video                        | `faceswap_video`                 |
+|                    | Enhanced face swap (multi-face)             | `faceswap_plus`                  |
+|                    | Get face swap result                        | `faceswap_result`                |
+|                    | Delete a face swap record                   | `faceswap_delete`                |
+|                    | Live streaming face swap                    | `faceswap_live`                  |
+| **Avatar**         | List digital avatars                        | `avatar_list`                    |
+|                    | Get avatar detail                           | `avatar_detail`                  |
+|                    | Submit character swap task                  | `character_swap_create`          |
+|                    | Get character swap result                   | `character_swap_result`          |
+| **Image to Video** | Create a video from an image                | `video_image2video_create`       |
+|                    | Get image-to-video result                   | `video_image2video_results`      |
+|                    | List available video effects                | `video_image2video_effects`      |
+|                    | Update audio on a video                     | `video_image2video_update_audio` |
+|                    | Delete an image-to-video record             | `video_image2video_delete`       |
+| **Face Detection** | Detect faces in an image                    | `facedetect_detect`              |
+|                    | Analyze faces across multiple frames        | `facedetect_analyze`             |
+
+---
+
+## Setup Guides
+
+<Note>
+  **CLI quick-add** is only supported by **Claude Code**. All other clients
+  (Cursor, Windsurf, Codex, Kiro) require editing a JSON config file.
+</Note>
+
+### Claude Code
+
+**Install**
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+**Add AKOOL MCP**
+
+```bash
+claude mcp add akool-mcp https://openapi.akool.com/mcp/v1 \
+  --header "x-client-id: YOUR_CLIENT_ID" \
+  --header "x-client-secret: YOUR_CLIENT_SECRET"
+```
+
+Or edit `~/.claude/mcp_servers.json` directly:
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+Verify:
+
+```bash
+claude mcp list
+# akool-mcp   http   https://openapi.akool.com/mcp/v1
+```
+
+---
+
+### Claude Desktop
+
+**Install**
+
+Download and install from [claude.ai/download](https://claude.ai/download).
+
+**Add AKOOL MCP**
+
+Open Claude Desktop → **Settings** → **Developer** → **Edit Config**, then add:
+
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+Restart Claude Desktop. A **hammer icon** (🔨) will appear in the chat input when MCP tools are ready.
+
+---
+
+### Cursor
+
+**Install**
+
+Download from [cursor.com](https://www.cursor.com/), install and open.
+
+**Add AKOOL MCP**
+
+Go to **Settings** → **MCP** → **Add new global MCP server**, or edit `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+Restart Cursor. In the **Agent** panel, AKOOL tools will appear under **Available Tools**.
+
+---
+
+### Windsurf
+
+**Install**
+
+Download from [codeium.com/windsurf](https://codeium.com/windsurf), install and open.
+
+**Add AKOOL MCP**
+
+Go to **Windsurf Settings** → **MCP** → **Add Server**, or edit `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+Restart Windsurf and open the **Cascade** panel. AKOOL tools will be listed under available tools.
+
+---
+
+### OpenAI Codex
+
+**Install**
+
+```bash
+npm install -g @openai/codex
+```
+
+**Add AKOOL MCP**
+
+Edit `~/.codex/mcp_servers.json`:
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+Codex will automatically load MCP servers on startup.
+
+---
+
+### Kiro
+
+**Install**
+
+Download from [kiro.dev](https://kiro.dev), install and open.
+
+**Add AKOOL MCP**
+
+Create or edit `~/.kiro/settings/mcp.json` (global) or `.kiro/settings/mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "akool-mcp": {
+      "type": "http",
+      "url": "https://openapi.akool.com/mcp/v1",
+      "headers": {
+        "x-client-id": "YOUR_CLIENT_ID",
+        "x-client-secret": "YOUR_CLIENT_SECRET"
+      }
+    }
+  }
+}
+```
+
+Restart Kiro. In the **Agent** panel, AKOOL tools will be listed under **MCP Tools**.
+
+---
+
+## Usage Examples
+
+Once configured, describe tasks in natural language:
+
+**Face swap (image)**
+
+```
+Swap the face in source.jpg onto target.jpg using AKOOL, save the result URL
+```
+
+**Face swap (video)**
+
+```
+Use AKOOL to swap the face from face.jpg onto video.mp4, then wait for the result
+```
+
+**Enhanced face swap**
+
+```
+Use AKOOL faceswap_plus to swap multiple faces in group.jpg with the source face
+```
+
+**Character swap**
+
+```
+Use AKOOL to do a character swap: source image is source.png, target is target.png
+```
+
+**Generate image**
+
+```
+Ask AKOOL to generate an image: cinematic portrait of an astronaut on Mars, golden hour
+```
+
+**Image to video**
+
+```
+Use AKOOL to turn hero.jpg into a video clip with the "zoom" effect
+```
+
+**Text to speech**
+
+```
+List available AKOOL voices, then convert this script to speech using a female English voice:
+"Welcome to our annual product showcase."
+```
+
+**Face detection**
+
+```
+Use AKOOL to detect all faces in photo.jpg and return their bounding boxes
+```
+
+**Check account**
+
+```
+Check my AKOOL credit balance and list available AI models
+```
+
+---
+
+## Tips
+
+- Never commit `x-client-id` / `x-client-secret` to source control. Store them in environment variables and reference via your MCP client's env substitution (e.g. `$AKOOL_CLIENT_ID`).
+- Run `akool-cli credit` first to confirm your credentials are valid before configuring any MCP client.
+- Most AKOOL tools are **async** — the assistant will call `*_result` tools automatically to poll until the job completes.
+- If a tool call returns `401 Unauthorized`, verify credentials at the [AKOOL dashboard](https://akool.com/workspace/current/api/credentials).
