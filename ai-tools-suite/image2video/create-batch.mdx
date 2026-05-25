@@ -33,6 +33,7 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
 | resolution    | String   | true         | Resolution value (e.g., 720p, 1080p, 4k). Available options are retrieved from the resolutionList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
 | video_length  | Integer  | true         | Video duration in seconds. Available durations are retrieved from the durationList field of the selected model in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) |
 | last_image_url | String  | false        | URL of the image to use as the last frame of the video |
+| generate_audio | Boolean | false        | Whether to generate AI audio alongside the video. Only applicable to models that support audio generation — check the `generate_audio` field in [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) (non-null means supported). Default: `false`. Enabling this on supported models may increase credit consumption |
 | count         | Integer  | false        | Number of videos to create simultaneously (1-10), default: 1 |
 | webhookurl    | String   | false        | Callback URL for POST requests |
 
@@ -84,6 +85,22 @@ POST https://openapi.akool.com/api/open/v4/image2Video/createBySourcePrompt/batc
   "video_length": 5,
   "last_image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-last-frame.png",
   "count": 3
+}
+```
+
+### Request Body - With Audio Generation
+
+Use `generate_audio` when the selected model supports audio generation (e.g., `AkoolImage2VideoFastV1`, `AkoolImage2VideoHDV1`):
+
+```json
+{
+  "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+  "prompt": "Animate this image with smooth camera movement and ambient background sound.",
+  "model_name": "AkoolImage2VideoFastV1",
+  "resolution": "720p",
+  "video_length": 5,
+  "generate_audio": true,
+  "count": 1
 }
 ```
 
@@ -279,7 +296,8 @@ print(response.text)
 - **Resolution**: Available options depend on the selected model; check the model's `resolutionList` field
 - **Video Length**: Available durations depend on the selected model; check the model's `durationList` field
 - **Last Frame**: Use `last_image_url` to specify what the video's last frame should look like
-- **Credits**: Each video in the batch is charged individually based on resolution and duration
+- **Audio Generation**: Set `generate_audio` to `true` to add AI-generated audio to the output video. This parameter is only effective for models where the `generate_audio` field is not null in the [Get AI Model List](/ai-tools-suite/aimodel#get-ai-model-list) response. If the selected model does not support audio generation, this parameter is ignored
+- **Credits**: Each video in the batch is charged individually based on resolution and duration. Enabling `generate_audio` on supported models may increase credit consumption
 - **Resource Expiration**: Generated videos are valid for 7 days, save them promptly
 - **Webhook**: Use `webhookUrl` to receive notifications when each video generation is complete
 - Save the `_id` values from the response to check video status using the [Get Image to Video Results](/ai-tools-suite/image2video/get-results) API
