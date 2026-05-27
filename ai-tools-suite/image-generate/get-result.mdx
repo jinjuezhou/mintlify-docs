@@ -20,7 +20,7 @@ GET https://openapi.akool.com/api/open/v3/content/image/infobymodelid?image_mode
 
 | **Parameter** | **Type** | **Required** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| image_model_id | String | true         | The `_id` returned from the [Create By Prompt API](/ai-tools-suite/image-generate/create-by-prompt) or [Generate 4K or Variations API](/ai-tools-suite/image-generate/create-by-button) |
+| image_model_id | String | true         | The `_id` returned from the [Create By Source Prompt API](/ai-tools-suite/image-generate/create-by-source-prompt) or [Generate 4K or Variations API](/ai-tools-suite/image-generate/create-by-button) |
 
 ## Response Attributes
 
@@ -143,7 +143,7 @@ print(response.text)
 
 ## Important Notes
 
-- Use the `_id` field from the [Create By Prompt API](/ai-tools-suite/image-generate/create-by-prompt) or [Generate 4K or Variations API](/ai-tools-suite/image-generate/create-by-button) response as the `image_model_id` parameter
+- Use the `_id` field from the [Create By Source Prompt API](/ai-tools-suite/image-generate/create-by-source-prompt) or [Generate 4K or Variations API](/ai-tools-suite/image-generate/create-by-button) response as the `image_model_id` parameter
 - Poll this endpoint periodically to check the image generation status
 - When `image_status` is 3 (Success), the `image` field will contain the URL of the generated image
 - The `buttons` field lists available operations (U1-U4 for 4K upscale, V1-V4 for variations) - use these with the [Generate 4K or Variations API](/ai-tools-suite/image-generate/create-by-button)
