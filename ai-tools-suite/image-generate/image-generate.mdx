@@ -12,7 +12,7 @@ description: "Comprehensive guide to the Image Generate API"
 
 ### Image Generate Operations
 
-- [Text to Image / Image to Image](/ai-tools-suite/image-generate/create-by-prompt) - Create images from text prompts or transform existing images
+- [Text to Image / Image to Image](/ai-tools-suite/image-generate/create-by-source-prompt) - Create images from text prompts or transform existing images (V4)
 - [Generate 4K or Variations](/ai-tools-suite/image-generate/create-by-button) - Upscale images to 4K or generate variations from existing results
 - [Get Image Result](/ai-tools-suite/image-generate/get-result) - Retrieve image generation results by ID
 
@@ -23,7 +23,7 @@ description: "Comprehensive guide to the Image Generate API"
 1. **Create Image**:
    - Prepare your text prompt describing the desired image
    - Optionally provide a source image for image-to-image transformation
-   - Call the [Create By Prompt API](/ai-tools-suite/image-generate/create-by-prompt) with your parameters
+   - Call the [Create By Source Prompt API](/ai-tools-suite/image-generate/create-by-source-prompt) with your parameters
 
 2. **Check Results**:
    - Use the [Get Image Result API](/ai-tools-suite/image-generate/get-result) to check the status
@@ -73,7 +73,8 @@ When checking results, the `image_status` field indicates the current state:
 
 ### API Usage Tips
 
-- **Webhook**: Use the `webhookUrl` parameter to receive notifications when processing is complete
+- **Webhook**: Use the `webhookurl` parameter to receive notifications when processing is complete
+- **Batch Generation**: Use `batch_quantity` (1-4) to generate multiple images in a single request
 - **4K Upscale**: Use buttons U1-U4 to upscale specific images to 4K resolution
 - **Variations**: Use buttons V1-V4 to generate variations of specific images
 - **Result Cleanup**: Save generated images promptly as they expire after 7 days

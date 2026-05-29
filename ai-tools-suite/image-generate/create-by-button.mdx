@@ -25,7 +25,7 @@ POST https://openapi.akool.com/api/open/v3/content/image/createbybutton
 
 | **Parameter** | **Type** | **Required** | **Description**                                                                                                                                        |
 |---------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| _id           | String   | true         | The image `_id` you had generated, from the [Create By Prompt API](/ai-tools-suite/image-generate/create-by-prompt) response |
+| _id           | String   | true         | The image `_id` you had generated, from the [Create By Source Prompt API](/ai-tools-suite/image-generate/create-by-source-prompt) response |
 | button        | String   | true         | The type of operation to perform. Get available values from the `buttons` field in [Get Image Result API](/ai-tools-suite/image-generate/get-result) response. U1-U4: Generate a single 4K image based on the corresponding image. V1-V4: Generate a single variant based on the corresponding image |
 | webhookUrl    | String   | false        | Callback URL address based on HTTP request |
 
@@ -191,7 +191,7 @@ print(response.text)
 
 ## Important Notes
 
-- The `_id` must be from a previously generated image via the [Create By Prompt API](/ai-tools-suite/image-generate/create-by-prompt)
+- The `_id` must be from a previously generated image via the [Create By Source Prompt API](/ai-tools-suite/image-generate/create-by-source-prompt)
 - Check available buttons from the `buttons` field in the [Get Image Result API](/ai-tools-suite/image-generate/get-result) response before performing an operation
 - Once a button is used, it will move from `buttons` to `used_buttons` and cannot be used again
 - **Resource Expiration**: Generated images are valid for 7 days, save them promptly

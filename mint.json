@@ -206,7 +206,7 @@
         {
           "group": "API Endpoints",
           "pages": [
-            "ai-tools-suite/image-generate/create-by-prompt",
+            "ai-tools-suite/image-generate/create-by-source-prompt",
             "ai-tools-suite/image-generate/create-by-button",
             "ai-tools-suite/image-generate/get-result"
           ]
