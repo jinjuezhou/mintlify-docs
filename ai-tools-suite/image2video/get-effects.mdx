@@ -1,0 +1,143 @@
+---
+title: "Get Available Effects"
+description: "List all available video effects for Image to Video"
+---
+
+## Endpoint
+
+```
+GET https://openapi.akool.com/api/open/v4/image2Video/effects
+```
+
+## Request Headers
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                               |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+
+## Response Attributes
+
+| **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| code          | Integer  | Interface returns business status code (1000:success)                                                                                                                                                                   |
+| msg           | String   | Interface returns status information                                                                                                                                                                                   |
+| data          | Object   | Response data object |
+| - result      | Array    | Array of effect objects |
+| -- _id        | String   | Effect document ID |
+| -- create_time | Long    | Creation timestamp |
+| -- logo       | String   | Effect logo URL |
+| -- name       | String   | Effect name |
+| -- video_url  | String   | Effect preview video URL |
+| -- effect_code | String  | Effect code |
+| - count       | Integer  | Total number of effects |
+
+## Example
+
+### Request
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/image2Video/effects' \
+--header 'x-api-key: {{API Key}}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/image2Video/effects")
+  .method("GET", null)
+  .addHeader("x-api-key", "{{API Key}}")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("x-api-key", "{{API Key}}");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/image2Video/effects", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'x-api-key' =>'{{API Key}}'
+];
+$request = new Request('GET', 'https://openapi.akool.com/api/open/v4/image2Video/effects', $headers);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+
+url = "https://openapi.akool.com/api/open/v4/image2Video/effects"
+
+headers = {
+  'x-api-key':'{{API Key}}'
+}
+
+response = requests.request("GET", url, headers=headers)
+print(response.text)
+```
+
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "code": 1000,
+  "msg": "Success",
+  "data": {
+    "result": [
+      {
+        "_id": "687632b95a0f52799eeed701",
+        "create_time": 1752576694502,
+        "logo": "https://static.website-files.org/assets/Image_to_Video/Lora/Squish.png",
+        "name": "Squish",
+        "video_url": "https://static.website-files.org/assets/Image_to_Video/Lora/Squish.mp4",
+        "effect_code": "squish_89244231312"
+      },
+      {
+        "_id": "687632ba5a0f52799eeed887",
+        "create_time": 1752576694502,
+        "logo": "https://static.website-files.org/assets/Image_to_Video/Lora/Cakeify.png",
+        "name": "Cakeify",
+        "video_url": "https://static.website-files.org/assets/Image_to_Video/Lora/Cakeify.mp4",
+        "effect_code": "cakeify_24743216"
+      },
+      {
+        "_id": "687632bc5a0f52799eeed929",
+        "create_time": 1752576694502,
+        "logo": "https://static.website-files.org/assets/Image_to_Video/Lora/Samurai.png",
+        "name": "Samurai",
+        "video_url": "https://static.website-files.org/assets/Image_to_Video/Lora/Samurai.mp4",
+        "effect_code": "samurai_99757865"
+      }
+    ],
+    "count": 10
+  }
+}
+```
+
+## Important Notes
+
+- Use the `effect_code` value when creating videos with the [Create Image to Video API](/ai-tools-suite/image2video/create-video)
+- When an effect is applied, the `prompt` parameter will be ignored
+- Preview each effect using the `video_url` field before applying
+- The `logo` field provides a thumbnail image for displaying in your UI

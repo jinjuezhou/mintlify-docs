@@ -200,6 +200,37 @@
       ]
     },
     {
+      "group": "Image Generate",
+      "pages": [
+        "ai-tools-suite/image-generate/image-generate",
+        {
+          "group": "API Endpoints",
+          "pages": [
+            "ai-tools-suite/image-generate/create-by-source-prompt",
+            "ai-tools-suite/image-generate/create-by-button",
+            "ai-tools-suite/image-generate/get-result"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Image to Video",
+      "pages": [
+        "ai-tools-suite/image2video/image2video",
+        {
+          "group": "API Endpoints",
+          "pages": [
+            "ai-tools-suite/image2video/create-video",
+            "ai-tools-suite/image2video/create-batch",
+            "ai-tools-suite/image2video/get-results",
+            "ai-tools-suite/image2video/get-effects",
+            "ai-tools-suite/image2video/update-audio",
+            "ai-tools-suite/image2video/delete-videos"
+          ]
+        }
+      ]
+    },
+    {
       "group": "Head Swap",
       "pages": [
         "ai-tools-suite/head-swap/head-swap",
@@ -225,9 +256,7 @@
         "ai-tools-suite/talking-avatar",
 
         "ai-tools-suite/lip-sync",
-        "ai-tools-suite/image-generate",
         "ai-tools-suite/jarvis-moderator",
-        "ai-tools-suite/image2video",
         "ai-tools-suite/aimodel",
         "ai-tools-suite/webhook",
         "ai-tools-suite/error-code"

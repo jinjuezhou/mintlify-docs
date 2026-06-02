@@ -1,0 +1,234 @@
+---
+title: "Get Image to Video Results"
+description: "Retrieve image to video generation results by IDs"
+---
+
+## Endpoint
+
+```
+POST https://openapi.akool.com/api/open/v4/image2Video/resultsByIds
+```
+
+## Request Headers
+
+| **Parameter** | **Value**    | **Description**                                                                                                                                               |
+|---------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| x-api-key | API Key | Your API Key used for request authorization. If both Authorization and x-api-key have values, Authorization will be used first and x-api-key will be discarded. |
+| Authorization | Bearer `{token}`| Your API Key used for request authorization.[Get Token](/authentication/usage#get-the-token) |
+
+## Body Attributes
+
+| **Parameter** | **Type** | **Required** | **Description**                                                                                                                                        |
+|---------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| _ids          | String   | true         | Multiple IDs separated by commas |
+
+## Response Attributes
+
+| **Parameter** | **Type** | **Description**                                                                                                                                                                                                        |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| code          | Integer  | Interface returns business status code (1000:success)                                                                                                                                                                   |
+| msg           | String   | Interface returns status information                                                                                                                                                                                   |
+| data          | Object   | Response data object |
+| - result      | Array    | Array of result objects |
+| -- _id        | String   | Document ID |
+| -- create_time | Long    | Creation timestamp |
+| -- uid        | Integer  | User ID |
+| -- team_id    | String   | Team ID |
+| -- update_time | Long    | Last update time/completion time |
+| -- video_duration | Number | Actual video duration |
+| -- webhookUrl | String   | Callback URL |
+| -- file_name  | String   | File name |
+| -- effect_name | String  | Effect name |
+| -- image_url  | String   | Image URL |
+| -- prompt     | String   | Prompt text |
+| -- resolution | String   | Resolution |
+| -- audio_type | Integer  | Audio type |
+| -- audio_url  | String   | Audio URL |
+| -- deduction_credit | Integer | Actual credits deducted |
+| -- effect_code | String  | Effect code |
+| -- video_url  | String   | Generated video URL |
+| -- status     | Integer  | Status: 1=queueing, 2=processing, 3=completed, 4=failed |
+| -- only_add_audio | Boolean | Whether only audio was added |
+
+## Example
+
+### Request Body
+
+```json
+{
+  "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c"
+}
+```
+
+### Request
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v4/image2Video/resultsByIds' \
+--header 'x-api-key: {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c"
+}'
+```
+
+```java Java
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "{\n  \"_ids\": \"68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c\"\n}");
+Request request = new Request.Builder()
+  .url("https://openapi.akool.com/api/open/v4/image2Video/resultsByIds")
+  .method("POST", body)
+  .addHeader("x-api-key", "{{API Key}}")
+  .addHeader("Content-Type", "application/json")
+  .build();
+Response response = client.newCall(request).execute();
+```
+
+```js Javascript
+const myHeaders = new Headers();
+myHeaders.append("x-api-key", "{{API Key}}");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c"
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://openapi.akool.com/api/open/v4/image2Video/resultsByIds", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```php PHP
+<?php
+$client = new Client();
+$headers = [
+  'x-api-key' =>'{{API Key}}',
+  'Content-Type' => 'application/json'
+];
+$body = '{
+  "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c"
+}';
+$request = new Request('POST', 'https://openapi.akool.com/api/open/v4/image2Video/resultsByIds', $headers, $body);
+$res = $client->sendAsync($request)->wait();
+echo $res->getBody();
+?>
+```
+
+```python Python
+import requests
+import json
+
+url = "https://openapi.akool.com/api/open/v4/image2Video/resultsByIds"
+
+payload = json.dumps({
+  "_ids": "68919a464b4dbdd4ab3d3034,6891a07f5d612f78c9204f1c"
+})
+headers = {
+  'x-api-key':'{{API Key}}',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+print(response.text)
+```
+
+</CodeGroup>
+
+### Response
+
+#### Queueing Status (status = 1)
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "result": [
+      {
+        "_id": "6891a2295d612f78c9204f77",
+        "create_time": 1754374697629,
+        "uid": 101400,
+        "team_id": "6805fb69e92d9edc7ca0b409",
+        "update_time": 1754374394023,
+        "video_duration": 5.063,
+        "webhookUrl": "",
+        "file_name": "Image2Video_Animate this image with .mp4",
+        "effect_name": "Squish",
+        "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+        "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+        "resolution": "4k",
+        "audio_type": 2,
+        "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1753772497950-9213-1749809724426audio.mp3",
+        "deduction_credit": 5,
+        "effect_code": "squish_89244231312",
+        "status": 1,
+        "only_add_audio": true
+      }
+    ]
+  }
+}
+```
+
+#### Completed Status (status = 3)
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "result": [
+      {
+        "_id": "6891abe782f7cd2a890c44ba",
+        "create_time": 1754377191100,
+        "uid": 101400,
+        "team_id": "6805fb69e92d9edc7ca0b409",
+        "sub_type": 1501,
+        "video_duration": 5.063,
+        "webhookUrl": "",
+        "file_name": "Image2Video_Animate this image with .mp4",
+        "effect_name": "Squish",
+        "update_time": 1754377293090,
+        "image_url": "https://drz0f01yeq1cx.cloudfront.net/1753772478686-9524-b6e4169bb1b44d5d8361936b3f6eddb8.png",
+        "prompt": "Animate this image with smooth camera movement and subtle object motion.",
+        "resolution": "4k",
+        "audio_type": 2,
+        "audio_url": "https://drz0f01yeq1cx.cloudfront.net/1753772497950-9213-1749809724426audio.mp3",
+        "deduction_credit": 30,
+        "effect_code": "squish_89244231312",
+        "video_url": "https://d2qf6ukcym4kn9.cloudfront.net/1754377291791-1423.mp4",
+        "status": 3,
+        "only_add_audio": false
+      }
+    ]
+  }
+}
+```
+
+## Video Status
+
+| Status | Description |
+|--------|-------------|
+| 1 | In Queue - Your request is waiting to be processed |
+| 2 | Processing - Video is currently being generated |
+| 3 | Success - Video completed, result URL is available in the `video_url` field |
+| 4 | Failed - Video generation failed, check your input resources |
+
+## Important Notes
+
+- Use the `_id` values from the [Create Image to Video](/ai-tools-suite/image2video/create-video) or [Create Batch Image to Video](/ai-tools-suite/image2video/create-batch) response as the `_ids` parameter
+- You can query multiple video results at once by separating IDs with commas
+- Poll this endpoint periodically to check the video generation status
+- When `status` is 3 (Success), the `video_url` field will contain the URL of the generated video
+- Generated videos are valid for 7 days, download and save them promptly
+- If a webhook URL was provided during creation, you will receive a callback when the task completes (no need to poll)
