@@ -58,7 +58,7 @@
     {
       "name": "MCP",
       "icon": "plug",
-      "url": "mcp"
+      "url": "mcp-server"
     },
     {
       "name": "Blog",
@@ -88,7 +88,7 @@
     {
       "group": "MCP",
       "pages": [
-        "mcp"
+        "mcp-server"
       ]
     },
     {
