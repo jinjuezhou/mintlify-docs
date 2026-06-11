@@ -64,6 +64,7 @@ paths:
                 value:
                   url: "https://example.com/video.mp4"
                   num_frames: 10
+                  deduplicate: false
               with_face_url:
                 summary: Get Cropped Face Images
                 value:
@@ -339,6 +340,12 @@ components:
             When set to `true`, only returns the largest face (by area) in each frame.
             Useful when you only need the main/primary face in the image or video.
           example: false
+        deduplicate:
+          type: boolean
+          default: true
+          description: |
+            Whether to enable face deduplication. When set to `false`, all detected faces are returned.
+          example: true
 
     FaceFrameData:
       type: object

@@ -173,6 +173,16 @@ paths:
                   similarity_boost: 0.75
                   style: 0
                   use_speaker_boost: true
+                minimax_settings:
+                  api_key: "your api key"
+                  model: "speech-2.8-turbo"
+                  language_boost: "auto"
+                  voice_setting:
+                    voice_id: "English_Gentle-voiced_man"
+                    speed: 1.0
+                    vol: 1.0
+                    pitch: 0
+                    emotion: "angry"
       responses:
         '200':
           description: Session created successfully
@@ -508,6 +518,8 @@ components:
           $ref: '#/components/schemas/TurnDetection'
         elevenlabs_settings:
           $ref: '#/components/schemas/ElevenlabsSettings'
+        minimax_settings:
+          $ref: '#/components/schemas/MinimaxSettings'
 
     VoiceParams:
       type: object
@@ -535,6 +547,8 @@ components:
           $ref: '#/components/schemas/TurnDetection'
         elevenlabs_settings:
           $ref: '#/components/schemas/ElevenlabsSettings'
+        minimax_settings:
+          $ref: '#/components/schemas/MinimaxSettings'
 
     TurnDetection:
       type: object
@@ -583,6 +597,49 @@ components:
         use_speaker_boost:
           type: boolean
           description: Enhances the similarity to the original speaker. Recommended for improved voice cloning quality.
+
+    MinimaxSettings:
+      type: object
+      description: Minimax custom voice configuration. Allows you to use your own Minimax API key and customize voice parameters.
+      properties:
+        api_key:
+          type: string
+          description: Your Minimax API key for authentication
+        model:
+          type: string
+          description: Minimax speech model ID to use for voice generation
+          example: speech-2.8-turbo
+        language_boost:
+          type: string
+          description: Language boost option for Minimax speech generation
+          example: auto
+        voice_setting:
+          $ref: '#/components/schemas/MinimaxVoiceSetting'
+
+    MinimaxVoiceSetting:
+      type: object
+      description: Minimax voice parameters
+      properties:
+        voice_id:
+          type: string
+          description: Minimax voice ID
+          example: English_Gentle-voiced_man
+        speed:
+          type: number
+          description: Voice speed
+          example: 1.0
+        vol:
+          type: number
+          description: Voice volume
+          example: 1.0
+        pitch:
+          type: number
+          description: Voice pitch
+          example: 0
+        emotion:
+          type: string
+          description: Voice emotion
+          example: angry
 
     Credentials:
       type: object
