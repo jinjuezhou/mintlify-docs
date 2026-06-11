@@ -17,6 +17,7 @@ Detect faces in images and videos with 6-point landmarks. Supports URL and base6
 | `num_frames` | integer | No | 5 | Number of frames for video analysis |
 | `return_face_url` | boolean | No | false | Return cropped face image URLs |
 | `single_face` | boolean | No | false | Return only the largest face |
+| `deduplicate` | boolean | No | true | Enable face deduplication. When set to `false`, returns all detected faces |
 
 <Note>
 Either `url` or `img` must be provided. If both are provided, `url` takes priority.
@@ -98,7 +99,8 @@ Either `url` or `img` must be provided. If both are provided, `url` takes priori
 ```json
 {
   "url": "https://example.com/video.mp4",
-  "num_frames": 10
+  "num_frames": 10,
+  "deduplicate": false
 }
 ```
 
