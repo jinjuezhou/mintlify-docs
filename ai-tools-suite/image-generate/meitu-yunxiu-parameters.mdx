@@ -1,0 +1,1221 @@
+---
+title: "Meitu Yunxiu Pro Parameter Reference"
+description: "Raw parameter structures, validation rules, and parameter-specific material enums for Meitu Yunxiu Pro"
+---
+
+<Note>
+This is a special-model parameter guide for the [Text to Image / Image to Image API](/ai-tools-suite/image-generate/create-by-source-prompt). Material IDs are scoped to the parameter whose table lists them; do not reuse an ID with a different parameter.
+</Note>
+
+## Quick start
+
+Use this page in the following order:
+
+1. Send the request to the [Text to Image / Image to Image API](/ai-tools-suite/image-generate/create-by-source-prompt) with `model_name` set to `meitu/yunxiu-pro/image-to-image`.
+2. Copy the five `people_type` entries exactly as shown below. Their content and order are fixed.
+3. Add only the effects you need under `parameter.all_params`.
+4. For a complex effect such as makeup, filters, hair color, or sky replacement, follow the link in the complete parameter table to select a valid material ID.
+
+### Minimal complete request
+
+This example applies global exposure to the image and removes under-eye bags for all five audience groups.
+
+```json
+{
+  "model_name": "meitu/yunxiu-pro/image-to-image",
+  "source_images": ["https://example.com/source.jpg"],
+  "parameter": {
+    "people_type": [
+      { "age": [15, 49], "gender": 1, "key": "man", "name": "" },
+      { "age": [15, 49], "gender": 0, "key": "woman", "name": "" },
+      { "age": [0, 14], "gender": 0, "key": "child", "name": "" },
+      { "age": [50, 100], "gender": 0, "key": "oldwoman", "name": "" },
+      { "age": [50, 100], "gender": 1, "key": "oldman", "name": "" }
+    ],
+    "all_params": {
+      "exposure": 20,
+      "remove_pouch": [30, 30, 30, 30, 30]
+    }
+  },
+  "batch_quantity": 1,
+  "webhookurl": "https://example.com/webhook"
+}
+```
+
+## How to choose the correct value shape
+
+The `Type` column in the complete table determines how a value must be sent.
+
+| Table type | When to use it | Example |
+| --- | --- | --- |
+| `int` | One value applies to the whole image | `"exposure": 20` |
+| `bool` | Enables or disables a global option | `"color_grading_global_enable": true` |
+| Standard `list` | One intensity per audience group | `"remove_pouch": [30, 20, 0, 10, 10]` |
+| Makeup `list` | One material item per audience group | `"eyebrow": [{ "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 50 }, ...]` |
+| `dict` | A nested, effect-specific object | `"filter": { "filter_id": "Fa0000qhjvzrB6bk", "filters_lut_alpha": 50 }` |
+| Curve `list` | Flattened x/y curve coordinates | `"gray_point": [0, 0, 128, 140, 255, 255]` |
+
+<Warning>
+A standard five-item list and a makeup five-item list are different structures. Standard lists contain integers. Makeup lists contain objects with `id`, `color`, and `alpha`.
+</Warning>
+
+## Common examples
+
+### Apply different intensities by audience group
+
+The fixed list order is:
+
+| Index | `people_type.key` | Audience |
+| --- | --- | --- |
+| 0 | `man` | Adult man |
+| 1 | `woman` | Adult woman |
+| 2 | `child` | Child |
+| 3 | `oldwoman` | Older woman |
+| 4 | `oldman` | Older man |
+
+For example, this applies stronger under-eye-bag removal to adult women and no effect to children:
+
+```json
+{
+  "all_params": {
+    "remove_pouch": [20, 60, 0, 30, 30]
+  }
+}
+```
+
+### Apply an eyebrow material
+
+Select `id` from the [eyebrow material enum](#makeup-eyebrow). Every makeup parameter requires exactly five items.
+
+```json
+{
+  "all_params": {
+    "eyebrow": [
+      { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 30 },
+      { "id": "biaozhunmei", "color": "108;66;24;255", "alpha": 50 },
+      { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 0 },
+      { "id": "biaozhunmei", "color": "137;100;41;255", "alpha": 30 },
+      { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 30 }
+    ]
+  }
+}
+```
+
+The selected material ID belongs only to `eyebrow`. Do not use it for `eye`, `eyeshadow`, or another makeup parameter.
+
+### Apply a filter
+
+Select `filter_id` from the [filter material enum](#filter-parameter-structure). The intensity range is 0–100.
+
+```json
+{
+  "all_params": {
+    "filter": {
+      "filter_id": "Fa0000qhjvzrB6bk",
+      "filters_lut_alpha": 50
+    }
+  }
+}
+```
+
+### Replace the sky
+
+Select `logic_id` from the [sky material enum](#sky-background-structure).
+
+```json
+{
+  "all_params": {
+    "sky_background": {
+      "logic_id": "2130",
+      "params": {
+        "sky_wap_flag": 1,
+        "sky_shift_x_coef": 0,
+        "sky_shift_y_coef": 0,
+        "sky_blip_flag": 0,
+        "sky_edge_dilate_coef": 0,
+        "sky_edge_blur_coef": -10,
+        "blur_coef": 0,
+        "sky_alpha_coef": 100,
+        "sky_exposure": 0,
+        "sky_saturability": 0,
+        "sky_scale_coef": 0,
+        "sky_temperature": 0
+      }
+    }
+  }
+}
+```
+
+### Combine multiple effects
+
+Multiple independent parameters can be placed in the same `all_params` object:
+
+```json
+{
+  "all_params": {
+    "exposure": 15,
+    "saturability": 10,
+    "remove_pouch": [20, 40, 0, 20, 20],
+    "bright_eye": [20, 30, 0, 20, 20],
+    "filter": {
+      "filter_id": "Fa0000qhjvzrB6bk",
+      "filters_lut_alpha": 30
+    }
+  }
+}
+```
+
+Only include parameters you intend to change. Use the complete table below to confirm the type and accepted range before sending a value.
+
+## Common validation mistakes
+
+### Incorrect audience-list length
+
+Standard list parameters require exactly five values.
+
+| Invalid | Correct |
+| --- | --- |
+| `"remove_pouch": [30, 30, 30]` | `"remove_pouch": [30, 30, 30, 30, 30]` |
+
+### Incorrect makeup value shape
+
+Makeup parameters require five item objects, not five integers.
+
+```json
+{
+  "eyebrow": [30, 30, 30, 30, 30]
+}
+```
+
+Use the shared makeup structure instead:
+
+```json
+{
+  "eyebrow": [
+    { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 30 },
+    { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 30 },
+    { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 30 },
+    { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 30 },
+    { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 30 }
+  ]
+}
+```
+
+### Material ID used with the wrong parameter
+
+Each material table is parameter-specific. For example, an ID from the [eyebrow table](#makeup-eyebrow) is valid only in `eyebrow[].id`; it cannot be used in `eye[].id` or `eyeshadow[].id`.
+
+### Value outside its documented range
+
+The following value is invalid because `filters_lut_alpha` accepts 0–100:
+
+```json
+{
+  "filter": {
+    "filter_id": "Fa0000qhjvzrB6bk",
+    "filters_lut_alpha": 120
+  }
+}
+```
+
+### Unsupported source image
+
+Only JPG, JPEG, and PNG are supported. Images larger than 15000 × 15000 cannot be submitted. Endpoint selection for smaller images is automatic; clients must not send an endpoint-selection parameter.
+
+## 1. Parameter object structure
+
+`parameter` uses the following top-level structure:
+
+```json
+{
+  "people_type": [
+    { "age": [15, 49], "gender": 1, "key": "man", "name": "" },
+    { "age": [15, 49], "gender": 0, "key": "woman", "name": "" },
+    { "age": [0, 14], "gender": 0, "key": "child", "name": "" },
+    { "age": [50, 100], "gender": 0, "key": "oldwoman", "name": "" },
+    { "age": [50, 100], "gender": 1, "key": "oldman", "name": "" }
+  ],
+  "all_params": {}
+}
+```
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `people_type` | Object array | Yes | Exactly five audience entries in the documented order; do not modify the content or order |
+| `all_params` | Object | Yes | Collection of retouching parameters |
+
+## 2. Value-shape rules
+
+| Type | Value shape | Rule |
+| --- | --- | --- |
+| `int` | One integer | Use the range or enum in the complete parameter table |
+| `bool` | `true` / `false` | Boolean values only |
+| Standard `list` | Five integers | Order: man, woman, child, oldwoman, oldman |
+| Makeup `list` | Five makeup item objects | Each item contains `id`, `color`, and `alpha` |
+| `dict` | Object | Use the parameter-specific structure linked from the table |
+| Curve `list` | Flattened curve points | Coordinate values are 0–255; this is not a five-audience intensity list |
+
+Example standard list:
+
+```json
+{ "remove_pouch": [30, 30, 30, 30, 30] }
+```
+
+## 3. Complete `all_params` table
+
+Linked names in the Parameter column open the corresponding structure or material enum. The Notes column summarizes what the linked section contains.
+
+### Complex parameter quick links
+
+| Parameter | Structure or enum reference |
+| --- | --- |
+| `eyebrow`, `eye`, `eyesocket`, `eyeshadow`, `eyelash`, `feature`, `blush`, `mouth`, `facialdecals` | [Makeup structures and parameter-specific material IDs](#makeup-parameter-structure) |
+| `filter` | [Filter object and `filter_id` enum](#filter-parameter-structure) |
+| `aicolormatch_type` | [AI filter enum](#ai-filter-enum) |
+| `sky_background` | [Sky object and `logic_id` enum](#sky-background-structure) |
+| `skin_color_lut_path` | [Skin-tone enum](#skin-color-enum) |
+| `hair_color` | [Hair-color item structure and `id` enum](#hair-color-parameter-structure) |
+| `gray_point`, `red_point`, `green_point`, `blue_point` | [Curve value structure](#curve-parameter-structure) |
+
+<a id="complete-parameters"></a>
+
+### Global color
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| - | AI filter intensity | `aicolormatch_alpha` | int | [0,100] | - |
+| - | AI filter preset | [`aicolormatch_type`](#ai-filter-enum) | int | `1`, `2`, `3`, `4`, `6`, `7`, `8` | Enum values |
+| White balance | Smart white balance for standard backgrounds | `awb_norm_coef` | int | [0,100] | - |
+| White balance | Smart white balance for solid-color backgrounds | `awb_pure_coef` | int | [0,100] | - |
+| Green primary - hue | Color Calibration Green Hue Intensity | `color_calibration_green_hue_alpha` | int | [-100,100] | - |
+| Green primary - saturation | Color Calibration Green Saturation Intensity | `color_calibration_green_sat_alpha` | int | [-100,100] | - |
+| Red primary - hue | Color Calibration Red Hue Intensity | `color_calibration_red_hue_alpha` | int | [-100,100] | - |
+| Red primary - saturation | Color Calibration Red Saturation Intensity | `color_calibration_red_sat_alpha` | int | [-100,100] | - |
+| Blue primary - hue | Color Calibration Blue Hue Intensity | `color_calibration_blue_hue_alpha` | int | [-100,100] | - |
+| Blue primary - saturation | Color Calibration Blue Saturation Intensity | `color_calibration_blue_sat_alpha` | int | [-100,100] | - |
+| Color grading | Color Grading Balance | `color_grading_balance` | int | [-100,100] | - |
+| Color grading | Color Grading Blend | `color_grading_blend` | int | [0,100] | - |
+| Color grading | Color Grading Global Enable | `color_grading_global_enable` | bool | true/false | - |
+| Color grading | Color Grading Global Hue | `color_grading_global_hue` | int | [0,359] | - |
+| Color grading | Color Grading Global Light | `color_grading_global_light` | int | [0,100] | - |
+| Color grading | Color Grading Global Saturation | `color_grading_global_sat` | int | [0,100] | - |
+| Color grading | Color Grading Hightlight Enable | `color_grading_hightlight_enable` | bool | true/false | - |
+| Color grading | Color Grading Hightlight Hue | `color_grading_hightlight_hue` | int | [0,359] | - |
+| Color grading | Color Grading Hightlight Light | `color_grading_hightlight_light` | int | [0,100] | - |
+| Color grading | Color Grading Hightlight Saturation | `color_grading_hightlight_sat` | int | [0,100] | - |
+| Color grading | Color Grading Midtone Enable | `color_grading_midtone_enable` | bool | true/false | - |
+| Color grading | Color Grading Midtone Hue | `color_grading_midtone_hue` | int | [0,359] | - |
+| Color grading | Color Grading Midtone Light | `color_grading_midtone_light` | int | [0,100] | - |
+| Color grading | Color Grading Midtone Saturation | `color_grading_midtone_sat` | int | [0,100] | - |
+| Color grading | Color Grading Shadow Enable | `color_grading_shadow_enable` | bool | true/false | - |
+| Color grading | Color Grading Shadow Hue | `color_grading_shadow_hue` | int | [0,359] | - |
+| Color grading | Color Grading Shadow Light | `color_grading_shadow_light` | int | [0,100] | - |
+| Color grading | Color Grading Shadow Saturation | `color_grading_shadow_sat` | int | [0,100] | - |
+| Tone | Contrast (provider parameter spelling retained) | `constrast` | int | [-100,100] | - |
+| Tone | Exposure | `exposure` | int | [-500,500] | - |
+| Tone | Highlight | `highlight` | int | [-100,100] | - |
+| Tone | Smart exposure intensity | `exposure_alpha` | int | [0,100] | - |
+| Tone | Smart exposure enable flag | `exposure_flag` | int | [0,1] | - |
+| Tone | Saturability | `saturability` | int | [-100,100] | - |
+| Tone | Shadow | `shadow` | int | [-100,100] | - |
+| Tone | Vibrance | `vibrance` | int | [-100,100] | - |
+| Tone | Blackness | `blackness` | int | [-100,100] | - |
+| Tone | Whiteness | `whiteness` | int | [-100,100] | - |
+| Tone | Sharpness | `sharpness` | int | [-100,100] | - |
+| Detail | Dehaze Intensity | `dehaze_coef` | int | [0,100] | - |
+| Detail | Film Granularity | `film_granularity` | int | [0,100] | - |
+| Detail | Highpass Background Intensity | `highpass_background_coef` | int | [0,100] | - |
+| Detail | Highpass Body Intensity | `highpass_body_coef` | int | [0,100] | - |
+| Detail | Midpoint Adjustment | `midpoint_adjustment` | int | [0,100] | - |
+| Detail | Vignette Adjustment | `vignette_adjustment` | int | [-100,100] | - |
+| - | Filter | [`filter`](#filter-parameter-structure) | dict | - | Nested object and material IDs |
+| HSL - hue | HSL Hue Aqua | `hsl_hue_aqua` | int | [-100,100] | - |
+| HSL - hue | HSL Hue Blue | `hsl_hue_blue` | int | [-100,100] | - |
+| HSL - hue | HSL Hue Green | `hsl_hue_green` | int | [-100,100] | - |
+| HSL - hue | HSL Hue Magenta | `hsl_hue_magenta` | int | [-100,100] | - |
+| HSL - hue | HSL Hue Orange | `hsl_hue_orange` | int | [-100,100] | - |
+| HSL - hue | HSL Hue Red | `hsl_hue_red` | int | [-100,100] | - |
+| HSL - hue | HSL Hue Violet | `hsl_hue_violet` | int | [-100,100] | - |
+| HSL - hue | HSL Hue Yellow | `hsl_hue_yellow` | int | [-100,100] | - |
+| HSL - luminance | HSL Luma Aqua | `hsl_luma_aqua` | int | [-100,100] | - |
+| HSL - luminance | HSL Luma Blue | `hsl_luma_blue` | int | [-100,100] | - |
+| HSL - luminance | HSL Luma Green | `hsl_luma_green` | int | [-100,100] | - |
+| HSL - luminance | HSL Luma Magenta | `hsl_luma_magenta` | int | [-100,100] | - |
+| HSL - luminance | HSL Luma Orange | `hsl_luma_orange` | int | [-100,100] | - |
+| HSL - luminance | HSL Luma Red | `hsl_luma_red` | int | [-100,100] | - |
+| HSL - luminance | HSL Luma Violet | `hsl_luma_violet` | int | [-100,100] | - |
+| HSL - luminance | HSL Luma Yellow | `hsl_luma_yellow` | int | [-100,100] | - |
+| HSL - saturation | HSL Saturation Aqua | `hsl_sat_aqua` | int | [-100,100] | - |
+| HSL - saturation | HSL Saturation Blue | `hsl_sat_blue` | int | [-100,100] | - |
+| HSL - saturation | HSL Saturation Green | `hsl_sat_green` | int | [-100,100] | - |
+| HSL - saturation | HSL Saturation Magenta | `hsl_sat_magenta` | int | [-100,100] | - |
+| HSL - saturation | HSL Saturation Orange | `hsl_sat_orange` | int | [-100,100] | - |
+| HSL - saturation | HSL Saturation Red | `hsl_sat_red` | int | [-100,100] | - |
+| HSL - saturation | HSL Saturation Violet | `hsl_sat_violet` | int | [-100,100] | - |
+| HSL - saturation | HSL Saturation Yellow | `hsl_sat_yellow` | int | [-100,100] | - |
+| White balance | Temperature | `temperature` | int | [-100,100] | - |
+| White balance | Hue | `hue` | int | [-100,100] | - |
+| Curves | Gray Point | [`gray_point`](#curve-parameter-structure) | list | [0,255] | Curve value structure |
+| Curves | Red Point | [`red_point`](#curve-parameter-structure) | list | [0,255] | Curve value structure |
+| Curves | Green Point | [`green_point`](#curve-parameter-structure) | list | [0,255] | Curve value structure |
+| Curves | Blue Point | [`blue_point`](#curve-parameter-structure) | list | [0,255] | Curve value structure |
+
+### Facial volume
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Facial volume | Under-eye volume | `aegyosal_fill` | list | [0,100] | - |
+| Facial volume | Mouth-corner volume | `angulus_oris_fill` | list | [0,100] | - |
+| Facial volume | Apple Cheek Fillers | `apple_cheek_fillers` | list | [0,100] | - |
+| Facial volume | Brow Arch Fill | `brow_arch_fill` | list | [0,100] | - |
+| Facial volume | Chin Fillers | `chin_fillers` | list | [0,100] | - |
+| Facial volume | Eye Socket Fillers | `eye_socket_fillers` | list | [0,100] | - |
+| Facial volume | Fore Head Fillers | `fore_head_fillers` | list | [0,100] | - |
+| Facial volume | Nose Fillers | `nose_fillers` | list | [0,100] | - |
+| Facial volume | Tear Trough | `tear_trough` | list | [0,100] | - |
+| Facial volume | Jowl Fill | `jowl_fill` | list | [0,100] | - |
+| Face smoothing and lifting | Fore Head Smooth | `fore_head_smooth` | list | [0,100] | - |
+| Face smoothing and lifting | Perioral Smooth | `perioral_smooth` | list | [0,100] | - |
+| Face smoothing and lifting | Periorbital Smooth | `periorbital_smooth` | list | [0,100] | - |
+
+### Blemish removal
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| - | Beauty Belly Intensity | `beauty_belly_alpha` | list | [0,1] | - |
+| - | Double Chin | `double_chin` | list | [0,100] | - |
+| - | Face Restore Intensity | `face_restore_alpha` | list | [0,100] | - |
+| - | Flaw Clean Intensity | `flaw_clean_alpha` | list | [0,100] | - |
+| - | Lip Remove Intensity | `lip_remove_alpha` | list | [0,100] | - |
+| - | Makeup Protect | `makeup_protect` | list | [0,1] | - |
+| - | Nevus Removal Enable flag | `nevus_removal_flag` | list | [0,1] | - |
+| - | Remove Axillary Breast | `remove_axillary_breast` | list | [0,100] | - |
+| - | Remove Pouch | `remove_pouch` | list | [0,100] | - |
+| - | Shiny Clean Intensity | `shiny_clean_alpha` | list | [0,100] | - |
+| - | Fleck Clean Enable flag | `fleck_clean_flag` | list | [0,100] | - |
+| - | Skin Fleck Clean Enable flag | `skin_fleck_clean_flag` | list | [0,100] | - |
+| - | Wrinkle Cheek Removal Intensity | `wrinkle_cheek_removal_alpha` | list | [0,100] | - |
+| - | Wrinkle Forehead Removal Intensity | `wrinkle_forehead_removal_alpha` | list | [0,100] | - |
+| - | Wrinkle Nasolabial Removal Intensity | `wrinkle_nasolabial_removal_alpha` | list | [0,100] | - |
+| - | Wrinkle Neck Removal Intensity | `wrinkle_neck_removal_alpha` | list | [0,100] | - |
+| - | Wrinkle Periorbital Removal Intensity | `wrinkle_periorbital_removal_alpha` | list | [0,100] | - |
+
+### Body reshaping
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| - | Body Shape Chest Enlarge | `body_shape_chest_enlarge` | list | [-100,100] | - |
+| - | Body Shape Heighten | `body_shape_heighten` | list | [0,100] | - |
+| - | Body Shape Hunch Back | `body_shape_hunch_back` | list | [0,100] | - |
+| - | Body Shape Lengthen | `body_shape_lengthen` | list | [0,100] | - |
+| - | Body Shape Right Shoulder | `body_shape_right_shoulder` | list | [0,100] | - |
+| - | Body Shape Shrink Head | `body_shape_shrink_head` | list | [0,100] | - |
+| - | Body Shape Slim | `body_shape_slim` | list | [-100,100] | - |
+| - | Body Shape Slim Belly | `body_shape_slim_belly` | list | [0,100] | - |
+| - | Body Shape Slim Hand | `body_shape_slim_hand` | list | [-100,100] | - |
+| - | Body Shape Slim Hip | `body_shape_slim_hip` | list | [-100,100] | - |
+| - | Body Shape Slim Leg | `body_shape_slim_leg` | list | [0,100] | - |
+| - | Body Shape Slim Neck Left | `body_shape_slim_neck_left` | list | [0,100] | - |
+| - | Body Shape Slim Neck Right | `body_shape_slim_neck_right` | list | [0,100] | - |
+| - | Body Shape Slim Waist | `body_shape_slim_waist` | list | [0,100] | - |
+| - | Body Shape Swan Neck Left | `body_shape_swan_neck_left` | list | [0,100] | - |
+| - | Body Shape Swan Neck Right | `body_shape_swan_neck_right` | list | [0,100] | - |
+| - | Body Shape Thin Shoulders | `body_shape_thin_shoulders` | list | [-100,100] | - |
+| - | Multibody Beauty | `multibody_beauty` | list | [0,100] | - |
+
+### Face reshaping
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Face shape | Ai Shrink Head | `ai_shrink_head` | list | [0,100] | - |
+| Face shape | Body Symmetry | `body_symmetry` | list | [0,100] | - |
+| Face shape | Bottom Half Of Face | `bottom_half_of_face` | list | [-100,100] | - |
+| Face shape | Cheekbone | `cheekbone` | list | [-100,100] | - |
+| Face shape | Cheekbone Left | `cheekbone_left` | list | [-100,100] | - |
+| Face shape | Cheekbone Right | `cheekbone_right` | list | [-100,100] | - |
+| Eyes | Eye Distance | `eye_distance` | list | [-100,100] | - |
+| Eyes | Eye Distance Left | `eye_distance_left` | list | [-100,100] | - |
+| Eyes | Eye Distance Right | `eye_distance_right` | list | [-100,100] | - |
+| Eyes | Eye Height | `eye_height` | list | [-100,100] | - |
+| Eyes | Eye Height Left | `eye_height_left` | list | [-100,100] | - |
+| Eyes | Eye Height Right | `eye_height_right` | list | [-100,100] | - |
+| Eyes | Eye Lid Left | `eye_lid_left` | list | [-100,100] | - |
+| Eyes | Eye Lid Right | `eye_lid_right` | list | [-100,100] | - |
+| Nose | Bridge Nose | `bridge_nose` | list | [-100,100] | - |
+| Eyes | Eye Tilt Left | `eye_tilt_left` | list | [-100,100] | - |
+| Eyes | Eye Tilt Right | `eye_tilt_right` | list | [-100,100] | - |
+| Eyes | Eye Trans | `eye_trans` | list | [-100,100] | - |
+| Eyes | Eye Trans Left | `eye_trans_left` | list | [-100,100] | - |
+| Eyes | Eye Trans Right | `eye_trans_right` | list | [-100,100] | - |
+| Eyes | Eye Up Down Left | `eye_up_down_left` | list | [-100,100] | - |
+| Eyes | Eye Up Down Right | `eye_up_down_right` | list | [-100,100] | - |
+| Eyes | Eye Width | `eye_width` | list | [-100,100] | - |
+| Eyes | Eye Width Left | `eye_width_left` | list | [-100,100] | - |
+| Eyes | Eye Width Right | `eye_width_right` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Distance | `eyebrow_distance` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Distance Left | `eyebrow_distance_left` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Distance Right | `eyebrow_distance_right` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Height | `eyebrow_height` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Height Left | `eyebrow_height_left` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Height Right | `eyebrow_height_right` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Ridge | `eyebrow_ridge` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Ridge Left | `eyebrow_ridge_left` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Ridge Right | `eyebrow_ridge_right` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Size | `eyebrow_size` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Size Left | `eyebrow_size_left` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Size Right | `eyebrow_size_right` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Tilt | `eyebrow_tilt` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Tilt Left | `eyebrow_tilt_left` | list | [-100,100] | - |
+| Eyebrows | Eyebrow Tilt Right | `eyebrow_tilt_right` | list | [-100,100] | - |
+| Face shape | Face Forehead | `face_forehead` | list | [-100,100] | - |
+| Face shape | Face Trans | `face_trans` | list | [-100,100] | - |
+| Face shape | Facial Contour | `facial_contour` | list | [0,100] | - |
+| Eyes | Inner Eye Corner Left | `inner_eye_corner_left` | list | [-100,100] | - |
+| Eyes | Inner Eye Corner Right | `inner_eye_corner_right` | list | [-100,100] | - |
+| Mouth | High Mouth | `high_mouth` | list | [-100,100] | - |
+| Mouth | Lowerlip Enhance | `lowerlip_enhance` | list | [-100,100] | - |
+| Mouth | Mouth Breadth | `mouth_breadth` | list | [-100,100] | - |
+| Mouth | Mouth High | `mouth_high` | list | [-100,100] | - |
+| Mouth | Mouth Smile | `mouth_smile` | list | [-100,100] | - |
+| Mouth | Mouth Tilted | `mouth_tilted` | list | [-100,100] | - |
+| Mouth | Mouth Trans | `mouth_trans` | list | [-100,100] | - |
+| Mouth | Upperlip Enhance | `upperlip_enhance` | list | [-100,100] | - |
+| Nose | Nasal Root | `nasal_root` | list | [-100,100] | - |
+| Nose | Nasal Tip | `nasal_tip` | list | [-100,100] | - |
+| Nose | Nose Longer | `nose_longer` | list | [-100,100] | - |
+| Nose | Scale Nose | `scale_nose` | list | [-100,100] | - |
+| Nose | Shrink Nose | `shrink_nose` | list | [-100,100] | - |
+| Face shape | Jaw Trans | `jaw_trans` | list | [-100,100] | - |
+| Face shape | Mandible | `mandible` | list | [-100,100] | - |
+| Face shape | Mandible Left | `mandible_left` | list | [-100,100] | - |
+| Face shape | Mandible Right | `mandible_right` | list | [-100,100] | - |
+| Face shape | Middle Half Of Face | `middle_half_of_face` | list | [-100,100] | - |
+| Face shape | Philtrum Warp | `philtrum_warp` | list | [-100,100] | - |
+| Face shape | Run Symmetry List | `run_symmetry_list` | list | [0,1] | - |
+| Face shape | Face Symmetry | `face_symmetry` | list | [0,100] | - |
+| Face shape | Narrow Face | `narrow_face` | list | [-100,100] | - |
+| Face shape | Temple | `temple` | list | [-100,100] | - |
+| Face shape | Temple Left | `temple_left` | list | [-100,100] | - |
+| Face shape | Temple Right | `temple_right` | list | [-100,100] | - |
+| 3D contouring | Threed Left Right | `threed_left_right` | list | [-100,100] | - |
+| 3D contouring | Threed Up Down | `threed_up_down` | list | [-100,100] | - |
+
+### Eye enhancement
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| - | Bright Eye | `bright_eye` | list | [0,100] | - |
+| - | Bright Eye Left | `bright_eye_left` | list | [0,100] | - |
+| - | Bright Eye Right | `bright_eye_right` | list | [0,100] | - |
+| Catchlight | Eye Light Intensity Left | `eye_light_alpha_left` | list | [0,100] | - |
+| Catchlight | Eye Light Intensity Right | `eye_light_alpha_right` | list | [0,100] | - |
+| Catchlight | Eye Light H Flip Left | `eye_light_h_flip_left` | list | [0,100] | - |
+| Catchlight | Eye Light H Flip Right | `eye_light_h_flip_right` | list | [0,100] | - |
+| Catchlight | Eye Light Rotate Left | `eye_light_rotate_left` | list | [0,100] | - |
+| Catchlight | Eye Light Rotate Right | `eye_light_rotate_right` | list | [0,100] | - |
+| Catchlight | Eye Light Size Left | `eye_light_size_left` | list | [0,100] | - |
+| Catchlight | Eye Light Size Right | `eye_light_size_right` | list | [0,100] | - |
+| - | Eye Light Type Id | `eye_light_type_id` | list | - | - |
+| Catchlight | Eye Light X Pos Left | `eye_light_x_pos_left` | list | [0,100] | - |
+| Catchlight | Eye Light X Pos Right | `eye_light_x_pos_right` | list | [0,100] | - |
+| Catchlight | Eye Light Y Pos Left | `eye_light_y_pos_left` | list | [0,100] | - |
+| Catchlight | Eye Light Y Pos Right | `eye_light_y_pos_right` | list | [0,100] | - |
+| - | Reduce Glass Light | `reduce_glass_light` | list | [0,100] | - |
+| - | Reduce Redness | `reduce_redness` | list | [0,100] | - |
+
+### Hair adjustment
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| - | Black Hair | `black_hair` | list | [0,100] | - |
+| - | Hairline Fill | `hairline_fill` | list | [0,100] | - |
+| - | Hair Color | [`hair_color`](#hair-color-parameter-structure) | list | - | Item structure and material IDs |
+| - | Broken Hair | `broken_hair` | list | [0,100] | - |
+| Flyaway removal | Broken Hair Background Area | `broken_hair_background_area` | list | [0,100] | - |
+| Flyaway removal | Broken Hair Hair Area | `broken_hair_hair_area` | list | [0,100] | - |
+| - | Fluffy Hair | `fluffy_hair` | list | [-100,100] | - |
+| - | Smooth Hair | `smooth_hair` | list | [0,100] | - |
+
+### Makeup
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| - | Eyebrow Deepen | `eyebrow_deepen` | list | [0,100] | - |
+| - | Highlight Intensity | `highlight_alpha` | list | [0,100] | - |
+| - | Eyeshadow Deepen | `eyeshadow_deepen` | list | [0,100] | - |
+| - | Facial Deepen | `facial_deepen` | list | [0,100] | - |
+| - | Lipstick Deepen | `lipstick_deepen` | list | [0,100] | - |
+| - | Shadow Light | `shadow_light` | list | [0,100] | - |
+| - | Makeup Highlight | [`makeup_highlight`](#makeup-parameter-structure) | list | - | Shared makeup item structure |
+| - | Eyeliner | [`eyeliner`](#makeup-parameter-structure) | list | - | Shared makeup item structure |
+| - | Mouth | [`mouth`](#makeup-mouth) | list | - | Parameter-specific material IDs |
+| - | Facialdecals | [`facialdecals`](#makeup-facialdecals) | list | - | Parameter-specific material IDs |
+| - | Feature | [`feature`](#makeup-feature) | list | - | Parameter-specific material IDs |
+| - | Blush | [`blush`](#makeup-blush) | list | - | Parameter-specific material IDs |
+| - | Eye | [`eye`](#makeup-eye) | list | - | Parameter-specific material IDs |
+| - | Eyebrow | [`eyebrow`](#makeup-eyebrow) | list | - | Parameter-specific material IDs |
+| - | Eyelash | [`eyelash`](#makeup-eyelash) | list | - | Parameter-specific material IDs |
+| - | Eyeshadow | [`eyeshadow`](#makeup-eyeshadow) | list | - | Parameter-specific material IDs |
+| - | Eyesocket | [`eyesocket`](#makeup-eyesocket) | list | - | Parameter-specific material IDs |
+
+### Skin tone
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| - | Face Balance Intensity | `face_balance_alpha` | list | [0,100] | - |
+| - | Face Beauty Intensity | `face_beauty_alpha` | list | [0,100] | - |
+| - | Sharpen Intensity | `sharpen_alpha` | list | [0,100] | - |
+| - | Skin Color Hue Intensity | `skin_color_hue_alpha` | list | [-100,100] | - |
+| - | Skin Color LUT Intensity | `skin_color_lut_alpha` | list | [0,100] | - |
+| - | Skin Color LUT Path | [`skin_color_lut_path`](#skin-color-enum) | list | - | Enum values |
+| - | Skin Hdr Intensity | `skin_hdr_alpha` | list | [0,100] | - |
+| - | Skin Red Intensity | `skin_red_alpha` | list | [0,100] | - |
+| - | Skin Tone Body Intensity | `skin_tone_body_alpha` | list | [0,100] | - |
+| - | Skin Tone Face Intensity | `skin_tone_face_alpha` | list | [0,100] | - |
+| - | Skin Tone Multiple Intensity | `skin_tone_multiple_alpha` | list | [0,100] | - |
+| - | Skin White Intensity | `skin_white_alpha` | list | [0,100] | - |
+| - | Smooth Face Skin Intensity | `smooth_face_skin_alpha` | list | [0,100] | - |
+| - | Smooth Face Skin Hight Intensity | `smooth_face_skin_hight_alpha` | list | [-100,100] | - |
+| - | Smooth Face Skin Low Intensity | `smooth_face_skin_low_alpha` | list | [0,100] | - |
+| - | Smooth Not Face Skin Intensity | `smooth_not_face_skin_alpha` | list | [0,100] | - |
+| - | Smooth Not Face Skin Hight Intensity | `smooth_not_face_skin_hight_alpha` | list | [-100,100] | - |
+| - | Smooth Not Face Skin Low Intensity | `smooth_not_face_skin_low_alpha` | list | [0,100] | - |
+
+### -
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Face smoothing and lifting | Malars Smooth | `malars_smooth` | list | [0,100] | - |
+
+### Skin retouching
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| - | Neutral Gray Enhance Intensity | `neutral_gray_enhance_alpha` | list | [0,100] | - |
+| - | Neutral Gray Smooth Intensity | `neutral_gray_smooth_alpha` | list | [0,100] | - |
+
+### Teeth enhancement
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| - | Teeth Beauty | `teeth_beauty` | list | [0,1] | - |
+| - | Teeth Clean Intensity | `teeth_clean_alpha` | list | [0,100] | - |
+| - | White Teeth | `white_teeth` | list | [0,100] | - |
+| Teeth whitening | White Teeth Luminance | `white_teeth_luminance` | list | [0,100] | - |
+| Teeth whitening | White Teeth Remove Yellow | `white_teeth_remove_yellow` | list | [0,100] | - |
+
+### Background adjustment
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Background enhancement | Background enhancement intensity | `radio` | int | [0,100] | - |
+| Background enhancement | Solid-background blemish removal | `background_detain_alpha` | int | [0,100] | - |
+| Background enhancement | Background artifact removal | `remove_background_mistake` | int | [0,1] | - |
+
+### ID photo background
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| ID photo background mode | ID photo background mode | `id_photo_bg_mode` | int | [0,2] | - |
+| Background or gradient start color | Background or gradient start RGBA | `id_photo_bg_color` | [4]int | rgba-[0,255] | - |
+| Gradient end color | Gradient end RGBA | `id_photo_bg_dst_color` | [4]int | rgba-[0,255] | - |
+| Gradient type | ID photo gradient type | `id_photo_gradient_type` | int | [0,1] | - |
+| Fill type | ID photo fill type | `id_photo_fill_type` | int | [0,1] | - |
+
+### Sky replacement
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Recommended background | Sky Background | [`sky_background`](#sky-background-structure) | dict | [0,100] | Nested object and material IDs |
+
+### Clothing
+
+| Subfeature | Description | Parameter | Type | Range / enum | Notes |
+| --- | --- | --- | --- | --- | --- |
+| - | Clothing wrinkle removal | `rmw_rink` | int | [0,100] | - |
+| - | Clothing edge smoothing | `cloth_edge_smooth` | int | [0,100] | - |
+
+## 4. Inline enums
+
+### Skin tone: `skin_color_lut_path`
+
+This is a five-item list in `people_type` order. Each item accepts one value:
+
+| Effect | Enum value |
+| --- | --- |
+| Original skin tone | `""` |
+| Cool tone | `skin1.png` |
+| Porcelain pink | `skin2.png` |
+| Warm tone | `skin3.png` |
+| Wheat tone | `skin4.png` |
+| Cocoa tone | `skin5.png` |
+
+### ID photo background
+
+| Parameter | Enum values |
+| --- | --- |
+| `id_photo_bg_mode` | `0`: none; `1`: solid color; `2`: reserved for provider capability |
+| `id_photo_gradient_type` | `0`: vertical gradient; `1`: center-point gradient |
+| `id_photo_fill_type` | `0`: solid color; `1`: gradient |
+
+<a id="makeup-parameter-structure"></a>
+
+## 5. Shared makeup item structure
+
+The following parameters use a fixed five-item array in `people_type` order: `mouth`, `facialdecals`, `feature`, `blush`, `eye`, `eyebrow`, `eyelash`, `eyeshadow`, and `eyesocket`.
+
+```json
+{
+  "eyebrow": [
+    { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 50 },
+    { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 50 },
+    { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 50 },
+    { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 50 },
+    { "id": "biaozhunmei", "color": "0;0;0;255", "alpha": 50 }
+  ]
+}
+```
+
+| Item field | Type | Description |
+| --- | --- | --- |
+| `id` | String | An ID from the material table for this parameter |
+| `color` | String | A supported color code or RGBA value where the material table provides one |
+| `alpha` | Integer | Intensity from 0 to 100 |
+
+## 6. Makeup parameters and material enums
+
+<a id="makeup-eyebrow"></a>
+
+### Eyebrow: `eyebrow`
+
+JSON path: `parameter.all_params.eyebrow[].id`. Select `id` from this parameter-specific table; IDs must not be shared across parameters.
+
+| Asset ID enum | Display name | Supported color codes / RGBA |
+| --- | --- | --- |
+| `biaozhunmei` | Natural | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `yizimei` | Straight | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `yingqimei` | Heroic | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `wanyuemei` | Crescent | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `gaotiaomei` | High-arched | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `jianmei` | Dense | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `yeshengmei` | Slight arch | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `shuliumei` | Wild | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `hengliumei` | Natural-growth | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `Mi0000yD1mozSrdF` | Classical | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `Mi0000hGArIjPKqE` | Silky mist | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `Mi0000OlZZZLg427` | Brown mist | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+| `Mi0000JJ4k5NOuI9` | Fluffy | BK01  0;0;0;255BR01  108;66;24;255LB01  137;100;41;255RB01  156;58;39;255 |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="makeup-eye"></a>
+
+### Contact lens: `eye`
+
+JSON path: `parameter.all_params.eye[].id`. Select `id` from this parameter-specific table; IDs must not be shared across parameters.
+
+| Asset ID enum |
+| --- |
+| `qiaokeli` |
+| `fugulv` |
+| `taojihui` |
+| `ganmeigui` |
+| `yanhuazi` |
+| `xingyunzong` |
+| `Mi0000YPyxa4tVJZ` |
+| `Mi0000KkQwKms79a` |
+| `Mi0000ctJWSsKeyV` |
+| `Mi0000j9sVvEjCkG` |
+| `Mi0000ILJ0BFFgGP` |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="makeup-eyesocket"></a>
+
+### Under-eye makeup: `eyesocket`
+
+JSON path: `parameter.all_params.eyesocket[].id`. Select `id` from this parameter-specific table; IDs must not be shared across parameters.
+
+| Asset ID enum |
+| --- |
+| `Mi0000fhqyr6fZyl` |
+| `Mi0000jqGa1V9RB6` |
+| `suyan` |
+| `ziran` |
+| `eyesocketrichang` |
+| `keai` |
+| `wugu` |
+| `chengshu` |
+| `xiachui` |
+| `eyesocketliangpian` |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="makeup-eyeshadow"></a>
+
+### Eye shadow: `eyeshadow`
+
+JSON path: `parameter.all_params.eyeshadow[].id`. Select `id` from this parameter-specific table; IDs must not be shared across parameters.
+
+| Asset ID enum |
+| --- |
+| `luoxing` |
+| `eyeshadow10` |
+| `diaoxi` |
+| `eyeshadow09` |
+| `eyeshadow04` |
+| `eyeshadow07` |
+| `eyeshadow08` |
+| `eyeshadowliangpian` |
+| `eyeshadow05` |
+| `tangguo` |
+| `Mi0000leDxesU8HP` |
+| `Mi0000OPcCwZT80P` |
+| `Mi0000BF9UTcGbc0` |
+| `Mi0000MxD6tGixT0` |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="makeup-eyelash"></a>
+
+### Eyelash: `eyelash`
+
+JSON path: `parameter.all_params.eyelash[].id`. Select `id` from this parameter-specific table; IDs must not be shared across parameters.
+
+| Asset ID enum |
+| --- |
+| `eyelash02` |
+| `eyelash01` |
+| `eyelash05` |
+| `eyelash06` |
+| `eyelash10` |
+| `eyelash09` |
+| `eyelash14` |
+| `eyelash15` |
+| `xiajiemao1` |
+| `xiajiemao` |
+| `eyelash9` |
+| `Mi0000uTbmphGMDE` |
+| `Mi00002I63gwAXR7` |
+| `Mi0000XtPAVP8ZpR` |
+| `Mi0000Q56zV1aamA` |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="makeup-feature"></a>
+
+### Contour: `feature`
+
+JSON path: `parameter.all_params.feature[].id`. Select `id` from this parameter-specific table; IDs must not be shared across parameters.
+
+| Asset ID enum |
+| --- |
+| `liti` |
+| `featurerichang` |
+| `Vlian` |
+| `qizhi` |
+| `jianling` |
+| `tila` |
+| `biying` |
+| `gutong` |
+| `Mi0000I8IWqaqbuW` |
+| `Mi0000ohvx7mN2YS` |
+| `Mi0000A93APmWflz` |
+| `Mi000031HQCOcmo9` |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="makeup-blush"></a>
+
+### Blush: `blush`
+
+JSON path: `parameter.all_params.blush[].id`. Select `id` from this parameter-specific table; IDs must not be shared across parameters.
+
+| Asset ID enum | Supported color codes / RGBA |
+| --- | --- |
+| `blush01` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `blush02` | 001 255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `blush03` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `blush08` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `blush06` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `blush05` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `Mi0000fKcDexSogs` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005. 255;134;106;255 |
+| `Mi00002yMqzH8Xnl` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `Mi0000hfMqZn8tkR` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `Mi0000gm5FZvaQj8` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `Mi00006vvZFZmT76` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `Mi0000Mfob60M0MY` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `Mi0000ChAgz4Zoyd` | 001  255;116;178;255002  255;227;98;255003  210;128;122;255004  198;130;145;255005  255;134;106;255 |
+| `Mi0000pkce3FzLJR` | - |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="makeup-mouth"></a>
+
+### Lip color: `mouth`
+
+JSON path: `parameter.all_params.mouth[].id`. Select `id` from this parameter-specific table; IDs must not be shared across parameters.
+
+| Asset ID enum |
+| --- |
+| `luozhuang` |
+| `shuimitao` |
+| `yingtao` |
+| `jiaotang` |
+| `juziqishui` |
+| `zhenghong` |
+| `jinli` |
+| `yimase` |
+| `dousha` |
+| `meigui` |
+| `huolongguo` |
+| `Mi0000deCm1woQrB` |
+| `Mi0000n7E1vsCzpt` |
+| `Mi0000hIhG4pPK7J` |
+| `Mi0000Wmi9Qqy20b` |
+| `Mi0000VuA5Y29FXd` |
+| `Mi0000Rm1qmCsdaO` |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="makeup-facialdecals"></a>
+
+### Facial decoration: `facialdecals`
+
+JSON path: `parameter.all_params.facialdecals[].id`. Select `id` from this parameter-specific table; IDs must not be shared across parameters.
+
+| Asset ID enum | Supported color codes / RGBA |
+| --- | --- |
+| `eyeshadow06` | - |
+| `queban` | - |
+| `Mi0000FVHF7wqiNC` | - |
+| `Mi0000qxnSbjKxgb` | - |
+| `Mi0000SiOzeusi2U` | - |
+| `meishiqueban` | - |
+| `Mi0000EJKuYAUiWJ` | - |
+| `Mi00004nlc1o1zbM` | - |
+| `Mi0000cUzfaAlQgx` | 01    53;28;26;255  02    0;0;0;25503    101;80;64;25504    101;66;23;25505    157;36;28;25506    150;3;101;255 |
+| `Mi0000Kri3hozVzR` | 01    53;28;26;25502    0;0;0;25503    101;80;64;25504    101;66;23;25505    157;36;28;25506     150;3;101;255 |
+| `Mi0000m4pyNOR5wA` | 01    53;28;26;25502    0;0;0;25503    101;80;64;25504    101;66;23;25505    157;36;28;25506    150;3;101;255 |
+| `Mi0000FpkyFTjEhY` | 01    53;28;26;25502    0;0;0;25503    101;80;64;25504    101;66;23;25505    157;36;28;25506    150;3;101;255 |
+| `Mi0000ArTobhIM9y` | 01    53;28;26;25502    0;0;0;25503    101;80;64;25504    101;66;23;25505    157;36;28;25506    150;3;101;255 |
+| `Mi00008Pdys6ShW3` | 01    53;28;26;25502    0;0;0;25503    101;80;64;25504    101;66;23;25505    157;36;28;25506    150;3;101;255 |
+| `Mi0000mJDm4VZSZL` | 01    53;28;26;25502    0;0;0;25503    101;80;64;25504    101;66;23;25505    157;36;28;25506    150;3;101;255 |
+| `Mi0000U8yopkvAQl` | 01    53;28;26;25502    0;0;0;25503    101;80;64;25504    101;66;23;25505    157;36;28;25506    150;3;101;255 |
+| `Mi0000iIK9XUBFUc` | 01    53;28;26;25502    0;0;0;25503    101;80;64;25504    101;66;23;25505    157;36;28;25506    150;3;101;255 |
+| `Mi0000WbLdWUO8Mn` | 01    53;28;26;25502    0;0;0;25503    101;80;64;25504    101;66;23;25505    157;36;28;25506    150;3;101;255 |
+| `Mi0000lMRW4bMbyN` | 01    53;28;26;25502    0;0;0;25503    101;80;64;255041    01;66;23;25505    157;36;28;25506    150;3;101;255 |
+| `Mi0000aShpCmphEy` | - |
+| `Mi0000d3Ti0TATej` | - |
+| `Mi0000CPhRXt5RoB` | - |
+| `Mi00003bH6O8902g` | - |
+| `Mi0000qgUP6NxdZ5` | - |
+| `Mi0000TMtJhiPr77` | - |
+| `Mi0000IwiReFuX9r` | - |
+| `Mi00009a3Hwy6AyZ` | - |
+| `Mi0000KNKZad2mUr` | - |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="filter-parameter-structure"></a>
+
+## 7. Filter structure and material enums: `filter`
+
+```json
+{
+  "filter": {
+    "filter_id": "Fa0000qhjvzrB6bk",
+    "filters_lut_alpha": 50
+  }
+}
+```
+
+Select `filter_id` from the table below. `filters_lut_alpha` accepts 0–100; the final column contains the provider-recommended default.
+
+| `filter_id` enum | Category | Recommended `filters_lut_alpha` |
+| --- | --- | --- |
+| `Fa0000qhjvzrB6bk` | Legacy | 50 |
+| `Fa0000GIqjw2lTHs` | Legacy | 50 |
+| `Fa0000ka4QT8K4qu` | Legacy | 50 |
+| `Fa00006fhJ3N39BW` | Legacy | 60 |
+| `Fam7OiW93OVqp7VZ` | Legacy | 100 |
+| `FaZQiqI8ivwXDO8V` | Legacy | 50 |
+| `FaTrSSLhNVNl7fez` | Legacy | 50 |
+| `FaSIJM59R7eIQNdb` | Legacy | 50 |
+| `FakN7AwtNBuTbbAg` | Legacy | 50 |
+| `Fai455PvRjZLgUas` | Legacy | 50 |
+| `FaGt8R0xGCprQFOs` | Legacy | 50 |
+| `FaFgP87DcDJGi4mI` | Legacy | 50 |
+| `FaCDFG5M2NJDbzhE` | Legacy | 50 |
+| `Fa9EFqwgJB9SwW8d` | Legacy | 50 |
+| `Fa5Ko6DFZ0M7LYq0` | Legacy | 50 |
+| `Fa00005laGsjTUku` | Legacy | 50 |
+| `Fa00004ZuQuHKGS8` | Legacy | 51 |
+| `Fa0000l4c2ZRdh74` | Legacy | 50 |
+| `Fa0000LB7OThWMDo` | Legacy | 100 |
+| `Fa0000zZmwsM7Nfl` | Legacy | 50 |
+| `Fa0000OyoLKHimmO` | Legacy | 50 |
+| `Fa0000UksyrcZDzz` | Legacy | 50 |
+| `Fa0000P2W1nfgpop` | Legacy | 50 |
+| `Fa0000WvV9T5NlWV` | Legacy | 50 |
+| `Fa0000LKNAHh9PbV` | Legacy | 50 |
+| `Fa0000Tm94bdbZCX` | Legacy | 50 |
+| `Fa0000RGuP61MarE` | Legacy | 50 |
+| `Fa0000EzvY8aqbxR` | Legacy | 50 |
+| `Fa00001mDiwf1m6n` | Legacy | 50 |
+| `Fa00001gSzM52xQC` | Legacy | 50 |
+| `Fa0000GoCAiFCxQy` | Legacy | 50 |
+| `Fa00000crgokZT00` | Legacy | 50 |
+| `Fa0000Actdx2USmT` | Legacy | 50 |
+| `Fa00005HwwB7VhPZ` | Legacy | 50 |
+| `Fa0000EymDnzj6NT` | Legacy | 50 |
+| `Fa0000F1ce3gv5Jj` | Legacy | 50 |
+| `Fa0000l7dQAKzlCU` | Legacy | 50 |
+| `Fa0000KubcZugZ4e` | Legacy | 50 |
+| `Fa0000wBVTX9Jt4h` | Legacy | 50 |
+| `Fa0000epgjUhXLrB` | Legacy | 50 |
+| `Fa00008KUR0HiadL` | Legacy | 50 |
+| `Fa00008Xh3vS8BsQ` | Legacy | 50 |
+| `Fa00006jrLeSJK8m` | Legacy | 50 |
+| `Fa0000vKd89H9Kqv` | Legacy | 50 |
+| `Fa0000rBAQvqB3eo` | Legacy | 50 |
+| `Fa0000KmtNJgfmLO` | Legacy | 50 |
+| `Fa0000cDzjDPwxmC` | Legacy | 50 |
+| `Fa0000pQAGXT1ZzH` | Legacy | 50 |
+| `Fa0000ujWq4h3s3j` | Legacy | 50 |
+| `Fa0000AcP6k81I2p` | Legacy | 50 |
+| `Fa0000FQIZ2ZxBdI` | Legacy | 50 |
+| `Fa0000ZO5eevvoev` | Portrait | 60 |
+| `Fa0000UGIBMahr3w` | Portrait | 50 |
+| `Fa0000sw8eCTX3AB` | Portrait | 80 |
+| `Fa0000BJzKzgEAJX` | Portrait | 50 |
+| `Fa0000C0csBbBLGJ` | Portrait | 50 |
+| `Fa0000hsMOoC6wHx` | Portrait | 80 |
+| `Fa0000m2c3wcLMKe` | Portrait | 80 |
+| `Fa0000UiikN0tEAN` | Portrait | 80 |
+| `Fa0000Ly2xGD9OHh` | Portrait | 80 |
+| `Fa0000dWhwAG10Mt` | Portrait | 80 |
+| `Fa00009qkfva96ax` | Portrait | 50 |
+| `Fa0000skp99iK19d` | Outdoor | 60 |
+| `Fa0000GwlRgJjWkp` | Outdoor | 80 |
+| `Fa0000VoJWMs5IDW` | Outdoor | 80 |
+| `Fa00007cZB1m8CH3` | Outdoor | 80 |
+| `Fa00002CFtLbdAsN` | Outdoor | 80 |
+| `Fa0000ngg7xDaVqe` | Outdoor | 80 |
+| `Fa0000nZwYBKbihl` | Outdoor | 50 |
+| `Fa0000iDqHash0sP` | Outdoor | 70 |
+| `Fa0000yQvOJtTKWf` | Outdoor | 80 |
+| `Fa0000HxecTNSCnj` | Outdoor | 80 |
+| `Fa00004WmU47xXrf` | Outdoor | 70 |
+| `Fa00005Pa1RiA2fF` | Film | 80 |
+| `Fa0000GzfSGpFf4k` | Film | 80 |
+| `Fa0000bqxcuYY5bb` | Film | 70 |
+| `Fa0000Yq5faQ9nQa` | Film | 80 |
+| `Fa0000UpsemzyADt` | Film | 80 |
+| `Fa0000hnu5fysSnw` | City | 50 |
+| `Fa00006StiDCCXUQ` | City | 50 |
+| `Fa0000zPXcq6HaKm` | City | 80 |
+| `Fa0000EOz3ZOATjI` | Black and white | 100 |
+| `Fa0000wxCJsSmkr4` | Black and white | 100 |
+| `Fa0000dMNokcFbOP` | Black and white | 100 |
+| `Fa0000e02nxtPjgZ` | Black and white | 100 |
+| `Fa0000Hpx9vvGngd` | Popular | 60 |
+| `Fa0000pmMzflxryj` | Popular | 80 |
+| `Fa0000NDn04T8Vp4` | Popular | 80 |
+| `Fa0000aPQLtBufth` | Popular | 50 |
+| `Fa0000jIA9yz0wXt` | Popular | 80 |
+| `Fa00008kCBX2bBc7` | Popular | 60 |
+| `Fa0000yA1Lir2bdo` | Popular | 80 |
+| `Fa0000CWwYIyajdD` | Film | 80 |
+| `Fa0000fZrH9dDXNu` | Legacy | 50 |
+| `Fa0000ddGjlHmJmt` | Latest | 70 |
+| `Fa0000XsSNfzw8Iv` | New Chinese style | 80 |
+| `Fa0000PMFu1ymPrj` | New Chinese style | 80 |
+| `Fa00000Ncf1Y1Xpe` | New Chinese style | 80 |
+| `Fa000067X1tIabF6` | Portrait | 80 |
+| `Fa0000n39JYhOhBM` | Camera simulation | 80 |
+| `Fa0000uqfHKXomZf` | Camera simulation | 80 |
+| `Fa0000T4RcvE18G0` | Portrait | 80 |
+| `Fa0000QYdwKZF7wL` | Portrait | 80 |
+| `Fa0000KjRdHMn5Mr` | Portrait | 80 |
+| `Fa0000tJ6KxsAcfe` | Camera simulation | 80 |
+| `Fa0000s53M1s9jGx` | Camera simulation | 80 |
+| `Fa0000ygyMjU1Ma0` | Latest | 80 |
+| `Fa0000CLst7Ai0T8` | Latest | 80 |
+| `Fa0000C4Jp6RLqqn` | City | 50 |
+| `Fa0000q0Og7jsV5h` | City | 50 |
+| `Fa0000OdwdQXpb8K` | Portrait | 50 |
+| `Fa0000qSV4CD8wiA` | Portrait | 70 |
+| `Fa00003dLXLQtrKC` | Portrait | 50 |
+| `Fa0000HQiZpHMO8r` | Portrait | 70 |
+| `Fa0000qwhHdBqot9` | Film | 60 |
+| `Fa0000JxRrBX6azN` | Film | 60 |
+| `Fa0000IX999CcTJF` | Film | 80 |
+| `Fa0000DLropO1ZjD` | Film | 60 |
+| `Fa00008e573MgZjy` | Portrait | 60 |
+| `Fa00005JdxFdFGdi` | Portrait | 80 |
+| `Fa0000T762IwrzT6` | Outdoor | 50 |
+| `Fa0000n1TcETBLqi` | Film | 50 |
+| `Fa0000EylPpqvN8A` | Outdoor | 75 |
+| `Fa0000wZMjJDkJQw` | Film | 50 |
+| `Fa0000s2oLwiefuK` | Outdoor | 70 |
+| `Fa0000OIJLRukbio` | Film | 80 |
+| `Fa0000s5KPcqwa2q` | Latest | 50 |
+| `Fa0000ykWawJisVT` | Latest | 70 |
+| `Fa0000OM8ZuTHT7y` | Latest | 70 |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="ai-filter-enum"></a>
+
+## 8. AI filter enum: `aicolormatch_type`
+
+Intensity is controlled by `aicolormatch_alpha` from 0 to 100.
+
+| Effect | `aicolormatch_type` |
+| --- | --- |
+| Natural portrait | `1` |
+| Rich film | `2` |
+| Vintage artistic | `3` |
+| Clear and airy | `4` |
+| Fresh and bright | `6` |
+| Japanese cool tone | `7` |
+| Lemon-yellow warm tone | `8` |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="sky-background-structure"></a>
+
+## 9. Sky replacement structure and material enums: `sky_background.logic_id`
+
+```json
+{
+  "sky_background": {
+    "logic_id": "2130",
+    "params": {
+      "sky_wap_flag": 1,
+      "sky_shift_x_coef": 0,
+      "sky_shift_y_coef": 0,
+      "sky_blip_flag": 0,
+      "sky_edge_dilate_coef": 0,
+      "sky_edge_blur_coef": -10,
+      "blur_coef": 0,
+      "sky_alpha_coef": 100,
+      "sky_exposure": 0,
+      "sky_saturability": 0,
+      "sky_scale_coef": 0,
+      "sky_temperature": 0
+    }
+  }
+}
+```
+
+| `logic_id` enum | Description |
+| --- | --- |
+| `2130` | Cloudy 1 |
+| `2131` | Cloudy 2 |
+| `2132` | Cloudy 3 |
+| `2133` | Cloudy 4 |
+| `2134` | Cloudy 5 |
+| `2135` | Cloudy 6 |
+| `2136` | Cloudy 7 |
+| `2137` | Cloudy 8 |
+| `2138` | Cloudy 9 |
+| `4192` | Cloudy 10 |
+| `4193` | Cloudy 11 |
+| `4194` | Cloudy 12 |
+| `2139` | Clear sky 1 |
+| `2140` | Clear sky 2 |
+| `2141` | Clear sky 3 |
+| `2142` | Clear sky 4 |
+| `2143` | Clear sky 5 |
+| `2144` | Clear sky 6 |
+| `2145` | Clear sky 7 |
+| `4195` | Clear sky 8 |
+| `4196` | Clear sky 9 |
+| `4197` | Clear sky 10 |
+| `4198` | Clear sky 11 |
+| `4199` | Clear sky 12 |
+| `4200` | Clear sky 13 |
+| `2146` | Sunset 1 |
+| `2147` | Sunset 2 |
+| `2148` | Sunset 3 |
+| `2149` | Sunset 4 |
+| `2150` | Sunset 5 |
+| `2151` | Sunset 6 |
+| `2152` | Sunset 7 |
+| `4201` | Sunset 8 |
+| `4202` | Sunset 9 |
+| `4203` | Sunset 10 |
+| `4204` | Sunset 11 |
+| `2153` | Night sky 1 |
+| `2154` | Night sky 2 |
+| `2155` | Night sky 3 |
+| `2156` | Night sky 4 |
+| `4205` | Night sky 5 |
+| `4206` | Night sky 6 |
+| `4207` | Night sky 7 |
+| `4208` | Night sky 8 |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="skin-color-enum"></a>
+
+## 10. Skin-tone enum: `skin_color_lut_path`
+
+Use a fixed five-item list in `people_type` order. Allowed values: `""` (original), `skin1.png` (cool), `skin2.png` (porcelain pink), `skin3.png` (warm), `skin4.png` (wheat), and `skin5.png` (cocoa).
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="hair-color-parameter-structure"></a>
+
+## 11. Hair-color structure and material enums: `hair_color[].id`
+
+`hair_color` is a fixed five-item array in `people_type` order. Each item contains `id`, `color`, and `alpha`; `alpha` accepts 0–100.
+
+| `hair_color[].id` enum | Display name |
+| --- | --- |
+| `yangqi` | Airy |
+| `qingche` | Clear |
+| `shencai` | Radiant |
+| `qiushui` | Autumn glow |
+| `lingdong` | Lively |
+| `shuiguang` | Glossy |
+| `jujiao` | Focused |
+| `touliang` | Bright |
+| `xingguang` | Starlight |
+| `tongtou` | Translucent |
+| `heicha` | Black tea |
+| `shumeihong` | Raspberry red |
+| `haiwanghong` | Vivid red |
+| `huizong` | Ash brown |
+| `zangju` | Burnt orange |
+| `ziranhei` | Natural black |
+| `lanzi` | Blue violet |
+| `heiqiao` | Dark chocolate |
+
+[Back to the complete parameter table](#complete-parameters)
+
+<a id="curve-parameter-structure"></a>
+
+## 12. Curve parameters
+
+| Parameter | Meaning | Value range |
+| --- | --- | --- |
+| `gray_point` | Gray curve points | 0–255 |
+| `red_point` | Red curve points | 0–255 |
+| `green_point` | Green curve points | 0–255 |
+| `blue_point` | Blue curve points | 0–255 |
+
+Curves consist of two-dimensional points. Flatten the point coordinates into a one-dimensional array as required by the provider; do not interpret the values as a five-audience intensity list.
+
+[Back to the complete parameter table](#complete-parameters)
+
+## 13. Source image constraints
+
+| Source image condition | Provider endpoint | Formats |
+| --- | --- | --- |
+| Width and height are both no more than 1500px | `/openapi/preview_chain.json` | JPG, JPEG, PNG |
+| Either side is greater than 1500px and both sides are no more than 15000px | `/openapi/chain.json` | JPG, JPEG, PNG |
+
+The openapi-job service reads the image header and selects the provider endpoint automatically. If either side exceeds 15000px, the format is unsupported, or metadata cannot be parsed, task creation fails before the provider create endpoint is called.

@@ -129,7 +129,13 @@
               {
                 "group": "API Endpoints",
                 "pages": [
-                  "ai-tools-suite/image-generate/create-by-source-prompt",
+                  {
+                    "group": "Text to Image / Image to Image",
+                    "pages": [
+                      "ai-tools-suite/image-generate/create-by-source-prompt",
+                      "ai-tools-suite/image-generate/meitu-yunxiu-parameters"
+                    ]
+                  },
                   "ai-tools-suite/image-generate/create-by-button",
                   "ai-tools-suite/image-generate/get-result"
                 ]
