@@ -14,7 +14,12 @@ paths:
   /api/open/v3/content/video/createbytranslate:
     post:
       summary: Create Video Translation
-      description: Translate videos into multiple languages with AI voices and lip-sync
+      description: |
+        Translate videos into multiple languages with automatic voice selection and lip-sync.
+        The server sets voice_type to 0 for target language codes in the original voice clone list and to 2 for other target languages, overriding any supplied voice_type.
+        This endpoint does not read an ai_voice request parameter.
+        Current OpenAPI validation does not enforce a 60-second duration limit. Shorter videos are recommended for faster processing; downstream processing constraints may still apply.
+        The separate legacy /api/open/v3/content/video/translate endpoint rejects videos longer than 60 seconds.
       tags:
         - Video Translation
       requestBody:
@@ -130,14 +135,17 @@ components:
       properties:
         url:
           type: string
-          description: The video URL address you want to translate
+          description: The video URL address you want to translate. Current OpenAPI validation does not enforce a 60-second duration limit; shorter videos are recommended for faster processing.
         source_language:
           type: string
           default: "DEFAULT"
           description: The original language of the video. Use "DEFAULT" for automatic language detection, or specify a language code (e.g., "en" for English, "zh" for Chinese, "es" for Spanish)
         language:
           type: string
-          description: Target language(s) for translation. For multiple languages, separate with commas (e.g., "ja,zh-CN-shandong,zh-CN-sichuan")
+          description: |
+            Target language(s) for translation. For multiple languages, separate with commas without surrounding spaces (e.g., "ja,zh-CN-shandong,zh-CN-sichuan").
+            Exact matches to en, fr, zh, ar, bg, hr, cs, da, nl, fil, fi, de, el, hi, hu, id, it, ja, ko, ms, nb, pl, pt, ro, ru, sk, es, sv, ta, tr, uk, vi use original voice cloning (voice_type 0). Other target codes use AI voice (voice_type 2).
+            For example, zh uses voice_type 0, while zh-CN uses voice_type 2.
         lipsync:
           type: boolean
           default: false
@@ -161,6 +169,18 @@ components:
         caption_url:
           type: string
           description: Subtitle file URL (supports SRT or ASS files)
+        voices_map:
+          type: object
+          description: Optional voice settings keyed by exact target language code. The server sets the language and overrides voice_type for each target according to the language selection rules. The current OpenAPI validation does not require voice_id.
+          additionalProperties:
+            type: object
+            properties:
+              voice_id:
+                type: string
+                description: Optional voice identifier passed to the translation service.
+              voice_type:
+                type: integer
+                description: Overridden by the server with 0 (original voice clone) or 2 (AI voice), based on the target language code.
         studio_voice:
           type: object
           description: Advanced voice and translation settings
