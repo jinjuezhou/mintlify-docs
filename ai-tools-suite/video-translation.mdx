@@ -28,7 +28,7 @@ Experience our video translation technology in action by exploring our interacti
 
 1. **Get Available Languages**:
    - Use the [Get Language List API](/ai-tools-suite/video-translation/get-languages) to see all supported target languages
-   - Note which languages require specific voice IDs
+   - Review the [automatic voice selection rules](/ai-tools-suite/video-translation/create-translation#voice-selection) for each target language
 
 2. **Create Translation**:
    - Call the [Create Video Translation API](/ai-tools-suite/video-translation/create-translation) with your video URL
@@ -76,7 +76,7 @@ Fine-tune translations with custom word mappings, pronunciation corrections, and
 | 1201 | Create audio error, please try again later |
 | 1202 | The same video cannot be translated with lip-sync in the same language more than once |
 | 1203 | Video should contain audio |
-| 1204 | Your video duration exceeds 60 seconds |
+| 1204 | Video duration exceeds 60 seconds (legacy `/content/video/translate` endpoint only; not enforced by `/content/video/createbytranslate`) |
 | 1205 | Create video error, please try again later |
 | 1207 | The video you are using exceeds the size limit of 300MB |
 | 1209 | Please upload a video in another encoding format |
@@ -97,7 +97,7 @@ When checking results, the `video_status` field indicates the current processing
 
 ### Video Requirements
 
-- **Duration**: Keep videos under 60 seconds for optimal processing time
+- **Duration**: `/content/video/createbytranslate` does not enforce a 60-second limit in OpenAPI validation. Shorter videos are recommended for faster processing; under 60 seconds is a recommendation, not a requirement. The legacy `/content/video/translate` endpoint rejects videos longer than 60 seconds.
 - **Size**: Maximum file size is 300MB
 - **Frame Rate**: Maximum 30fps supported
 - **Audio**: Ensure your video contains clear audio for accurate translation
@@ -125,7 +125,7 @@ When checking results, the `video_status` field indicates the current processing
   "url": "https://example.com/my-video.mp4",
   "source_language": "DEFAULT",
   "language": "es",
-  "lipsync": true,
+  "lipsync": true
 }
 ```
 

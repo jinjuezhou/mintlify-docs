@@ -4,10 +4,26 @@ description: "Translate videos into multiple languages with AI voices and lip-sy
 openapi: "POST /api/open/v3/content/video/createbytranslate"
 ---
 
-Create a video translation job to translate your video content into one or multiple target languages. The API supports automatic source language detection, custom AI voices, lip-sync, and various caption options.
+Create a video translation job to translate your video content into one or multiple target languages. The API supports automatic source language detection, automatic voice selection, lip-sync, and various caption options.
 
 <Note>
 The `merge_interval` and `face_enhance` parameters have been deprecated and are no longer supported.
 </Note>
 
 
+## Voice Selection
+
+The API selects the voice type separately for each target language:
+
+- **Original voice clone (`voice_type: 0`)**: Used when the target language exactly matches one of the following codes: `en`, `fr`, `zh`, `ar`, `bg`, `hr`, `cs`, `da`, `nl`, `fil`, `fi`, `de`, `el`, `hi`, `hu`, `id`, `it`, `ja`, `ko`, `ms`, `nb`, `pl`, `pt`, `ro`, `ru`, `sk`, `es`, `sv`, `ta`, `tr`, `uk`, `vi`.
+- **AI voice (`voice_type: 2`)**: Used for target language codes outside this list.
+
+Matching uses the exact language code. For example, `zh` selects original voice cloning, while `zh-CN` selects AI voice. For comma-separated targets, use language codes without surrounding spaces.
+
+You can provide optional voice settings in `voices_map`, keyed by target language. The server overrides any supplied `voice_type` according to the rules above and passes the resulting settings to the translation service. This endpoint does not read an `ai_voice` request parameter. A `voice_id` is not required by the current OpenAPI request validation.
+
+## Video Duration
+
+`/api/open/v3/content/video/createbytranslate` does not enforce a 60-second duration limit in the current OpenAPI validation. Shorter videos may reduce processing time; keeping videos under 60 seconds is a recommendation, not a request requirement. Downstream processing constraints may still apply.
+
+The separate legacy endpoint `/api/open/v3/content/video/translate` rejects videos longer than 60 seconds. This restriction does not apply to the Create Video Translation endpoint documented here.
