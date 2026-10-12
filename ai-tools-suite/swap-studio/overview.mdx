@@ -1,0 +1,33 @@
+---
+title: "Swap Studio V5"
+description: "Replace characters, transfer motion, swap heads, change hairstyles, and replace clothing with the V5 APIs."
+---
+
+Swap Studio provides separate APIs for character replacement, motion transfer, head replacement, hairstyle replacement, and clothing replacement. Each operation runs asynchronously.
+
+| Feature | Purpose | API reference |
+|---------|---------|---------------|
+| Character Swap | Replace the character in a source scene with a reference character. | [Character Swap V5](/ai-tools-suite/swap-studio/character-swap-v5) |
+| Motion Swap | Transfer motion from a driving video to a reference character. | [Motion Swap V5](/ai-tools-suite/swap-studio/motion-swap-v5) |
+| Head Swap | Replace a selected person's head with a reference head. | [Head Swap V5](/ai-tools-suite/swap-studio/head-swap-v5) |
+| Hair Swap | Change the hairstyle of a person using a reference hairstyle. | [Hair Swap V5](/ai-tools-suite/swap-studio/hair-swap-v5) |
+| Clothing Swap | Replace clothing with a reference outfit. | [Clothing Swap V5](/ai-tools-suite/swap-studio/clothing-swap-v5) |
+
+## Integration workflow
+
+1. Read the feature reference for supported input types, models, and parameters.
+2. Create a task using your [API key](/authentication/usage).
+3. Save the returned task ID and poll the result endpoint documented for that feature.
+4. Download the output when the task completes. If creation fails, inspect the business response code and message before retrying.
+
+Character Swap and Motion Swap have distinct meanings: Character Swap replaces a person in a scene; Motion Swap uses a driving video's movement to animate a reference character.
+
+## Version compatibility
+
+The V5 endpoints are additional interfaces. Existing [Character Swap V4](/ai-tools-suite/character-swap/create) and [Head Swap V4](/ai-tools-suite/head-swap/create) integrations retain their existing request and response contracts. Use the V5 page for the new operation instead of substituting the version number in a V4 request.
+
+## Billing and errors
+
+Models, input limits, resolution choices, and billing depend on the selected operation and model. See each feature reference for billing rules. The business response code `1000` indicates a successful API request; a successful task-creation response does not indicate that generation has completed.
+
+See [Error Codes](/ai-tools-suite/error-code) for authentication and account errors.

@@ -110,6 +110,17 @@
             ]
           },
           {
+            "group": "Swap Studio V5",
+            "pages": [
+              "ai-tools-suite/swap-studio/overview",
+              "ai-tools-suite/swap-studio/character-swap-v5",
+              "ai-tools-suite/swap-studio/motion-swap-v5",
+              "ai-tools-suite/swap-studio/head-swap-v5",
+              "ai-tools-suite/swap-studio/clothing-swap-v5",
+              "ai-tools-suite/swap-studio/hair-swap-v5"
+            ]
+          },
+          {
             "group": "Character Swap",
             "pages": [
               "ai-tools-suite/character-swap/character-swap",
