@@ -1,0 +1,61 @@
+---
+title: "Analyze Source Material"
+description: "Analyze Source Material for Character Swap V5."
+openapi: "POST /api/open/v5/characterSwap/analyze"
+---
+
+```
+POST https://openapi.akool.com/api/open/v5/characterSwap/analyze
+```
+
+Use the same authorization headers as task creation.
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|---|---|---|---|
+| url | String | true | Public source material URL. Use the identical URL during task creation. |
+| media_type | String | true | `image` or `video`; Head Swap requires video. |
+| type | String | false | Analysis category: `person`, `head`, or `outfit`; use the category appropriate for this operation. |
+
+**Body**
+
+```json
+{
+  "url": "https://example.com/source.jpg",
+  "media_type": "image",
+  "type": "person"
+}
+```
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v5/characterSwap/analyze' \
+--header 'x-api-key: {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "url": "https://example.com/source.jpg",
+  "media_type": "image",
+  "type": "person"
+}'
+```
+
+</CodeGroup>
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|---|---|---|
+| code | Integer | Business response code. |
+| msg | String | Response message. |
+| data | Object | Newly created analysis. |
+| - _id | String | Analysis ID. |
+| - status | Integer | Initially 1 (queueing). |
+| - media_type | String | Source media type. |
+
+Save `data._id` as the analysis ID.
+
+<Note>For input limits, billing, callbacks, and error codes, see the [Character Swap V5 overview](/ai-tools-suite/swap-studio/character-swap-v5).</Note>

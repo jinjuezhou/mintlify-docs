@@ -1,0 +1,26 @@
+---
+title: "List Models"
+description: "List Models for Clothing Swap V5."
+openapi: "GET /api/open/v5/clothingSwap/models"
+---
+
+```
+GET https://openapi.akool.com/api/open/v5/clothingSwap/models
+```
+
+Use your API key to list models available for this operation. The response is `data.list`. Each item includes `model_name`, `label`, `description`, `icon`, `provider`, `params`, `unit_price_map`, and `requires_priority`. Use `params` for supported resolutions, defaults, and input limits; `unit_price_map` is the configured pricing map. Your final charge also depends on account/team pricing. Model availability can change; do not use a model ID from another operation.
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v5/clothingSwap/models' \
+--header 'x-api-key: {{API Key}}'
+```
+
+### Model IDs
+
+| Model ID | Configured resolutions |
+|---|---|
+| `akool-premium/clothing_swap` | `480p`, `720p` |
+
+Use the models endpoint for current availability. Head Swap and Akool Character Swap creation accept only `480p` or `720p`, even if a shared configuration advertises other resolutions.
+
+<Note>For input limits, billing, callbacks, and error codes, see the [Clothing Swap V5 overview](/ai-tools-suite/swap-studio/clothing-swap-v5).</Note>

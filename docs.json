@@ -113,11 +113,82 @@
             "group": "Swap Studio V5",
             "pages": [
               "ai-tools-suite/swap-studio/overview",
-              "ai-tools-suite/swap-studio/character-swap-v5",
-              "ai-tools-suite/swap-studio/motion-swap-v5",
-              "ai-tools-suite/swap-studio/head-swap-v5",
-              "ai-tools-suite/swap-studio/clothing-swap-v5",
-              "ai-tools-suite/swap-studio/hair-swap-v5"
+              {
+                "group": "Character Swap V5",
+                "pages": [
+                  "ai-tools-suite/swap-studio/character-swap-v5",
+                  {
+                    "group": "API Endpoints",
+                    "pages": [
+                      "ai-tools-suite/swap-studio/character-swap-v5/models",
+                      "ai-tools-suite/swap-studio/character-swap-v5/create",
+                      "ai-tools-suite/swap-studio/character-swap-v5/get-result",
+                      "ai-tools-suite/swap-studio/character-swap-v5/analyze",
+                      "ai-tools-suite/swap-studio/character-swap-v5/analysis-result"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Motion Swap V5",
+                "pages": [
+                  "ai-tools-suite/swap-studio/motion-swap-v5",
+                  {
+                    "group": "API Endpoints",
+                    "pages": [
+                      "ai-tools-suite/swap-studio/motion-swap-v5/models",
+                      "ai-tools-suite/swap-studio/motion-swap-v5/create",
+                      "ai-tools-suite/swap-studio/motion-swap-v5/get-result"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Head Swap V5",
+                "pages": [
+                  "ai-tools-suite/swap-studio/head-swap-v5",
+                  {
+                    "group": "API Endpoints",
+                    "pages": [
+                      "ai-tools-suite/swap-studio/head-swap-v5/models",
+                      "ai-tools-suite/swap-studio/head-swap-v5/create",
+                      "ai-tools-suite/swap-studio/head-swap-v5/get-result",
+                      "ai-tools-suite/swap-studio/head-swap-v5/analyze",
+                      "ai-tools-suite/swap-studio/head-swap-v5/analysis-result"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Clothing Swap V5",
+                "pages": [
+                  "ai-tools-suite/swap-studio/clothing-swap-v5",
+                  {
+                    "group": "API Endpoints",
+                    "pages": [
+                      "ai-tools-suite/swap-studio/clothing-swap-v5/models",
+                      "ai-tools-suite/swap-studio/clothing-swap-v5/create",
+                      "ai-tools-suite/swap-studio/clothing-swap-v5/get-result",
+                      "ai-tools-suite/swap-studio/clothing-swap-v5/analyze",
+                      "ai-tools-suite/swap-studio/clothing-swap-v5/analysis-result"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Hair Swap V5",
+                "pages": [
+                  "ai-tools-suite/swap-studio/hair-swap-v5",
+                  {
+                    "group": "API Endpoints",
+                    "pages": [
+                      "ai-tools-suite/swap-studio/hair-swap-v5/models",
+                      "ai-tools-suite/swap-studio/hair-swap-v5/create",
+                      "ai-tools-suite/swap-studio/hair-swap-v5/get-result"
+                    ]
+                  }
+                ]
+              }
             ]
           },
           {
@@ -277,7 +348,8 @@
       "openapi/video-translation.yaml",
       "openapi/talking-photo.yaml",
       "openapi/face-detection.yaml",
-      "openapi/face-detect-legacy.yaml"
+      "openapi/face-detect-legacy.yaml",
+      "openapi/swap-studio-v5.yaml"
     ],
     "playground": {
       "display": "simple"

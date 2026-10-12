@@ -1,0 +1,40 @@
+---
+title: "Get Analysis Result"
+description: "Get Analysis Result for Clothing Swap V5."
+openapi: "GET /api/open/v5/clothingSwap/analyze/detail"
+---
+
+```
+GET https://openapi.akool.com/api/open/v5/clothingSwap/analyze/detail?_id={{analysis_id}}
+```
+
+**Query Attributes**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|---|---|---|---|
+| _id | String | true | Analysis ID returned by the analyze endpoint. |
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v5/clothingSwap/analyze/detail?_id=670000000000000000000001' \
+--header 'x-api-key: {{API Key}}'
+```
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|---|---|---|
+| data | Object | Analysis record. |
+| - _id | String | Analysis ID. |
+| - status | Integer | 1 = queueing, 2 = processing, 3 = completed, 4 = failed. |
+| - url | String | Original source URL. |
+| - media_type | String | Original media type. |
+| - progress | Number | Progress when available. |
+| - analysis_result | Object | Algorithm result, available after completion. |
+| -- track_manifest_url | String | Tracking manifest required to create the replacement task. |
+| -- media | Array | Detected objects. |
+| --- obj_id | Integer | Detected person/object ID for mappings. |
+| - error_reason | String | Failure reason when available. |
+
+Use your API key. Wait for `data.status: 3`, then read person IDs from `data.analysis_result.media[].obj_id`. The completed result must also contain `track_manifest_url`. Pass that analysis ID as `analyze_id` and the detected IDs as `mappings[].obj_id` when creating a task. Failed analysis uses `status: 4`; inspect its failure reason before retrying.
+
+<Note>For input limits, billing, callbacks, and error codes, see the [Clothing Swap V5 overview](/ai-tools-suite/swap-studio/clothing-swap-v5).</Note>

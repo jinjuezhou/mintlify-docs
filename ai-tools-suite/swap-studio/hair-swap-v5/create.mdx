@@ -1,0 +1,112 @@
+---
+title: "Create Task"
+description: "Create Task for Hair Swap V5."
+openapi: "POST /api/open/v5/hairswap/create"
+---
+
+```
+POST https://openapi.akool.com/api/open/v5/hairswap/create
+```
+
+**Request Headers**
+
+| **Parameter** | **Value** | **Description** |
+|---|---|---|
+| x-api-key | API Key | API key used for authorization. Authorization takes precedence when both headers are supplied. |
+| Authorization | Bearer `{token}` | [Get Token](/authentication/usage#get-the-token). |
+| Content-Type | application/json | Required for JSON requests. |
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|---|---|---|---|
+| target_url | String | true | Public target portrait image URL. |
+| images | Array | conditional | 1–50 reference hairstyle image URLs. Provide `images` or `mappings`. |
+| mappings | Array | conditional | 1–50 objects; when supplied, takes precedence over `images`. |
+| - source_url | String | true | Reference hairstyle image URL. |
+| - target_face_index | Integer | false | Zero-based target face index for this mapping; defaults to 0. |
+| - source_face_index | Integer | false | Zero-based reference face index for this mapping; defaults to 0. |
+| multi_shot | Boolean | false | Generate three additional hairstyle views; defaults to false. Single-person targets only. |
+| target_face_index | Integer | false | Zero-based target face index; defaults to `0`. |
+| source_face_index | Integer | false | Zero-based reference face index; defaults to `0`. |
+| model_name | String | false | Defaults to `akool/hair-swap`. |
+| webhookUrl | String | false | Optional final-state callback URL; follow the [Webhook guide](/ai-tools-suite/webhook). |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|---|---|---|
+| code | Integer | Business response code; `1000` means the request succeeded. |
+| msg | String | Response message. |
+| data | Object | Batch creation result. |
+| - list | Array | Successfully created tasks. |
+| -- _id | String | Task ID to use for result polling. |
+| -- status | Integer | Initial task status. |
+| -- media_type | String | Output media type: image or video. |
+| -- model_name | String | Selected model ID. |
+| -- deduction_credit | Number | Task billing amount. |
+| -- create_time | Number | Creation timestamp in milliseconds. |
+| - errors | Array | Inputs that could not create a task. Inspect this array even when code is 1000. |
+| -- index | Integer | Zero-based plan/input index that failed during submission. |
+| -- error | String | Submission failure description. |
+
+**Example**
+
+**Body**
+
+```json
+{
+  "target_url": "https://example.com/portrait.jpg",
+  "images": [
+    "https://example.com/hairstyle.jpg"
+  ],
+  "target_face_index": 0,
+  "source_face_index": 0,
+  "model_name": "akool/hair-swap"
+}
+```
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v5/hairswap/create' \
+--header 'x-api-key: {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "target_url": "https://example.com/portrait.jpg",
+  "images": [
+    "https://example.com/hairstyle.jpg"
+  ],
+  "target_face_index": 0,
+  "source_face_index": 0,
+  "model_name": "akool/hair-swap"
+}'
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "list": [
+      {
+        "_id": "670000000000000000000002",
+        "status": 1,
+        "media_type": "image",
+        "model_name": "akool/hair-swap",
+        "deduction_credit": 6,
+        "create_time": 1791777600000
+      }
+    ],
+    "errors": []
+  }
+}
+```
+
+<Note>For input limits, billing, callbacks, and error codes, see the [Hair Swap V5 overview](/ai-tools-suite/swap-studio/hair-swap-v5).</Note>

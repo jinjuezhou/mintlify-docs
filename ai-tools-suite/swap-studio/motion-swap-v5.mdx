@@ -1,186 +1,25 @@
 ---
-title: "Motion Swap V5"
-description: "Transfer movement from one driving video to up to 50 character images."
+title: "Motion Swap V5 API Overview"
+description: "Models, workflow, input limits, and billing for Motion Swap V5."
 ---
 
+<Info>
 Transfer movement from one driving video to up to 50 character images.
 
 The video supplies movement; the images supply character appearance. This endpoint does not perform the character replacement workflow. Each image has its own task ID and result.
+</Info>
 
-## Supported models
+## API Endpoints
 
-```
-GET https://openapi.akool.com/api/open/v5/motionSwap/models
-```
+- [List Models](/ai-tools-suite/swap-studio/motion-swap-v5/models) — `GET`
+- [Create Task](/ai-tools-suite/swap-studio/motion-swap-v5/create) — `POST`
+- [Get Task Result](/ai-tools-suite/swap-studio/motion-swap-v5/get-result) — `GET`
 
-Use your API key to list models available for this operation. The response is `data.list`. Each item includes `model_name`, `label`, `description`, `icon`, `provider`, `params`, `unit_price_map`, and `requires_priority`. Use `params` for supported resolutions, defaults, and input limits; `unit_price_map` is the configured pricing map. Your final charge also depends on account/team pricing. Model availability can change; do not use a model ID from another operation.
+## Getting Started
 
-```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v5/motionSwap/models' \
---header 'x-api-key: {{API Key}}'
-```
-
-### Model IDs
-
-| Model ID | Configured resolutions |
-|---|---|
-| `pixverse/motion-control` | `360p`, `540p`, `720p` |
-| `kwaivgi/kling-v3.0-pro/motion-control` | `720P`, `1080P` |
-| `kwaivgi/kling-v3.0-std/motion-control` | `720P`, `1080P` |
-| `kwaivgi/kling-v2.6-pro/motion-control` | `720P`, `1080P` |
-| `kwaivgi/kling-v2.6-std/motion-control` | `720P`, `1080P` |
-| `wavespeed-ai/wan-2.2/animate` | `360p`, `480p`, `540p`, `720p` |
-
-Use the models endpoint for current availability. Head Swap and Akool Character Swap creation accept only `480p` or `720p`, even if a shared configuration advertises other resolutions.
-
-## Create task
-
-```
-POST https://openapi.akool.com/api/open/v5/motionSwap/create
-```
-
-**Request Headers**
-
-| **Parameter** | **Value** | **Description** |
-|---|---|---|
-| x-api-key | API Key | API key used for authorization. Authorization takes precedence when both headers are supplied. |
-| Authorization | Bearer `{token}` | [Get Token](/authentication/usage#get-the-token). |
-| Content-Type | application/json | Required for JSON requests. |
-
-**Body Attributes**
-
-| **Parameter** | **Type** | **Required** | **Description** |
-|---|---|---|---|
-| video | String | true | Public driving video URL. |
-| images | Array | true | 1–50 public character image URLs. Each image creates an independent video task. |
-| model_name | String | true | Motion-control model ID from the models endpoint. |
-| resolution | String | false | Case-sensitive resolution supported by the selected model. |
-| mode | String | false | `animate` or `replace`, where supported by the model. |
-| prompt | String | false | Optional instructions, up to 5000 characters. |
-| negative_prompt | String | false | Optional negative instructions. |
-| character_orientation | String | false | `image` or `video`; model-specific duration limits apply. |
-| keep_original_sound | Boolean | false | Keep source audio in the generated video. |
-| duration | Number | false | Optional driving duration; must satisfy the selected model limits. |
-| webhookUrl | String | false | Optional final-state callback URL; follow the [Webhook guide](/ai-tools-suite/webhook). |
-
-**Response Attributes**
-
-| **Parameter** | **Type** | **Description** |
-|---|---|---|
-| code | Integer | Business response code; `1000` means the request succeeded. |
-| msg | String | Response message. |
-| data | Object | Batch creation result. |
-| - list | Array | Successfully created tasks. |
-| -- _id | String | Task ID to use for result polling. |
-| -- status | Integer | Initial task status. |
-| -- media_type | String | Output media type: image or video. |
-| -- model_name | String | Selected model ID. |
-| -- deduction_credit | Number | Task billing amount. |
-| -- create_time | Number | Creation timestamp in milliseconds. |
-| - errors | Array | Inputs that could not create a task. Inspect this array even when code is 1000. |
-| -- index | Integer | Zero-based plan/input index that failed during submission. |
-| -- error | String | Submission failure description. |
-
-**Example**
-
-**Body**
-
-```json
-{
-  "video": "https://example.com/motion.mp4",
-  "images": [
-    "https://example.com/character.jpg"
-  ],
-  "model_name": "kwaivgi/kling-v3.0-pro/motion-control",
-  "resolution": "720P",
-  "character_orientation": "video",
-  "keep_original_sound": true
-}
-```
-
-**Request**
-
-<CodeGroup>
-
-```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v5/motionSwap/create' \
---header 'x-api-key: {{API Key}}' \
---header 'Content-Type: application/json' \
---data '{
-  "video": "https://example.com/motion.mp4",
-  "images": [
-    "https://example.com/character.jpg"
-  ],
-  "model_name": "kwaivgi/kling-v3.0-pro/motion-control",
-  "resolution": "720P",
-  "character_orientation": "video",
-  "keep_original_sound": true
-}'
-```
-
-</CodeGroup>
-
-**Response**
-
-```json
-{
-  "code": 1000,
-  "msg": "OK",
-  "data": {
-    "list": [
-      {
-        "_id": "670000000000000000000002",
-        "status": 1,
-        "media_type": "video",
-        "model_name": "kwaivgi/kling-v3.0-pro/motion-control",
-        "deduction_credit": 6,
-        "create_time": 1791777600000
-      }
-    ],
-    "errors": []
-  }
-}
-```
-
-## Get task detail
-
-```
-GET https://openapi.akool.com/api/open/v5/motionSwap/task/detail?_id={{task_id}}
-```
-
-**Request Headers**
-
-| **Parameter** | **Value** | **Description** |
-|---|---|---|
-| x-api-key | API Key | API key used for authorization. Authorization takes precedence when both headers are supplied. |
-| Authorization | Bearer `{token}` | [Get Token](/authentication/usage#get-the-token). |
-| Content-Type | application/json | Required for JSON requests. |
-
-**Query Attributes**
-
-| **Parameter** | **Type** | **Required** | **Description** |
-|---|---|---|---|
-| _id | String | true | A task ID from the creation response. Only tasks belonging to your user/team are accessible. |
-
-**Response Attributes**
-
-| **Parameter** | **Type** | **Description** |
-|---|---|---|
-| code | Integer | `1000` for a successful query. |
-| msg | String | Response message. |
-| data | Object | Task detail, including the task fields returned by creation. |
-| - status | Integer | 1 = queueing, 2 = processing, 3 = completed, 4 = failed. |
-| - url | String | Output URL, available after completion. |
-| - progress | Number | Processing progress, when available. |
-| - error_reason | String | Failure reason, when available. |
-| - multi_shot_results | Array | Additional hairstyle views; empty for other operations. |
-
-```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v5/motionSwap/task/detail?_id=670000000000000000000002' \
---header 'x-api-key: {{API Key}}'
-```
-
-The `url` field may be empty before completion. Use it only when `status` is 3. Poll until `status` is 3 or 4. A query with `code: 1000` may still describe a failed generation task; inspect `data.status` and `data.error_reason`.
+1. List the models available for this feature.
+2. Create a task using the model-specific parameters.
+3. Poll task results or receive the final webhook notification.
 
 ## Billing
 

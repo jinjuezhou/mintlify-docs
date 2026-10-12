@@ -1,0 +1,114 @@
+---
+title: "Create Task"
+description: "Create Task for Motion Swap V5."
+openapi: "POST /api/open/v5/motionSwap/create"
+---
+
+```
+POST https://openapi.akool.com/api/open/v5/motionSwap/create
+```
+
+**Request Headers**
+
+| **Parameter** | **Value** | **Description** |
+|---|---|---|
+| x-api-key | API Key | API key used for authorization. Authorization takes precedence when both headers are supplied. |
+| Authorization | Bearer `{token}` | [Get Token](/authentication/usage#get-the-token). |
+| Content-Type | application/json | Required for JSON requests. |
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|---|---|---|---|
+| video | String | true | Public driving video URL. |
+| images | Array | true | 1–50 public character image URLs. Each image creates an independent video task. |
+| model_name | String | true | Motion-control model ID from the models endpoint. |
+| resolution | String | false | Case-sensitive resolution supported by the selected model. |
+| mode | String | false | `animate` or `replace`, where supported by the model. |
+| prompt | String | false | Optional instructions, up to 5000 characters. |
+| negative_prompt | String | false | Optional negative instructions. |
+| character_orientation | String | false | `image` or `video`; model-specific duration limits apply. |
+| keep_original_sound | Boolean | false | Keep source audio in the generated video. |
+| duration | Number | false | Optional driving duration; must satisfy the selected model limits. |
+| webhookUrl | String | false | Optional final-state callback URL; follow the [Webhook guide](/ai-tools-suite/webhook). |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|---|---|---|
+| code | Integer | Business response code; `1000` means the request succeeded. |
+| msg | String | Response message. |
+| data | Object | Batch creation result. |
+| - list | Array | Successfully created tasks. |
+| -- _id | String | Task ID to use for result polling. |
+| -- status | Integer | Initial task status. |
+| -- media_type | String | Output media type: image or video. |
+| -- model_name | String | Selected model ID. |
+| -- deduction_credit | Number | Task billing amount. |
+| -- create_time | Number | Creation timestamp in milliseconds. |
+| - errors | Array | Inputs that could not create a task. Inspect this array even when code is 1000. |
+| -- index | Integer | Zero-based plan/input index that failed during submission. |
+| -- error | String | Submission failure description. |
+
+**Example**
+
+**Body**
+
+```json
+{
+  "video": "https://example.com/motion.mp4",
+  "images": [
+    "https://example.com/character.jpg"
+  ],
+  "model_name": "kwaivgi/kling-v3.0-pro/motion-control",
+  "resolution": "720P",
+  "character_orientation": "video",
+  "keep_original_sound": true
+}
+```
+
+**Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v5/motionSwap/create' \
+--header 'x-api-key: {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "video": "https://example.com/motion.mp4",
+  "images": [
+    "https://example.com/character.jpg"
+  ],
+  "model_name": "kwaivgi/kling-v3.0-pro/motion-control",
+  "resolution": "720P",
+  "character_orientation": "video",
+  "keep_original_sound": true
+}'
+```
+
+</CodeGroup>
+
+**Response**
+
+```json
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "list": [
+      {
+        "_id": "670000000000000000000002",
+        "status": 1,
+        "media_type": "video",
+        "model_name": "kwaivgi/kling-v3.0-pro/motion-control",
+        "deduction_credit": 6,
+        "create_time": 1791777600000
+      }
+    ],
+    "errors": []
+  }
+}
+```
+
+<Note>For input limits, billing, callbacks, and error codes, see the [Motion Swap V5 overview](/ai-tools-suite/swap-studio/motion-swap-v5).</Note>
