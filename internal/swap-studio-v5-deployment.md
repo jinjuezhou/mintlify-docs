@@ -44,3 +44,27 @@ Call each V5 `/models` endpoint with an authorized API key and verify `data.list
 If credit settlement reaches the `processing` or `error` state after a partial service failure, reconcile against the existing credit ledger before retrying settlement. The worker intentionally avoids automatically repeating an uncertain balance mutation.
 
 Deploying files, importing model configuration, and validating a live provider task are separate steps; report each result separately.
+
+## V3 face detection configuration
+
+Configure `host.facedetectv3` in the effective OpenAPI environment configuration or Nacos document. Set the base URL of the service exposing `/detect_faces`, for example `https://<face-detection-service>`, without the endpoint path. This is required by Kling Character Swap reference/first-frame detection and Hair Swap. The legacy `host.facedetect` serves `/detect_multi` and is not a fallback for V3.
+
+If detection fails, verify configuration injection, service connectivity, and the `[detect_face_v3]` trace ID, HTTP status and business error. Reload the service after configuration changes and retest the original single-person inputs. Do not place internal service addresses or credentials in public API pages.
+## Motion Swap submission failure: MaaS configuration
+
+For DEV bug `reczz28ND9z670xD`, Job logs identified `maasBackend configuration is required` behind the public `Swap submission failed` message. Configuration has been supplied according to the user; effective runtime loading and end-to-end generation remain unverified.
+
+Configure the **open-api-job** environment/Nacos document:
+
+```js
+maasBackend: {
+    api_url: 'https://<maas-service>/api/v1',
+    api_key: '<injected-secret>',
+}
+```
+
+Alternatively use `MAAS_BACKEND_API_URL` and `MAAS_BACKEND_API_KEY`. An existing `app.config.maasBackend` object takes precedence as a whole: an incomplete object does not fall back to environment variables field by field. Supply both fields or remove the object when relying on environment variables. Do not append `/run` to the base URL or store actual secrets in this document.
+
+Routing follows the runtime provider and queued task: `maas`/`pixverse` use MaaS; `wavespeed-ai`/`wavespeed`/`kwaivgi` use WaveSpeed. A Kling public model ID may be routed through MaaS. This failure is unrelated to `host.facedetectv3`.
+
+Reload/restart Job after configuration changes, create a new task, verify provider task ID assignment, final status, credit settlement, and webhook delivery. Previously failed tasks do not automatically resume; do not replay their queue messages without reconciling credit state. A log showing the failure settlement service was called does not by itself prove that credits were released. Retest each affected available PixVerse/Kling model and record the actual provider, task ID, sanitized logs, and ledger outcome.

@@ -15,17 +15,4 @@ curl --location 'https://openapi.akool.com/api/open/v5/motionSwap/models' \
 --header 'x-api-key: {{API Key}}'
 ```
 
-### Model IDs
-
-| Model ID | Configured resolutions |
-|---|---|
-| `pixverse/motion-control` | `360p`, `540p`, `720p` |
-| `kwaivgi/kling-v3.0-pro/motion-control` | `720P`, `1080P` |
-| `kwaivgi/kling-v3.0-std/motion-control` | `720P`, `1080P` |
-| `kwaivgi/kling-v2.6-pro/motion-control` | `720P`, `1080P` |
-| `kwaivgi/kling-v2.6-std/motion-control` | `720P`, `1080P` |
-| `wavespeed-ai/wan-2.2/animate` | `360p`, `480p`, `540p`, `720p` |
-
-Use the models endpoint for current availability. Head Swap and Akool Character Swap creation accept only `480p` or `720p`, even if a shared configuration advertises other resolutions.
-
 <Note>For input limits, billing, callbacks, and error codes, see the [Motion Swap V5 overview](/ai-tools-suite/swap-studio/motion-swap-v5).</Note>
