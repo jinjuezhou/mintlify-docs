@@ -192,19 +192,6 @@
             ]
           },
           {
-            "group": "Character Swap",
-            "pages": [
-              "ai-tools-suite/character-swap/character-swap",
-              {
-                "group": "API Endpoints",
-                "pages": [
-                  "ai-tools-suite/character-swap/create",
-                  "ai-tools-suite/character-swap/get-result"
-                ]
-              }
-            ]
-          },
-          {
             "group": "Image Generate",
             "pages": [
               "ai-tools-suite/image-generate/image-generate",
@@ -231,21 +218,6 @@
                   "ai-tools-suite/image2video/get-effects",
                   "ai-tools-suite/image2video/update-audio",
                   "ai-tools-suite/image2video/delete-videos"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Head Swap",
-            "pages": [
-              "ai-tools-suite/head-swap/head-swap",
-              {
-                "group": "API Endpoints",
-                "pages": [
-                  "ai-tools-suite/head-swap/submit-analysis",
-                  "ai-tools-suite/head-swap/get-analysis-detail",
-                  "ai-tools-suite/head-swap/create",
-                  "ai-tools-suite/head-swap/get-result"
                 ]
               }
             ]
