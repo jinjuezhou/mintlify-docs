@@ -68,3 +68,17 @@ Alternatively use `MAAS_BACKEND_API_URL` and `MAAS_BACKEND_API_KEY`. An existing
 Routing follows the runtime provider and queued task: `maas`/`pixverse` use MaaS; `wavespeed-ai`/`wavespeed`/`kwaivgi` use WaveSpeed. A Kling public model ID may be routed through MaaS. This failure is unrelated to `host.facedetectv3`.
 
 Reload/restart Job after configuration changes, create a new task, verify provider task ID assignment, final status, credit settlement, and webhook delivery. Previously failed tasks do not automatically resume; do not replay their queue messages without reconciling credit state. A log showing the failure settlement service was called does not by itself prove that credits were released. Retest each affected available PixVerse/Kling model and record the actual provider, task ID, sanitized logs, and ledger outcome.
+
+## Prompt configuration precedence and algorithm routing
+
+OpenAPI accepts `character_swap_prompt` (source AIGC naming) and `characterSwapPromptModel`. Fields resolve from `characterSwapPromptModel` to `character_swap_prompt` to `CHARACTER_SWAP_PROMPT_*` environment variables; `apiKey` and `api_key` are accepted. The model finally defaults to `gpt-5.5`. Timeout and other options merge from source configuration with the newer object taking precedence.
+
+Analysis jobs use `algorithmFrom: characterSwap`, `algorithmType: analyze`, with task/queue `character_analyze` for character/head analysis or `sam3_analyzer` for clothing analysis. Clothing generation uses `algorithmFrom: clothSwap`, `algorithmType: clothSwap`, task/queue `cloth_swap`. Verify worker consumption and token-protected callback reachability when analysis stays waiting.
+
+Kling character replacement resolves the configured `alias.motion_model` and checks its availability, account access and resolution before starting image editing. Runtime model documents determine the actual provider. Public responses include downstream `task_id`, which can be empty before submission or change across stages; use `_id` for API polling.
+
+## Price parity verification (2026-10-16)
+
+The local snapshot matches all 10 public models and the internal GPT image-edit model in the current AIGC source `unit_price_map`; character image fee constants match as well. This does not verify runtime Mongo documents. Clothing requires runtime model pricing and cannot be compared from its placeholder snapshot.
+
+Final charges may differ: AIGC Hair Swap has a configured 0.66 membership discount which OpenAPI does not apply. OpenAPI resolves account feature pricing before team pricing and normal model prices. Character image replacement uses the low-quality edit tier plus 2 credits; hair multiple views use four times the base task quote. Clothing image generation uses each service's runtime `image_deduction_credit`. Compare actual account/team pricing and ledger outcomes before declaring production billing parity. Do not expose supplier costs in public model responses or documentation.

@@ -29,7 +29,7 @@ POST https://openapi.akool.com/api/open/v5/motionSwap/create
 | negative_prompt | String | false | Optional negative instructions. |
 | character_orientation | String | false | `image` or `video`; model-specific duration limits apply. |
 | keep_original_sound | Boolean | false | Keep source audio in the generated video. |
-| duration | Number | false | Optional driving duration; must satisfy the selected model limits. |
+| duration | Number | false | Optional compatibility field (1–120). The server measures the actual video duration for limits and billing; this field does not trim or override it. |
 | webhookUrl | String | false | Optional final-state callback URL; follow the [Webhook guide](/ai-tools-suite/webhook). |
 
 **Response Attributes**
@@ -41,6 +41,7 @@ POST https://openapi.akool.com/api/open/v5/motionSwap/create
 | data | Object | Batch creation result. |
 | - list | Array | Successfully created tasks. |
 | -- _id | String | Task ID to use for result polling. |
+| -- task_id | String | Downstream algorithm/provider task ID; may be empty until submission. Use `_id`, not this value, for task-detail queries. It may change between workflow stages. |
 | -- status | Integer | Initial task status. |
 | -- media_type | String | Output media type: image or video. |
 | -- model_name | String | Selected model ID. |
@@ -103,7 +104,8 @@ curl --location 'https://openapi.akool.com/api/open/v5/motionSwap/create' \
         "media_type": "video",
         "model_name": "kwaivgi/kling-v3.0-pro/motion-control",
         "deduction_credit": 6,
-        "create_time": 1791777600000
+        "create_time": 1791777600000,
+        "task_id": ""
       }
     ],
     "errors": []

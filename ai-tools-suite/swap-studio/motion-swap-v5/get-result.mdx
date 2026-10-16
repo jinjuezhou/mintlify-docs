@@ -5,7 +5,7 @@ openapi: "GET /api/open/v5/motionSwap/task/detail"
 ---
 
 ```
-GET https://openapi.akool.com/api/open/v5/motionSwap/task/detail?_id={{task_id}}
+GET https://openapi.akool.com/api/open/v5/motionSwap/task/detail?_id={{id}}
 ```
 
 **Request Headers**
@@ -29,6 +29,7 @@ GET https://openapi.akool.com/api/open/v5/motionSwap/task/detail?_id={{task_id}}
 | code | Integer | `1000` for a successful query. |
 | msg | String | Response message. |
 | data | Object | Task detail, including the task fields returned by creation. |
+| - task_id | String | Downstream algorithm/provider task ID; may be empty until submission. Use `_id`, not this value, for task-detail queries. It may change between workflow stages. |
 | - status | Integer | 1 = queueing, 2 = processing, 3 = completed, 4 = failed. |
 | - url | String | Output URL, available after completion. |
 | - progress | Number | Processing progress, when available. |

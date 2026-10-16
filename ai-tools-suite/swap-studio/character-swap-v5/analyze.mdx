@@ -53,6 +53,7 @@ curl --location 'https://openapi.akool.com/api/open/v5/characterSwap/analyze' \
 | msg | String | Response message. |
 | data | Object | Newly created analysis. |
 | - _id | String | Analysis ID. |
+| - task_id | String | Downstream algorithm/provider task ID; may be empty until submission. Use `_id`, not this value, for task-detail queries. It may change between workflow stages. |
 | - status | Integer | Initially 1 (queueing). |
 | - media_type | String | Source media type. |
 

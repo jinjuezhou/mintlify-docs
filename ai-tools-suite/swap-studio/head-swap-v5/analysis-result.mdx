@@ -25,6 +25,7 @@ curl --location 'https://openapi.akool.com/api/open/v5/headswap/analyze/detail?_
 |---|---|---|
 | data | Object | Analysis record. |
 | - _id | String | Analysis ID. |
+| - task_id | String | Downstream algorithm/provider task ID; may be empty until submission. Use `_id`, not this value, for task-detail queries. It may change between workflow stages. |
 | - status | Integer | 1 = queueing, 2 = processing, 3 = completed, 4 = failed. |
 | - url | String | Original source URL. |
 | - media_type | String | Original media type. |

@@ -41,6 +41,7 @@ POST https://openapi.akool.com/api/open/v5/clothingSwap/create
 | data | Object | Batch creation result. |
 | - list | Array | Successfully created tasks. |
 | -- _id | String | Task ID to use for result polling. |
+| -- task_id | String | Downstream algorithm/provider task ID; may be empty until submission. Use `_id`, not this value, for task-detail queries. It may change between workflow stages. |
 | -- status | Integer | Initial task status. |
 | -- media_type | String | Output media type: image or video. |
 | -- model_name | String | Selected model ID. |
@@ -109,7 +110,8 @@ curl --location 'https://openapi.akool.com/api/open/v5/clothingSwap/create' \
         "media_type": "image",
         "model_name": "akool-premium/clothing_swap",
         "deduction_credit": 6,
-        "create_time": 1791777600000
+        "create_time": 1791777600000,
+        "task_id": ""
       }
     ],
     "errors": []

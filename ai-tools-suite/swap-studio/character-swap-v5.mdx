@@ -26,7 +26,7 @@ For Akool video replacement, analyze the video first, then pass the completed an
 
 ## Billing
 
-Generation is priced using the selected model configuration and your account/team pricing. Image generation is charged per task; video pricing also depends on duration and resolution. Credits are reserved before queueing and finalized through the existing generation billing flow. Creation errors do not produce a billable task. Read `deduction_credit` per created task rather than treating the sample value as a price quotation.
+Generation is priced using the selected model configuration and your account/team pricing. Image generation is charged per task; video pricing also depends on duration and resolution. Credits are reserved before queueing and finalized through the existing generation billing flow. Creation errors do not produce a billable task. Read `deduction_credit` per created task rather than treating the sample value as a price quotation. AIGC website membership discounts do not automatically apply to OpenAPI; account and team pricing can change the final credit amount.
 
 ## Response Code Description
 
@@ -51,3 +51,5 @@ If `webhookUrl` is supplied, final task notifications follow the existing encryp
 ## Input limits
 
 Akool video replacement supports 3–20 seconds and 1–5 distinct analyzed people. Kling character replacement supports 3–30 seconds; image orientation supports at most 10 seconds. Image replacement accepts 1–2 face mappings and selects output size automatically from the target image.
+
+For Kling replacement, the selected character model and its configured motion model must both be available to your account. Resolution must be compatible with the configured motion model.

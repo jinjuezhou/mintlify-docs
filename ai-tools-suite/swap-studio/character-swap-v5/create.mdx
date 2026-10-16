@@ -34,7 +34,8 @@ POST https://openapi.akool.com/api/open/v5/characterSwap/create
 | image | String | Kling video | Reference character URL for a single-person Kling replacement. |
 | resolution | String | false | Video output resolution. Select a value supported by the chosen model. |
 | keep_original_sound | Boolean | false | Keep source video audio. |
-| prompt | String | false | Optional generation instructions. |
+| prompt | String | false | Optional generation instructions, up to 5000 characters. |
+| negative_prompt | String | false | Optional Kling video negative instructions, up to 5000 characters. |
 | webhookUrl | String | false | Optional final-state callback URL; follow the [Webhook guide](/ai-tools-suite/webhook). |
 
 **Response Attributes**
@@ -46,6 +47,7 @@ POST https://openapi.akool.com/api/open/v5/characterSwap/create
 | data | Object | Batch creation result. |
 | - list | Array | Successfully created tasks. |
 | -- _id | String | Task ID to use for result polling. |
+| -- task_id | String | Downstream algorithm/provider task ID; may be empty until submission. Use `_id`, not this value, for task-detail queries. It may change between workflow stages. |
 | -- status | Integer | Initial task status. |
 | -- media_type | String | Output media type: image or video. |
 | -- model_name | String | Selected model ID. |
@@ -132,7 +134,8 @@ curl --location 'https://openapi.akool.com/api/open/v5/characterSwap/create' \
         "media_type": "image",
         "model_name": "akool-premium-multi-person",
         "deduction_credit": 6,
-        "create_time": 1791777600000
+        "create_time": 1791777600000,
+        "task_id": ""
       }
     ],
     "errors": []
