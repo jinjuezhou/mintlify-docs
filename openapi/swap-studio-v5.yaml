@@ -1,0 +1,1714 @@
+openapi: 3.0.3
+info:
+  title: Swap Studio V5 API
+  version: 5.0.0
+  description: Asynchronous character, motion, head, hair and clothing replacement APIs.
+servers:
+  - url: https://openapi.akool.com
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+paths:
+  /api/open/v5/characterSwap/models:
+    get:
+      operationId: characterSwap_models
+      summary: List Models — Character Swap
+      tags:
+        - Character Swap
+      description: See the Character Swap V5 reference for model-specific constraints
+        and conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            model_name:
+                              type: string
+                            label:
+                              type: string
+                            description:
+                              type: string
+                            icon:
+                              type: string
+                            provider:
+                              type: string
+                            params:
+                              type: object
+                              additionalProperties: true
+                            unit_price_map:
+                              type: object
+                              additionalProperties: true
+                            requires_priority:
+                              type: number
+  /api/open/v5/characterSwap/create:
+    post:
+      operationId: characterSwap_create
+      summary: Create Task — Character Swap
+      tags:
+        - Character Swap
+      description: See the Character Swap V5 reference for model-specific constraints
+        and conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Task"
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            index:
+                              type: integer
+                              minimum: 0
+                            error:
+                              type: string
+              example:
+                code: 1000
+                msg: OK
+                data:
+                  list:
+                    - _id: "670000000000000000000002"
+                      status: 1
+                      media_type: image
+                      model_name: akool-premium-multi-person
+                      deduction_credit: 6
+                      create_time: 1791777600000
+                      task_id: ""
+                  errors: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                media_type:
+                  type: string
+                  description: "`image` or `video`."
+                  enum:
+                    - image
+                    - video
+                target_url:
+                  type: string
+                  description: Public source scene image or video URL.
+                  format: uri
+                model_name:
+                  type: string
+                  description: Defaults to `akool-premium-multi-person`. Get supported IDs from
+                    the models endpoint.
+                mappings:
+                  type: array
+                  description: "Image: 1–2 mappings with `source_url`, `source_bbox`, and
+                    `target_bbox`. Akool video: 1–5 mappings with `obj_id` and
+                    `img_url`."
+                  items:
+                    type: object
+                    properties:
+                      source_url:
+                        type: string
+                        description: Reference character image URL.
+                        format: uri
+                      source_bbox:
+                        type: array
+                        description: Reference face bounding box `[x1,y1,x2,y2]` in original-image
+                          pixels.
+                        items:
+                          type: number
+                          minimum: 0
+                        minItems: 4
+                        maxItems: 4
+                      target_bbox:
+                        type: array
+                        description: Target face bounding box `[x1,y1,x2,y2]` in original-image pixels.
+                          The same target box cannot be mapped twice.
+                        items:
+                          type: number
+                          minimum: 0
+                        minItems: 4
+                        maxItems: 4
+                      obj_id:
+                        type: integer
+                        description: Person ID from the analysis result.
+                        minimum: 0
+                      img_url:
+                        type: string
+                        description: Reference character image URL.
+                        format: uri
+                  minItems: 1
+                  maxItems: 5
+                analyze_id:
+                  type: string
+                  description: Completed analysis ID for the same source video.
+                character_orientation:
+                  type: string
+                  description: "Kling video: `image` or `video`; defaults to `video`."
+                  enum:
+                    - image
+                    - video
+                image:
+                  type: string
+                  description: Reference character URL for a single-person Kling replacement.
+                  format: uri
+                resolution:
+                  type: string
+                  description: Video output resolution. Select a value supported by the chosen
+                    model.
+                keep_original_sound:
+                  type: boolean
+                  description: Keep source video audio.
+                prompt:
+                  type: string
+                  description: Optional generation instructions.
+                  maxLength: 5000
+                webhookUrl:
+                  type: string
+                  description: Optional final-state callback URL; follow the [Webhook
+                    guide](/ai-tools-suite/webhook).
+                  format: uri
+                negative_prompt:
+                  type: string
+                  maxLength: 5000
+                  description: Optional Kling video negative instructions.
+              required:
+                - media_type
+                - target_url
+              oneOf:
+                - properties:
+                    media_type:
+                      enum:
+                        - image
+                    mappings:
+                      type: array
+                      description: "Image: 1–2 mappings with `source_url`, `source_bbox`, and
+                        `target_bbox`. Akool video: 1–5 mappings with `obj_id`
+                        and `img_url`."
+                      items:
+                        type: object
+                        properties:
+                          source_url:
+                            type: string
+                            description: Reference character image URL.
+                            format: uri
+                          source_bbox:
+                            type: array
+                            description: Reference face bounding box `[x1,y1,x2,y2]` in original-image
+                              pixels.
+                            items:
+                              type: number
+                              minimum: 0
+                            minItems: 4
+                            maxItems: 4
+                          target_bbox:
+                            type: array
+                            description: Target face bounding box `[x1,y1,x2,y2]` in original-image pixels.
+                              The same target box cannot be mapped twice.
+                            items:
+                              type: number
+                              minimum: 0
+                            minItems: 4
+                            maxItems: 4
+                          obj_id:
+                            type: integer
+                            description: Person ID from the analysis result.
+                            minimum: 0
+                          img_url:
+                            type: string
+                            description: Reference character image URL.
+                            format: uri
+                        required:
+                          - source_url
+                          - source_bbox
+                          - target_bbox
+                      minItems: 1
+                      maxItems: 2
+                  required:
+                    - mappings
+                - properties:
+                    media_type:
+                      enum:
+                        - video
+                    model_name:
+                      not:
+                        enum:
+                          - kling-v3.0-pro/character-swap
+                    mappings:
+                      type: array
+                      description: "Image: 1–2 mappings with `source_url`, `source_bbox`, and
+                        `target_bbox`. Akool video: 1–5 mappings with `obj_id`
+                        and `img_url`."
+                      items:
+                        type: object
+                        properties:
+                          source_url:
+                            type: string
+                            description: Reference character image URL.
+                            format: uri
+                          source_bbox:
+                            type: array
+                            description: Reference face bounding box `[x1,y1,x2,y2]` in original-image
+                              pixels.
+                            items:
+                              type: number
+                              minimum: 0
+                            minItems: 4
+                            maxItems: 4
+                          target_bbox:
+                            type: array
+                            description: Target face bounding box `[x1,y1,x2,y2]` in original-image pixels.
+                              The same target box cannot be mapped twice.
+                            items:
+                              type: number
+                              minimum: 0
+                            minItems: 4
+                            maxItems: 4
+                          obj_id:
+                            type: integer
+                            description: Person ID from the analysis result.
+                            minimum: 0
+                          img_url:
+                            type: string
+                            description: Reference character image URL.
+                            format: uri
+                        required:
+                          - obj_id
+                          - img_url
+                      minItems: 1
+                      maxItems: 5
+                  required:
+                    - analyze_id
+                    - mappings
+                - properties:
+                    model_name:
+                      enum:
+                        - kling-v3.0-pro/character-swap
+                    media_type:
+                      enum:
+                        - video
+                  required:
+                    - model_name
+                    - image
+            example:
+              media_type: image
+              target_url: https://example.com/scene.jpg
+              model_name: akool-premium-multi-person
+              mappings:
+                - source_url: https://example.com/character.jpg
+                  source_bbox:
+                    - 10
+                    - 20
+                    - 200
+                    - 400
+                  target_bbox:
+                    - 100
+                    - 50
+                    - 350
+                    - 600
+  /api/open/v5/characterSwap/task/detail:
+    get:
+      operationId: characterSwap_get_result
+      summary: Get Task Result — Character Swap
+      tags:
+        - Character Swap
+      description: See the Character Swap V5 reference for model-specific constraints
+        and conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/Task"
+      parameters:
+        - name: _id
+          in: query
+          required: true
+          description: Task or analysis ID belonging to the authenticated user/team.
+          schema:
+            type: string
+            pattern: ^[a-fA-F0-9]{24}$
+  /api/open/v5/characterSwap/analyze:
+    post:
+      operationId: characterSwap_analyze
+      summary: Analyze Source Material — Character Swap
+      tags:
+        - Character Swap
+      description: See the Character Swap V5 reference for model-specific constraints
+        and conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    additionalProperties: true
+                    properties:
+                      _id:
+                        type: string
+                      task_id:
+                        type: string
+                        description: Downstream algorithm/provider task ID; may be empty until
+                          submission. Use `_id`, not this value, for task-detail
+                          queries. It may change between workflow stages.
+                      status:
+                        type: integer
+                        enum:
+                          - 1
+                          - 2
+                          - 3
+                          - 4
+                      media_type:
+                        type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: Public source material URL. Use the identical URL during task
+                    creation.
+                  format: uri
+                media_type:
+                  type: string
+                  description: "`image` or `video`; Head Swap requires video."
+                  enum:
+                    - image
+                    - video
+                type:
+                  type: string
+                  description: "Analysis category: `person`, `head`, or `outfit`; use the category
+                    appropriate for this operation."
+                  enum:
+                    - person
+                    - head
+                    - outfit
+              required:
+                - url
+                - media_type
+            example:
+              url: https://example.com/source.jpg
+              media_type: image
+              type: person
+  /api/open/v5/characterSwap/analyze/detail:
+    get:
+      operationId: characterSwap_analysis_result
+      summary: Get Analysis Result — Character Swap
+      tags:
+        - Character Swap
+      description: See the Character Swap V5 reference for model-specific constraints
+        and conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      status:
+                        type: integer
+                        enum:
+                          - 1
+                          - 2
+                          - 3
+                          - 4
+                      url:
+                        type: string
+                      media_type:
+                        type: string
+                      progress:
+                        type: number
+                      analysis_result:
+                        type: object
+                        properties:
+                          track_manifest_url:
+                            type: string
+                          media:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                obj_id:
+                                  type: integer
+                              additionalProperties: true
+                        additionalProperties: true
+                      error_reason:
+                        type: string
+                      task_id:
+                        type: string
+                        description: Downstream algorithm/provider task ID; may be empty until
+                          submission. Use `_id`, not this value, for task-detail
+                          queries. It may change between workflow stages.
+      parameters:
+        - name: _id
+          in: query
+          required: true
+          description: Task or analysis ID belonging to the authenticated user/team.
+          schema:
+            type: string
+            pattern: ^[a-fA-F0-9]{24}$
+  /api/open/v5/motionSwap/models:
+    get:
+      operationId: motionSwap_models
+      summary: List Models — Motion Swap
+      tags:
+        - Motion Swap
+      description: See the Motion Swap V5 reference for model-specific constraints and
+        conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            model_name:
+                              type: string
+                            label:
+                              type: string
+                            description:
+                              type: string
+                            icon:
+                              type: string
+                            provider:
+                              type: string
+                            params:
+                              type: object
+                              additionalProperties: true
+                            unit_price_map:
+                              type: object
+                              additionalProperties: true
+                            requires_priority:
+                              type: number
+  /api/open/v5/motionSwap/create:
+    post:
+      operationId: motionSwap_create
+      summary: Create Task — Motion Swap
+      tags:
+        - Motion Swap
+      description: See the Motion Swap V5 reference for model-specific constraints and
+        conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Task"
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            index:
+                              type: integer
+                              minimum: 0
+                            error:
+                              type: string
+              example:
+                code: 1000
+                msg: OK
+                data:
+                  list:
+                    - _id: "670000000000000000000002"
+                      status: 1
+                      media_type: video
+                      model_name: kwaivgi/kling-v3.0-pro/motion-control
+                      deduction_credit: 6
+                      create_time: 1791777600000
+                      task_id: ""
+                  errors: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                video:
+                  type: string
+                  description: Public driving video URL.
+                  format: uri
+                images:
+                  type: array
+                  description: 1–50 public character image URLs. Each image creates an independent
+                    video task.
+                  items:
+                    type: string
+                    format: uri
+                  minItems: 1
+                  maxItems: 50
+                model_name:
+                  type: string
+                  description: Motion-control model ID from the models endpoint.
+                resolution:
+                  type: string
+                  description: Case-sensitive resolution supported by the selected model.
+                mode:
+                  type: string
+                  description: "`animate` or `replace`, where supported by the model."
+                  enum:
+                    - animate
+                    - replace
+                prompt:
+                  type: string
+                  description: Optional instructions, up to 5000 characters.
+                  maxLength: 5000
+                negative_prompt:
+                  type: string
+                  description: Optional negative instructions.
+                  maxLength: 5000
+                character_orientation:
+                  type: string
+                  description: "`image` or `video`; model-specific duration limits apply."
+                  enum:
+                    - image
+                    - video
+                keep_original_sound:
+                  type: boolean
+                  description: Keep source audio in the generated video.
+                duration:
+                  type: number
+                  description: Optional compatibility field. Actual video duration is measured for
+                    limits and billing; this does not trim or override it.
+                  minimum: 1
+                  maximum: 120
+                webhookUrl:
+                  type: string
+                  description: Optional final-state callback URL; follow the [Webhook
+                    guide](/ai-tools-suite/webhook).
+                  format: uri
+              required:
+                - video
+                - images
+                - model_name
+            example:
+              video: https://example.com/motion.mp4
+              images:
+                - https://example.com/character.jpg
+              model_name: kwaivgi/kling-v3.0-pro/motion-control
+              resolution: 720P
+              character_orientation: video
+              keep_original_sound: true
+  /api/open/v5/motionSwap/task/detail:
+    get:
+      operationId: motionSwap_get_result
+      summary: Get Task Result — Motion Swap
+      tags:
+        - Motion Swap
+      description: See the Motion Swap V5 reference for model-specific constraints and
+        conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/Task"
+      parameters:
+        - name: _id
+          in: query
+          required: true
+          description: Task or analysis ID belonging to the authenticated user/team.
+          schema:
+            type: string
+            pattern: ^[a-fA-F0-9]{24}$
+  /api/open/v5/headswap/models:
+    get:
+      operationId: headswap_models
+      summary: List Models — Head Swap
+      tags:
+        - Head Swap
+      description: See the Head Swap V5 reference for model-specific constraints and
+        conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            model_name:
+                              type: string
+                            label:
+                              type: string
+                            description:
+                              type: string
+                            icon:
+                              type: string
+                            provider:
+                              type: string
+                            params:
+                              type: object
+                              additionalProperties: true
+                            unit_price_map:
+                              type: object
+                              additionalProperties: true
+                            requires_priority:
+                              type: number
+  /api/open/v5/headswap/create:
+    post:
+      operationId: headswap_create
+      summary: Create Task — Head Swap
+      tags:
+        - Head Swap
+      description: See the Head Swap V5 reference for model-specific constraints and
+        conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Task"
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            index:
+                              type: integer
+                              minimum: 0
+                            error:
+                              type: string
+              example:
+                code: 1000
+                msg: OK
+                data:
+                  list:
+                    - _id: "670000000000000000000002"
+                      status: 1
+                      media_type: video
+                      model_name: akool-premium
+                      deduction_credit: 6
+                      create_time: 1791777600000
+                      task_id: ""
+                  errors: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                media_type:
+                  type: string
+                  description: Always `video`.
+                  enum:
+                    - video
+                target_url:
+                  type: string
+                  description: Public source video URL; must match the completed analysis.
+                  format: uri
+                analyze_id:
+                  type: string
+                  description: Completed head analysis ID.
+                mappings:
+                  type: array
+                  description: 1–5 objects pairing detected people with reference images.
+                  items:
+                    type: object
+                    properties:
+                      obj_id:
+                        type: integer
+                        description: Person ID from the analysis result.
+                        minimum: 0
+                      img_url:
+                        type: string
+                        description: Reference head image URL.
+                        format: uri
+                    required:
+                      - obj_id
+                      - img_url
+                  minItems: 1
+                  maxItems: 5
+                model_name:
+                  type: string
+                  description: Defaults to `akool-premium`.
+                resolution:
+                  type: string
+                  description: "`480p` or `720p`."
+                keep_original_sound:
+                  type: boolean
+                  description: Keep source video audio.
+                webhookUrl:
+                  type: string
+                  description: Optional final-state callback URL; follow the [Webhook
+                    guide](/ai-tools-suite/webhook).
+                  format: uri
+              required:
+                - media_type
+                - target_url
+                - analyze_id
+                - mappings
+            example:
+              media_type: video
+              target_url: https://example.com/source.mp4
+              analyze_id: "670000000000000000000001"
+              mappings:
+                - obj_id: 0
+                  img_url: https://example.com/head.jpg
+              model_name: akool-premium
+              resolution: 720p
+              keep_original_sound: true
+  /api/open/v5/headswap/task/detail:
+    get:
+      operationId: headswap_get_result
+      summary: Get Task Result — Head Swap
+      tags:
+        - Head Swap
+      description: See the Head Swap V5 reference for model-specific constraints and
+        conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/Task"
+      parameters:
+        - name: _id
+          in: query
+          required: true
+          description: Task or analysis ID belonging to the authenticated user/team.
+          schema:
+            type: string
+            pattern: ^[a-fA-F0-9]{24}$
+  /api/open/v5/headswap/analyze:
+    post:
+      operationId: headswap_analyze
+      summary: Analyze Source Material — Head Swap
+      tags:
+        - Head Swap
+      description: See the Head Swap V5 reference for model-specific constraints and
+        conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    additionalProperties: true
+                    properties:
+                      _id:
+                        type: string
+                      task_id:
+                        type: string
+                        description: Downstream algorithm/provider task ID; may be empty until
+                          submission. Use `_id`, not this value, for task-detail
+                          queries. It may change between workflow stages.
+                      status:
+                        type: integer
+                        enum:
+                          - 1
+                          - 2
+                          - 3
+                          - 4
+                      media_type:
+                        type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: Public source material URL. Use the identical URL during task
+                    creation.
+                  format: uri
+                media_type:
+                  type: string
+                  description: "`image` or `video`; Head Swap requires video."
+                  enum:
+                    - video
+                type:
+                  type: string
+                  description: "Analysis category: `person`, `head`, or `outfit`; use the category
+                    appropriate for this operation."
+                  enum:
+                    - person
+                    - head
+                    - outfit
+              required:
+                - url
+                - media_type
+            example:
+              url: https://example.com/source.mp4
+              media_type: video
+              type: head
+  /api/open/v5/headswap/analyze/detail:
+    get:
+      operationId: headswap_analysis_result
+      summary: Get Analysis Result — Head Swap
+      tags:
+        - Head Swap
+      description: See the Head Swap V5 reference for model-specific constraints and
+        conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      status:
+                        type: integer
+                        enum:
+                          - 1
+                          - 2
+                          - 3
+                          - 4
+                      url:
+                        type: string
+                      media_type:
+                        type: string
+                      progress:
+                        type: number
+                      analysis_result:
+                        type: object
+                        properties:
+                          track_manifest_url:
+                            type: string
+                          media:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                obj_id:
+                                  type: integer
+                              additionalProperties: true
+                        additionalProperties: true
+                      error_reason:
+                        type: string
+                      task_id:
+                        type: string
+                        description: Downstream algorithm/provider task ID; may be empty until
+                          submission. Use `_id`, not this value, for task-detail
+                          queries. It may change between workflow stages.
+      parameters:
+        - name: _id
+          in: query
+          required: true
+          description: Task or analysis ID belonging to the authenticated user/team.
+          schema:
+            type: string
+            pattern: ^[a-fA-F0-9]{24}$
+  /api/open/v5/clothingSwap/models:
+    get:
+      operationId: clothingSwap_models
+      summary: List Models — Clothing Swap
+      tags:
+        - Clothing Swap
+      description: See the Clothing Swap V5 reference for model-specific constraints
+        and conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            model_name:
+                              type: string
+                            label:
+                              type: string
+                            description:
+                              type: string
+                            icon:
+                              type: string
+                            provider:
+                              type: string
+                            params:
+                              type: object
+                              additionalProperties: true
+                            unit_price_map:
+                              type: object
+                              additionalProperties: true
+                            requires_priority:
+                              type: number
+  /api/open/v5/clothingSwap/create:
+    post:
+      operationId: clothingSwap_create
+      summary: Create Task — Clothing Swap
+      tags:
+        - Clothing Swap
+      description: See the Clothing Swap V5 reference for model-specific constraints
+        and conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Task"
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            index:
+                              type: integer
+                              minimum: 0
+                            error:
+                              type: string
+              example:
+                code: 1000
+                msg: OK
+                data:
+                  list:
+                    - _id: "670000000000000000000002"
+                      status: 1
+                      media_type: image
+                      model_name: akool-premium/clothing_swap
+                      deduction_credit: 6
+                      create_time: 1791777600000
+                      task_id: ""
+                  errors: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target_url:
+                  type: string
+                  description: Public source image or video URL; must match analysis.
+                  format: uri
+                media_type:
+                  type: string
+                  description: "`image` or `video`."
+                  enum:
+                    - image
+                    - video
+                analyze_id:
+                  type: string
+                  description: Completed analysis ID for the source material.
+                mappings:
+                  type: array
+                  description: 1–50 detected-person and reference-outfit mappings.
+                  items:
+                    type: object
+                    properties:
+                      obj_id:
+                        type: integer
+                        description: Person ID from analysis.
+                        minimum: 0
+                      img_url:
+                        type: string
+                        description: Reference outfit image URL.
+                        format: uri
+                    required:
+                      - obj_id
+                      - img_url
+                  minItems: 1
+                  maxItems: 50
+                clothing_area:
+                  type: string
+                  description: "`Top`, `Bottom`, `Full Outfit`, or `Auto`. Values are
+                    case-sensitive."
+                  enum:
+                    - Top
+                    - Bottom
+                    - Full Outfit
+                    - Auto
+                model_name:
+                  type: string
+                  description: Defaults to `akool-premium/clothing_swap`.
+                resolution:
+                  type: string
+                  description: Video output resolution supported by the model.
+                keep_original_sound:
+                  type: boolean
+                  description: Keep source video audio.
+                webhookUrl:
+                  type: string
+                  description: Optional final-state callback URL; follow the [Webhook
+                    guide](/ai-tools-suite/webhook).
+                  format: uri
+              required:
+                - target_url
+                - media_type
+                - analyze_id
+                - mappings
+            example:
+              target_url: https://example.com/source.jpg
+              media_type: image
+              analyze_id: "670000000000000000000001"
+              mappings:
+                - obj_id: 0
+                  img_url: https://example.com/outfit.jpg
+              model_name: akool-premium/clothing_swap
+              clothing_area: Full Outfit
+  /api/open/v5/clothingSwap/task/detail:
+    get:
+      operationId: clothingSwap_get_result
+      summary: Get Task Result — Clothing Swap
+      tags:
+        - Clothing Swap
+      description: See the Clothing Swap V5 reference for model-specific constraints
+        and conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/Task"
+      parameters:
+        - name: _id
+          in: query
+          required: true
+          description: Task or analysis ID belonging to the authenticated user/team.
+          schema:
+            type: string
+            pattern: ^[a-fA-F0-9]{24}$
+  /api/open/v5/clothingSwap/analyze:
+    post:
+      operationId: clothingSwap_analyze
+      summary: Analyze Source Material — Clothing Swap
+      tags:
+        - Clothing Swap
+      description: See the Clothing Swap V5 reference for model-specific constraints
+        and conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    additionalProperties: true
+                    properties:
+                      _id:
+                        type: string
+                      task_id:
+                        type: string
+                        description: Downstream algorithm/provider task ID; may be empty until
+                          submission. Use `_id`, not this value, for task-detail
+                          queries. It may change between workflow stages.
+                      status:
+                        type: integer
+                        enum:
+                          - 1
+                          - 2
+                          - 3
+                          - 4
+                      media_type:
+                        type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: Public source material URL. Use the identical URL during task
+                    creation.
+                  format: uri
+                media_type:
+                  type: string
+                  description: "`image` or `video`; Head Swap requires video."
+                  enum:
+                    - image
+                    - video
+                type:
+                  type: string
+                  description: "Analysis category: `person`, `head`, or `outfit`; use the category
+                    appropriate for this operation."
+                  enum:
+                    - person
+                    - head
+                    - outfit
+              required:
+                - url
+                - media_type
+            example:
+              url: https://example.com/source.jpg
+              media_type: image
+              type: person
+  /api/open/v5/clothingSwap/analyze/detail:
+    get:
+      operationId: clothingSwap_analysis_result
+      summary: Get Analysis Result — Clothing Swap
+      tags:
+        - Clothing Swap
+      description: See the Clothing Swap V5 reference for model-specific constraints
+        and conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      status:
+                        type: integer
+                        enum:
+                          - 1
+                          - 2
+                          - 3
+                          - 4
+                      url:
+                        type: string
+                      media_type:
+                        type: string
+                      progress:
+                        type: number
+                      analysis_result:
+                        type: object
+                        properties:
+                          track_manifest_url:
+                            type: string
+                            description: Required for video; not required for image analysis.
+                          media:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                obj_id:
+                                  type: integer
+                              additionalProperties: true
+                        additionalProperties: true
+                      error_reason:
+                        type: string
+                      task_id:
+                        type: string
+                        description: Downstream algorithm/provider task ID; may be empty until
+                          submission. Use `_id`, not this value, for task-detail
+                          queries. It may change between workflow stages.
+      parameters:
+        - name: _id
+          in: query
+          required: true
+          description: Task or analysis ID belonging to the authenticated user/team.
+          schema:
+            type: string
+            pattern: ^[a-fA-F0-9]{24}$
+  /api/open/v5/hairswap/models:
+    get:
+      operationId: hairswap_models
+      summary: List Models — Hair Swap
+      tags:
+        - Hair Swap
+      description: See the Hair Swap V5 reference for model-specific constraints and
+        conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            model_name:
+                              type: string
+                            label:
+                              type: string
+                            description:
+                              type: string
+                            icon:
+                              type: string
+                            provider:
+                              type: string
+                            params:
+                              type: object
+                              additionalProperties: true
+                            unit_price_map:
+                              type: object
+                              additionalProperties: true
+                            requires_priority:
+                              type: number
+  /api/open/v5/hairswap/create:
+    post:
+      operationId: hairswap_create
+      summary: Create Task — Hair Swap
+      tags:
+        - Hair Swap
+      description: See the Hair Swap V5 reference for model-specific constraints and
+        conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Task"
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            index:
+                              type: integer
+                              minimum: 0
+                            error:
+                              type: string
+              example:
+                code: 1000
+                msg: OK
+                data:
+                  list:
+                    - _id: "670000000000000000000002"
+                      status: 1
+                      media_type: image
+                      model_name: akool/hair-swap
+                      deduction_credit: 6
+                      create_time: 1791777600000
+                      task_id: ""
+                  errors: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target_url:
+                  type: string
+                  description: Public target portrait image URL.
+                  format: uri
+                images:
+                  type: array
+                  description: 1–50 reference hairstyle image URLs. Provide `images` or
+                    `mappings`.
+                  items:
+                    type: string
+                    format: uri
+                  minItems: 1
+                  maxItems: 50
+                mappings:
+                  type: array
+                  description: 1–50 objects; when supplied, takes precedence over `images`.
+                  items:
+                    type: object
+                    properties:
+                      source_url:
+                        type: string
+                        description: Reference hairstyle image URL.
+                        format: uri
+                      target_face_index:
+                        type: integer
+                        description: Zero-based target face index for this mapping; defaults to 0.
+                        minimum: 0
+                      source_face_index:
+                        type: integer
+                        description: Zero-based reference face index for this mapping; defaults to 0.
+                        minimum: 0
+                    required:
+                      - source_url
+                  minItems: 1
+                  maxItems: 50
+                multi_shot:
+                  type: boolean
+                  description: Generate three additional hairstyle views; defaults to false.
+                    Single-person targets only.
+                target_face_index:
+                  type: integer
+                  description: Zero-based target face index; defaults to `0`.
+                  minimum: 0
+                source_face_index:
+                  type: integer
+                  description: Zero-based reference face index; defaults to `0`.
+                  minimum: 0
+                model_name:
+                  type: string
+                  description: Defaults to `akool/hair-swap`.
+                webhookUrl:
+                  type: string
+                  description: Optional final-state callback URL; follow the [Webhook
+                    guide](/ai-tools-suite/webhook).
+                  format: uri
+              required:
+                - target_url
+              anyOf:
+                - required:
+                    - mappings
+                - required:
+                    - images
+            example:
+              target_url: https://example.com/portrait.jpg
+              images:
+                - https://example.com/hairstyle.jpg
+              target_face_index: 0
+              source_face_index: 0
+              model_name: akool/hair-swap
+  /api/open/v5/hairswap/task/detail:
+    get:
+      operationId: hairswap_get_result
+      summary: Get Task Result — Hair Swap
+      tags:
+        - Hair Swap
+      description: See the Hair Swap V5 reference for model-specific constraints and
+        conditional parameters. Authorization takes precedence when both
+        authentication headers are supplied.
+      responses:
+        "200":
+          description: Business response. Code 1000 means the request succeeded; inspect
+            task status or data.errors for generation/submission outcomes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1000
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/Task"
+      parameters:
+        - name: _id
+          in: query
+          required: true
+          description: Task or analysis ID belonging to the authenticated user/team.
+          schema:
+            type: string
+            pattern: ^[a-fA-F0-9]{24}$
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    Task:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID used for task-detail queries.
+        task_id:
+          type: string
+          description: Downstream algorithm/provider task ID; may be empty until
+            submission. Use `_id`, not this value, for task-detail queries. It
+            may change between workflow stages.
+        status:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+        media_type:
+          type: string
+          enum:
+            - image
+            - video
+        model_name:
+          type: string
+        deduction_credit:
+          type: number
+        create_time:
+          type: number
+        progress:
+          type: number
+        url:
+          type: string
+        error_reason:
+          type: string
+        multi_shot_results:
+          type: array
+          items:
+            type: object
+            additionalProperties: true

@@ -1,0 +1,50 @@
+---
+title: "Motion Swap V5 API Overview"
+description: "Models, workflow, input limits, and billing for Motion Swap V5."
+---
+
+<Info>
+Transfer movement from one driving video to up to 50 character images.
+
+The video supplies movement; the images supply character appearance. This endpoint does not perform the character replacement workflow. Each image has its own task ID and result.
+</Info>
+
+## API Endpoints
+
+- [List Models](/ai-tools-suite/swap-studio/motion-swap-v5/models) — `GET`
+- [Create Task](/ai-tools-suite/swap-studio/motion-swap-v5/create) — `POST`
+- [Get Task Result](/ai-tools-suite/swap-studio/motion-swap-v5/get-result) — `GET`
+
+## Getting Started
+
+1. List the models available for this feature.
+2. Create a task using the model-specific parameters.
+3. Poll task results or receive the final webhook notification.
+
+## Billing
+
+Generation is priced using the selected model configuration and your account/team pricing. Image generation is charged per task; video pricing also depends on duration and resolution. Credits are reserved before queueing and finalized through the existing generation billing flow. Creation errors do not produce a billable task. Read `deduction_credit` per created task rather than treating the sample value as a price quotation. AIGC website membership discounts do not automatically apply to OpenAPI; account and team pricing can change the final credit amount.
+
+## Response Code Description
+
+<Note>A business code other than 1000 indicates that the API request failed. For batch creation, also check data.errors.</Note>
+
+| **Code** | **Description** |
+|---|---|
+| 1000 | Request succeeded. Inspect task status for generation results. |
+| 1003 | Invalid input, unsupported model/parameters, unavailable feature, or task/analysis not found. |
+| 1008 | Content does not exist (general platform error). |
+| 1009 | Permission denied. |
+| 1101 | Invalid or expired authorization. |
+| 1102 | Authorization is missing. |
+| 1104 | Insufficient credits. |
+
+See the [Webhook guide](/ai-tools-suite/webhook) for callback verification and the [complete error list](/ai-tools-suite/error-code) for other account errors.
+
+## Callback
+
+If `webhookUrl` is supplied, final task notifications follow the existing encrypted and signed [Webhook format](/ai-tools-suite/webhook). After verification and decryption, read `_id`, `status`, `type`, and `url`. Fetch task detail to obtain operation-specific fields, including additional hairstyle views. Return HTTP 200 to acknowledge delivery.
+
+## Video limits
+
+The server measures the driving video duration. The `duration` field does not trim the video. Input duration must satisfy the selected model configuration; Kling with `character_orientation: "image"` supports at most 10 seconds.
