@@ -16,6 +16,10 @@ POST https://openapi.akool.com/api/open/v5/characterSwap/create
 | Authorization | Bearer `{token}` | [Get Token](/authentication/usage#get-the-token). |
 | Content-Type | application/json | Required for JSON requests. |
 
+<Note>
+Choose the matching request example: Image replacement, Akool video replacement, or Kling video replacement. analyze_id is required only for Akool video. obj_id and img_url belong to mappings[], not analyze_id. Kling uses image and target_url; image replacement uses source_url, source_bbox and target_bbox inside mappings[].
+</Note>
+
 **Body Attributes**
 
 | **Parameter** | **Type** | **Required** | **Description** |
@@ -24,17 +28,17 @@ POST https://openapi.akool.com/api/open/v5/characterSwap/create
 | target_url | String | true | Public source scene image or video URL. |
 | model_name | String | false | Defaults to `akool-premium-multi-person`. Get supported IDs from the models endpoint. |
 | mappings | Array | conditional | Image: 1–2 mappings with `source_url`, `source_bbox`, and `target_bbox`. Akool video: 1–5 mappings with `obj_id` and `img_url`. |
-| - source_url | String | image | Reference character image URL. |
-| - source_bbox | Array | image | Reference face bounding box `[x1,y1,x2,y2]` in original-image pixels. |
-| - target_bbox | Array | image | Target face bounding box `[x1,y1,x2,y2]` in original-image pixels. The same target box cannot be mapped twice. |
-| analyze_id | String | Akool video | Completed analysis ID for the same source video. |
-| - obj_id | Integer | Akool video | Person ID from the analysis result. |
-| - img_url | String | Akool video | Reference character image URL. |
+| mappings[].source_url | String | image | Reference character image URL. |
+| mappings[].source_bbox | Array | image | Reference face bounding box `[x1,y1,x2,y2]` in original-image pixels. |
+| mappings[].target_bbox | Array | image | Target face bounding box `[x1,y1,x2,y2]` in original-image pixels. The same target box cannot be mapped twice. |
+| mappings[].obj_id | Integer | Akool video | Person ID from the analysis result. |
+| mappings[].img_url | String | Akool video | Reference character image URL. |
+| analyze_id | String | Akool video only | Completed person analysis _id for the identical source video URL; not needed for image or Kling video. |
 | character_orientation | String | false | Kling video: `image` or `video`; defaults to `video`. |
 | image | String | Kling video | Reference character URL for a single-person Kling replacement. |
-| resolution | String | false | Video output resolution. Select a value supported by the chosen model. |
-| keep_original_sound | Boolean | false | Keep source video audio. |
-| prompt | String | false | Optional generation instructions, up to 5000 characters. |
+| resolution | String | false | Image: automatic. Akool video: 480p or 720p. Kling: choose from the model's supported values. |
+| keep_original_sound | Boolean | false | Keep source video audio; defaults to true. |
+| prompt | String | false | Video generation instructions, up to 5000 characters. Image replacement generates its instructions from mappings. |
 | negative_prompt | String | false | Optional Kling video negative instructions, up to 5000 characters. |
 | webhookUrl | String | false | Optional final-state callback URL; follow the [Webhook guide](/ai-tools-suite/webhook). |
 
@@ -57,7 +61,13 @@ POST https://openapi.akool.com/api/open/v5/characterSwap/create
 | -- index | Integer | Zero-based plan/input index that failed during submission. |
 | -- error | String | Submission failure description. |
 
-**Example**
+## Request examples
+
+Select a scenario below or in the request sample to view matching request and response examples. URLs, IDs and model selections are illustrative; replace them with accessible resources, completed analyses and models available to your account. Response credit values are examples, not price quotations. Poll each returned _id until completion.
+
+<Tabs>
+
+<Tab title="Image">
 
 **Body**
 
@@ -86,13 +96,66 @@ POST https://openapi.akool.com/api/open/v5/characterSwap/create
 }
 ```
 
-**Request**
 
-<CodeGroup>
+</Tab>
 
-```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v5/characterSwap/create' \
---header 'x-api-key: {{API Key}}' \
+<Tab title="Akool video">
+
+**Body**
+
+```json
+{
+  "media_type": "video",
+  "target_url": "https://example.com/source.mp4",
+  "model_name": "akool-premium-multi-person",
+  "analyze_id": "670000000000000000000001",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/character.jpg"
+    }
+  ],
+  "resolution": "480p",
+  "keep_original_sound": true,
+  "prompt": "Preserve the source scene."
+}
+```
+
+
+</Tab>
+
+<Tab title="Kling video">
+
+**Body**
+
+```json
+{
+  "media_type": "video",
+  "target_url": "https://example.com/source.mp4",
+  "model_name": "kling-v3.0-pro/character-swap",
+  "image": "https://example.com/character.jpg",
+  "character_orientation": "video",
+  "resolution": "720p",
+  "keep_original_sound": true,
+  "prompt": "Preserve the original movement.",
+  "negative_prompt": "blur"
+}
+```
+
+
+</Tab>
+
+</Tabs>
+
+
+<Note>For input limits, billing, callbacks, and error codes, see the [Character Swap V5 overview](/ai-tools-suite/swap-studio/character-swap-v5).</Note>
+
+<RequestExample>
+
+```bash Image
+curl --request POST \
+--url 'https://openapi.akool.com/api/open/v5/characterSwap/create' \
+--header 'x-api-key: <api-key>' \
 --header 'Content-Type: application/json' \
 --data '{
   "media_type": "image",
@@ -118,11 +181,51 @@ curl --location 'https://openapi.akool.com/api/open/v5/characterSwap/create' \
 }'
 ```
 
-</CodeGroup>
+```bash Akool video
+curl --request POST \
+--url 'https://openapi.akool.com/api/open/v5/characterSwap/create' \
+--header 'x-api-key: <api-key>' \
+--header 'Content-Type: application/json' \
+--data '{
+  "media_type": "video",
+  "target_url": "https://example.com/source.mp4",
+  "model_name": "akool-premium-multi-person",
+  "analyze_id": "670000000000000000000001",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/character.jpg"
+    }
+  ],
+  "resolution": "480p",
+  "keep_original_sound": true,
+  "prompt": "Preserve the source scene."
+}'
+```
 
-**Response**
+```bash Kling video
+curl --request POST \
+--url 'https://openapi.akool.com/api/open/v5/characterSwap/create' \
+--header 'x-api-key: <api-key>' \
+--header 'Content-Type: application/json' \
+--data '{
+  "media_type": "video",
+  "target_url": "https://example.com/source.mp4",
+  "model_name": "kling-v3.0-pro/character-swap",
+  "image": "https://example.com/character.jpg",
+  "character_orientation": "video",
+  "resolution": "720p",
+  "keep_original_sound": true,
+  "prompt": "Preserve the original movement.",
+  "negative_prompt": "blur"
+}'
+```
 
-```json
+</RequestExample>
+
+<ResponseExample>
+
+```json Image
 {
   "code": 1000,
   "msg": "OK",
@@ -143,4 +246,46 @@ curl --location 'https://openapi.akool.com/api/open/v5/characterSwap/create' \
 }
 ```
 
-<Note>For input limits, billing, callbacks, and error codes, see the [Character Swap V5 overview](/ai-tools-suite/swap-studio/character-swap-v5).</Note>
+```json Akool video
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "list": [
+      {
+        "_id": "670000000000000000000002",
+        "status": 1,
+        "media_type": "video",
+        "model_name": "akool-premium-multi-person",
+        "deduction_credit": 6,
+        "create_time": 1791777600000,
+        "task_id": ""
+      }
+    ],
+    "errors": []
+  }
+}
+```
+
+```json Kling video
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "list": [
+      {
+        "_id": "670000000000000000000002",
+        "status": 1,
+        "media_type": "video",
+        "model_name": "kling-v3.0-pro/character-swap",
+        "deduction_credit": 6,
+        "create_time": 1791777600000,
+        "task_id": ""
+      }
+    ],
+    "errors": []
+  }
+}
+```
+
+</ResponseExample>

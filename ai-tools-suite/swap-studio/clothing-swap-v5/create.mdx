@@ -16,6 +16,10 @@ POST https://openapi.akool.com/api/open/v5/clothingSwap/create
 | Authorization | Bearer `{token}` | [Get Token](/authentication/usage#get-the-token). |
 | Content-Type | application/json | Required for JSON requests. |
 
+<Note>
+Choose the image or video example consistently in both analyze and create. Use a completed analysis of the identical target_url and media_type. Video requires track_manifest_url; image does not. mappings[].obj_id values must be distinct and come from analysis_result.media.
+</Note>
+
 **Body Attributes**
 
 | **Parameter** | **Type** | **Required** | **Description** |
@@ -24,12 +28,12 @@ POST https://openapi.akool.com/api/open/v5/clothingSwap/create
 | media_type | String | true | `image` or `video`. |
 | analyze_id | String | true | Completed analysis ID for the source material. |
 | mappings | Array | true | 1–50 detected-person and reference-outfit mappings. |
-| - obj_id | Integer | true | Person ID from analysis. |
-| - img_url | String | true | Reference outfit image URL. |
+| mappings[].obj_id | Integer | true | Person ID from analysis. |
+| mappings[].img_url | String | true | Reference outfit image URL. |
 | clothing_area | String | false | `Top`, `Bottom`, `Full Outfit`, or `Auto`. Values are case-sensitive. |
 | model_name | String | false | Defaults to `akool-premium/clothing_swap`. |
-| resolution | String | false | Video output resolution supported by the model. |
-| keep_original_sound | Boolean | false | Keep source video audio. |
+| resolution | String | false | `480p` or `720p`; uses the selected model default, otherwise `480p`. |
+| keep_original_sound | Boolean | false | Keep source video audio; defaults to true. |
 | webhookUrl | String | false | Optional final-state callback URL; follow the [Webhook guide](/ai-tools-suite/webhook). |
 
 **Response Attributes**
@@ -51,7 +55,13 @@ POST https://openapi.akool.com/api/open/v5/clothingSwap/create
 | -- index | Integer | Zero-based plan/input index that failed during submission. |
 | -- error | String | Submission failure description. |
 
-**Example**
+## Request examples
+
+Select a scenario below or in the request sample to view matching request and response examples. URLs, IDs and model selections are illustrative; replace them with accessible resources, completed analyses and models available to your account. Response credit values are examples, not price quotations. Poll each returned _id until completion.
+
+<Tabs>
+
+<Tab title="Image">
 
 **Body**
 
@@ -71,13 +81,45 @@ POST https://openapi.akool.com/api/open/v5/clothingSwap/create
 }
 ```
 
-**Request**
 
-<CodeGroup>
+</Tab>
 
-```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v5/clothingSwap/create' \
---header 'x-api-key: {{API Key}}' \
+<Tab title="Video">
+
+**Body**
+
+```json
+{
+  "target_url": "https://example.com/source.mp4",
+  "media_type": "video",
+  "analyze_id": "670000000000000000000001",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/outfit.jpg"
+    }
+  ],
+  "model_name": "akool-premium/clothing_swap",
+  "clothing_area": "Top",
+  "resolution": "480p",
+  "keep_original_sound": true
+}
+```
+
+
+</Tab>
+
+</Tabs>
+
+
+<Note>For input limits, billing, callbacks, and error codes, see the [Clothing Swap V5 overview](/ai-tools-suite/swap-studio/clothing-swap-v5).</Note>
+
+<RequestExample>
+
+```bash Image
+curl --request POST \
+--url 'https://openapi.akool.com/api/open/v5/clothingSwap/create' \
+--header 'x-api-key: <api-key>' \
 --header 'Content-Type: application/json' \
 --data '{
   "target_url": "https://example.com/source.jpg",
@@ -94,11 +136,33 @@ curl --location 'https://openapi.akool.com/api/open/v5/clothingSwap/create' \
 }'
 ```
 
-</CodeGroup>
+```bash Video
+curl --request POST \
+--url 'https://openapi.akool.com/api/open/v5/clothingSwap/create' \
+--header 'x-api-key: <api-key>' \
+--header 'Content-Type: application/json' \
+--data '{
+  "target_url": "https://example.com/source.mp4",
+  "media_type": "video",
+  "analyze_id": "670000000000000000000001",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/outfit.jpg"
+    }
+  ],
+  "model_name": "akool-premium/clothing_swap",
+  "clothing_area": "Top",
+  "resolution": "480p",
+  "keep_original_sound": true
+}'
+```
 
-**Response**
+</RequestExample>
 
-```json
+<ResponseExample>
+
+```json Image
 {
   "code": 1000,
   "msg": "OK",
@@ -119,4 +183,25 @@ curl --location 'https://openapi.akool.com/api/open/v5/clothingSwap/create' \
 }
 ```
 
-<Note>For input limits, billing, callbacks, and error codes, see the [Clothing Swap V5 overview](/ai-tools-suite/swap-studio/clothing-swap-v5).</Note>
+```json Video
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "list": [
+      {
+        "_id": "670000000000000000000002",
+        "status": 1,
+        "media_type": "video",
+        "model_name": "akool-premium/clothing_swap",
+        "deduction_credit": 6,
+        "create_time": 1791777600000,
+        "task_id": ""
+      }
+    ],
+    "errors": []
+  }
+}
+```
+
+</ResponseExample>

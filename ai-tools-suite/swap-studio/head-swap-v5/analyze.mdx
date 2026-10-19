@@ -15,8 +15,12 @@ Use the same authorization headers as task creation.
 | **Parameter** | **Type** | **Required** | **Description** |
 |---|---|---|---|
 | url | String | true | Public source material URL. Use the identical URL during task creation. |
-| media_type | String | true | `image` or `video`; Head Swap requires video. |
-| type | String | false | Analysis category: `person`, `head`, or `outfit`; use the category appropriate for this operation. |
+| media_type | String | true | Must be video. |
+| type | String | false | This endpoint always performs head analysis. Omit type or send head; other accepted type values do not change the effective category. |
+
+## Request examples
+
+Select a source scenario to view matching request and queued response examples. URLs and IDs are illustrative; replace them with your accessible source material.
 
 **Body**
 
@@ -28,22 +32,6 @@ Use the same authorization headers as task creation.
 }
 ```
 
-**Request**
-
-<CodeGroup>
-
-```bash cURL
-curl --location 'https://openapi.akool.com/api/open/v5/headswap/analyze' \
---header 'x-api-key: {{API Key}}' \
---header 'Content-Type: application/json' \
---data '{
-  "url": "https://example.com/source.mp4",
-  "media_type": "video",
-  "type": "head"
-}'
-```
-
-</CodeGroup>
 
 **Response Attributes**
 
@@ -60,3 +48,36 @@ curl --location 'https://openapi.akool.com/api/open/v5/headswap/analyze' \
 Save `data._id` as the analysis ID.
 
 <Note>For input limits, billing, callbacks, and error codes, see the [Head Swap V5 overview](/ai-tools-suite/swap-studio/head-swap-v5).</Note>
+
+<RequestExample>
+
+```bash Source video
+curl --request POST \
+--url 'https://openapi.akool.com/api/open/v5/headswap/analyze' \
+--header 'x-api-key: <api-key>' \
+--header 'Content-Type: application/json' \
+--data '{
+  "url": "https://example.com/source.mp4",
+  "media_type": "video",
+  "type": "head"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Source video
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "_id": "670000000000000000000001",
+    "task_id": "",
+    "status": 1,
+    "media_type": "video"
+  }
+}
+```
+
+</ResponseExample>
