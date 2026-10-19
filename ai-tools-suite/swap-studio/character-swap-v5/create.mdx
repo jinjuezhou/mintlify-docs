@@ -38,7 +38,7 @@ Choose the matching request example: Image replacement, Akool video replacement,
 | image | String | Kling video | Reference character URL for a single-person Kling replacement. |
 | resolution | String | false | Image: automatic. Akool video: 480p or 720p. Kling: choose from the model's supported values. |
 | keep_original_sound | Boolean | false | Keep source video audio; defaults to true. |
-| prompt | String | false | Video generation instructions, up to 5000 characters. Image replacement generates its instructions from mappings. |
+| prompt | String | false | Video generation instructions: up to 2500 characters for Kling and 5000 for Akool. Overlong prompts are rejected before generation. Image replacement generates its instructions from mappings. |
 | negative_prompt | String | false | Optional Kling video negative instructions, up to 5000 characters. |
 | webhookUrl | String | false | Optional final-state callback URL; follow the [Webhook guide](/ai-tools-suite/webhook). |
 

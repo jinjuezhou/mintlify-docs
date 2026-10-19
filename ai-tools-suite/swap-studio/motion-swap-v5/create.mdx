@@ -29,7 +29,7 @@ Each reference image produces a separate video task. Use a model returned by thi
 | model_name | String | true | Motion-control model ID from the models endpoint. |
 | resolution | String | false | Case-sensitive resolution supported by the selected model. |
 | mode | String | false | Wan models: `animate` or `replace`, defaults to `animate`. |
-| prompt | String | false | Optional instructions, up to 5000 characters, for Wan/Kling models. |
+| prompt | String | false | Optional instructions: up to 2500 characters for Kling and 5000 for Wan. Overlong prompts are rejected before generation. |
 | negative_prompt | String | false | Optional negative instructions, up to 5000 characters, for Wan/Kling models. |
 | character_orientation | String | false | Kling models: `image` or `video`, defaults to `video`; image orientation supports at most 10 seconds. |
 | keep_original_sound | Boolean | false | Keep source audio in the generated video; defaults to true. |
