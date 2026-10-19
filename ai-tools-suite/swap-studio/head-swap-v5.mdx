@@ -1,0 +1,53 @@
+---
+title: "Head Swap V5 API Overview"
+description: "Models, workflow, input limits, and billing for Head Swap V5."
+---
+
+<Info>
+Analyze a source video and replace selected heads with reference images.
+
+Submit analysis with `media_type: "video"` and `type: "head"`. Wait for analysis completion before creating the replacement task. Use person IDs returned by that analysis.
+</Info>
+
+## API Endpoints
+
+- [List Models](/ai-tools-suite/swap-studio/head-swap-v5/models) — `GET`
+- [Create Task](/ai-tools-suite/swap-studio/head-swap-v5/create) — `POST`
+- [Get Task Result](/ai-tools-suite/swap-studio/head-swap-v5/get-result) — `GET`
+- [Analyze Source Material](/ai-tools-suite/swap-studio/head-swap-v5/analyze) — `POST`
+- [Get Analysis Result](/ai-tools-suite/swap-studio/head-swap-v5/analysis-result) — `GET`
+
+## Getting Started
+
+1. List the models available for this feature.
+2. If required by your model, analyze the source and wait for the analysis to complete.
+3. Create a task using the model-specific parameters.
+4. Poll task results or receive the final webhook notification.
+
+## Billing
+
+Generation is priced using the selected model configuration and your account/team pricing. Image generation is charged per task; video pricing also depends on duration and resolution. Credits are reserved before queueing and finalized through the existing generation billing flow. Creation errors do not produce a billable task. Read `deduction_credit` per created task rather than treating the sample value as a price quotation. AIGC website membership discounts do not automatically apply to OpenAPI; account and team pricing can change the final credit amount.
+
+## Response Code Description
+
+<Note>A business code other than 1000 indicates that the API request failed. For batch creation, also check data.errors.</Note>
+
+| **Code** | **Description** |
+|---|---|
+| 1000 | Request succeeded. Inspect task status for generation results. |
+| 1003 | Invalid input, unsupported model/parameters, unavailable feature, or task/analysis not found. |
+| 1008 | Content does not exist (general platform error). |
+| 1009 | Permission denied. |
+| 1101 | Invalid or expired authorization. |
+| 1102 | Authorization is missing. |
+| 1104 | Insufficient credits. |
+
+See the [Webhook guide](/ai-tools-suite/webhook) for callback verification and the [complete error list](/ai-tools-suite/error-code) for other account errors.
+
+## Callback
+
+If `webhookUrl` is supplied, final task notifications follow the existing encrypted and signed [Webhook format](/ai-tools-suite/webhook). After verification and decryption, read `_id`, `status`, `type`, and `url`. Fetch task detail to obtain operation-specific fields, including additional hairstyle views. Return HTTP 200 to acknowledge delivery.
+
+## Video limits
+
+Head Swap supports source videos from 3 to 20 seconds. Analysis and creation must use the identical source URL and completed analysis. Each detected person can appear in at most one mapping.

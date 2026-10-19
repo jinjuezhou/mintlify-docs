@@ -1,0 +1,207 @@
+---
+title: "Create Task"
+description: "Create Task for Clothing Swap V5."
+openapi: "POST /api/open/v5/clothingSwap/create"
+---
+
+```
+POST https://openapi.akool.com/api/open/v5/clothingSwap/create
+```
+
+**Request Headers**
+
+| **Parameter** | **Value** | **Description** |
+|---|---|---|
+| x-api-key | API Key | API key used for authorization. Authorization takes precedence when both headers are supplied. |
+| Authorization | Bearer `{token}` | [Get Token](/authentication/usage#get-the-token). |
+| Content-Type | application/json | Required for JSON requests. |
+
+<Note>
+Choose the image or video example consistently in both analyze and create. Use a completed analysis of the identical target_url and media_type. Video requires track_manifest_url; image does not. mappings[].obj_id values must be distinct and come from analysis_result.media.
+</Note>
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|---|---|---|---|
+| target_url | String | true | Public source image or video URL; must match analysis. |
+| media_type | String | true | `image` or `video`. |
+| analyze_id | String | true | Completed analysis ID for the source material. |
+| mappings | Array | true | 1–50 detected-person and reference-outfit mappings. |
+| mappings[].obj_id | Integer | true | Person ID from analysis. |
+| mappings[].img_url | String | true | Reference outfit image URL. |
+| clothing_area | String | false | `Top`, `Bottom`, `Full Outfit`, or `Auto`. Values are case-sensitive. |
+| model_name | String | false | Defaults to `akool-premium/clothing_swap`. |
+| resolution | String | false | `480p` or `720p`; uses the selected model default, otherwise `480p`. |
+| keep_original_sound | Boolean | false | Keep source video audio; defaults to true. |
+| webhookUrl | String | false | Optional final-state callback URL; follow the [Webhook guide](/ai-tools-suite/webhook). |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|---|---|---|
+| code | Integer | Business response code; `1000` means the request succeeded. |
+| msg | String | Response message. |
+| data | Object | Batch creation result. |
+| - list | Array | Successfully created tasks. |
+| -- _id | String | Task ID to use for result polling. |
+| -- task_id | String | Downstream algorithm/provider task ID; may be empty until submission. Use `_id`, not this value, for task-detail queries. It may change between workflow stages. |
+| -- status | Integer | Initial task status. |
+| -- media_type | String | Output media type: image or video. |
+| -- model_name | String | Selected model ID. |
+| -- deduction_credit | Number | Task billing amount. |
+| -- create_time | Number | Creation timestamp in milliseconds. |
+| - errors | Array | Inputs that could not create a task. Inspect this array even when code is 1000. |
+| -- index | Integer | Zero-based plan/input index that failed during submission. |
+| -- error | String | Submission failure description. |
+
+## Request examples
+
+Select a scenario below or in the request sample to view matching request and response examples. URLs, IDs and model selections are illustrative; replace them with accessible resources, completed analyses and models available to your account. Response credit values are examples, not price quotations. Poll each returned _id until completion.
+
+<Tabs>
+
+<Tab title="Image">
+
+**Body**
+
+```json
+{
+  "target_url": "https://example.com/source.jpg",
+  "media_type": "image",
+  "analyze_id": "670000000000000000000001",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/outfit.jpg"
+    }
+  ],
+  "model_name": "akool-premium/clothing_swap",
+  "clothing_area": "Full Outfit"
+}
+```
+
+
+</Tab>
+
+<Tab title="Video">
+
+**Body**
+
+```json
+{
+  "target_url": "https://example.com/source.mp4",
+  "media_type": "video",
+  "analyze_id": "670000000000000000000001",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/outfit.jpg"
+    }
+  ],
+  "model_name": "akool-premium/clothing_swap",
+  "clothing_area": "Top",
+  "resolution": "480p",
+  "keep_original_sound": true
+}
+```
+
+
+</Tab>
+
+</Tabs>
+
+
+<Note>For input limits, billing, callbacks, and error codes, see the [Clothing Swap V5 overview](/ai-tools-suite/swap-studio/clothing-swap-v5).</Note>
+
+<RequestExample>
+
+```bash Image
+curl --request POST \
+--url 'https://openapi.akool.com/api/open/v5/clothingSwap/create' \
+--header 'x-api-key: <api-key>' \
+--header 'Content-Type: application/json' \
+--data '{
+  "target_url": "https://example.com/source.jpg",
+  "media_type": "image",
+  "analyze_id": "670000000000000000000001",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/outfit.jpg"
+    }
+  ],
+  "model_name": "akool-premium/clothing_swap",
+  "clothing_area": "Full Outfit"
+}'
+```
+
+```bash Video
+curl --request POST \
+--url 'https://openapi.akool.com/api/open/v5/clothingSwap/create' \
+--header 'x-api-key: <api-key>' \
+--header 'Content-Type: application/json' \
+--data '{
+  "target_url": "https://example.com/source.mp4",
+  "media_type": "video",
+  "analyze_id": "670000000000000000000001",
+  "mappings": [
+    {
+      "obj_id": 0,
+      "img_url": "https://example.com/outfit.jpg"
+    }
+  ],
+  "model_name": "akool-premium/clothing_swap",
+  "clothing_area": "Top",
+  "resolution": "480p",
+  "keep_original_sound": true
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Image
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "list": [
+      {
+        "_id": "670000000000000000000002",
+        "status": 1,
+        "media_type": "image",
+        "model_name": "akool-premium/clothing_swap",
+        "deduction_credit": 6,
+        "create_time": 1791777600000,
+        "task_id": ""
+      }
+    ],
+    "errors": []
+  }
+}
+```
+
+```json Video
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "list": [
+      {
+        "_id": "670000000000000000000002",
+        "status": 1,
+        "media_type": "video",
+        "model_name": "akool-premium/clothing_swap",
+        "deduction_credit": 6,
+        "create_time": 1791777600000,
+        "task_id": ""
+      }
+    ],
+    "errors": []
+  }
+}
+```
+
+</ResponseExample>

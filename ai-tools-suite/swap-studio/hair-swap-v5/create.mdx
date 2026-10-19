@@ -1,0 +1,255 @@
+---
+title: "Create Task"
+description: "Create Task for Hair Swap V5."
+openapi: "POST /api/open/v5/hairswap/create"
+---
+
+```
+POST https://openapi.akool.com/api/open/v5/hairswap/create
+```
+
+**Request Headers**
+
+| **Parameter** | **Value** | **Description** |
+|---|---|---|
+| x-api-key | API Key | API key used for authorization. Authorization takes precedence when both headers are supplied. |
+| Authorization | Bearer `{token}` | [Get Token](/authentication/usage#get-the-token). |
+| Content-Type | application/json | Required for JSON requests. |
+
+<Note>
+Use images for reference-image batches or mappings for per-face selection. When mappings is supplied it takes precedence; top-level face indexes apply only to the images shortcut. Multi-person targets combine mappings into one primary task and each target face can appear only once. multi_shot=true requires a single-person target and at most 12 references (four outputs per primary task).
+</Note>
+
+**Body Attributes**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|---|---|---|---|
+| target_url | String | true | Public target portrait image URL. |
+| images | Array | conditional | 1–50 reference hairstyle image URLs (at most 12 with `multi_shot: true`). Provide `images` or `mappings`. |
+| mappings | Array | conditional | 1–50 objects (at most 12 with `multi_shot: true`); takes precedence over `images`. |
+| mappings[].source_url | String | true | Reference hairstyle image URL. |
+| mappings[].target_face_index | Integer | false | Zero-based target face index for this mapping; defaults to 0. |
+| mappings[].source_face_index | Integer | false | Zero-based reference face index for this mapping; defaults to 0. |
+| multi_shot | Boolean | false | Generate three additional hairstyle views; defaults to false. Single-person targets only. |
+| target_face_index | Integer | false | Zero-based target face index for `images` only; defaults to `0`. For `mappings`, set it on each mapping. |
+| source_face_index | Integer | false | Zero-based reference face index for `images` only; defaults to `0`. For `mappings`, set it on each mapping. |
+| model_name | String | false | Defaults to `akool/hair-swap`. |
+| webhookUrl | String | false | Optional final-state callback URL; follow the [Webhook guide](/ai-tools-suite/webhook). |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|---|---|---|
+| code | Integer | Business response code; `1000` means the request succeeded. |
+| msg | String | Response message. |
+| data | Object | Batch creation result. |
+| - list | Array | Successfully created tasks. |
+| -- _id | String | Task ID to use for result polling. |
+| -- task_id | String | Downstream algorithm/provider task ID; may be empty until submission. Use `_id`, not this value, for task-detail queries. It may change between workflow stages. |
+| -- status | Integer | Initial task status. |
+| -- media_type | String | Output media type: image or video. |
+| -- model_name | String | Selected model ID. |
+| -- deduction_credit | Number | Task billing amount. |
+| -- create_time | Number | Creation timestamp in milliseconds. |
+| - errors | Array | Inputs that could not create a task. Inspect this array even when code is 1000. |
+| -- index | Integer | Zero-based plan/input index that failed during submission. |
+| -- error | String | Submission failure description. |
+
+## Request examples
+
+Select a scenario below or in the request sample to view matching request and response examples. URLs, IDs and model selections are illustrative; replace them with accessible resources, completed analyses and models available to your account. Response credit values are examples, not price quotations. Poll each returned _id until completion.
+
+<Tabs>
+
+<Tab title="Images">
+
+**Body**
+
+```json
+{
+  "target_url": "https://example.com/portrait.jpg",
+  "images": [
+    "https://example.com/hairstyle.jpg"
+  ],
+  "target_face_index": 0,
+  "source_face_index": 0,
+  "model_name": "akool/hair-swap"
+}
+```
+
+
+</Tab>
+
+<Tab title="Face mappings">
+
+**Body**
+
+```json
+{
+  "target_url": "https://example.com/group.jpg",
+  "mappings": [
+    {
+      "source_url": "https://example.com/hairstyle.jpg",
+      "target_face_index": 0,
+      "source_face_index": 0
+    },
+    {
+      "source_url": "https://example.com/hairstyle-2.jpg",
+      "target_face_index": 1,
+      "source_face_index": 0
+    }
+  ],
+  "model_name": "akool/hair-swap"
+}
+```
+
+
+</Tab>
+
+<Tab title="Multiple views">
+
+**Body**
+
+```json
+{
+  "target_url": "https://example.com/portrait.jpg",
+  "images": [
+    "https://example.com/hairstyle.jpg"
+  ],
+  "model_name": "akool/hair-swap",
+  "multi_shot": true
+}
+```
+
+
+</Tab>
+
+</Tabs>
+
+
+<Note>For input limits, billing, callbacks, and error codes, see the [Hair Swap V5 overview](/ai-tools-suite/swap-studio/hair-swap-v5).</Note>
+
+<RequestExample>
+
+```bash Images
+curl --request POST \
+--url 'https://openapi.akool.com/api/open/v5/hairswap/create' \
+--header 'x-api-key: <api-key>' \
+--header 'Content-Type: application/json' \
+--data '{
+  "target_url": "https://example.com/portrait.jpg",
+  "images": [
+    "https://example.com/hairstyle.jpg"
+  ],
+  "target_face_index": 0,
+  "source_face_index": 0,
+  "model_name": "akool/hair-swap"
+}'
+```
+
+```bash Face mappings
+curl --request POST \
+--url 'https://openapi.akool.com/api/open/v5/hairswap/create' \
+--header 'x-api-key: <api-key>' \
+--header 'Content-Type: application/json' \
+--data '{
+  "target_url": "https://example.com/group.jpg",
+  "mappings": [
+    {
+      "source_url": "https://example.com/hairstyle.jpg",
+      "target_face_index": 0,
+      "source_face_index": 0
+    },
+    {
+      "source_url": "https://example.com/hairstyle-2.jpg",
+      "target_face_index": 1,
+      "source_face_index": 0
+    }
+  ],
+  "model_name": "akool/hair-swap"
+}'
+```
+
+```bash Multiple views
+curl --request POST \
+--url 'https://openapi.akool.com/api/open/v5/hairswap/create' \
+--header 'x-api-key: <api-key>' \
+--header 'Content-Type: application/json' \
+--data '{
+  "target_url": "https://example.com/portrait.jpg",
+  "images": [
+    "https://example.com/hairstyle.jpg"
+  ],
+  "model_name": "akool/hair-swap",
+  "multi_shot": true
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Images
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "list": [
+      {
+        "_id": "670000000000000000000002",
+        "status": 1,
+        "media_type": "image",
+        "model_name": "akool/hair-swap",
+        "deduction_credit": 6,
+        "create_time": 1791777600000,
+        "task_id": ""
+      }
+    ],
+    "errors": []
+  }
+}
+```
+
+```json Face mappings
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "list": [
+      {
+        "_id": "670000000000000000000002",
+        "status": 1,
+        "media_type": "image",
+        "model_name": "akool/hair-swap",
+        "deduction_credit": 6,
+        "create_time": 1791777600000,
+        "task_id": ""
+      }
+    ],
+    "errors": []
+  }
+}
+```
+
+```json Multiple views
+{
+  "code": 1000,
+  "msg": "OK",
+  "data": {
+    "list": [
+      {
+        "_id": "670000000000000000000002",
+        "status": 1,
+        "media_type": "image",
+        "model_name": "akool/hair-swap",
+        "deduction_credit": 6,
+        "create_time": 1791777600000,
+        "task_id": ""
+      }
+    ],
+    "errors": []
+  }
+}
+```
+
+</ResponseExample>

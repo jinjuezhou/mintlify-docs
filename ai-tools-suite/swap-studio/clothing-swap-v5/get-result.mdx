@@ -1,0 +1,47 @@
+---
+title: "Get Task Result"
+description: "Get Task Result for Clothing Swap V5."
+openapi: "GET /api/open/v5/clothingSwap/task/detail"
+---
+
+```
+GET https://openapi.akool.com/api/open/v5/clothingSwap/task/detail?_id={{id}}
+```
+
+**Request Headers**
+
+| **Parameter** | **Value** | **Description** |
+|---|---|---|
+| x-api-key | API Key | API key used for authorization. Authorization takes precedence when both headers are supplied. |
+| Authorization | Bearer `{token}` | [Get Token](/authentication/usage#get-the-token). |
+| Content-Type | application/json | Required for JSON requests. |
+
+**Query Attributes**
+
+| **Parameter** | **Type** | **Required** | **Description** |
+|---|---|---|---|
+| _id | String | true | A task ID from the creation response. Only tasks belonging to your user/team are accessible. |
+
+**Response Attributes**
+
+| **Parameter** | **Type** | **Description** |
+|---|---|---|
+| code | Integer | `1000` for a successful query. |
+| msg | String | Response message. |
+| data | Object | Task detail, including the task fields returned by creation. |
+| - _id | String | Stable local task ID used for this query. |
+| - task_id | String | Downstream algorithm/provider task ID; may be empty until submission. Use `_id`, not this value, for task-detail queries. It may change between workflow stages. |
+| - status | Integer | 1 = queueing, 2 = processing, 3 = completed, 4 = failed. |
+| - url | String | Output URL, available after completion. |
+| - progress | Number | Processing progress, when available. |
+| - error_reason | String | Failure reason, when available. |
+| - multi_shot_results | Array | Additional hairstyle views; empty for other operations. |
+
+```bash cURL
+curl --location 'https://openapi.akool.com/api/open/v5/clothingSwap/task/detail?_id=670000000000000000000002' \
+--header 'x-api-key: {{API Key}}'
+```
+
+The `url` field may be empty before completion. Use it only when `status` is 3. Poll until `status` is 3 or 4. A query with `code: 1000` may still describe a failed generation task; inspect `data.status` and `data.error_reason`.
+
+<Note>For input limits, billing, callbacks, and error codes, see the [Clothing Swap V5 overview](/ai-tools-suite/swap-studio/clothing-swap-v5).</Note>

@@ -1,0 +1,52 @@
+---
+title: "Hair Swap V5 API Overview"
+description: "Models, workflow, input limits, and billing for Hair Swap V5."
+---
+
+<Info>
+Apply reference hairstyles to a selected person in an image.
+
+Use portrait images with clearly visible hair and faces. Face indexes select a person when the source or target image contains multiple faces. For a single-person target, each reference hairstyle produces one primary task. For a multi-person target, mappings are combined into one primary task, with at most one reference per selected target face.
+</Info>
+
+## API Endpoints
+
+- [List Models](/ai-tools-suite/swap-studio/hair-swap-v5/models) — `GET`
+- [Create Task](/ai-tools-suite/swap-studio/hair-swap-v5/create) — `POST`
+- [Get Task Result](/ai-tools-suite/swap-studio/hair-swap-v5/get-result) — `GET`
+
+## Getting Started
+
+1. List the models available for this feature.
+2. Create a task using the model-specific parameters.
+3. Poll task results or receive the final webhook notification.
+
+## Billing
+
+Generation is priced using the selected model configuration and your account/team pricing. Image generation is charged per task; video pricing also depends on duration and resolution. Credits are reserved before queueing and finalized through the existing generation billing flow. Creation errors do not produce a billable task. Read `deduction_credit` per created task rather than treating the sample value as a price quotation. AIGC website membership discounts do not automatically apply to OpenAPI; account and team pricing can change the final credit amount.
+
+## Response Code Description
+
+<Note>A business code other than 1000 indicates that the API request failed. For batch creation, also check data.errors.</Note>
+
+| **Code** | **Description** |
+|---|---|
+| 1000 | Request succeeded. Inspect task status for generation results. |
+| 1003 | Invalid input, unsupported model/parameters, unavailable feature, or task/analysis not found. |
+| 1008 | Content does not exist (general platform error). |
+| 1009 | Permission denied. |
+| 1101 | Invalid or expired authorization. |
+| 1102 | Authorization is missing. |
+| 1104 | Insufficient credits. |
+
+See the [Webhook guide](/ai-tools-suite/webhook) for callback verification and the [complete error list](/ai-tools-suite/error-code) for other account errors.
+
+## Callback
+
+If `webhookUrl` is supplied, final task notifications follow the existing encrypted and signed [Webhook format](/ai-tools-suite/webhook). After verification and decryption, read `_id`, `status`, `type`, and `url`. Fetch task detail to obtain operation-specific fields, including additional hairstyle views. Return HTTP 200 to acknowledge delivery.
+
+## Multiple views
+
+With `multi_shot: true`, each primary task produces the main image plus `high_45`, `side`, and `back` views. The create response lists primary task IDs; additional views do not create extra entries in `data.list`. Read `data.multi_shot_results`, an array of `{ "view": "side", "url": "https://example.com/side.jpg" }`, from task detail after completion.
+
+Multiple views require a single-person target. The total generated image count cannot exceed 50, so at most 12 reference images are accepted when generating four images per primary task. Billing includes the additional outputs.
