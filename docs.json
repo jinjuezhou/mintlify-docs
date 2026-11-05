@@ -268,7 +268,7 @@
       },
       {
         "anchor": "CLI",
-        "icon": "terminal",
+        "icon": "keyboard",
         "groups": [
           {
             "group": "CLI",
@@ -280,7 +280,7 @@
       },
       {
         "anchor": "MCP",
-        "icon": "plug",
+        "icon": "sparkles",
         "groups": [
           {
             "group": "MCP",
@@ -292,7 +292,7 @@
       },
       {
         "anchor": "Plugin",
-        "icon": "puzzle-piece",
+        "icon": "plug",
         "groups": [
           {
             "group": "Plugin",
