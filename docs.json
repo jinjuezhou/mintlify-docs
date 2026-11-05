@@ -291,6 +291,18 @@
         ]
       },
       {
+        "anchor": "Plugin",
+        "icon": "puzzle-piece",
+        "groups": [
+          {
+            "group": "Plugin",
+            "pages": [
+              "plugin"
+            ]
+          }
+        ]
+      },
+      {
         "anchor": "Blog",
         "href": "https://akool.com/blog",
         "icon": "newspaper"
