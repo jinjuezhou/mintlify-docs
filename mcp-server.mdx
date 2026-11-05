@@ -1,6 +1,6 @@
 ---
 title: "MCP"
-description: "Connect AKOOL AI capabilities to Claude, Cursor, Codex, and any MCP-compatible client."
+description: "Connect AKOOL AI capabilities to ChatGPT, Claude, Cursor, Codex, and any MCP-compatible client."
 ---
 
 ## Overview
@@ -15,6 +15,8 @@ MCP uses the same credentials as the CLI. Get them from your [AKOOL dashboard](h
 | ----------------- | ----------------------------------- |
 | `x-client-id`     | Your Client ID (`clientId`)         |
 | `x-client-secret` | Your Client Secret (`clientSecret`) |
+
+ChatGPT doesn't use these credentials. See [ChatGPT](#chatgpt).
 
 ## Server Config
 
@@ -70,9 +72,20 @@ MCP uses the same credentials as the CLI. Get them from your [AKOOL dashboard](h
 ## Setup Guides
 
 <Note>
-  **CLI quick-add** is only supported by **Claude Code**. All other clients
-  (Cursor, Windsurf, Codex, Kiro) require editing a JSON config file.
+  **ChatGPT** installs AKOOL from its plugin directory. **CLI quick-add** is
+  only supported by **Claude Code**. All other clients (Cursor, Windsurf,
+  Codex, Kiro) require editing a JSON config file.
 </Note>
+
+### ChatGPT
+
+ChatGPT connects through the official AKOOL plugin and your AKOOL account sign-in. You don't need a Client ID, Client Secret or config file.
+
+1. Open the [AKOOL plugin page in ChatGPT](https://chatgpt.com/plugins/plugin_asdk_app_6ae19adbd7548191a53c7cb25c03bba1).
+2. Select **Install plugin**, then sign in to your AKOOL account when asked.
+3. Start a new chat and ask for an image or video, for example: `Use AKOOL to generate an image of an astronaut on Mars at golden hour`.
+
+---
 
 ### Claude Code
 
