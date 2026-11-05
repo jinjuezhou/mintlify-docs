@@ -1,0 +1,96 @@
+---
+title: "Plugin"
+description: "Use AKOOL in ChatGPT, Claude, Claude Code and Codex by signing in with your AKOOL account."
+---
+
+## Overview
+
+The **AKOOL plugin** brings AKOOL's image, video, talking avatar, voiceover and face swap tools into ChatGPT, Claude, Claude Code and Codex. You connect by signing in with your AKOOL account, so you don't need AKOOL API credentials.
+
+**Requirements:**
+
+- An AKOOL Pro Max, Business or Enterprise plan. Generations use your AKOOL credits.
+- ChatGPT, Claude (web or desktop app), Claude Code or Codex.
+
+For one-click buttons, see [akool.com/plugin](https://akool.com/plugin).
+
+---
+
+## Setup Guides
+
+### ChatGPT
+
+1. Open the [AKOOL plugin in ChatGPT](https://chatgpt.com/plugins/plugin_asdk_app_6ae19adbd7548191a53c7cb25c03bba1).
+2. Select **Install plugin**, then sign in to your AKOOL account when asked.
+3. Start a new chat and ask for an image or video.
+
+---
+
+### Claude
+
+Works in Claude on the web and in the Claude desktop app.
+
+1. Open [this link](https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=Akool&connectorUrl=https%3A%2F%2Fopenapi.akool.com%2Fmcp%2Fv1) to add AKOOL as a custom connector. Or go to **Customize** → **Connectors** → **Add custom connector**, name it `Akool` and enter `https://openapi.akool.com/mcp/v1`.
+2. Finish adding it, then sign in to your AKOOL account when asked.
+3. Start a new chat and ask Claude for an image or video.
+
+<Note>
+  On a Claude **Team** or **Enterprise** plan, an Owner adds the connector
+  first. Each member then connects their own AKOOL account.
+</Note>
+
+---
+
+### Claude Code
+
+**Add AKOOL**
+
+```bash
+claude mcp add --transport http --scope user akool https://openapi.akool.com/mcp/v1
+claude mcp login akool
+```
+
+Finish signing in to AKOOL in the browser that opens. Then start Claude Code (restart it if it's open).
+
+---
+
+### Codex
+
+**Install the plugin**
+
+Open the [AKOOL plugin in Codex](codex://plugins/install/akool?marketplace=openai-curated), install it, and sign in to your AKOOL account when asked. Then start a new chat.
+
+**Or add AKOOL from the Codex CLI**
+
+```bash
+codex mcp add akool --url https://openapi.akool.com/mcp/v1
+```
+
+---
+
+## Usage Examples
+
+Once connected, describe tasks in natural language and mention AKOOL:
+
+**Check the connection**
+
+```
+What is my AKOOL credit balance?
+```
+
+**Generate an image**
+
+```
+Use AKOOL to generate an image of an astronaut on Mars at golden hour
+```
+
+---
+
+## Tips
+
+- Name AKOOL in your request (for example "use AKOOL"), or ChatGPT may create the image itself.
+- In ChatGPT and Claude, give AKOOL a link to your own image or video that it can open. Claude Code and Codex can upload files from your computer.
+- Videos can take a while. Ask the assistant to check the job's status later: submitting the request again may start a second job that is also charged.
+- `Only subscribed users can use the API functions` or `Your current subscription plan does not support this API feature` means the workspace you connected doesn't have a Pro Max, Business or Enterprise plan. AKOOL connects the workspace you have open on akool.com when you sign in. Upgrade on [akool.com/pricing](https://akool.com/pricing) or switch to a workspace with one of these plans, then connect again.
+- If AKOOL's tools don't show up, turn AKOOL on for the chat (in Claude: **+** → **Connectors**) or start a new chat. If your sign-in expired, connect again: `claude mcp login akool` in Claude Code, `codex mcp login akool` in the Codex CLI.
+- Using another MCP client or API credentials? See [MCP](/mcp-server).
