@@ -48,27 +48,35 @@ MCP uses the same credentials as the CLI. Get them from your [AKOOL dashboard](h
 |                    | List available AI models                    | `account_models`                 |
 | **Image**          | Generate image from text or reference image | `image_create`                   |
 |                    | Get image generation result                 | `image_info`                     |
-|                    | Upscale or create variants of an image      | `image_upscale`                  |
 | **Voice**          | List available TTS voices                   | `voice_list`                     |
 |                    | Convert text to speech                      | `audio_tts`                      |
 |                    | Get TTS result                              | `voice_result`                   |
 | **Face Swap**      | Swap face in an image                       | `faceswap_image`                 |
-|                    | Swap face in a video                        | `faceswap_video`                 |
-|                    | Enhanced face swap (multi-face)             | `faceswap_plus`                  |
+|                    | Face swap in images or videos (multi-face)  | `faceswap_plus`                  |
 |                    | Get face swap result                        | `faceswap_result`                |
 |                    | Delete a face swap record                   | `faceswap_delete`                |
-|                    | Live streaming face swap                    | `faceswap_live`                  |
 | **Avatar**         | List digital avatars                        | `avatar_list`                    |
 |                    | Get avatar detail                           | `avatar_detail`                  |
-|                    | Submit character swap task                  | `character_swap_create`          |
-|                    | Get character swap result                   | `character_swap_result`          |
+| **Video**          | Generate a video from a text prompt         | `video_text2video_create`        |
+|                    | Create a talking photo video                | `video_talking_photo_create`     |
+|                    | Create a talking avatar video               | `video_talking_avatar_create`    |
+|                    | Get video generation result                 | `video_result`                   |
 | **Image to Video** | Create a video from an image                | `video_image2video_create`       |
 |                    | Get image-to-video result                   | `video_image2video_results`      |
 |                    | List available video effects                | `video_image2video_effects`      |
 |                    | Update audio on a video                     | `video_image2video_update_audio` |
 |                    | Delete an image-to-video record             | `video_image2video_delete`       |
+| **Motion Swap**    | List motion swap models                     | `video_motion_swap_models`       |
+|                    | Animate a person with a video's motion      | `video_motion_swap_create`       |
+| **Video Editing**  | Get the video editing guide                 | `video_edit_guide`               |
+|                    | Analyze a video                             | `video_analyze`                  |
+|                    | Look at frames of a video                   | `video_frames`                   |
+|                    | Render an edited video                      | `video_render`                   |
+|                    | Get video analysis or render result         | `video_edit_result`              |
 | **Face Detection** | Detect faces in an image                    | `facedetect_detect`              |
 |                    | Analyze faces across multiple frames        | `facedetect_analyze`             |
+| **Files**          | Upload a local file                         | `file_upload`                    |
+|                    | Show results in the chat                    | `show_result`                    |
 
 ---
 
@@ -76,7 +84,7 @@ MCP uses the same credentials as the CLI. Get them from your [AKOOL dashboard](h
 
 <Note>
   **CLI quick-add** is only supported by **Claude Code**. All other clients
-  (Cursor, Windsurf, Codex, Kiro) require editing a JSON config file.
+  (Cursor, Windsurf, Codex, Kiro) require editing a config file.
 </Note>
 
 ### Claude Code
@@ -90,26 +98,9 @@ npm install -g @anthropic-ai/claude-code
 **Add AKOOL MCP**
 
 ```bash
-claude mcp add akool-mcp https://openapi.akool.com/mcp/v1 \
+claude mcp add --transport http akool-mcp https://openapi.akool.com/mcp/v1 \
   --header "x-client-id: YOUR_CLIENT_ID" \
   --header "x-client-secret: YOUR_CLIENT_SECRET"
-```
-
-Or edit `~/.claude/mcp_servers.json` directly:
-
-```json
-{
-  "mcpServers": {
-    "akool-mcp": {
-      "type": "http",
-      "url": "https://openapi.akool.com/mcp/v1",
-      "headers": {
-        "x-client-id": "YOUR_CLIENT_ID",
-        "x-client-secret": "YOUR_CLIENT_SECRET"
-      }
-    }
-  }
-}
 ```
 
 Verify:
@@ -129,27 +120,10 @@ Download and install from [claude.ai/download](https://claude.ai/download).
 
 **Add AKOOL MCP**
 
-Open Claude Desktop → **Settings** → **Developer** → **Edit Config**, then add:
-
-- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "akool-mcp": {
-      "type": "http",
-      "url": "https://openapi.akool.com/mcp/v1",
-      "headers": {
-        "x-client-id": "YOUR_CLIENT_ID",
-        "x-client-secret": "YOUR_CLIENT_SECRET"
-      }
-    }
-  }
-}
-```
-
-Restart Claude Desktop. A **hammer icon** (🔨) will appear in the chat input when MCP tools are ready.
+1. Go to **Customize** → **Connectors** → **+ Add** → **Add custom connector**.
+2. Name it `akool-mcp` and enter `https://openapi.akool.com/mcp/v1` as the URL.
+3. Under **Request headers**, add `x-client-id` and `x-client-secret` with your credentials.
+4. Choose **No sign in**, then add the connector.
 
 ---
 
@@ -221,21 +195,12 @@ npm install -g @openai/codex
 
 **Add AKOOL MCP**
 
-Edit `~/.codex/mcp_servers.json`:
+Edit `~/.codex/config.toml`:
 
-```json
-{
-  "mcpServers": {
-    "akool-mcp": {
-      "type": "http",
-      "url": "https://openapi.akool.com/mcp/v1",
-      "headers": {
-        "x-client-id": "YOUR_CLIENT_ID",
-        "x-client-secret": "YOUR_CLIENT_SECRET"
-      }
-    }
-  }
-}
+```toml
+[mcp_servers.akool-mcp]
+url = "https://openapi.akool.com/mcp/v1"
+http_headers = { "x-client-id" = "YOUR_CLIENT_ID", "x-client-secret" = "YOUR_CLIENT_SECRET" }
 ```
 
 Codex will automatically load MCP servers on startup.
@@ -291,12 +256,6 @@ Use AKOOL to swap the face from face.jpg onto video.mp4, then wait for the resul
 
 ```
 Use AKOOL faceswap_plus to swap multiple faces in group.jpg with the source face
-```
-
-**Character swap**
-
-```
-Use AKOOL to do a character swap: source image is source.png, target is target.png
 ```
 
 **Generate image**
