@@ -98,9 +98,10 @@ npm install -g @anthropic-ai/claude-code
 **Add AKOOL MCP**
 
 ```bash
-claude mcp add --transport http akool-mcp https://openapi.akool.com/mcp/v1 \
+claude mcp add \
   --header "x-client-id: YOUR_CLIENT_ID" \
-  --header "x-client-secret: YOUR_CLIENT_SECRET"
+  --header "x-client-secret: YOUR_CLIENT_SECRET" \
+  --transport http akool-mcp https://openapi.akool.com/mcp/v1
 ```
 
 Verify:
